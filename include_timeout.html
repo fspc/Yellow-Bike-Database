@@ -1,0 +1,17 @@
+<!--//This function redirects the Log to the Welcome Page ================================================ -->
+<script type="text/javascript">
+var t;
+window.onload=resetTimer;
+document.onmousedown=resetTimer;
+document.onkeypress=resetTimer;
+
+function logout()
+{
+	location.href='shop_welcome.php' 
+}
+function resetTimer()
+{
+	clearTimeout(t);
+	t=setTimeout(logout,1000*5) //logs out in 30 minutes
+}
+</script>

@@ -1,0 +1,81 @@
+.yb_standard {
+	font-family: Arial, Helvetica, sans-serif;
+	color: #000000;
+	background-color: #FFFFFF;
+}
+.yb_standarditalics {
+	color: #000000;
+	background-color: #FFFFFF;
+	font-style: italic;
+}
+.yb_standardCENTER {
+	color: #000000;
+	text-align: center;
+}
+.yb_standardLEFT {
+	color: #000000;
+	text-align: left;
+}
+.yb_pagetitle {
+	color: #000000;
+	background-color: #FFFFFF;
+	font-weight: bold;
+	text-decoration: underline;
+}
+.yb_heading1 {
+	color: #000000;
+	background-color: #FFFFFF;
+	font-size: 24px;
+	font-weight: bold;
+	font-style: italic;
+}
+.yb_heading2 {
+	color: #000000;
+	background-color: #FFFFFF;
+	font-size: 16px;
+	font-weight: bold;
+	font-style: italic;
+}
+.yb_heading3 {
+	color: #000000;
+	font-weight: bold;
+}
+.yb_heading3red {
+	color: #FF0000;
+	background-color: #FFFFFF;
+	font-weight: bold;
+}
+.yb_standardCENTERbold {
+	text-align: center;
+	font-weight: bold;
+}
+.yb_standardCENTERred {
+	color: #FF0000;
+	background-color: #FFFFFF;
+	text-align: center;
+}
+.yb_standard_singlereturn {
+	color: #000000;
+	background-color: #FFFFFF;
+	display: none;
+}
+.yb_standard_small {
+	color: #000000;
+	background-color: #FFFFFF;
+	font-size: 10px;
+}
+.yb_standardRIGHT {
+	text-align: right;
+}
+.yb_standardRIGHTred {
+	color: #FF0000;
+	background-color: #FFFFFF;
+	text-align: right;
+}
+.yb_standardBold {
+	font-weight: bold;
+}
+.yb_standardred {
+	color: #FF0000;
+	background-color: #FFFFFF;
+}

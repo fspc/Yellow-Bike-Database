@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Untitled Document</title>
+</head>
+
+<script>
+function getArgs() {
+var args = new Object();
+var query = location.search.substring(1);
+var pairs = query.split("&");
+for(var i = 0; i < pairs.length; i++) {
+var pos = pairs[i].indexOf("=");
+if (pos == -1) continue;
+var argname = pairs[i].substring(0,pos);
+var value = pairs[i].substring(pos+1);
+args[argname] = unescape(value);
+}
+return args;
+}
+var args = getArgs();
+var google_link = "http://groups.google.com/group/yellowbike-newsletter/boxsubscribe?email=" + args.email; 
+var frameset_def = '<frameset rows="200,600" cols="*" framespacing="0" frameborder="no" border="0">/n<frame src="contact_add_edit_confirmation.html" name="mainFrame" id="mainFrame" title="mainFrame" />/n<frame src="' + google_link + '" name="bottomFrame" scrolling="No" noresize="noresize" id="bottomFrame" title="bottomFrame" />/n</frameset>';
+document.write(frameset_def);
+</script>
+
+<noframes><body>
+</body>
+</noframes></html>
