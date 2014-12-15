@@ -130,7 +130,7 @@ function list_shop_locations($form_name = "none", $default_value = ""){
 
 // Function provides specific MySQL parameters to the function that generates the list box code
 function list_transaction_types($form_name = "none", $default_value = ""){
-	$querySQL = "SELECT transaction_type_id FROM transaction_types ORDER BY rank, transaction_type_id;";
+	$querySQL = "SELECT transaction_type_id FROM transaction_types ORDER BY rank + 0;";
 	$list_value = "transaction_type_id";
 	$list_text = "transaction_type_id";
 	generate_list($querySQL,$list_value,$list_text,$form_name, $default_value);
