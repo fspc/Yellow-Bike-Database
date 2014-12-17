@@ -13,7 +13,7 @@ define("PAGE_SALE_LOG", "transaction_log.php");
 define("PAGE_EDIT_LOCATION", "location_add_edit.php");
 define("PAGE_SELECT_LOCATION", "location_add_edit_select.php");
 
-//This is a general function to generate the contents of a list box based on a MySQL query.  All nessary parameters for the query are passed 
+//This is a general function to generate the contents of a list box based on a MySQL query.  All necessary parameters for the query are passed 
 function generate_list($querySQL,$list_value,$list_text, $form_name, $default_value)
 {
 	global $database_YBDB, $YBDB;
@@ -31,7 +31,7 @@ function generate_list($querySQL,$list_value,$list_text, $form_name, $default_va
 		if( $default_value == $row_recordset[$list_value]){ 
 			$default_delimiter = 'selected="selected"';
 		} else { $default_delimiter = '';}
-		echo '<option value="' . $row_recordset[$list_value] . '"' . $default_delimiter .'>' . $row_recordset[$list_text] . '</option>\n';
+		echo '<option value="' . $row_recordset[$list_value] . '"' . $default_delimiter .'>' . $row_recordset[$list_text] . '</option>\n';		
 		} while ($row_recordset = mysql_fetch_assoc($recordset));
  	$rows = mysql_num_rows($recordset);
  	if($rows > 0) {
@@ -143,10 +143,11 @@ function list_donation_types($form_name = "none", $default_value = ""){
 	generate_list($querySQL,$list_value,$list_text,$form_name, $default_value);
 }
 
-function list_donation_locations($form_name = "none", $default_value = ""){
-	$querySQL = "SELECT first_name, last_name, location_name, contact_id FROM contacts WHERE location_type IS NULL ORDER BY location_name";
+function list_donation_locations($form_name = "none", $default_value = "", $max_name_length = 20){
+	$querySQL = "SELECT LEFT(CONCAT(last_name, ', ', first_name, ' ',middle_initial),$max_name_length) AS full_name, 
+					location_name, contact_id FROM contacts WHERE location_type IS NULL ORDER BY location_name";
 	$list_value = "contact_id";
-	$list_text = "first_name";
+	$list_text = "full_name";
 	generate_list($querySQL,$list_value,$list_text,$form_name, $default_value);
 }
 
@@ -363,7 +364,7 @@ function list_contacts_YBP_project($form_name = "contact_id", $default_value = "
 	function list_donation_locations_withheader($form_name = "coordinator_id", $default_value = "")
 {
 	echo "<select name={$form_name} class='yb_standard'>\n";
-	echo "<option value='no_selection'>Select Location</option>\n";
+	echo "<option value='no_selection'>Select Patron</option>\n";
 	echo "<option value='no_selection'>--------------</option>";
 	list_donation_locations("none",$default_value);	
 	echo "</select>\n";

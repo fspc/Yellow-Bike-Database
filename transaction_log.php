@@ -64,16 +64,20 @@ if($_GET['record_count']>0){
 	$record_count = 30;}
 
 // This is the recordset for the list of logged transactions	
+
+
 mysql_select_db($database_YBDB, $YBDB);
 $query_Recordset1 = "SELECT *,
 DATE_FORMAT(date,'%m/%d (%a)') as date_wday,
 CONCAT('$',FORMAT(amount,2)) as format_amount,
 CONCAT(contacts.last_name, ', ', contacts.first_name, ' ',contacts.middle_initial) AS full_name,
-LEFT(IF(community_bike,CONCAT(quantity, ' Bikes: ', location_name),IF(show_soldto_location, CONCAT(location_name,' Donation'), description)),25) as description_with_locations
+LEFT(IF(show_startdate, CONCAT(' [',
+		DATE_FORMAT(DATE_ADD(date_startstorage,INTERVAL 14 DAY),'%W, %M %D'), '] ', transaction_log.description),
+		IF(community_bike,CONCAT('Quantity(', quantity, ')  ', transaction_log.description), description)),100) as description_with_locations
 FROM transaction_log
 LEFT JOIN contacts ON transaction_log.sold_to=contacts.contact_id
 LEFT JOIN transaction_types ON transaction_log.transaction_type=transaction_types.transaction_type_id
-WHERE 1=1 {$trans_date} {$shop_dayname} {$trans_type} ORDER BY transaction_id DESC LIMIT  0, $record_count;";
+WHERE 1=1 {$trans_date} {$shop_dayname} {$trans_type} ORDER BY date_wday DESC LIMIT  0, $record_count;";
 $Recordset1 = mysql_query($query_Recordset1, $YBDB) or die(mysql_error());
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
@@ -197,13 +201,13 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
     <td>
       <table border="1" cellpadding="1" cellspacing="0" bordercolor="#CCCCCC">
         <tr bordercolor="#CCCCCC" bgcolor="#99CC33">
-          <td colspan="7" bgcolor="#99CC33"><div align="center"><strong>Bike and Sale Log </strong></div></td>
+          <td colspan="8" bgcolor="#99CC33"><div align="center"><strong>Bike and Sale Log </strong></div></td>
 		  </tr>
         <?php 		// show delete tranaction confirmation =========================================
 		if($delete_trans_id <> -1 ) { ?>
         <form method="post" name="FormConfirmDelete" action="<?php echo $editFormAction; ?>">
           <tr bordercolor="#CCCCCC" bgcolor="#CCCC33">
-            <td colspan="7"><p><strong>Edit Transaction:
+            <td colspan="8"><p><strong>Edit Transaction:
               <input type="submit" name="DeleteConfirm" value="Confirm Delete" />
               <input type="submit" name="DeleteConfirm" value="Cancel" />
               <input type="hidden" name="delete_trans_id" value="<?php echo $delete_trans_id; ?>">
@@ -221,8 +225,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 	  $query_Recordset2 = "SELECT *,
 DATE_FORMAT(date_startstorage,'%Y-%m-%d') as date_startstorage_day,
 DATE_FORMAT(date,'%Y-%m-%d') as date_day,
-DATE_FORMAT(DATE_ADD(date_startstorage,INTERVAL 42 DAY),'%W, %M %D') as storage_deadline,
-DATEDIFF(DATE_ADD(date_startstorage,INTERVAL 42 DAY),CURRENT_DATE()) as storage_days_left,
+DATE_FORMAT(DATE_ADD(date_startstorage,INTERVAL 14 DAY),'%W, %M %D') as storage_deadline,
+DATEDIFF(DATE_ADD(date_startstorage,INTERVAL 14 DAY),CURRENT_DATE()) as storage_days_left,
 FORMAT(amount,2) as format_amount
 FROM transaction_log WHERE transaction_id = $trans_id; ";
 	  $Recordset2 = mysql_query($query_Recordset2, $YBDB) or die(mysql_error());
@@ -230,7 +234,7 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 	  $totalRows_Recordset2 = mysql_num_rows($Recordset2);
 	  $trans_type = $row_Recordset2['transaction_type'];  //This field is used to set edit box preferences
 	  
-	  // gets prefrences of edit based on Transaction Type
+	  // gets preferences of edit based on Transaction Type
 	  mysql_select_db($database_YBDB, $YBDB);
 	  $query_Recordset3 = "SELECT * FROM transaction_types WHERE transaction_type_id = \"$trans_type\";";
 	  $Recordset3 = mysql_query($query_Recordset3, $YBDB) or die(mysql_error());
@@ -241,7 +245,7 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
         
         
         <tr bgcolor="#CCCC33">
-          <td colspan="5">
+          <td colspan="7">
             <form method="post" name="FormEdit" action="<?php echo $editFormAction; ?>">
               <table border="0" cellspacing="0" cellpadding="1">
                 <tr>
@@ -314,7 +318,7 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 			if($row_Recordset3['show_soldto_location']){
 				list_donation_locations_withheader('sold_to', $row_Recordset2['sold_to']); 
 				$record_trans_id = $row_Recordset2['transaction_id']; 
-				echo " <a href=\"location_add_edit.php?trans_id={$record_trans_id}&contact_id=new_contact\">Create New Location</a> | <a href=\"location_add_edit_select.php?trans_id={$record_trans_id}&contact_id=new_contact\">Edit Existing Location</a>";
+				// echo " <a href=\"location_add_edit.php?trans_id={$record_trans_id}&contact_id=new_contact\">Create New Location</a> | <a href=\"location_add_edit_select.php?trans_id={$record_trans_id}&contact_id=new_contact\">Edit Existing Location</a>";
 			} else {
 				//list_CurrentShopUsers_select('sold_to', $row_Recordset2['sold_to']);
 			}  ?></td>
@@ -333,15 +337,15 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
               <input type="hidden" name="db_date_startstorage" value="<?php echo $row_Recordset2['date_startstorage']; ?>">
               <input type="hidden" name="db_date" value="<?php echo $row_Recordset2['date']; ?>">
               </form></td>
-		  <td colspan="2" align="right" valign="top"> 
+		  <td colspan="1" align="right" valign="top"> 
 		    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 		      <input type="hidden" name="cmd" value="_xclick" />
-		      <input type="hidden" name="business" value="austinyellowbike@gmail.com" />
-		      <input type="hidden" name="item_name" value="YBP Transaction: <?php echo $row_Recordset2['transaction_type']; ?> - <?php echo $row_Recordset2['description']; ?>" />
+		      <input type="hidden" name="business" value="donate@positivespin.org" />
+		      <input type="hidden" name="item_name" value="PS Transaction <?php echo $row_Recordset2['transaction_id']; ?>: <?php echo $row_Recordset2['transaction_type']; ?> - <?php echo $row_Recordset2['description']; ?>" />
 		      <input type="hidden" name="amount" value="<?php echo $row_Recordset2['format_amount']; ?>" />
-		      <input type="hidden" name="item_number" value="74-2860831" />
+		      <!-- <input type="hidden" name="item_number" value="" /> -->
 		      <input type="hidden" name="no_shipping" value="1" />
-		      <input type="hidden" name="return" value="http://ybdb.austinyellowbike.org/transaction_log.php?error=transactioncomplete" />
+		      <input type="hidden" name="return" value="http://fsbomorgantown.com:84/transaction_log.php?error=transactioncomplete" />
 		      <input type="hidden" name="no_note" value="1" />
 		      <input type="hidden" name="currency_code" value="USD" />
 		      <input type="hidden" name="tax" value="0" />
@@ -352,7 +356,7 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 	    </tr>
         
         
-        <?php    // Form to create a tranaction
+        <?php    // Form to create a transction
 	  } else { //This section executes if it is not the transaction_id selected NOT FOR EDIT ?>
         
         <form method="post" name="FormNew" action="<?php echo $editFormAction; ?>">
@@ -365,13 +369,14 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
           </form>
 	    <?php } // if ?>
         <tr bordercolor="#CCCCCC" bgcolor="#99CC33">
-          <td width="50"><strong>Shop</strong></td>
+        <td width="50"><strong>Shop</strong></td>
 		  <td width="100"><strong>Date</strong></td>
 		  <td width="200" bgcolor="#99CC33"><strong>Sale Type </strong></td>
 		  <td width="70"><strong>Amount</strong></td>
 		  <td width="300"><strong>Description</strong></td>
-		  <td><!--<strong>Sold To / Donated By </strong>--></td>
+		  <td><strong>Patron</strong></td>
 		  <td width="50"><strong>Edit  </strong></td>
+		  <td><strong>Sold</strong></td>
 	    </tr>
         <?php while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)) { //do { ?>
         
@@ -382,8 +387,9 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 		  <td><?php echo $row_Recordset1['transaction_type']; ?></td>
 		  <td><?php echo $row_Recordset1['format_amount']; ?>&nbsp;</td>
 		  <td><?php echo $row_Recordset1['description_with_locations']; ?>&nbsp;</td>
-		  <td><?php //echo $row_Recordset1['full_name']; ?></td>
+		  <td><?php echo $row_Recordset1['full_name']; ?></td>
 		  <td><?php $record_trans_id = $row_Recordset1['transaction_id']; echo "<a href=\"{$_SERVER['PHP_SELF']}?trans_id={$record_trans_id}\">edit</a>"; ?></td>
+		  <td></td>
 	    </tr>
           <input type="hidden" name="MM_insert" value="FormUpdate">
           <input type="hidden" name="shop_visit_id" value="<?php echo $row_Recordset1['transaction_id']; ?>">
