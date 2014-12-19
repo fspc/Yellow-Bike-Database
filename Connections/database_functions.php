@@ -2,16 +2,16 @@
 require_once('YBDB.php');
 
 //constants
-define("PAGE_START_SHOP", "start_shop.php");
-define("PAGE_SHOP_LOG", "shop_log.php");
-define("PAGE_EDIT_CONTACT", "contact_add_edit.php");
-define("PAGE_SELECT_CONTACT", "contact_add_edit_select.php");
-define("PAGE_SHOP_LOG_DELETE_VISIT", "shop_log_delete_shopvisitid.php");
+define("PAGE_START_SHOP", "/start_shop.php");
+define("PAGE_SHOP_LOG", "/shop_log.php");
+define("PAGE_EDIT_CONTACT", "/contact_add_edit.php");
+define("PAGE_SELECT_CONTACT", "/contact_add_edit_select.php");
+define("PAGE_SHOP_LOG_DELETE_VISIT", "/shop_log_delete_shopvisitid.php");
 define("INDIVIDUAL_HOURS_LOG", "/stats/individual_hours_log.php");
 define("INDIVIDUAL_HISTORY_LOG", "/stats/individual_history_log.php");
-define("PAGE_SALE_LOG", "transaction_log.php");
-define("PAGE_EDIT_LOCATION", "location_add_edit.php");
-define("PAGE_SELECT_LOCATION", "location_add_edit_select.php");
+define("PAGE_SALE_LOG", "/transaction_log.php");
+define("PAGE_EDIT_LOCATION", "/location_add_edit.php");
+define("PAGE_SELECT_LOCATION", "/location_add_edit_select.php");
 
 //This is a general function to generate the contents of a list box based on a MySQL query.  All necessary parameters for the query are passed 
 function generate_list($querySQL,$list_value,$list_text, $form_name, $default_value)
