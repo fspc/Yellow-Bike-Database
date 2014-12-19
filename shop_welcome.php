@@ -1,5 +1,9 @@
 <?php
 
+require_once('Connections/database_functions.php');
+
+?>
+
 <?php include("include_header.html"); ?>
       <p><span class="yb_heading2">Welcome to the Austin Yellow Bike Project</span></p>
       <p>Here are a few things to know about using the shop:</p>
