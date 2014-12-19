@@ -1,6 +1,6 @@
 <?php
-require_once('Connections/YBDB.php');
-require_once('Connections/database_functions.php'); 
+require_once('../Connections/YBDB.php');
+require_once('../Connections/database_functions.php'); 
 
 $page_edit_contact = PAGE_EDIT_CONTACT;
 
