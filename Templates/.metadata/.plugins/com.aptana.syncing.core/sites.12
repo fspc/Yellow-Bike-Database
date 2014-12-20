@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<sites>
-<site>
-<name>YBDB &lt;-&gt; YBDB_Remote</name>
-<source>workspace:/YBDB</source>
-<destination>aptanavfs://83422b28-2181-4f36-b3b7-c239d76e66a2/</destination>
-</site>
-</sites>
