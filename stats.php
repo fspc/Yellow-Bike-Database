@@ -1,3 +1,5 @@
+<?php include("include_header.html"); ?>
+
 	<p class="yb_heading3red">Bookkeeping Reports</p>
 	    <ul>         
           <li><a href="stats/stats_monthlysalestax.php">Sales Tax Report</a><br /></li>
