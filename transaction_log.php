@@ -5,7 +5,6 @@ require_once('Connections/database_functions.php');
 $page_edit_contact = PAGE_EDIT_CONTACT; 
 $page_individual_history_log = INDIVIDUAL_HISTORY_LOG;
 
-
 //transaction ID	
 if($_GET['trans_id']>0){
 	$trans_id = $_GET['trans_id'];
@@ -87,6 +86,7 @@ $editFormAction = $_SERVER['PHP_SELF'];
 //Form Submit New Transaction===================================================================
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
 
+
 	$trans_type = $_POST['transaction_type'];
 	$shop_id = current_shop_by_ip(); 
 	
@@ -131,13 +131,15 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
 } // end Form Submit New Transaction
 
 //Form Edit Record ===============================================================================
-if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_POST["EditSubmit"] == "Update")) {
-	
+if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_POST["EditSubmit"] == "Submit")) {
+
+
 	//Error Correction
 	$sold_to = (($_POST['sold_to'] == 'no_selection') ? 1268 : $_POST['sold_to'] );
 	$sold_by = (($_POST['sold_by'] == 'no_selection') ? 1268 : $_POST['sold_by'] );
 	$date_startstorage = date_update_wo_timestamp($_POST['date_startstorage'], $_POST['db_date_startstorage']);
 	$date = date_update_wo_timestamp($_POST['date'], $_POST['db_date']);
+	$description = (($_POST['description'] == "") ? "No Description" : $_POST['description'] );	
 
 	$updateSQL = sprintf("UPDATE transaction_log SET transaction_type=%s, date_startstorage=%s, date=%s, amount=%s, quantity=%s, description=%s, sold_to=%s, sold_by=%s, shop_id=%s WHERE transaction_id=%s",
 						   GetSQLValueString($_POST['transaction_type'], "text"),
@@ -145,12 +147,13 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_PO
 						   GetSQLValueString($date, "date"),
 						   GetSQLValueString($_POST['amount'], "double"),
 						   GetSQLValueString($_POST['quantity'], "int"),
-						   GetSQLValueString($_POST['description'], "text"),
+						   GetSQLValueString($description, "text"),
 						   GetSQLValueString($sold_to, "int"),
 						   GetSQLValueString($sold_by, "int"),
 						   GetSQLValueString($_POST['shop_id'], "int"),
 						   GetSQLValueString($_POST['transaction_id'], "int"));
 						   //"2006-10-12 18:15:00"
+	
 	
 	mysql_select_db($database_YBDB, $YBDB);
 	$Result1 = mysql_query($updateSQL, $YBDB) or die(mysql_error());
@@ -250,10 +253,10 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
               <table border="0" cellspacing="0" cellpadding="1">
                 <tr>
                   <td colspan="3"><strong>Edit Transaction:
-                    <input type="submit" name="EditSubmit" value="Update"  >
+                    <input type="submit" name="EditSubmit" value="Submit"  >
                     <input type="submit" name="EditSubmit" value="Close" >
                     <input type="submit" name="EditSubmit" value="Delete"  >
-                    </strong> Update before using paypal ->></td>
+                    </strong> Submit before using paypal ->></td>
 		  	    </tr>
                 
                 <tr><td width="10">&nbsp;</td>
@@ -356,12 +359,12 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 	    </tr>
         
         
-        <?php    // Form to create a transction
+        <?php    // Form to create a transaction
 	  } else { //This section executes if it is not the transaction_id selected NOT FOR EDIT ?>
         
         <form method="post" name="FormNew" action="<?php echo $editFormAction; ?>">
           <tr bordercolor="#CCCCCC" bgcolor="#CCCC33">
-            <td colspan="7"><p><strong>Start New Transaction:</strong><br />&nbsp;&nbsp;&nbsp;&nbsp;Select Type: <?php list_transaction_types('transaction_type','Sale - Used Parts'); ?> 
+            <td colspan="8"><p><strong>Start New Transaction:</strong><br />&nbsp;&nbsp;&nbsp;&nbsp;Select Type: <?php list_transaction_types('transaction_type','Sale - Used Parts'); ?> 
               <input type="submit" name="Submit43" value="Create Transaction" />
               </p>	      </td>
 	      </tr>
@@ -376,8 +379,9 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 		  <td width="300"><strong>Description</strong></td>
 		  <td><strong>Patron</strong></td>
 		  <td width="50"><strong>Edit  </strong></td>
-		  <td><strong>Sold</strong></td>
+		  <td><strong>Paid</strong></td>
 	    </tr>
+   
         <?php while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)) { //do { ?>
         
         <form method="post" name="FormView_<?php echo $row_Recordset1['transaction_id']; ?>" action="<?php echo $editFormAction; ?>">
@@ -389,7 +393,7 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 		  <td><?php echo $row_Recordset1['description_with_locations']; ?>&nbsp;</td>
 		  <td><?php echo $row_Recordset1['full_name']; ?></td>
 		  <td><?php $record_trans_id = $row_Recordset1['transaction_id']; echo "<a href=\"{$_SERVER['PHP_SELF']}?trans_id={$record_trans_id}\">edit</a>"; ?></td>
-		  <td></td>
+		  <td><input class="paid" type="checkbox" name="<?php echo $row_Recordset1['transaction_id']; ?>" value="<?php echo $row_Recordset1['paid']; ?>"></td>
 	    </tr>
           <input type="hidden" name="MM_insert" value="FormUpdate">
           <input type="hidden" name="shop_visit_id" value="<?php echo $row_Recordset1['transaction_id']; ?>">
