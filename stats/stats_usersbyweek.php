@@ -52,7 +52,7 @@ $totalRows_Recordset4 = mysql_num_rows($Recordset4);
 ?>
 
 
-<?php include("include_header.html"); ?>
+<?php include("../../include_header.html"); ?>
         <table>
         <tr valign="top">
           <td><span class="yb_heading3red">New and Total Users by Week</span></td>
@@ -115,7 +115,7 @@ $totalRows_Recordset4 = mysql_num_rows($Recordset4);
 	  </tr>
         </table>
 		
-		<?php include("include_footer.html"); ?>
+		<?php include("../../include_footer.html"); ?>
 <?php
 mysql_free_result($Recordset1);
 ?>

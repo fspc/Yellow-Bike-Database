@@ -23,7 +23,7 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
 ?>
 
-<?php include("include_header.html"); ?>
+<?php include("../include_header.html"); ?>
 
         <table>
         <tr valign="top">
@@ -71,7 +71,7 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 	  </tr>
         </table>
 		
-		<?php include("include_footer.html"); ?>
+		<?php include("../include_footer.html"); ?>
 <?php
 mysql_free_result($Recordset1);
 ?>

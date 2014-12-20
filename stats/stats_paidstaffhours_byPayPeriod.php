@@ -40,7 +40,7 @@ $totalRows_Recordset2 = mysql_num_rows($Recordset2);
 
 ?>
 
-<?php include("include_header.html"); ?>
+<?php include("../include_header.html"); ?>
 
         <table>
         	<tr valign="top"><td><span class="yb_heading3red">Staff Hours by Pay Period</span></td></tr>
@@ -86,7 +86,7 @@ $totalRows_Recordset2 = mysql_num_rows($Recordset2);
 	  </tr>
         </table>
 		
-		<?php include("include_footer.html"); ?>
+		<?php include("../include_footer.html"); ?>
 <?php
 mysql_free_result($Recordset1);
 ?>

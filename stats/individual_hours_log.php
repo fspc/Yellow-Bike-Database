@@ -136,7 +136,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 ?>
 
 
-<?php include("include_header.html"); ?>
+<?php include("../include_header.html"); ?>
 <table   border="0" cellpadding="1" cellspacing="0">
   <tr>
     <td align="left" valign="bottom"><?php echo $error_message;?>
@@ -263,7 +263,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                   <input type="hidden" name="MM_insert" value="ChangeDate" />
       </form>
 <p>&nbsp;</p>
-<?php include("include_footer.html"); ?>
+<?php include("../include_footer.html"); ?>
 <?php
 mysql_free_result($Recordset1);
 ?>

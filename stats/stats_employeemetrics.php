@@ -65,7 +65,7 @@ $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 
 ?>
 
-<?php include("include_header.html"); ?>
+<?php include("../include_header.html"); ?>
 
         <table>
         	<tr><td><?php echo "Employee Stats: 
@@ -119,7 +119,7 @@ $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 	  </tr>
         </table>
 		
-		<?php include("include_footer.html"); ?>
+		<?php include("../include_footer.html"); ?>
 <?php
 mysql_free_result($Recordset1);
 ?>
