@@ -131,7 +131,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
 } // end Form Submit New Transaction
 
 //Form Edit Record ===============================================================================
-if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_POST["EditSubmit"] == "Submit")) {
+if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_POST["EditSubmit"] == "Save")) {
 
 
 	//Error Correction & good place for jquery 
@@ -253,10 +253,10 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
               <table border="0" cellspacing="0" cellpadding="1">
                 <tr>
                   <td colspan="3"><strong>Edit Transaction:
-                    <input type="submit" name="EditSubmit" value="Submit"  >
+                    <input type="submit" name="EditSubmit" value="Save"  >
                     <input type="submit" name="EditSubmit" value="Close" >
                     <input type="submit" name="EditSubmit" value="Delete"  >
-                    </strong> Submit before using paypal ->></td>
+                    </strong> Save before using paypal ->></td>
 		  	    </tr>
                 
                 <tr><td width="10">&nbsp;</td>
