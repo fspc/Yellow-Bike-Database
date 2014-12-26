@@ -385,7 +385,10 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
         <?php while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)) { //do { ?>
         
         <form method="post" name="FormView_<?php echo $row_Recordset1['transaction_id']; ?>" action="<?php echo $editFormAction; ?>">
-          <tr bordercolor='#CCCCCC' <?php echo ((intval($row_Recordset1['transaction_id']) == intval($trans_id)) ? "bgcolor='#CCCC33'" :  "")?> >
+          <tr bordercolor='#CCCCCC' <?php
+          	echo ((intval($row_Recordset1['transaction_id']) == intval($trans_id)) ? "bgcolor='#CCCC33'" :  "");
+          	if ($row_Recordset1['paid'] == 1) { echo "bgcolor='#99CC33'"; } 
+          ?> >
           <td><?php echo $row_Recordset1['shop_id']; ?></td>
 		  <td><?php echo $row_Recordset1['date_wday']; ?></td>
 		  <td><?php echo $row_Recordset1['transaction_type']; ?></td>
@@ -393,7 +396,11 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 		  <td><?php echo $row_Recordset1['description_with_locations']; ?>&nbsp;</td>
 		  <td><?php echo $row_Recordset1['full_name']; ?></td>
 		  <td><?php $record_trans_id = $row_Recordset1['transaction_id']; echo "<a href=\"{$_SERVER['PHP_SELF']}?trans_id={$record_trans_id}\">edit</a>"; ?></td>
-		  <td><input class="paid" type="checkbox" name="<?php echo $row_Recordset1['transaction_id']; ?>" value="<?php echo $row_Recordset1['paid']; ?>"></td>
+		  <td><input class="paid" type="checkbox" name="<?php echo $row_Recordset1['transaction_id']; ?>" 
+		  														value="<?php echo $row_Recordset1['paid'];?>"
+																<?php if ($row_Recordset1['paid'] == 1) { echo "  checked"; }  ?>		  														
+		  														>
+		  </td>
 	    </tr>
           <input type="hidden" name="MM_insert" value="FormUpdate">
           <input type="hidden" name="shop_visit_id" value="<?php echo $row_Recordset1['transaction_id']; ?>">
