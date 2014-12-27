@@ -4,6 +4,7 @@ require_once('Connections/database_functions.php');
 
 $page_edit_contact = PAGE_EDIT_CONTACT; 
 $page_individual_history_log = INDIVIDUAL_HISTORY_LOG;
+$default_shop_user = DEFAULT_SHOP_USER;
 
 mysql_select_db($database_YBDB, $YBDB);
 //?shop_id=2
@@ -31,7 +32,13 @@ if($_GET['new_user_id']>0){
 }
 	
 	
-$query_Recordset1 = "SELECT shop_hours.shop_visit_id, shop_hours.contact_id, shop_hours.shop_user_role, shop_hours.project_id, shop_hours.time_in, shop_hours.time_out, TIME_FORMAT(TIMEDIFF(time_out, time_in),'%k:%i') as et, shop_hours.comment, CONCAT(contacts.last_name, ', ', contacts.first_name, ' ',contacts.middle_initial) AS full_name, contacts.first_name FROM shop_hours
+$query_Recordset1 = "SELECT shop_hours.shop_visit_id, shop_hours.contact_id, 
+									shop_hours.shop_user_role, shop_hours.project_id, 
+									shop_hours.time_in, shop_hours.time_out, 
+									TIME_FORMAT(TIMEDIFF(time_out, time_in),'%k:%i') 
+									AS et, shop_hours.comment, 
+									CONCAT(contacts.last_name, ', ', contacts.first_name, ' ',contacts.middle_initial) 
+									AS full_name, contacts.first_name FROM shop_hours
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role=shop_user_roles.shop_user_role_id
 LEFT JOIN contacts ON shop_hours.contact_id=contacts.contact_id
 WHERE shop_hours.shop_id = $shop_id ORDER BY hours_rank, time_in DESC;";
@@ -148,7 +155,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
               &nbsp;&nbsp;&nbsp;&nbsp;last name quickly</span>
               <?php list_contacts_select_user('contact_id', $new_user_id); ?></td>
 		  <td valign="bottom"><strong>
-		    <?php list_shop_user_roles('user_role','Personal'); ?>
+		    <?php list_shop_user_roles('user_role', $default_shop_user); ?>
 		    </strong></td>
 		  <td valign="bottom"><strong>
 		    <?php if($totalRows_Recordset1 <> 0){ 

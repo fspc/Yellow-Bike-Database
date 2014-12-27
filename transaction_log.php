@@ -4,6 +4,8 @@ require_once('Connections/database_functions.php');
 
 $page_edit_contact = PAGE_EDIT_CONTACT; 
 $page_individual_history_log = INDIVIDUAL_HISTORY_LOG;
+$storage_period = STORAGE_PERIOD;
+$default_transaction_type = DEFAULT_TRANSACTION_TYPE;
 
 //transaction ID	
 if($_GET['trans_id']>0){
@@ -14,10 +16,10 @@ if($_GET['trans_id']>0){
 //error
 switch ($_GET['error']) {
 case 'transactioncomplete':
-   $error_message = 'Paypal transaction was sucessful';
+   $error_message = 'Paypal transaction was successful';
    break;
 case 'transactioncanceled':	//this is a sample error message.  insert error case here		
-   $error_message = 'Paypal transaction was canceled';
+   $error_message = 'Paypal transaction was cancelled';
    break;
 default:
    $error_message = '';
@@ -71,12 +73,12 @@ DATE_FORMAT(date,'%m/%d (%a)') as date_wday,
 CONCAT('$',FORMAT(amount,2)) as format_amount,
 CONCAT(contacts.last_name, ', ', contacts.first_name, ' ',contacts.middle_initial) AS full_name,
 LEFT(IF(show_startdate, CONCAT(' [',
-		DATE_FORMAT(DATE_ADD(date_startstorage,INTERVAL 14 DAY),'%W, %M %D'), '] ', transaction_log.description),
+		DATE_FORMAT(DATE_ADD(date_startstorage,INTERVAL $storage_period DAY),'%W, %M %D'), '] ', transaction_log.description),
 		IF(community_bike,CONCAT('Quantity(', quantity, ')  ', transaction_log.description), description)),100) as description_with_locations
 FROM transaction_log
 LEFT JOIN contacts ON transaction_log.sold_to=contacts.contact_id
 LEFT JOIN transaction_types ON transaction_log.transaction_type=transaction_types.transaction_type_id
-WHERE 1=1 {$trans_date} {$shop_dayname} {$trans_type} ORDER BY date_wday DESC LIMIT  0, $record_count;";
+WHERE 1=1 {$trans_date} {$shop_dayname} {$trans_type} ORDER BY transaction_id DESC LIMIT  0, $record_count;";
 $Recordset1 = mysql_query($query_Recordset1, $YBDB) or die(mysql_error());
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
@@ -228,8 +230,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 	  $query_Recordset2 = "SELECT *,
 DATE_FORMAT(date_startstorage,'%Y-%m-%d') as date_startstorage_day,
 DATE_FORMAT(date,'%Y-%m-%d') as date_day,
-DATE_FORMAT(DATE_ADD(date_startstorage,INTERVAL 14 DAY),'%W, %M %D') as storage_deadline,
-DATEDIFF(DATE_ADD(date_startstorage,INTERVAL 14 DAY),CURRENT_DATE()) as storage_days_left,
+DATE_FORMAT(DATE_ADD(date_startstorage,INTERVAL $storage_period DAY),'%W, %M %D') as storage_deadline,
+DATEDIFF(DATE_ADD(date_startstorage,INTERVAL $storage_period DAY),CURRENT_DATE()) as storage_days_left,
 FORMAT(amount,2) as format_amount
 FROM transaction_log WHERE transaction_id = $trans_id; ";
 	  $Recordset2 = mysql_query($query_Recordset2, $YBDB) or die(mysql_error());
@@ -364,7 +366,7 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
         
         <form method="post" name="FormNew" action="<?php echo $editFormAction; ?>">
           <tr bordercolor="#CCCCCC" bgcolor="#CCCC33">
-            <td colspan="8"><p><strong>Start New Transaction:</strong><br />&nbsp;&nbsp;&nbsp;&nbsp;Select Type: <?php list_transaction_types('transaction_type','Sale - Used Parts'); ?> 
+            <td colspan="8"><p><strong>Start New Transaction:</strong><br />&nbsp;&nbsp;&nbsp;&nbsp;Select Type: <?php list_transaction_types('transaction_type',$default_transaction_type); ?> 
               <input type="submit" name="Submit43" value="Create Transaction" />
               </p>	      </td>
 	      </tr>
@@ -399,6 +401,7 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 		  <td><input class="paid" type="checkbox" name="<?php echo $row_Recordset1['transaction_id']; ?>" 
 		  														value="<?php echo $row_Recordset1['paid'];?>"
 																<?php if ($row_Recordset1['paid'] == 1) { echo "  checked"; }  ?>		  														
+		  														
 		  														>
 		  </td>
 	    </tr>

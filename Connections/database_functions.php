@@ -1,6 +1,12 @@
 <?php
 require_once('YBDB.php');
 
+// User defined constants - read populate.sql for directions
+define("STORAGE_PERIOD", 14);
+define("ACCOUNTING_GROUP", "Sales");
+define("DEFAULT_TRANSACTION_TYPE", "Sale - Used Parts");
+define("DEFAULT_SHOP_USER", "Volunteer");
+
 //constants
 define("PAGE_START_SHOP", "/start_shop.php");
 define("PAGE_SHOP_LOG", "/shop_log.php");
