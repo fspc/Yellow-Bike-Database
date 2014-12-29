@@ -17,4 +17,15 @@ $(function() {
 	  	} 
 	});
 
+	// make tabbing more predictable
+	$("input[name='shop_id']").attr("tabindex",1);
+	$("select[name='transaction_type']").attr("tabindex",2);
+	$("input[name='date']").attr("tabindex",3);
+	$("input[name='amount']").attr("tabindex",4)
+	$("input[name='quantity']").attr("tabindex",5)
+	$("textarea[name='description']").attr("tabindex",6)
+	$("select[name='sold_to']").attr("tabindex",8)
+	$("select[name='sold_by']").attr("tabindex",9)
+
+
 });

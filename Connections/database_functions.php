@@ -30,7 +30,11 @@ function generate_list($querySQL,$list_value,$list_text, $form_name, $default_va
 	$default_delimiter = '';
 	
 	// if a form name is supplied HTML listbox code is inserted
-	if($form_name <> "none"){echo "<select name=\"$form_name\">";}
+	if($form_name == "transaction_type"){
+		echo "<select class=\"yb_standard\" name=\"$form_name\">";
+	} elseif($form_name <> "none"){ 
+		echo "<select name=\"$form_name\">";	
+	}
 
 	echo "\n";
 	do { 

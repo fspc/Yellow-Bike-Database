@@ -197,11 +197,13 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 
 <?php include("include_header.html"); ?>
 
-<input type="hidden" name="cancel_return" value="http://ybdb.austinyellowbike.org/transaction_log.php?error=transactioncanceled" />
+<input type="hidden" name="cancel_return" value="http://positivespin.org/ybdb/transaction_log.php?error=transactioncanceled" />
 <table border="0" cellpadding="1" cellspacing="0">
   <tr>
     <td align="left" valign="bottom"><?php echo $error_message ?> </td>
     </tr>
+  
+  <!-- All elements of edit transaction contained in this row -->  
   <tr>
     <td>
       <table border="1" cellpadding="1" cellspacing="0" bordercolor="#CCCCCC">
@@ -248,35 +250,39 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 	  
 	  ?>
         
-        
+        <!-- The actual row for edit transactions -->
         <tr bgcolor="#CCCC33">
+
+			<!-- the column for the edit transactions form -->          
           <td colspan="7">
             <form method="post" name="FormEdit" action="<?php echo $editFormAction; ?>">
               <table border="0" cellspacing="0" cellpadding="1">
-                <tr>
-                  <td colspan="3"><strong>Edit Transaction:
-                    <input type="submit" name="EditSubmit" value="Save"  >
-                    <input type="submit" name="EditSubmit" value="Close" >
-                    <input type="submit" name="EditSubmit" value="Delete"  >
-                    </strong> Save before using paypal ->></td>
+                  
+                   <td></td><td></td>
+                   <td>
+                    <input type="submit" name="EditSubmit" value="Save" align="right">
+                    <input type="submit" name="EditSubmit" value="Close">
+                    <input type="submit" name="EditSubmit" value="Delete">
+                    <!-- Save before using paypal ->> -->
+                    </td>
 		  	    </tr>
                 
-                <tr><td width="10">&nbsp;</td>
-		  	    <td width="130">Transaction ID: </td>
+                <tr><td>&nbsp;</td>
+		  	    <td><label>Transaction ID:</label></td>
                 <td><?php echo $row_Recordset2['transaction_id']; ?><em><?php echo $row_Recordset3['message_transaction_id']; ?></em></em></td>
 		  	  </tr>
-		  	    <tr><td width="10">&nbsp;</td>
-		  	    <td width="130">ShopID: </td>
+		  	    <tr><td>&nbsp;</td>
+		  	    <td><label>ShopID:</label> </td>
                 <td><input name="shop_id" type="text" id="amount" value="<?php echo $row_Recordset2['shop_id']; ?>" size="6" /></td>
 		  	  </tr>
                 <?php ?>
-                <tr><td>&nbsp;</td><td>Select Type:</td>
+                <tr><td>&nbsp;</td><td><label>Select Type:</label></td>
 		  	    <td><?php list_transaction_types('transaction_type',$row_Recordset2['transaction_type'] ); ?></td>
 		  	  </tr>
                 <?php //date_startstorage ==============================================================
 			if($row_Recordset3['show_startdate']){?>
                 <tr><td>&nbsp;</td>
-		  	    <td>Storage Start Date:</td>
+		  	    <td><label>Storage Start Date:</label></td>
 		  	    <td><input name="date_startstorage" type="text" id="date_startstorage" value="<?php 
 			  echo $row_Recordset2['date_startstorage_day']; ?>" size="10" maxlength="10" />
 		  	      <em>YYYY-MM-DD</em></td>
@@ -284,7 +290,7 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
                 <?php } //end if storage | start of date ================================================
 			?>
                 <tr><td>&nbsp;</td>
-		  	    <td><?php echo $row_Recordset3['fieldname_date']; ?>:</td>
+		  	    <td><label><?php echo $row_Recordset3['fieldname_date']; ?>:</label></td>
 		  	    <td><input name="date" type="text" id="date" value="<?php echo $row_Recordset2['date_day']; ?>" size="10" maxlength="10" />
 		  	      <em>YYYY-MM-DD
 		  	        <SCRIPT>
@@ -299,26 +305,35 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 		  	  </tr>
                 <?php if($row_Recordset3['show_amount']){ ?>
                 <tr><td>&nbsp;</td>
-			  <td>Amount:</td>
-			  <td>$ <input name="amount" type="text" id="amount" value="<?php echo $row_Recordset2['format_amount']; ?>" size="6" /></td>
+			  <td><label>Price:</label></td>
+			  <td><input name="amount" type="text" id="amount" value="<?php echo $row_Recordset2['format_amount']; ?>" size="6" /></td>
 			  </tr>
                 <?php } // end if show amount
 			if($row_Recordset3['community_bike']){ //community bike will allow a quantity to be selected for Yellow Bikes and Kids Bikes?>
                 <tr>
                   <td>&nbsp;</td>
-		  	    <td valign="top">Quantity:</td>
+		  	    <td valign="top"><label>Quantity:</label></td>
 		  	    <td><input name="quantity" type="text" id="quantity" value="<?php echo $row_Recordset2['quantity']; ?>" size="3" maxlength="3" /></td>
 		  	    </tr>
                 <?php } // end if show quanitiy for community bikes
 			if($row_Recordset3['show_description']){ ?>
                 <tr><td>&nbsp;</td>
-		  	  <td valign="top"><?php echo $row_Recordset3['fieldname_description']; ?>:</td>
+		  	  <td valign="top"><label><?php echo $row_Recordset3['fieldname_description']; ?>:</label></td>
 		  	  <td><textarea name="description" cols="45" rows="2"><?php echo $row_Recordset2['description']; ?></textarea></td>
+		  	  </tr>
+		  	  <tr>
+		  	  		<td></td>
+					<td><label>Payment Type:</label></td>
+					<td>
+						<input type="radio" name="payment_type" value="cash">Cash
+						<input type="radio" name="payment_type" value="credit">Credit Card
+						<input type="radio" name="payment_type" value="check">Check	
+					</td>		  	  
 		  	  </tr>
                 <?php } // end if show_description 
 				if($row_Recordset3['show_soldto_location']){ // if location show row?>
                 <tr><td>&nbsp;</td>
-		  	  <td><?php echo $row_Recordset3['fieldname_soldto']; ?>:</td>
+		  	  <td><label><?php echo $row_Recordset3['fieldname_soldto']; ?>:</label></td>
 		  	  <td><?php
 			if($row_Recordset3['show_soldto_location']){
 				list_donation_locations_withheader('sold_to', $row_Recordset2['sold_to']); 
@@ -329,7 +344,7 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 			}  ?></td>
 		  	  </tr> <?php } //end if show location row ?>
                 <tr><td>&nbsp;</td>
-			  <td><?php echo $row_Recordset3['fieldname_soldby']; ?>:</td>
+			  <td><label><?php echo $row_Recordset3['fieldname_soldby']; ?>:</label></td>
 			  <td><?php if(current_shop_by_ip()>0) list_current_coordinators_select('sold_by', $row_Recordset2['sold_by']); else list_contacts_coordinators('sold_by', $row_Recordset2['sold_by']); 
 			  //list_contacts_coordinators('sold_by', $row_Recordset2['sold_by']);
               //list_current_coordinators_select('sold_by', $row_Recordset2['sold_by']);
@@ -342,6 +357,8 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
               <input type="hidden" name="db_date_startstorage" value="<?php echo $row_Recordset2['date_startstorage']; ?>">
               <input type="hidden" name="db_date" value="<?php echo $row_Recordset2['date']; ?>">
               </form></td>
+        
+        <!-- PayPal column for edit transactions -->     
 		  <td colspan="1" align="right" valign="top"> 
 		    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 		      <input type="hidden" name="cmd" value="_xclick" />
