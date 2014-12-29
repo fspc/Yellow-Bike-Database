@@ -5,6 +5,7 @@ require_once('Connections/database_functions.php');
 $page_edit_contact = PAGE_EDIT_CONTACT; 
 $page_individual_history_log = INDIVIDUAL_HISTORY_LOG;
 $default_shop_user = DEFAULT_SHOP_USER;
+$shop_hours_length = SHOP_HOURS_LENGTH;
 
 mysql_select_db($database_YBDB, $YBDB);
 //?shop_id=2
@@ -215,7 +216,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
             <td><a href="<?php echo "{$page_individual_history_log}?contact_id=" . $row_Recordset1['contact_id']; ?>"><?php echo $row_Recordset1['full_name']; ?></a></td>
 		  <td><?php echo $row_Recordset1['shop_user_role']; ?></td>
 		  <td><?php echo date_to_time($row_Recordset1['time_in']); ?></td>
-		  <td><?php echo list_time($row_Recordset1['time_in'],$row_Recordset1['time_out'],'time_out',0,1,'none', 8,$row_Recordset1['et']); ?></td>
+		  <td><?php echo list_time($row_Recordset1['time_in'],$row_Recordset1['time_out'],'time_out',0,1,'none', $shop_hours_length, $row_Recordset1['et']); ?></td>
 		  <td><?php sign_out($row_Recordset1['time_out'], $row_Recordset1['first_name']); ?>&nbsp</td>
 		  <td><?php if($shop_CanEdit == 1) {echo "<a href=\"{$_SERVER['PHP_SELF']}?shop_id={$shop_id}&visit_id={$row_Recordset1['shop_visit_id']}\">edit</a>";} else {echo "&nbsp";} ?></td>
 	    </tr>

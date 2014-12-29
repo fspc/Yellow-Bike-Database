@@ -319,15 +319,18 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 			if($row_Recordset3['show_description']){ ?>
                 <tr><td>&nbsp;</td>
 		  	  <td valign="top"><label><?php echo $row_Recordset3['fieldname_description']; ?>:</label></td>
-		  	  <td><textarea name="description" cols="45" rows="2"><?php echo $row_Recordset2['description']; ?></textarea></td>
+		  	  <td><textarea name="description" cols="45" rows="3"><?php echo $row_Recordset2['description']; ?></textarea></td>
 		  	  </tr>
 		  	  <tr>
 		  	  		<td></td>
 					<td><label>Payment Type:</label></td>
 					<td>
-						<input type="radio" name="payment_type" value="cash">Cash
-						<input type="radio" name="payment_type" value="credit">Credit Card
-						<input type="radio" name="payment_type" value="check">Check	
+						<input type="radio" name="payment_type" value="cash"
+						<?php if ($row_Recordset2['payment_type'] == "cash") { echo "  checked"; }  ?>	>Cash
+						<input type="radio" name="payment_type" value="credit"
+						<?php if ($row_Recordset2['payment_type'] == "credit") { echo "  checked"; } ?>  >Credit Card
+						<input type="radio" name="payment_type" value="check"
+						<?php if ($row_Recordset2['payment_type'] == "check") { echo "  checked"; } ?>   >Check	
 					</td>		  	  
 		  	  </tr>
                 <?php } // end if show_description 

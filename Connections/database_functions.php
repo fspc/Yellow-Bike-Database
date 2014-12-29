@@ -1,11 +1,15 @@
 <?php
 require_once('YBDB.php');
 
-// User defined constants - read populate.sql for directions
+// User defined constants - read sql/populate.sql for an explanation
 define("STORAGE_PERIOD", 14);
 define("ACCOUNTING_GROUP", "Sales");
 define("DEFAULT_TRANSACTION_TYPE", "Sale - Used Parts");
 define("DEFAULT_SHOP_USER", "Volunteer");
+
+// How many hours should the shop be open from the time a person logins?  Hours display in pulldown in shop_log.php
+// No overtime for volunteers.  :)
+define("SHOP_HOURS_LENGTH", 10);  
 
 /*    
 	Choose your timezone from http://php.net/manual/en/timezones.php 
@@ -184,7 +188,7 @@ function currency_format($value, $places = 2){
 	else echo number_format($value,$places);
 }
 
-//function to convert server time (UTC) to local time.  To be used by all other current date / time requests. 
+//function to convert server time to local time.  To be used by all other current date / time requests. 
 function local_datetime(){
 	// $hours_offset = UTC_TIME_OFFSET;
 	// $min_offset = 0;
