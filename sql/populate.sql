@@ -111,11 +111,12 @@ INSERT INTO contacts (
 --	
 
 INSERT INTO transaction_types 
-  (transaction_type_id, rank, active, community_bike, show_transaction_id, 
-  show_type, show_startdate, show_amount, show_description, show_soldto, 
-  show_soldby, fieldname_date, fieldname_soldby, message_transaction_id, 
-  fieldname_soldto, show_soldto_location, fieldname_description, 
-  accounting_group
+  (transaction_type_id, rank, 
+   active, community_bike, show_transaction_id, show_type, show_startdate, 
+   show_amount, show_description, show_soldto, show_soldby, 
+   fieldname_date, fieldname_soldby, message_transaction_id, 
+   fieldname_soldto, show_soldto_location, fieldname_description, 
+   accounting_group
 ) VALUES 
   ("Build Your Own Bike", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"), 
   ("Bicycles", 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"), 
@@ -139,10 +140,11 @@ INSERT INTO transaction_types
   ("Sale - Complete Bike", 20, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales");
 
 -- transaction_log - added paid or not
---  - added payment_type (cash, check or cc)
+--                 - added payment_type (cash, check or cc)
 -- transaction_id, date_startstorage, date,transaction_type, amount,
 -- description, sold_to, sold_by, quantity, shop_id, paid
-ALTER TABLE transaction_log ADD paid tinyint(1) NOT NULL DEFAULT '0';
 
+ALTER TABLE transaction_log ADD paid tinyint(1) NOT NULL DEFAULT '0';
+ALTER TABLE transaction_log ADD payment_type varchar(5) DEFAULT NULL;
 
 

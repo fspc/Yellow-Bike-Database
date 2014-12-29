@@ -285,14 +285,14 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 		  	    <td><label>Storage Start Date:</label></td>
 		  	    <td><input name="date_startstorage" type="text" id="date_startstorage" value="<?php 
 			  echo $row_Recordset2['date_startstorage_day']; ?>" size="10" maxlength="10" />
-		  	      <em>YYYY-MM-DD</em></td>
+		  	      (yyyy-mm-dd)</td>
 		  	  </tr>
                 <?php } //end if storage | start of date ================================================
 			?>
                 <tr><td>&nbsp;</td>
 		  	    <td><label><?php echo $row_Recordset3['fieldname_date']; ?>:</label></td>
 		  	    <td><input name="date" type="text" id="date" value="<?php echo $row_Recordset2['date_day']; ?>" size="10" maxlength="10" />
-		  	      <em>YYYY-MM-DD
+		  	      (yyyy-mm-dd)
 		  	        <SCRIPT>
 					function FillDate() { 
 						document.FormEdit.date.value = '<?php echo current_date(); ?>' }
@@ -301,7 +301,7 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 		  	        <br /><?php 
 				if ($row_Recordset3['show_startdate']) {  // If there is a start date show storage expiration message.
 					echo ($row_Recordset2['date_day'] == "0000-00-00") ? $row_Recordset2['storage_days_left'] . " days of storage remaining.  Bike must be finished by " . $row_Recordset2['storage_deadline'] . "." : "Bike is marked as complete and should no longer be stored in the shop.";
-				} ?></em></td>
+				} ?></td>
 		  	  </tr>
                 <?php if($row_Recordset3['show_amount']){ ?>
                 <tr><td>&nbsp;</td>

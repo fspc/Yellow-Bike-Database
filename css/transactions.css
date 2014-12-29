@@ -1,0 +1,24 @@
+/* sensible UI defaults for transaction views */
+
+/* right-align labels */
+td > label {
+	float: right; 
+	padding-right: 5px;
+}
+
+/* make unimportant buttons into links */
+input[value=Delete], input[name=date_fill] {
+	background:none!important;
+	border:none; 
+	padding:0!important;
+	color: blue;
+	/*border is optional*/
+	/* border-bottom:1px solid blue; */ 
+	cursor: pointer;
+}
+
+form[name=FormEdit] select:focus { 
+    color: green;
+}
+
+
