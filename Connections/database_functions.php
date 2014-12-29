@@ -7,6 +7,22 @@ define("ACCOUNTING_GROUP", "Sales");
 define("DEFAULT_TRANSACTION_TYPE", "Sale - Used Parts");
 define("DEFAULT_SHOP_USER", "Volunteer");
 
+/*    
+	Choose your timezone from http://php.net/manual/en/timezones.php 
+	
+	Eastern ........... America/New_York
+	Central ........... America/Chicago
+	Mountain .......... America/Denver
+	Mountain no DST ... America/Phoenix
+	Pacific ........... America/Los_Angeles
+	Alaska ............ America/Anchorage
+	Hawaii ............ America/Adak
+	Hawaii no DST ..... Pacific/Honolulu
+
+*/
+define("TIMEZONE", "America/New_York");
+
+
 //constants
 define("PAGE_START_SHOP", "/start_shop.php");
 define("PAGE_SHOP_LOG", "/shop_log.php");
@@ -168,12 +184,14 @@ function currency_format($value, $places = 2){
 	else echo number_format($value,$places);
 }
 
-//function to convert server time to local time.  To be used by all other current date / time requests. 
+//function to convert server time (UTC) to local time.  To be used by all other current date / time requests. 
 function local_datetime(){
-	$hours_offset = 2;
-	$min_offset = 0;
-	return time() + ($hours_offset * 60 * 60 + $min_offset * 60);
+	// $hours_offset = UTC_TIME_OFFSET;
+	// $min_offset = 0;
+	//return time() + ( $hours_offset *  60  * 60 + $min_offset * 60 );
 					//offset hours; 60 mins; 60secs offset
+	date_default_timezone_set(TIMEZONE); 
+	return time();
 }
 
 //function converts the current date/time into h:m am format 

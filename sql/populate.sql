@@ -146,5 +146,3 @@ INSERT INTO transaction_types
 
 ALTER TABLE transaction_log ADD paid tinyint(1) NOT NULL DEFAULT '0';
 ALTER TABLE transaction_log ADD payment_type varchar(5) DEFAULT NULL;
-
-
