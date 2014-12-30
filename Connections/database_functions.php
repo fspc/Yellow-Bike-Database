@@ -33,6 +33,9 @@ define("TIMEZONE", "America/New_York");
 */
 define("NONSHOP",0);
 
+// How many transactions to you want shown
+define("NUMBER_OF_TRANSACTIONS", 11);
+
 //constants
 define("PAGE_START_SHOP", "/start_shop.php");
 define("PAGE_SHOP_LOG", "/shop_log.php");

@@ -112,9 +112,12 @@ INSERT INTO contacts (
 --  a defined period before it is purchased.  If this is set,
 --  the behavior is to hide price (show_amount) and payment types (show_payment)
 --  until a date (label defined by fieldname_date) is entered.
-
+--
 -- Storage period may be defined in Connections/database_functions.php - STORAGE_PERIOD
-
+--
+-- DEPOSITS
+-- Deposit (transaction_type_id) is a special transaction type that behaves differently in the log
+-- for a good reason.
 
 ALTER TABLE transaction_types ADD show_payment tinyint(1) NOT NULL DEFAULT '1';
 INSERT INTO transaction_types 
@@ -130,7 +133,7 @@ INSERT INTO transaction_types
   ("Non-inventory Parts", 3, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
   ("Trade-ups/Ins", 4, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
   ("Helmets", 5, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
-  ("Donations", 6, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
+  ("Donations", 6, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),     
   ("Memberships", 7, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
   ("Inventory Parts", 8, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
   ("Cargo Related", 9, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
@@ -138,7 +141,7 @@ INSERT INTO transaction_types
   ("DIY Repairs", 11, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),
   ("Accounts Receivable Invoice", 12, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 0), 
   ("Accounts Receivable Payment", 13, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
-  ("Deposit", 14, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 0),
+  ("Deposit", 14, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Deposit Date", "Deposited By"," ", "", 0, "Description", "Sales", 0),
   ("Metrics - Completed Mechanic Operation Bike", 15, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),
   ("Metrics - Completed Mechanic Operation Wheel", 16, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),
   ("Metrics - New Parts on a Completed Bike", 17, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"),

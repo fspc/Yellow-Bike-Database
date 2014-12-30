@@ -6,6 +6,7 @@ $page_edit_contact = PAGE_EDIT_CONTACT;
 $page_individual_history_log = INDIVIDUAL_HISTORY_LOG;
 $storage_period = STORAGE_PERIOD;
 $default_transaction_type = DEFAULT_TRANSACTION_TYPE;
+$number_of_transactions = NUMBER_OF_TRANSACTIONS;
 
 //transaction ID	
 if($_GET['trans_id']>0){
@@ -62,7 +63,7 @@ if($_GET['trans_type']=='all_types'){
 if($_GET['record_count']>0){
 	$record_count = $_GET['record_count'];
 } else {
-	$record_count = 30;}
+	$record_count = $number_of_transactions;}
 
 // This is the recordset for the list of logged transactions	
 
@@ -329,7 +330,11 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  	  
 			 <?php if($row_Recordset3['show_amount']){ ?>
            <tr id="price"><td>&nbsp;</td>
-			  	<td><label>Price:</label></td>
+				<?php if($row_Recordset3['transaction_type_id'] == "Deposit"){?>           
+			  		<td><label>Deposited:</label></td>	
+				<?php } else { ?>
+					<td><label>Paid:</label></td>
+				<?php } ?>
 			  	<td><input name="amount" type="text" id="amount" value="<?php echo $row_Recordset2['format_amount']; ?>" size="6" /></td>
 			  </tr>
 			  <?php } ?>		  	  
@@ -449,7 +454,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
     <td height="40" valign="bottom"><form id="form1" name="form1" method="post" action="">
       <p><br />
         Show
-        <input name="record_count" type="text" value="30" size="3" maxlength="3" />
+        <input name="record_count" type="text" value="<?php echo $number_of_transactions;  ?>" size="3" maxlength="3" />
         transactions on or before:
         <input name="trans_date" type="text" id="trans_date" value="<?php echo current_date(); ?>" size="10" maxlength="10" />
         (date format YYYY-MM-DD) Day of week:
