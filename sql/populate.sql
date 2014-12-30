@@ -72,8 +72,6 @@ INSERT INTO contacts (
 -- Set-up transaction types
 -- This is object orienteed like :)
 --
--- Storage period may be defined in Connections/database_functions.php
---
 -- SILLY TEXT FIELDS (some presentation logic that is in the business logic, rather than kept cleanly separated from it)
 -- NOTE - (:colon is appended by default:)
 --
@@ -107,37 +105,47 @@ INSERT INTO contacts (
 --  Note: good news, default select value for transaction types may be set in Connections/database_functions.php
 --
 --  Sales Tax Report - Hardwired Caveat: The same value used for accounting_group 
--- 									           needs to be defined in Connections/database_functions.php
---	
+-- 									           needs to be defined in Connections/database_functions.php - ACCOUNTING_GROUP
+--
+--  STORAGE TRANSACTION	
+--  show_startdate - is used by transactions where an item (usually a bicycle) is stored for
+--  a defined period before it is purchased.  If this is set,
+--  the behavior is to hide price (show_amount) and payment types (show_payment)
+--  until a date (label defined by fieldname_date) is entered.
 
+-- Storage period may be defined in Connections/database_functions.php - STORAGE_PERIOD
+
+
+ALTER TABLE transaction_types ADD show_payment tinyint(1) NOT NULL DEFAULT '1';
 INSERT INTO transaction_types 
   (transaction_type_id, rank, 
    active, community_bike, show_transaction_id, show_type, show_startdate, 
    show_amount, show_description, show_soldto, show_soldby, 
    fieldname_date, fieldname_soldby, message_transaction_id, 
    fieldname_soldto, show_soldto_location, fieldname_description, 
-   accounting_group
+   accounting_group, show_payment)
 ) VALUES 
-  ("Build Your Own Bike", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"), 
-  ("Bicycles", 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"), 
-  ("Non-inventory Parts", 3, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"), 
-  ("Trade-ups/Ins", 4, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"), 
-  ("Helmets", 5, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"), 
-  ("Donations", 6, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"), 
-  ("Memberships", 7, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"), 
-  ("Inventory Parts", 8, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"), 
-  ("Cargo Related", 9, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"), 
-  ("Car Racks", 10, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"), 
-  ("DIY Repairs", 11, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"),
-  ("Accounts Receivable Invoice", 12, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"), 
-  ("Accounts Receivable Payment", 13, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"), 
-  ("Deposit", 14, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"),
-  ("Metrics - Completed Mechanic Operation Bike", 15, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"),
-  ("Metrics - Completed Mechanic Operation Wheel", 16, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"),
+  ("Build Your Own Bike", 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
+  ("Bicycles", 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
+  ("Non-inventory Parts", 3, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
+  ("Trade-ups/Ins", 4, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
+  ("Helmets", 5, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
+  ("Donations", 6, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
+  ("Memberships", 7, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
+  ("Inventory Parts", 8, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
+  ("Cargo Related", 9, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
+  ("Car Racks", 10, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
+  ("DIY Repairs", 11, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),
+  ("Accounts Receivable Invoice", 12, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 0), 
+  ("Accounts Receivable Payment", 13, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
+  ("Deposit", 14, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 0),
+  ("Metrics - Completed Mechanic Operation Bike", 15, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),
+  ("Metrics - Completed Mechanic Operation Wheel", 16, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),
   ("Metrics - New Parts on a Completed Bike", 17, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"),
-  ("Sale - Used Parts", 18, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"),
-  ("Sale - New Parts", 19, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales"),
-  ("Sale - Complete Bike", 20, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales");
+  ("Sale - Used Parts", 18, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),
+  ("Sale - New Parts", 19, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),
+  ("Sale - Complete Bike", 20, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),
+  ("Giveaway", 21, 1, 0, 1, 1, 0, 0, 1, 1, 1, "Sale Date", "Given By"," ", "Given To", 1, "Description", "Sales", 0);
 
 -- transaction_log - added paid or not
 --                 - added payment_type (cash, check or cc)

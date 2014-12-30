@@ -9,6 +9,7 @@ define("DEFAULT_SHOP_USER", "Volunteer");
 
 // How many hours should the shop be open from the time a person logins?  Hours display in pulldown in shop_log.php
 // No overtime for volunteers.  :)
+// shop will be current shop for the 24hr day yyyy-mm-dd (currently no check for hrs, only date)
 define("SHOP_HOURS_LENGTH", 10);  
 
 /*    
@@ -26,6 +27,11 @@ define("SHOP_HOURS_LENGTH", 10);
 */
 define("TIMEZONE", "America/New_York");
 
+/* If you elect to keep records for non-shop hours, decide which shop should be used for that purpose.
+   The first shop created, 1, makes sense.  A link will show in start_shop.php.
+	If you do not want this functionality at all, choose 0.   
+*/
+define("NONSHOP",0);
 
 //constants
 define("PAGE_START_SHOP", "/start_shop.php");

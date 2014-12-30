@@ -1,6 +1,6 @@
 <?php
-require_once('../Connections/YBDB.php');
-require_once('../Connections/database_functions.php'); 
+require_once('Connections/YBDB.php');
+require_once('Connections/database_functions.php'); 
 
 $page_edit_contact = PAGE_EDIT_CONTACT;
 
@@ -37,8 +37,9 @@ if($_GET['record_count']>0){
 	$record_count = $_GET['record_count'];
 } else {
 	$record_count = 10;}	
-	
-$individual_shop_id = 90;
+
+// A special shop devoted to this, better to start with 1. :)	
+$individual_shop_id = NONSHOP;
 	
 $query_Recordset1 = "SELECT shop_hours.shop_visit_id, shop_hours.contact_id, shop_hours.shop_user_role, shop_hours.project_id, DATE(shop_hours.time_in) AS date, shop_hours.time_in, shop_hours.time_out, TIME_FORMAT(TIMEDIFF(time_out, time_in),'%k:%i') as et, shop_hours.comment, CONCAT(contacts.last_name, ', ', contacts.first_name, ' ',contacts.middle_initial) AS full_name, contacts.first_name FROM shop_hours
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role=shop_user_roles.shop_user_role_id

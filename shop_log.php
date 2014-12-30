@@ -78,11 +78,13 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form_new") && ($_PO
 	//if no contact is selected
 	$error_message = '<span class="yb_heading3red">Please Select a User</span><br />';
 } elseif ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form_new")) {
-  $insertSQL = sprintf("INSERT INTO shop_hours (contact_id, shop_id, shop_user_role, time_in) VALUES (%s, %s, %s, %s)",
+  $insertSQL = sprintf("INSERT INTO shop_hours (contact_id, shop_id, shop_user_role, time_in, comment, project_id) VALUES (%s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['contact_id'], "int"),
                        GetSQLValueString($shop_id, "int"),
                        GetSQLValueString($_POST['user_role'], "text"),
-                       GetSQLValueString($_POST['time_in'], "date"));
+                       GetSQLValueString($_POST['time_in'], "date"),
+                       GetSQLValueString($_POST['comment'], "text"),
+					   	  GetSQLValueString($_POST['project'], "text"));
 
   mysql_select_db($database_YBDB, $YBDB);
   $Result1 = mysql_query($insertSQL, $YBDB) or die(mysql_error());
@@ -149,8 +151,12 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
 		  <td height="35"><strong>Update Hours </strong></td>
 		  <td height="35"><strong>Edit Data </strong></td>
 	    </tr>
+	    
+	    
         <form method="post" name="form_new" action="<?php echo $editFormAction; ?>">
-          <tr bordercolor="#CCCCCC">
+          
+          
+        <tr bordercolor="#CCCCCC">
             <td height="40" valign="bottom">
               <span class="yb_standard_small">&nbsp;&nbsp;Not in the list: Create <a href="<?php echo $page_edit_contact; ?>?contact_id=new_contact&shop_id=<?php echo $shop_id?>">New User</a><br>&nbsp;&nbsp;Hint: Click on dropdown below and type <br />
               &nbsp;&nbsp;&nbsp;&nbsp;last name quickly</span>
@@ -170,8 +176,28 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
 		  <td valign="bottom"><input name="Submit" type="submit" value="Sign In" /></td>
 		  <td valign="bottom">&nbsp;</td>
 	    </tr>
+
+			<!-- testing this -->
+			<tr bordercolor="#CCCCCC" bgcolor="transparent">
+			            <td colspan="6"><table border="0" cellspacing="0" cellpadding="1">
+			              <tbody><tr>
+			                <td width="125"><div align="right">Project:</div></td>
+			              <td><select name="project">
+			<option value="" selected="selected"></option>\n<option value="Bike Building">Bike Building</option>\n<option value="Computers">Computers</option>\n<option value="Inventory">Inventory</option>\n<option value="Organization">Organization</option>\n<option value="Website">Website</option>\n</select></td>
+			            </tr>
+			              <tr>
+			                <td><div align="right">Comment:</div></td>
+			              <td><input name="comment" type="text" value="" size="90"></td>
+			            </tr>
+			                            <tr>
+			                
+			            </tr>               </tbody></table>	    </td>
+			</tr>      	    
+	    
           <input type="hidden" name="MM_insert" value="form_new">
           </form>
+          
+          
 	  <tr valign="bottom" bordercolor="#CCCCCC" bgcolor="#99CC33">
 	    <td height="25" colspan="6" bgcolor="#99CC33">&nbsp;&nbsp;&nbsp;&nbsp;Existing Shop Users:</td>
 	      </tr>

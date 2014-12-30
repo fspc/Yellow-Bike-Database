@@ -3,6 +3,7 @@ require_once('Connections/YBDB.php');
 require_once('Connections/database_functions.php'); 
 
 $page_shop_log = PAGE_SHOP_LOG;
+$nonshop = NONSHOP;
 
 //?shop_id=2
 if($_GET['shop_id']>0){
@@ -126,9 +127,11 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                   <td><strong>Stats</strong></td>
                   <td><strong>Edit</strong></td>
                 </tr>
+                <?php if ($nonshop != 0) { ?>
                 <tr>
-                  <td height="30" colspan="6"><a href="http://www.ybdb.austinyellowbike.org/individual_hours_log.php">Log Non-Shop Hours</a> </td>
+                  <td height="30" colspan="6"><a href="individual_hours_log.php">Log Non-Shop Hours</a> </td>
                 </tr>
+                <?php } ?>
                 <form action="<?php echo $editFormAction; ?>" method="post" name="form_new" id="form_new">
                   <tr>
                     <td height="30"><span class="yb_heading3red">Start New Shop:</span></td>

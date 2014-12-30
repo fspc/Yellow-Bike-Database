@@ -42,6 +42,41 @@ $(function() {
 				$.post("json/transaction.php",{ payment_type: this.value, transaction_id: $transaction_id } );
 			}
 		});
+		
+		/* When the transaction is storage based, only show price and payment_type 
+		   when a full date (yyyy-mm-dd) is entered. */
+		if ( $("#date_startstorage").length ) {
+			
+			var date_value = $("#date").val();
+			var date_test = /^\d{4}-((0\d)|(1[012]))-(([012]\d)|3[01])$/.test(date_value);
+	
+			if ( date_test && date_value != "0000-00-00" ) {
+				$("#price").show();			
+				$("#payment_type").show();
+			} else {
+				$("#price").hide();			
+				$("#payment_type").hide();	
+			}
+			
+			$("#date_fill").click(function(){ 
+					$("#price").show();			
+					$("#payment_type").show();
+			})			
+			
+			$("#date").on("input", function(){ 
+				
+				date_test = /^\d{4}-((0\d)|(1[012]))-(([012]\d)|3[01])$/.test(this.value);
+				if ( date_test && this.value != "0000-00-00" ) {
+					$("#price").show();			
+					$("#payment_type").show();
+				} else {
+					$("#price").hide();			
+					$("#payment_type").hide();	
+				}
+			});
+	
+		} // end testing for storage presentation		   
+			
 			
 	} // editing a transaction
 

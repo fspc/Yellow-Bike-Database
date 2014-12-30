@@ -230,12 +230,12 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 	  // Gets data for the transaction being edited
 	  mysql_select_db($database_YBDB, $YBDB);
 	  $query_Recordset2 = "SELECT *,
-DATE_FORMAT(date_startstorage,'%Y-%m-%d') as date_startstorage_day,
-DATE_FORMAT(date,'%Y-%m-%d') as date_day,
-DATE_FORMAT(DATE_ADD(date_startstorage,INTERVAL $storage_period DAY),'%W, %M %D') as storage_deadline,
-DATEDIFF(DATE_ADD(date_startstorage,INTERVAL $storage_period DAY),CURRENT_DATE()) as storage_days_left,
-FORMAT(amount,2) as format_amount
-FROM transaction_log WHERE transaction_id = $trans_id; ";
+								DATE_FORMAT(date_startstorage,'%Y-%m-%d') as date_startstorage_day,
+								DATE_FORMAT(date,'%Y-%m-%d') as date_day,
+								DATE_FORMAT(DATE_ADD(date_startstorage,INTERVAL $storage_period DAY),'%W, %M %D') as storage_deadline,
+								DATEDIFF(DATE_ADD(date_startstorage,INTERVAL $storage_period DAY),CURRENT_DATE()) as storage_days_left,
+								FORMAT(amount,2) as format_amount
+								FROM transaction_log WHERE transaction_id = $trans_id; ";
 	  $Recordset2 = mysql_query($query_Recordset2, $YBDB) or die(mysql_error());
 	  $row_Recordset2 = mysql_fetch_assoc($Recordset2);
 	  $totalRows_Recordset2 = mysql_num_rows($Recordset2);
@@ -297,18 +297,23 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 					function FillDate() { 
 						document.FormEdit.date.value = '<?php echo current_date(); ?>' }
 				</SCRIPT>
-		  	        <input type="button" name="date_fill" value="Fill Current Date" onclick="FillDate()" />
+		  	        <input type="button" name="date_fill" id="date_fill" value="Fill Current Date" onclick="FillDate()" />
 		  	        <br /><?php 
 				if ($row_Recordset3['show_startdate']) {  // If there is a start date show storage expiration message.
-					echo ($row_Recordset2['date_day'] == "0000-00-00") ? $row_Recordset2['storage_days_left'] . " days of storage remaining.  Bike must be finished by " . $row_Recordset2['storage_deadline'] . "." : "Bike is marked as complete and should no longer be stored in the shop.";
+					
+					if ( $row_Recordset2['date_day'] == "0000-00-00" ||
+						  !isset($row_Recordset2['date_day']) ) { 
+						echo $row_Recordset2['storage_days_left'] . 
+								" days of storage remaining.  Bike must be finished by " . 
+								$row_Recordset2['storage_deadline'] . "."; 
+					} else {						 
+						echo "Bike is marked as complete and should no longer be stored in the shop.";
+					}
+		
 				} ?></td>
 		  	  </tr>
-                <?php if($row_Recordset3['show_amount']){ ?>
-                <tr><td>&nbsp;</td>
-			  <td><label>Price:</label></td>
-			  <td><input name="amount" type="text" id="amount" value="<?php echo $row_Recordset2['format_amount']; ?>" size="6" /></td>
-			  </tr>
-                <?php } // end if show amount
+           
+                <?php  // end if show amount
 			if($row_Recordset3['community_bike']){ //community bike will allow a quantity to be selected for Yellow Bikes and Kids Bikes?>
                 <tr>
                   <td>&nbsp;</td>
@@ -321,7 +326,16 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 		  	  <td valign="top"><label><?php echo $row_Recordset3['fieldname_description']; ?>:</label></td>
 		  	  <td><textarea name="description" cols="45" rows="3"><?php echo $row_Recordset2['description']; ?></textarea></td>
 		  	  </tr>
-		  	  <tr>
+		  	  
+			 <?php if($row_Recordset3['show_amount']){ ?>
+           <tr id="price"><td>&nbsp;</td>
+			  	<td><label>Price:</label></td>
+			  	<td><input name="amount" type="text" id="amount" value="<?php echo $row_Recordset2['format_amount']; ?>" size="6" /></td>
+			  </tr>
+			  <?php } ?>		  	  
+		  	  
+		  	  <?php if($row_Recordset3['show_payment']) { ?>
+		  	  <tr id="payment_type">
 		  	  		<td></td>
 					<td><label>Payment Type:</label></td>
 					<td>
@@ -333,6 +347,7 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 						<?php if ($row_Recordset2['payment_type'] == "check") { echo "  checked"; } ?>   >Check	
 					</td>		  	  
 		  	  </tr>
+		  	  <?php } ?>
                 <?php } // end if show_description 
 				if($row_Recordset3['show_soldto_location']){ // if location show row?>
                 <tr><td>&nbsp;</td>
@@ -370,7 +385,7 @@ FROM transaction_log WHERE transaction_id = $trans_id; ";
 		      <input type="hidden" name="amount" value="<?php echo $row_Recordset2['format_amount']; ?>" />
 		      <!-- <input type="hidden" name="item_number" value="" /> -->
 		      <input type="hidden" name="no_shipping" value="1" />
-		      <input type="hidden" name="return" value="http://fsbomorgantown.com:84/transaction_log.php?error=transactioncomplete" />
+		      <input type="hidden" name="return" value="transaction_log.php?error=transactioncomplete" />
 		      <input type="hidden" name="no_note" value="1" />
 		      <input type="hidden" name="currency_code" value="USD" />
 		      <input type="hidden" name="tax" value="0" />
