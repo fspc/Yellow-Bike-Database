@@ -7,6 +7,12 @@ define("ACCOUNTING_GROUP", "Sales");
 define("DEFAULT_TRANSACTION_TYPE", "Sale - Used Parts");
 define("DEFAULT_SHOP_USER", "Volunteer");
 
+/* Change Fund - A specific amount of money for the purpose of making change. 
+   The amount on hand should remain the same at all times; 
+   therefore a change funds does not require replenishment.
+*/
+define("CHANGE_FUND", 20);
+
 // How many hours should the shop be open from the time a person logins?  Hours display in pulldown in shop_log.php
 // No overtime for volunteers.  :)
 // shop will be current shop for the 24hr day yyyy-mm-dd (currently no check for hrs, only date)

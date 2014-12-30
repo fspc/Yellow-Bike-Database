@@ -7,6 +7,7 @@ $page_individual_history_log = INDIVIDUAL_HISTORY_LOG;
 $storage_period = STORAGE_PERIOD;
 $default_transaction_type = DEFAULT_TRANSACTION_TYPE;
 $number_of_transactions = NUMBER_OF_TRANSACTIONS;
+$change_fund = CHANGE_FUND;
 
 //transaction ID	
 if($_GET['trans_id']>0){
@@ -405,7 +406,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 	  } else { //This section executes if it is not the transaction_id selected NOT FOR EDIT ?>
         
         <form method="post" name="FormNew" action="<?php echo $editFormAction; ?>">
-          <tr bordercolor="#CCCCCC" bgcolor="#CCCC33">
+          <tr  bordercolor="#CCCCCC" bgcolor="#CCCC33">
             <td colspan="8"><p><strong>Start New Transaction:</strong><br />&nbsp;&nbsp;&nbsp;&nbsp;Select Type: <?php list_transaction_types('transaction_type',$default_transaction_type); ?> 
               <input type="submit" name="Submit43" value="Create Transaction" />
               </p>	      </td>
@@ -430,6 +431,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
           <tr bordercolor='#CCCCCC' <?php
           	echo ((intval($row_Recordset1['transaction_id']) == intval($trans_id)) ? "bgcolor='#CCCC33'" :  "");
           	if ($row_Recordset1['paid'] == 1) { echo "bgcolor='#99CC33'"; } 
+          	if ($row_Recordset1['transaction_type'] == "Deposit") { echo "class='deposit'"; }
           ?> >
           <td><?php echo $row_Recordset1['shop_id']; ?></td>
 		  <td><?php echo $row_Recordset1['date_wday']; ?></td>
@@ -438,13 +440,25 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  <td><?php echo $row_Recordset1['description_with_locations']; ?>&nbsp;</td>
 		  <td><?php echo $row_Recordset1['full_name']; ?></td>
 		  <td><?php $record_trans_id = $row_Recordset1['transaction_id']; echo "<a href=\"{$_SERVER['PHP_SELF']}?trans_id={$record_trans_id}\">edit</a>"; ?></td>
-		  <td><input class="paid" type="checkbox" name="<?php echo $row_Recordset1['transaction_id']; ?>" 
-		  														value="<?php echo $row_Recordset1['paid'];?>"
-																<?php if ($row_Recordset1['paid'] == 1) { echo "  checked"; }  ?>		  														
-		  														
+		  <td><input class="paid" type="checkbox" name="<?php $ti =  $row_Recordset1['transaction_id']; echo $ti; ?>" 
+		  														value="<?php echo $row_Recordset1['paid'];?>"	
+		  														 <?php if ($row_Recordset1['paid'] == 1) { echo "  checked"; }  ?>													
 		  														>
+		  														
 		  </td>
 	    </tr>
+	    <?php  			
+  			if ($row_Recordset1['transaction_type'] == "Deposit") {
+				echo "<tr class='deposit'><td colspan='8'><div style='text-align:right;'>";  				
+  				echo '<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_change">Change:' . " $$change_fund" . '</span>|
+  						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_credit">Credit Card:</span>|
+  						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_check">Check:</span>+
+  						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_cash">Cash:</span>=
+  						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_sum">Sum:</span>|
+  						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_difference">Difference:</span>';
+  				echo "</div></td></tr>";
+  			}
+  		?>
           <input type="hidden" name="MM_insert" value="FormUpdate">
           <input type="hidden" name="shop_visit_id" value="<?php echo $row_Recordset1['transaction_id']; ?>">
           </form>

@@ -21,4 +21,11 @@ form[name=FormEdit] select:focus {
     color: green;
 }
 
+/* distinguish deposits */
+.deposit {
+	background-color: #FFDB58;
+}
 
+.deposit [type='checkbox'] {
+	display: none;
+}

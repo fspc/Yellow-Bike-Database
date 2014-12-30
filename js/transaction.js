@@ -17,7 +17,6 @@ $(function() {
 	    	$.post("json/transaction.php",{ paid: 0, transaction_id: this.name } );
 	  	} 
 	});
-
 	
 	// editing a transaction
 	if ( $("input[name='shop_id']").length ) {
@@ -33,6 +32,9 @@ $(function() {
 		$("input[name='payment_type']").attr("tabindex",8);
 		$("select[name='sold_to']").attr("tabindex",9);
 		$("select[name='sold_by']").attr("tabindex",10);
+		
+		// require that values be filled in a particular fashion
+		$("#date").mask("0000-00-00");
 	
 		$transaction_id = $("input[name='transaction_id']").val();
 		
@@ -47,6 +49,9 @@ $(function() {
 		   when a full date (yyyy-mm-dd) is entered. */
 		if ( $("#date_startstorage").length ) {
 			
+			// require that values be filled in a particular fashion
+			$("#date_startstorage").mask("0000-00-00");
+
 			var date_value = $("#date").val();
 			var date_test = /^\d{4}-((0\d)|(1[012]))-(([012]\d)|3[01])$/.test(date_value);
 	
