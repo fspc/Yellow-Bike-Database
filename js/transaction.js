@@ -7,16 +7,47 @@ $(function() {
 	// paid or not?
 	$(".paid").click(function() {
 		if ($(this).prop("checked")) { 
-			//console.log("turn color on");
-			$(this).closest("tr").css("background-color","#99CC33");  
+		
+			$(this).closest("tr").css("background-color","#E6E7E6");  
 	    	$.post("json/transaction.php",{ paid: 1, transaction_id: this.name } );
 	 	} 
 	 	else { 
-	  		//console.log("turn color off");
+	  		
 	    	$(this).closest("tr").css("background-color","transparent");  
 	    	$.post("json/transaction.php",{ paid: 0, transaction_id: this.name } );
 	  	} 
 	});
+
+	// Deposit Calculator
+	if ( $(".paid").length ) {	 // any transactions?
+		var deposit_length = $(".deposit").length;
+		
+		if ( deposit_length && deposit_length == 1 ) { // one transaction - maybe can do 1 or more with a sort
+
+			$(".paid").each( function() {
+				
+				if (this.value == 1) {  /* Calculate using only the transactions that have been checked 
+													as paid before the deposit
+												*/
+					var deposit_number = $(".deposit input").attr("name");
+					if ( this.name < deposit_number ) {  // use database at this point
+						
+						// find out the Payment Type
+						console.log(this.name)
+					}
+					
+				} 
+			
+			});
+				
+		} 
+		else if ( deposit_length && deposit_length > 1) { /* more than one transaction
+																		  	  use a range of deposits closest to visible transactions
+																		  */
+			//console.log("greater than one deposit");
+			
+		}
+	}
 	
 	// editing a transaction
 	if ( $("input[name='shop_id']").length ) {
@@ -32,6 +63,8 @@ $(function() {
 		$("input[name='payment_type']").attr("tabindex",8);
 		$("select[name='sold_to']").attr("tabindex",9);
 		$("select[name='sold_by']").attr("tabindex",10);
+		$("input[value='Save']").attr("tabindex",11);
+		$("input[value='Close']").attr("tabindex",12);		
 		
 		// require that values be filled in a particular fashion
 		$("#date").mask("0000-00-00");

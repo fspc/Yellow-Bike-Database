@@ -21,8 +21,14 @@ form[name=FormEdit] select:focus {
     color: green;
 }
 
+/*
+input[value=Save]:focus, input[value=Close]:focus {
+	background: green;
+}
+*/
+
 /* distinguish deposits */
-.deposit {
+.deposit, .deposit_calculator {
 	background-color: #FFDB58;
 }
 

@@ -430,7 +430,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
         <form method="post" name="FormView_<?php echo $row_Recordset1['transaction_id']; ?>" action="<?php echo $editFormAction; ?>">
           <tr bordercolor='#CCCCCC' <?php
           	echo ((intval($row_Recordset1['transaction_id']) == intval($trans_id)) ? "bgcolor='#CCCC33'" :  "");
-          	if ($row_Recordset1['paid'] == 1) { echo "bgcolor='#99CC33'"; } 
+          	if ($row_Recordset1['paid'] == 1) { echo "bgcolor='#E6E7E6'"; } 
           	if ($row_Recordset1['transaction_type'] == "Deposit") { echo "class='deposit'"; }
           ?> >
           <td><?php echo $row_Recordset1['shop_id']; ?></td>
@@ -449,13 +449,13 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 	    </tr>
 	    <?php  			
   			if ($row_Recordset1['transaction_type'] == "Deposit") {
-				echo "<tr class='deposit'><td colspan='8'><div style='text-align:right;'>";  				
-  				echo '<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_change">Change:' . " $$change_fund" . '</span>|
-  						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_credit">Credit Card:</span>|
-  						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_check">Check:</span>+
-  						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_cash">Cash:</span>=
-  						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_sum">Sum:</span>|
-  						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_difference">Difference:</span>';
+				echo "<tr class='deposit_calculator'><td colspan='8'><div style='text-align:right;'>";  				
+  				echo '<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_change">Change Fund:' . " $$change_fund" . '  <span></span></span>|
+  						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_credit">Credit Card:  <span></span></span>|
+  						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_check">Check:  <span></span></span>+
+  						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_cash">Cash:  <span></span></span>=
+  						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_sum">Sum:  <span></span></span>|
+  						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_difference">Difference:  <span></span></span>';
   				echo "</div></td></tr>";
   			}
   		?>
