@@ -488,7 +488,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
           <input type="hidden" name="MM_insert" value="ChangeDate" />
           </p>
   	  </form>
-      <?php if(current_shop_by_ip()>1) echo "current shop"; else echo "no shop"; ?>
+  	  
+      <?php if(current_shop_by_ip()>=1) echo "current shop"; else echo "no shop"; ?>
       </td>
     </tr>
 </table>
