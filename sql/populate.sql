@@ -127,7 +127,7 @@ INSERT INTO transaction_types
    show_amount, show_description, show_soldto, show_soldby, 
    fieldname_date, fieldname_soldby, message_transaction_id, 
    fieldname_soldto, show_soldto_location, fieldname_description, 
-   accounting_group, show_payment)
+   accounting_group, show_payment
 ) VALUES 
   ("Build Your Own Bike", 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
   ("Bicycles", 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
