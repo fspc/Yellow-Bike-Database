@@ -39,7 +39,7 @@ INSERT INTO shop_user_roles (
   ("Personal",0,0,0,0), 
   ("Volunteer",0,1,0,0), 
   ("Greeter",0,0,1,0),
-  ("Staff",0,0,1,1)
+  ("Staff",0,0,1,1),
   ("Student Volunteer",0,0,0,0);
 
 -- Add some projects to projects

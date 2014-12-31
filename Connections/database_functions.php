@@ -39,7 +39,7 @@ define("TIMEZONE", "America/New_York");
 */
 define("NONSHOP",0);
 
-// How many transactions to you want shown
+// How many transactions do you want shown
 define("NUMBER_OF_TRANSACTIONS", 50);
 
 //constants
