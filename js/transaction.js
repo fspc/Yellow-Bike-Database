@@ -28,15 +28,13 @@ $(function() {
 
 	// Deposit Calculator
 	if ( $(".paid").length ) {	 // any transactions?
+
+		var deposit = {};		
+		$(".deposit input").each(function(count){ 
+			deposit[count] =  this.name;
+		});			
 		
-		$(".deposit input").each(function(){ console.log(this.name);});		
-		
-		var deposit_length = $(".deposit").length;
-		if ( deposit_length == 1 ) { // one visible deposit could be 1 or more invisible 
-				
-				var deposit_number = $(".deposit input").attr("name");	
-				//console.log(deposit_number);
-		} 
+		$.post("json/transaction.php",{"deposit": deposit});
 	
 	}
 

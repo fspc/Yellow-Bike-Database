@@ -29,6 +29,11 @@ mysql_select_db($database_YBDB, $YBDB);
 		
 	}
 
+	// Deposit Calculator
+	if (isset($_POST['deposit'])) {
+		print_r($_POST);	
+	}
+
 	/*
 		 transaction_id, date_startstorage, date,transaction_type, amount, description, sold_to, sold_by, quantity, shop_id, paid
 	    

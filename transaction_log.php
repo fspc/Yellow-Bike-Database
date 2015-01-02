@@ -134,6 +134,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
 	header(sprintf("Location: %s", $LoadPage));
 } // end Form Submit New Transaction
 
+
 //Form Edit Record ===============================================================================
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_POST["EditSubmit"] == "Save")) {
 
@@ -160,7 +161,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_PO
 	
 	
 	mysql_select_db($database_YBDB, $YBDB);
-	$Result1 = mysql_query($updateSQL, $YBDB) or die(mysql_error());
+	$Result1 = mysql_query($updateSQL, $YBDB) or die(mysql_error());	
 	
 	$trans_id = $_POST['transaction_id'];
 	header(sprintf("Location: %s",$editFormAction . "?trans_id={$trans_id}" ));   //$editFormAction
@@ -168,7 +169,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_PO
 
 //Form Edit Record Delete ===============================================================================
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_POST["EditSubmit"] == "Delete")) {
-	
+
 	$trans_id = $_POST['transaction_id'];
 	header(sprintf("Location: %s",$editFormAction . "?delete_trans_id={$trans_id}" ));   //$editFormAction
 }
@@ -431,7 +432,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
         <?php while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)) { //do { ?>
         
         <form method="post" name="FormView_<?php echo $row_Recordset1['transaction_id']; ?>" action="<?php echo $editFormAction; ?>">
-          <tr bordercolor='#CCCCCC' <?php
+          <tr  bordercolor='#CCCCCC' <?php echo "title='Transaction ID: " . $row_Recordset1['transaction_id'] . "'";
           	echo ((intval($row_Recordset1['transaction_id']) == intval($trans_id)) ? "bgcolor='#CCCC33'" :  "");
           	if ($row_Recordset1['paid'] == 1) { echo "bgcolor='#E6E7E6'"; } 
           	if ($row_Recordset1['transaction_type'] == "Deposit") { echo "class='deposit'"; }
@@ -444,7 +445,18 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  <td><?php echo $row_Recordset1['payment_type']; ?>&nbsp;</td>
 		  <td><?php echo $row_Recordset1['format_amount']; ?>&nbsp;</td>
 		  <td><?php $record_trans_id = $row_Recordset1['transaction_id']; 
-		  				echo "<a href=\"{$_SERVER['PHP_SELF']}?trans_id={$record_trans_id}\">edit</a>"; ?></td>
+						foreach ($_GET as $i => $value) {
+							if ($i != "trans_id") {
+								$trans_url .= "&$i" . "=" . $value;
+							}	
+						}
+						
+						if (isset($trans_url)) { 
+							echo "<a href=\"{$_SERVER['PHP_SELF']}?trans_id={$record_trans_id}$trans_url\">edit</a></td>";	
+						} else {		  				
+		  					echo "<a href=\"{$_SERVER['PHP_SELF']}?trans_id={$record_trans_id}\">edit</a></td>";
+		  				}	 
+		  				?>
 		  <td><input class="paid" type="checkbox" name="<?php $ti =  $row_Recordset1['transaction_id']; echo $ti; ?>" 
 		  														value="<?php echo $row_Recordset1['paid'];?>"	
 		  														 <?php if ($row_Recordset1['paid'] == 1) { echo "  checked"; }  ?>													
