@@ -210,13 +210,13 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
     <td>
       <table border="1" cellpadding="1" cellspacing="0" bordercolor="#CCCCCC">
         <tr bordercolor="#CCCCCC" bgcolor="#99CC33">
-          <td colspan="8" bgcolor="#99CC33"><div align="center"><strong>Bike and Sale Log </strong></div></td>
+          <td colspan="9" bgcolor="#99CC33"><div align="center"><strong>Bike and Sale Log </strong></div></td>
 		  </tr>
         <?php 		// show delete tranaction confirmation =========================================
 		if($delete_trans_id <> -1 ) { ?>
         <form method="post" name="FormConfirmDelete" action="<?php echo $editFormAction; ?>">
           <tr bordercolor="#CCCCCC" bgcolor="#CCCC33">
-            <td colspan="8"><p><strong>Edit Transaction:
+            <td colspan="9"><p><strong>Edit Transaction:
               <input type="submit" name="DeleteConfirm" value="Confirm Delete" />
               <input type="submit" name="DeleteConfirm" value="Cancel" />
               <input type="hidden" name="delete_trans_id" value="<?php echo $delete_trans_id; ?>">
@@ -256,7 +256,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
         <tr bgcolor="#CCCC33">
 
 			<!-- the column for the edit transactions form -->          
-          <td colspan="7">
+          <td colspan="8">
             <form method="post" name="FormEdit" action="<?php echo $editFormAction; ?>">
               <table border="0" cellspacing="0" cellpadding="1">
                   
@@ -359,8 +359,9 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                 <tr><td>&nbsp;</td>
 		  	  <td><label><?php echo $row_Recordset3['fieldname_soldto']; ?>:</label></td>
 		  	  <td><?php
-			if($row_Recordset3['show_soldto_location']){
-				list_donation_locations_withheader('sold_to', $row_Recordset2['sold_to']); 
+			if($row_Recordset3['show_soldto_location']){				
+				// list_donation_locations_withheader('sold_to', $row_Recordset2['sold_to']); 
+				list_CurrentShopUsers_select('sold_to', $row_Recordset2['sold_to']);		
 				$record_trans_id = $row_Recordset2['transaction_id']; 
 				// echo " <a href=\"location_add_edit.php?trans_id={$record_trans_id}&contact_id=new_contact\">Create New Location</a> | <a href=\"location_add_edit_select.php?trans_id={$record_trans_id}&contact_id=new_contact\">Edit Existing Location</a>";
 			} else {
@@ -369,7 +370,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  	  </tr> <?php } //end if show location row ?>
                 <tr><td>&nbsp;</td>
 			  <td><label><?php echo $row_Recordset3['fieldname_soldby']; ?>:</label></td>
-			  <td><?php if(current_shop_by_ip()>0) list_current_coordinators_select('sold_by', $row_Recordset2['sold_by']); else list_contacts_coordinators('sold_by', $row_Recordset2['sold_by']); 
+			  <td><?php if(current_shop_by_ip()>0) list_current_coordinators_select('sold_by', $row_Recordset2['sold_by']); 
+			  				else list_contacts_coordinators('sold_by//,', $row_Recordset2['sold_by']); 
 			  //list_contacts_coordinators('sold_by', $row_Recordset2['sold_by']);
               //list_current_coordinators_select('sold_by', $row_Recordset2['sold_by']);
 			  ?>
@@ -407,7 +409,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
         
         <form method="post" name="FormNew" action="<?php echo $editFormAction; ?>">
           <tr  bordercolor="#CCCCCC" bgcolor="#CCCC33">
-            <td colspan="8"><p><strong>Start New Transaction:</strong><br />&nbsp;&nbsp;&nbsp;&nbsp;Select Type: <?php list_transaction_types('transaction_type',$default_transaction_type); ?> 
+            <td colspan="9"><p><strong>Start New Transaction:</strong><br />&nbsp;&nbsp;&nbsp;&nbsp;Select Type: <?php list_transaction_types('transaction_type',$default_transaction_type); ?> 
               <input type="submit" name="Submit43" value="Create Transaction" />
               </p>	      </td>
 	      </tr>
@@ -418,9 +420,10 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
         <td width="50"><strong>Shop</strong></td>
 		  <td width="100"><strong>Date</strong></td>
 		  <td width="200" bgcolor="#99CC33"><strong>Sale Type </strong></td>
-		  <td width="70"><strong>Amount</strong></td>
-		  <td width="300"><strong>Description</strong></td>
 		  <td><strong>Patron</strong></td>
+		  <td width="300"><strong>Description</strong></td>
+		  <td><strong>Type</strong></td>
+		  <td width="70"><strong>Amount</strong></td>
 		  <td width="50"><strong>Edit  </strong></td>
 		  <td><strong>Paid</strong></td>
 	    </tr>
@@ -436,10 +439,12 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
           <td><?php echo $row_Recordset1['shop_id']; ?></td>
 		  <td><?php echo $row_Recordset1['date_wday']; ?></td>
 		  <td><?php echo $row_Recordset1['transaction_type']; ?></td>
-		  <td><?php echo $row_Recordset1['format_amount']; ?>&nbsp;</td>
+		  <td><?php echo $row_Recordset1['full_name']; ?>&nbsp;</td>
 		  <td><?php echo $row_Recordset1['description_with_locations']; ?>&nbsp;</td>
-		  <td><?php echo $row_Recordset1['full_name']; ?></td>
-		  <td><?php $record_trans_id = $row_Recordset1['transaction_id']; echo "<a href=\"{$_SERVER['PHP_SELF']}?trans_id={$record_trans_id}\">edit</a>"; ?></td>
+		  <td><?php echo $row_Recordset1['payment_type']; ?>&nbsp;</td>
+		  <td><?php echo $row_Recordset1['format_amount']; ?>&nbsp;</td>
+		  <td><?php $record_trans_id = $row_Recordset1['transaction_id']; 
+		  				echo "<a href=\"{$_SERVER['PHP_SELF']}?trans_id={$record_trans_id}\">edit</a>"; ?></td>
 		  <td><input class="paid" type="checkbox" name="<?php $ti =  $row_Recordset1['transaction_id']; echo $ti; ?>" 
 		  														value="<?php echo $row_Recordset1['paid'];?>"	
 		  														 <?php if ($row_Recordset1['paid'] == 1) { echo "  checked"; }  ?>													
@@ -449,7 +454,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 	    </tr>
 	    <?php  			
   			if ($row_Recordset1['transaction_type'] == "Deposit") {
-				echo "<tr class='deposit_calculator'><td colspan='8'><div style='text-align:right;'>";  				
+				echo "<tr class='deposit_calculator'><td colspan='9'><div style='text-align:right;'>";  				
   				echo '<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_change">Change Fund:' . " $$change_fund" . '  <span></span></span>|
   						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_credit">Credit Card:  <span></span></span>|
   						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_check">Check:  <span></span></span>+

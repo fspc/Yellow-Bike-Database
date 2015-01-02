@@ -40,7 +40,8 @@ INSERT INTO shop_user_roles (
   ("Volunteer",0,1,0,0), 
   ("Greeter",0,0,1,0),
   ("Staff",0,0,1,1),
-  ("Student Volunteer",0,0,0,0);
+  ("Student Volunteer",0,0,0,0),
+  ("Shopping",0,0,0,0);
 
 -- Add some projects to projects
 
@@ -73,7 +74,8 @@ INSERT INTO contacts (
 -- Set-up transaction types
 -- This is object orienteed like :)
 --
--- SILLY TEXT FIELDS (some presentation logic that is in the business logic, rather than kept cleanly separated from it)
+-- TEXT FIELDS (some presentation logic that is in the business logic, rather than kept cleanly separated from it)
+-- Although, there are some advantages to this approach.
 -- NOTE - (:colon is appended by default:)
 --
 -- fieldname_date: text field for the day the transaction transpires, e.g. "Sale Date"
@@ -85,10 +87,10 @@ INSERT INTO contacts (
 --
 -- DISCUSSION ABOUT LOCATIONS in transaction_log.php 
 -- show_soldto_location is now used to show patrons. The history of this name is 
--- that YBP was using it to keep track of donations and locations.  However, there is an
+-- that YBP was using it to keep track of donation locations.  However, there is an
 -- option in transaction_log.php that would show current shop users that was 
--- commented out, but never developed to work.
--- More than 1 shop with its own accounting?  Run a different instance of YBDB.
+-- commented out.  Not sure what the usefullness of location_add_edit_select.php is yet.
+-- With that thought, need more than 1 shop with its own accounting?  Run a different instance of YBDB.
 --
 -- USELESS or RESERVED FIELDS
 -- show_soldto and show_soldby currently do not do anything, 

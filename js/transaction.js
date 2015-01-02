@@ -4,50 +4,42 @@
 
 $(function() {
 
+	$("select[name='transaction_type']").attr("tabindex",1);
+	$("select[name='transaction_type']").focus();
+	$("input[value='Create Transaction']").attr("tabindex",2);
+
 	// paid or not?
+	$(":checked").parent("td").prev().children().hide();
 	$(".paid").click(function() {
 		if ($(this).prop("checked")) { 
 		
-			$(this).closest("tr").css("background-color","#E6E7E6");  
+			$(this).closest("tr").css("background-color","#E6E7E6"); 
+			$('[href$="' + this.name + '"]').hide(); 
+			console.log(this.name);
 	    	$.post("json/transaction.php",{ paid: 1, transaction_id: this.name } );
 	 	} 
 	 	else { 
 	  		
-	    	$(this).closest("tr").css("background-color","transparent");  
+	    	$(this).closest("tr").css("background-color","transparent");
+	    	$('[href$="' + this.name + '"]').show(); 
 	    	$.post("json/transaction.php",{ paid: 0, transaction_id: this.name } );
 	  	} 
 	});
 
 	// Deposit Calculator
 	if ( $(".paid").length ) {	 // any transactions?
-		var deposit_length = $(".deposit").length;
 		
-		if ( deposit_length && deposit_length == 1 ) { // one transaction - maybe can do 1 or more with a sort
-
-			$(".paid").each( function() {
+		$(".deposit input").each(function(){ console.log(this.name);});		
+		
+		var deposit_length = $(".deposit").length;
+		if ( deposit_length == 1 ) { // one visible deposit could be 1 or more invisible 
 				
-				if (this.value == 1) {  /* Calculate using only the transactions that have been checked 
-													as paid before the deposit
-												*/
-					var deposit_number = $(".deposit input").attr("name");
-					if ( this.name < deposit_number ) {  // use database at this point
-						
-						// find out the Payment Type
-						console.log(this.name)
-					}
-					
-				} 
-			
-			});
-				
+				var deposit_number = $(".deposit input").attr("name");	
+				//console.log(deposit_number);
 		} 
-		else if ( deposit_length && deposit_length > 1) { /* more than one transaction
-																		  	  use a range of deposits closest to visible transactions
-																		  */
-			//console.log("greater than one deposit");
-			
-		}
+	
 	}
+
 	
 	// editing a transaction
 	if ( $("input[name='shop_id']").length ) {

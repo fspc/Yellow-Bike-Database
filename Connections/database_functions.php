@@ -40,7 +40,7 @@ define("TIMEZONE", "America/New_York");
 define("NONSHOP",0);
 
 // How many transactions do you want shown
-define("NUMBER_OF_TRANSACTIONS", 50);
+define("NUMBER_OF_TRANSACTIONS", 11);
 
 //constants
 define("PAGE_START_SHOP", "/start_shop.php");
@@ -375,7 +375,7 @@ function list_contacts_select_user($form_name = "contact_id", $default_value = "
 function list_CurrentShopUsers_select($form_name = "contact_id", $default_value = "")
 {
 	echo "<select name={$form_name} class='yb_standard'>\n";
-	echo "<option value='no_selection'>Select User</option>\n";
+	echo "<option value='no_selection'>Select Patron</option>\n";
 	echo "<option value='no_selection'>--------------</option>";
 	list_CurrentShopUsers("none",$default_value);	
 	echo "</select>\n";
