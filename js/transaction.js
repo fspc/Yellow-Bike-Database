@@ -14,14 +14,14 @@ $(function() {
 		if ($(this).prop("checked")) { 
 		
 			$(this).closest("tr").css("background-color","#E6E7E6"); 
-			$('[href$="' + this.name + '"]').hide(); 
+			$('[href*="' + this.name + '"]').hide(); 
 			console.log(this.name);
 	    	$.post("json/transaction.php",{ paid: 1, transaction_id: this.name } );
 	 	} 
 	 	else { 
 	  		
 	    	$(this).closest("tr").css("background-color","transparent");
-	    	$('[href$="' + this.name + '"]').show(); 
+	    	$('[href*="' + this.name + '"]').show(); 
 	    	$.post("json/transaction.php",{ paid: 0, transaction_id: this.name } );
 	  	} 
 	});

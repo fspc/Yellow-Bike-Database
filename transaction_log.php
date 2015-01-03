@@ -64,7 +64,8 @@ if($_GET['trans_type']=='all_types'){
 if($_GET['record_count']>0){
 	$record_count = $_GET['record_count'];
 } else {
-	$record_count = $number_of_transactions;}
+	$record_count = $number_of_transactions;
+}
 
 // This is the recordset for the list of logged transactions	
 
@@ -130,6 +131,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
 	$totalRows_Recordset4 = mysql_num_rows($Recordset4);
 	$newtrans = $row_Recordset4['newtrans'];  //This field is used to set edit box preferences
 	
+	
 	$LoadPage = $_SERVER['PHP_SELF'] . "?trans_id={$newtrans}";
 	header(sprintf("Location: %s", $LoadPage));
 } // end Form Submit New Transaction
@@ -162,6 +164,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_PO
 	
 	mysql_select_db($database_YBDB, $YBDB);
 	$Result1 = mysql_query($updateSQL, $YBDB) or die(mysql_error());	
+	
 	
 	$trans_id = $_POST['transaction_id'];
 	header(sprintf("Location: %s",$editFormAction . "?trans_id={$trans_id}" ));   //$editFormAction
@@ -455,7 +458,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 							echo "<a href=\"{$_SERVER['PHP_SELF']}?trans_id={$record_trans_id}$trans_url\">edit</a></td>";	
 						} else {		  				
 		  					echo "<a href=\"{$_SERVER['PHP_SELF']}?trans_id={$record_trans_id}\">edit</a></td>";
-		  				}	 
+		  				}
+		  				$trans_url = "";	 
 		  				?>
 		  <td><input class="paid" type="checkbox" name="<?php $ti =  $row_Recordset1['transaction_id']; echo $ti; ?>" 
 		  														value="<?php echo $row_Recordset1['paid'];?>"	

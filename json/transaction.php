@@ -31,48 +31,67 @@ mysql_select_db($database_YBDB, $YBDB);
 
 	// Deposit Calculator
 	if (isset($_POST['deposit'])) {
-		print_r($_POST);	
-	}
-
-	/*
-		 transaction_id, date_startstorage, date,transaction_type, amount, description, sold_to, sold_by, quantity, shop_id, paid
-	    
-	    Always do transactions from the first visible Deposit to the next Deposit.
-	    Variations:
-
-		Based on the results of ..
-		SELECT COUNT(transaction_type) FROM transaction_log WHERE transaction_type="Deposit";
 		
-		However, if there are no invisible deposits go to the end from the last visible deposit, so do a comparison with 
-		visible deposits, to find out if there is 1 unique non-visible deposit.
-		
-		COUNT == 1
-      1.  Just beginning to use YBDB:  Calculation for 1 visible Deposit all the way to the first existing transaction
+		$visible_count = count($_POST['deposit']);
+		$c = $visible_count - 1;		
+		$deposit = $_POST['deposit'];
 
-			SELECT  SUM(IF(payment_type="check", amount, 0.00)) AS "Check",  
-		   SUM(IF(payment_type="credit", amount, 0.00)) AS "Credit",  
-		   SUM(IF(payment_type="cash", amount, 0.00)) AS "Cash"
-			FROM transaction_log WHERE paid=1 AND transaction_id < 74;	    
-			(return sum)	    
-	    
-	    COUNT > 1
-		 2.  Calculation for 1 or more  visible Deposits to next non-visible Deposit or no non-visible Deposit
-		
-			If no hidden, loop for visible deposits (#2)) ($v) with last one to end (#1 logic, except use $v variable); else;
-			loop for visible deposits to the next hidden deposit (#2).
-		
-			foreach ( my $v in @visible_deposits ) {
-		    
-		    SELECT  SUM(IF(payment_type="check", amount, 0.00)) AS "Check",  
-		    SUM(IF(payment_type="credit", amount, 0.00)) AS "Credit",  
-		    SUM(IF(payment_type="cash", amount, 0.00)) AS "Cash"  
-		    FROM transaction_log WHERE paid=1 AND transaction_id < $v AND transaction_id > 
-		    (SELECT transaction_id FROM transaction_log WHERE transaction_type="Deposit" ORDER BY transaction_id LIMIT 1);			
-
-			 push @sum, answer;			
+		$query = 'SELECT COUNT(transaction_type) AS "count" FROM transaction_log WHERE transaction_type="Deposit";';
+		$sql = mysql_query($query, $YBDB) or die(mysql_error());
+		$result = mysql_fetch_assoc($sql);
 			
-			}	 				
 		
-	*/
+		if ( $visible_count == $result["count"] ) { // 1 or more deposits, and all deposits are visible
+	
+			foreach ( $deposit as $key => $value ) {
+				if ( $c > $key ) {				
+					$query = 'SELECT  SUM(IF(payment_type="check", amount, 0)) AS "check",  
+				    			SUM(IF(payment_type="credit", amount, 0)) AS "credit",  
+				    			SUM(IF(payment_type="cash", amount, 0)) AS "cash"  
+				    			FROM transaction_log WHERE paid=1 AND transaction_id <' . $deposit[$key] . ' AND transaction_id >' 
+				    			. $deposit[$key + 1] . ';';
+					$sql = mysql_query($query, $YBDB) or die(mysql_error());
+					$result = mysql_fetch_assoc($sql);
+				} else {
+					$query = 'SELECT  SUM(IF(payment_type="check", amount, 0)) AS "check",  
+							   			SUM(IF(payment_type="credit", amount, 0)) AS "credit",  
+							   			SUM(IF(payment_type="cash", amount, 0)) AS "cash"
+											FROM transaction_log WHERE paid=1 AND transaction_id <' . $deposit[$key] . ';'; 
+					$sql = mysql_query($query, $YBDB) or die(mysql_error());
+					$result = mysql_fetch_assoc($sql);				
+						
+				}
+			
+				echo json_encode($result);
+
+			}
+		}  else {  // more deposits than visible
+
+				$limit = $visible_count + 1;
+				$query = 'SELECT transaction_id FROM transaction_log 
+							WHERE transaction_type="Deposit" ORDER BY transaction_id DESC LIMIT ' . $limit . ';';
+				$sql = mysql_query($query, $YBDB) or die(mysql_error());
+				
+				while ( $result = mysql_fetch_assoc($sql) ) {
+					$transaction_id[] = $result['transaction_id'];					
+				} 
+				
+				foreach ( $transaction_id as $key => $value ) {
+				
+						if ($key <= $c) {
+						$query = 'SELECT  SUM(IF(payment_type="check", amount, 0)) AS "check",  
+					    			SUM(IF(payment_type="credit", amount, 0)) AS "credit",  
+					    			SUM(IF(payment_type="cash", amount, 0)) AS "cash"  
+					    			FROM transaction_log WHERE paid=1 AND transaction_id <' . $transaction_id[$key] . ' AND transaction_id >' 
+					    			. $transaction_id[$key + 1] . ';';
+						$sql = mysql_query($query, $YBDB) or die(mysql_error());
+						$result = mysql_fetch_assoc($sql);
+						echo json_encode($result);
+					}
+				
+				} // foreach								
+		} // end  else for invisibles
+
+	}
 
 ?>
