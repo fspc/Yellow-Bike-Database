@@ -11,11 +11,13 @@ $(function() {
 	// paid or not?
 	$(":checked").parent("td").prev().children().hide();
 	$(".paid").click(function() {
+
+		$.ajaxSetup({async:false});
+		
 		if ($(this).prop("checked")) { 
 		
 			$(this).closest("tr").css("background-color","#E6E7E6"); 
 			$('[href*="' + this.name + '"]').hide(); 
-			console.log(this.name);
 	    	$.post("json/transaction.php",{ paid: 1, transaction_id: this.name } );
 	 	} 
 	 	else { 
@@ -24,17 +26,44 @@ $(function() {
 	    	$('[href*="' + this.name + '"]').show(); 
 	    	$.post("json/transaction.php",{ paid: 0, transaction_id: this.name } );
 	  	} 
+
+			// Deposit Calculator
+			var deposit = {};		
+			$(".deposit input").each(function(count){ 
+				deposit[count] =  this.name;
+			});			
+			
+					
+			$.post("json/transaction.php",{"deposit": deposit}, function(data) {
+				var obj = $.parseJSON(data);
+				$.each(obj,function(k,v){
+					//console.log(k + "= Cash: " + v.cash + " Check: " + v.check + " Credit: " + v.credit + "\n");
+					$("#" + k + "_cash span").text("$" + v.cash);
+					$("#" + k + "_check span").text("$" + v.check);
+					$("#" + k + "_credit span").text("$" + v.credit);
+				});
+			});	  	
+			$.ajaxSetup({async:true});	  	
+	  	
 	});
 
 	// Deposit Calculator
 	if ( $(".paid").length ) {	 // any transactions?
-
+			
 		var deposit = {};		
 		$(".deposit input").each(function(count){ 
 			deposit[count] =  this.name;
 		});			
 		
-		$.post("json/transaction.php",{"deposit": deposit});
+		$.post("json/transaction.php",{"deposit": deposit}, function(data) {
+			var obj = $.parseJSON(data);
+			$.each(obj,function(k,v){
+				//console.log(k + "= Cash: " + v.cash + " Check: " + v.check + " Credit: " + v.credit + "\n");
+				$("#" + k + "_cash span").text("$" + v.cash);
+				$("#" + k + "_check span").text("$" + v.check);
+				$("#" + k + "_credit span").text("$" + v.credit);
+			});
+		});
 	
 	}
 

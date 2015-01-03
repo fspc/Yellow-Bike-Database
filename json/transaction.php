@@ -52,6 +52,7 @@ mysql_select_db($database_YBDB, $YBDB);
 				    			. $deposit[$key + 1] . ';';
 					$sql = mysql_query($query, $YBDB) or die(mysql_error());
 					$result = mysql_fetch_assoc($sql);
+					$result_obj[$deposit[$key]] = $result; 
 				} else {
 					$query = 'SELECT  SUM(IF(payment_type="check", amount, 0)) AS "check",  
 							   			SUM(IF(payment_type="credit", amount, 0)) AS "credit",  
@@ -59,12 +60,12 @@ mysql_select_db($database_YBDB, $YBDB);
 											FROM transaction_log WHERE paid=1 AND transaction_id <' . $deposit[$key] . ';'; 
 					$sql = mysql_query($query, $YBDB) or die(mysql_error());
 					$result = mysql_fetch_assoc($sql);				
-						
+					$result_obj[$deposit[$key]] = $result;	
 				}
-			
-				echo json_encode($result);
 
 			}
+			echo json_encode($result_obj);			
+			
 		}  else {  // more deposits than visible
 
 				$limit = $visible_count + 1;
@@ -86,10 +87,11 @@ mysql_select_db($database_YBDB, $YBDB);
 					    			. $transaction_id[$key + 1] . ';';
 						$sql = mysql_query($query, $YBDB) or die(mysql_error());
 						$result = mysql_fetch_assoc($sql);
-						echo json_encode($result);
-					}
+						$result_obj[$transaction_id[$key]] = $result; 	
+					}									
 				
-				} // foreach								
+				} // foreach
+				echo json_encode($result_obj);								
 		} // end  else for invisibles
 
 	}
