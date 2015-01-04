@@ -60,12 +60,14 @@ if($_GET['trans_type']=='all_types'){
 	$trans_type = '';
 }	
 
+
 //record_count
 if($_GET['record_count']>0){
 	$record_count = $_GET['record_count'];
 } else {
 	$record_count = $number_of_transactions;
 }
+
 
 // This is the recordset for the list of logged transactions	
 
@@ -86,7 +88,14 @@ $Recordset1 = mysql_query($query_Recordset1, $YBDB) or die(mysql_error());
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
 //Action on form update
-$editFormAction = $_SERVER['PHP_SELF'];
+
+if (isset($_GET[record_count])) { 
+	$editFormAction = $_SERVER['PHP_SELF'];
+} else {		  				
+	$editFormAction = $_SERVER['PHP_SELF'];
+}
+
+//$editFormAction = $_SERVER['PHP_SELF'];
 
 //Form Submit New Transaction===================================================================
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
@@ -167,7 +176,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_PO
 	
 	
 	$trans_id = $_POST['transaction_id'];
-	header(sprintf("Location: %s",$editFormAction . "?trans_id={$trans_id}" ));   //$editFormAction
+	header(sprintf("Location: %s",$editFormAction . "?trans_id={$trans_id}&record_count=$record_count"));   //$editFormAction
 }
 
 //Form Edit Record Delete ===============================================================================
@@ -203,7 +212,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 
 <?php include("include_header.html"); ?>
 
-<input type="hidden" name="cancel_return" value="http://positivespin.org/ybdb/transaction_log.php?error=transactioncanceled" />
+<input type="hidden" name="cancel_return" value="transaction_log.php?error=transactioncanceled" />
 <table border="0" cellpadding="1" cellspacing="0">
   <tr>
     <td align="left" valign="bottom"><?php echo $error_message ?> </td>
@@ -279,7 +288,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  	  </tr>
 		  	    <tr><td>&nbsp;</td>
 		  	    <td><label>ShopID:</label> </td>
-                <td><input name="shop_id" type="text" id="amount" value="<?php echo $row_Recordset2['shop_id']; ?>" size="6" /></td>
+                <td><input name="shop_id" type="text" id="shop_id" value="<?php echo $row_Recordset2['shop_id']; ?>" size="6" /></td>
 		  	  </tr>
                 <?php ?>
                 <tr><td>&nbsp;</td><td><label>Select Type:</label></td>

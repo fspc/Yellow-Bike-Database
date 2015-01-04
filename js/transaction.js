@@ -41,6 +41,15 @@ $(function() {
 	
 	}
 
+	// null or real number
+	function payment_result(result) { 
+		if (result == null) {
+			 return 0;
+		} else {
+			return Number(result).toFixed(2);		
+		}
+	};
+
 	// Deposit Calculator function
 	function deposit_calculator() {
 
@@ -52,12 +61,29 @@ $(function() {
 			$.post("json/transaction.php",{"deposit": deposit}, function(data) {
 				var obj = $.parseJSON(data);
 				$.each(obj,function(k,v){
-					//console.log(k + "= Cash: " + v.cash + " Check: " + v.check + " Credit: " + v.credit + "\n");					
-					$("#" + k + "_cash span").text("$" + v.cash);
-					$("#" + k + "_check span").text("$" + v.check);
-					$("#" + k + "_credit span").text("$" + v.credit);
-					var sum = Number(v.check) + Number(v.cash);
-					$("#" + k + "_sum span").text("$" + sum);
+					
+					// Cash / Check / Credit					
+					$("#" + k + "_cash span").text("$" + payment_result(v.cash));
+					$("#" + k + "_check span").text("$" + payment_result(v.check));
+					$("#" + k + "_credit span").text("$" + payment_result(v.credit));
+
+					// Sum
+					var sum = Number(v.check) + Number(v.cash);				
+					$("#" + k + "_sum span").text("$" + sum.toFixed(2));				
+					
+					// Difference					
+					var deposit_amount = $('input[name="' + k + '"]').parent().prev().prev().text().replace(/\$(\d*\.\d*)\s+/, "$1" );										
+					if (deposit_amount != 0) {					
+						var diff = deposit_amount - sum;
+						$("#" + k + "_difference span").text("$"+ diff.toFixed(2));
+						if ( diff == 0 ) {
+							$("#" + k + "_difference").css("color","green");
+						} else {
+							$("#" + k + "_difference").css("color","red");
+						}					
+					} else {
+						$("#" + k + "_difference span").text("n/a");
+					}
 				});
 			
 			});			
@@ -84,6 +110,7 @@ $(function() {
 		
 		// require that values be filled in a particular fashion
 		$("#date").mask("0000-00-00");
+		$("#amount").mask("#0.00", {reverse: true});
 	
 		$transaction_id = $("input[name='transaction_id']").val();
 		
