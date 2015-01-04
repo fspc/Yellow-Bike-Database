@@ -41,8 +41,9 @@ mysql_select_db($database_YBDB, $YBDB);
 		$result = mysql_fetch_assoc($sql);
 			
 		
-		if ( $visible_count == $result["count"] ) { // 1 or more deposits, and all deposits are visible
-	
+		if ( $visible_count == $result["count"] ) { // 1 or more deposits, and all deposits are visible	
+						
+							
 			foreach ( $deposit as $key => $value ) {
 				if ( $c > $key ) {				
 					$query = 'SELECT  SUM(IF(payment_type="check", amount, 0)) AS "check",  

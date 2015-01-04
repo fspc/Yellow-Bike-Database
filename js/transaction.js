@@ -4,6 +4,9 @@
 
 $(function() {
 
+	$.ajaxSetup({async:false}); // best to do this in $.ajax, 
+										 // but all ajax needs to be synchronous in this program because of the use of mysql
+
 	$("select[name='transaction_type']").attr("tabindex",1);
 	$("select[name='transaction_type']").focus();
 	$("input[value='Create Transaction']").attr("tabindex",2);
@@ -12,58 +15,52 @@ $(function() {
 	$(":checked").parent("td").prev().children().hide();
 	$(".paid").click(function() {
 
-		$.ajaxSetup({async:false});
 		
 		if ($(this).prop("checked")) { 
 		
 			$(this).closest("tr").css("background-color","#E6E7E6"); 
-			$('[href*="' + this.name + '"]').hide(); 
+			$('[href*="trans_id=' + this.name + '"]').hide(); 
 	    	$.post("json/transaction.php",{ paid: 1, transaction_id: this.name } );
 	 	} 
 	 	else { 
 	  		
 	    	$(this).closest("tr").css("background-color","transparent");
-	    	$('[href*="' + this.name + '"]').show(); 
+	    	$('[href*="trans_id=' + this.name + '"]').show(); 
 	    	$.post("json/transaction.php",{ paid: 0, transaction_id: this.name } );
 	  	} 
 
-			// Deposit Calculator
+			// Deposit Calculator for clicks
+  			deposit_calculator();  	
+	  	
+	});
+
+	// Deposit Calculator on page reload
+	if ( $(".paid").length ) {	 // any transactions?
+			
+			deposit_calculator();
+	
+	}
+
+	// Deposit Calculator function
+	function deposit_calculator() {
+
 			var deposit = {};		
 			$(".deposit input").each(function(count){ 
 				deposit[count] =  this.name;
 			});			
-			
-					
+								
 			$.post("json/transaction.php",{"deposit": deposit}, function(data) {
 				var obj = $.parseJSON(data);
 				$.each(obj,function(k,v){
-					//console.log(k + "= Cash: " + v.cash + " Check: " + v.check + " Credit: " + v.credit + "\n");
+					//console.log(k + "= Cash: " + v.cash + " Check: " + v.check + " Credit: " + v.credit + "\n");					
 					$("#" + k + "_cash span").text("$" + v.cash);
 					$("#" + k + "_check span").text("$" + v.check);
 					$("#" + k + "_credit span").text("$" + v.credit);
+					var sum = Number(v.check) + Number(v.cash);
+					$("#" + k + "_sum span").text("$" + sum);
 				});
-			});	  	
-			$.ajaxSetup({async:true});	  	
-	  	
-	});
-
-	// Deposit Calculator
-	if ( $(".paid").length ) {	 // any transactions?
 			
-		var deposit = {};		
-		$(".deposit input").each(function(count){ 
-			deposit[count] =  this.name;
-		});			
-		
-		$.post("json/transaction.php",{"deposit": deposit}, function(data) {
-			var obj = $.parseJSON(data);
-			$.each(obj,function(k,v){
-				//console.log(k + "= Cash: " + v.cash + " Check: " + v.check + " Credit: " + v.credit + "\n");
-				$("#" + k + "_cash span").text("$" + v.cash);
-				$("#" + k + "_check span").text("$" + v.check);
-				$("#" + k + "_credit span").text("$" + v.credit);
-			});
-		});
+			});			
 	
 	}
 
