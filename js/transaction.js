@@ -19,7 +19,8 @@ $(function() {
 		if ($(this).prop("checked")) { 
 		
 			$(this).closest("tr").css("background-color","#E6E7E6"); 
-			$('[href*="trans_id=' + this.name + '"]').hide(); 
+			$('[href*="trans_id=' + this.name + '"]').hide();
+			$.post("json/transaction.php",{ paid: 1, transaction_id: this.name } ); 
 	 	} 
 	 	else { 
 	  		
