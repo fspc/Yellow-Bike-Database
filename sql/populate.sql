@@ -155,8 +155,10 @@ INSERT INTO transaction_types
 
 -- transaction_log - added paid or not
 --                 - added payment_type (cash, check or cc)
+--						 - added check_number (Check#)
 -- transaction_id, date_startstorage, date,transaction_type, amount,
 -- description, sold_to, sold_by, quantity, shop_id, paid
 
 ALTER TABLE transaction_log ADD paid tinyint(1) NOT NULL DEFAULT '0';
 ALTER TABLE transaction_log ADD payment_type varchar(6) DEFAULT NULL;
+ALTER TABLE transaction_log ADD check_number int(10) unsigned DEFAULT NULL;

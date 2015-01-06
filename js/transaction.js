@@ -20,7 +20,6 @@ $(function() {
 		
 			$(this).closest("tr").css("background-color","#E6E7E6"); 
 			$('[href*="trans_id=' + this.name + '"]').hide(); 
-	    	$.post("json/transaction.php",{ paid: 1, transaction_id: this.name } );
 	 	} 
 	 	else { 
 	  		
@@ -32,7 +31,7 @@ $(function() {
 			// Deposit Calculator for clicks
   			deposit_calculator();  	
 	  	
-	});
+	}); // paid or not?
 
 	// Deposit Calculator on page reload
 	if ( $(".paid").length ) {	 // any transactions?
@@ -88,7 +87,7 @@ $(function() {
 			
 			});			
 	
-	}
+	} // Deposit Calculator
 
 	
 	// editing a transaction
@@ -103,30 +102,55 @@ $(function() {
 		$("textarea[name='description']").attr("tabindex",6);
 		$("input[name='amount']").attr("tabindex",7);
 		$("input[name='payment_type']").attr("tabindex",8);
-		$("select[name='sold_to']").attr("tabindex",9);
-		$("select[name='sold_by']").attr("tabindex",10);
-		$("input[value='Save']").attr("tabindex",11);
-		$("input[value='Close']").attr("tabindex",12);		
+		$("#check_number").attr("tabindex",9);
+		$("select[name='sold_to']").attr("tabindex",10);
+		$("select[name='sold_by']").attr("tabindex",11);
+		$("input[value='Save']").attr("tabindex",12);
+		$("input[value='Close']").attr("tabindex",13);		
 		
 		// require that values be filled in a particular fashion
-		$("#date").mask("0000-00-00");
-		$("#amount").mask("#0.00", {reverse: true});
+		$("#date").mask("0000-00-00", {placeholder: "yyyy-mm-dd" });
+		$("#amount").mask("#0.00", {reverse: true, placeholder: "000.00"});
+		$("#check_number").mask("#0", {reverse: true, placeholder: "check number"});	
 	
 		$transaction_id = $("input[name='transaction_id']").val();
+		//var check_number = $("#check_number").on("input");
 		
 		// what type of payment? cash, credit or check?
 		$("input[name='payment_type']").click(function() { 
 			if ($(this).prop("checked")) { 
 				$.post("json/transaction.php",{ payment_type: this.value, transaction_id: $transaction_id } );
+		
+				// check number?				
+				if (this.value == "check") {					
+					if ($("#check_number").length == 0) {
+						$("#check").after('&nbsp;&nbsp;<input type="text" id="check_number" size="10" name="check_number" >');
+						$("#check_number").attr("tabindex",9);
+					}	else {
+						$("#check_number").show();	
+					}
+					
+					// return check #					
+					$.post("json/transaction.php",{ check_number: true, transaction_id: $transaction_id }, function(data) {
+						var obj = $.parseJSON(data);			
+	   				if (obj.check_number) {
+							$("#check_number").val(obj.check_number);		
+	   				}				
+	    			});				
+				} else{
+					$("#check_number").hide();				
+				}
+				
 			}
-		});
+		}); // what type of payment?
+	
 		
 		/* When the transaction is storage based, only show price and payment_type 
 		   when a full date (yyyy-mm-dd) is entered. */
 		if ( $("#date_startstorage").length ) {
 			
 			// require that values be filled in a particular fashion
-			$("#date_startstorage").mask("0000-00-00");
+			$("#date_startstorage").mask("0000-00-00", {placeholder: "yyyy-mm-dd" });
 
 			var date_value = $("#date").val();
 			var date_test = /^\d{4}-((0\d)|(1[012]))-(([012]\d)|3[01])$/.test(date_value);

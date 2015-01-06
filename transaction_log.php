@@ -148,7 +148,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
 
 //Form Edit Record ===============================================================================
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_POST["EditSubmit"] == "Save")) {
-
+	
 
 	//Error Correction & good place for jquery 
 	$sold_to = (($_POST['sold_to'] == 'no_selection') ? 1268 : $_POST['sold_to'] );
@@ -156,8 +156,13 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_PO
 	$date_startstorage = date_update_wo_timestamp($_POST['date_startstorage'], $_POST['db_date_startstorage']);
 	$date = date_update_wo_timestamp($_POST['date'], $_POST['db_date']);
 	$description = (($_POST['description'] == "") ? "No Description" : $_POST['description'] );	
+	$check_number = (($_POST['check_number'] == "") ? "" : $_POST['check_number'] );
 
-	$updateSQL = sprintf("UPDATE transaction_log SET transaction_type=%s, date_startstorage=%s, date=%s, amount=%s, quantity=%s, description=%s, sold_to=%s, sold_by=%s, shop_id=%s WHERE transaction_id=%s",
+	// keep the order
+	$updateSQL = sprintf("UPDATE transaction_log SET transaction_type=%s, date_startstorage=%s,
+																	 date=%s, amount=%s, quantity=%s, description=%s, 
+																	 sold_to=%s, sold_by=%s, 
+																	 shop_id=%s, check_number=%s WHERE transaction_id=%s",
 						   GetSQLValueString($_POST['transaction_type'], "text"),
 						   GetSQLValueString($date_startstorage, "date"),
 						   GetSQLValueString($date, "date"),
@@ -167,13 +172,14 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_PO
 						   GetSQLValueString($sold_to, "int"),
 						   GetSQLValueString($sold_by, "int"),
 						   GetSQLValueString($_POST['shop_id'], "int"),
-						   GetSQLValueString($_POST['transaction_id'], "int"));
+						   GetSQLValueString($check_number, "text"),
+						   GetSQLValueString($_POST['transaction_id'], "int")
+						   );
 						   //"2006-10-12 18:15:00"
 	
 	
 	mysql_select_db($database_YBDB, $YBDB);
 	$Result1 = mysql_query($updateSQL, $YBDB) or die(mysql_error());	
-	
 	
 	$trans_id = $_POST['transaction_id'];
 	header(sprintf("Location: %s",$editFormAction . "?trans_id={$trans_id}&record_count=$record_count"));   //$editFormAction
@@ -223,7 +229,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
     <td>
       <table border="1" cellpadding="1" cellspacing="0" bordercolor="#CCCCCC">
         <tr bordercolor="#CCCCCC" bgcolor="#99CC33">
-          <td colspan="9" bgcolor="#99CC33"><div align="center"><strong>Bike and Sale Log </strong></div></td>
+          <td colspan="9" bgcolor="#99CC33"><div align="center"><strong>Bike, Sale and Donation Log</strong></div></td>
 		  </tr>
         <?php 		// show delete tranaction confirmation =========================================
 		if($delete_trans_id <> -1 ) { ?>
@@ -262,7 +268,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 	  $Recordset3 = mysql_query($query_Recordset3, $YBDB) or die(mysql_error());
 	  $row_Recordset3 = mysql_fetch_assoc($Recordset3);
 	  $totalRows_Recordset3 = mysql_num_rows($Recordset3);
-	  
+	   
 	  ?>
         
         <!-- The actual row for edit transactions -->
@@ -287,7 +293,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                 <td><?php echo $row_Recordset2['transaction_id']; ?><em><?php echo $row_Recordset3['message_transaction_id']; ?></em></em></td>
 		  	  </tr>
 		  	    <tr><td>&nbsp;</td>
-		  	    <td><label>ShopID:</label> </td>
+		  	    <td><label for="shop_id">ShopID:</label> </td>
                 <td><input name="shop_id" type="text" id="shop_id" value="<?php echo $row_Recordset2['shop_id']; ?>" size="6" /></td>
 		  	  </tr>
                 <?php ?>
@@ -297,17 +303,17 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                 <?php //date_startstorage ==============================================================
 			if($row_Recordset3['show_startdate']){?>
                 <tr><td>&nbsp;</td>
-		  	    <td><label>Storage Start Date:</label></td>
+		  	    <td for="date_startstorage"><label>Storage Start Date:</label></td>
 		  	    <td><input name="date_startstorage" type="text" id="date_startstorage" value="<?php 
 			  echo $row_Recordset2['date_startstorage_day']; ?>" size="10" maxlength="10" />
-		  	      (yyyy-mm-dd)</td>
+		  	    </td>
 		  	  </tr>
                 <?php } //end if storage | start of date ================================================
 			?>
                 <tr><td>&nbsp;</td>
-		  	    <td><label><?php echo $row_Recordset3['fieldname_date']; ?>:</label></td>
+		  	    <td><label for="date"><?php echo $row_Recordset3['fieldname_date']; ?>:</label></td>
 		  	    <td><input name="date" type="text" id="date" value="<?php echo $row_Recordset2['date_day']; ?>" size="10" maxlength="10" />
-		  	      (yyyy-mm-dd)
+		  	
 		  	        <SCRIPT>
 					function FillDate() { 
 						document.FormEdit.date.value = '<?php echo current_date(); ?>' }
@@ -332,10 +338,10 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 			if($row_Recordset3['community_bike']){ //community bike will allow a quantity to be selected for Yellow Bikes and Kids Bikes?>
                 <tr>
                   <td>&nbsp;</td>
-		  	    <td valign="top"><label>Quantity:</label></td>
+		  	    <td valign="top"><label for="quantity">Quantity:</label></td>
 		  	    <td><input name="quantity" type="text" id="quantity" value="<?php echo $row_Recordset2['quantity']; ?>" size="3" maxlength="3" /></td>
 		  	    </tr>
-                <?php } // end if show quanitiy for community bikes
+                <?php } // end if show quanitity for community bikes
 			if($row_Recordset3['show_description']){ ?>
                 <tr><td>&nbsp;</td>
 		  	  <td valign="top"><label><?php echo $row_Recordset3['fieldname_description']; ?>:</label></td>
@@ -359,11 +365,19 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 					<td><label>Payment Type:</label></td>
 					<td>
 						<input type="radio" name="payment_type" value="cash"
-						<?php if ($row_Recordset2['payment_type'] == "cash") { echo "  checked"; }  ?>	>Cash
+						<?php if ($row_Recordset2['payment_type'] == "cash") { echo "  checked"; }  ?>	>
+						<label id="cash" class="payment_type" for="payment_type">Cash</label>
 						<input type="radio" name="payment_type" value="credit"
-						<?php if ($row_Recordset2['payment_type'] == "credit") { echo "  checked"; } ?>  >Credit Card
+						<?php if ($row_Recordset2['payment_type'] == "credit") { echo "  checked"; } ?>  >
+						<label id="credit_card" class="payment_type" for="payment_type">Credit Card</label>
 						<input type="radio" name="payment_type" value="check"
-						<?php if ($row_Recordset2['payment_type'] == "check") { echo "  checked"; } ?>   >Check	
+						<?php if ($row_Recordset2['payment_type'] == "check") { echo "  checked"; } ?>   >
+						<label id="check" class="payment_type" for="payment_type">Check</label>
+						<?php if ($row_Recordset2['payment_type'] == "check") { 						
+									echo '&nbsp;<input type="text" id="check_number" size="10" name="check_number" value="' . 
+											$row_Recordset2['check_number'] .  '".>'; 
+								} 
+						?>	
 					</td>		  	  
 		  	  </tr>
 		  	  <?php } ?>
@@ -498,7 +512,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
     <td height="40" valign="bottom"><form id="form1" name="form1" method="post" action="">
       <p><br />
         Show
-        <input name="record_count" type="text" value="<?php echo $number_of_transactions;  ?>" size="3" maxlength="3" />
+        <input name="record_count" type="text" value="<?php echo $number_of_transactions;  ?>" size="3"
         transactions on or before:
         <input name="trans_date" type="text" id="trans_date" value="<?php echo current_date(); ?>" size="10" maxlength="10" />
         (date format YYYY-MM-DD) Day of week:

@@ -29,6 +29,16 @@ mysql_select_db($database_YBDB, $YBDB);
 		
 	}
 
+	// If payment_type check is selected - return check number if exists 
+	if (isset($_POST['check_number'])) {
+		
+			$query = 'SELECT check_number FROM transaction_log WHERE transaction_id="' . $_POST['transaction_id'] . '";';
+			$sql = mysql_query($query, $YBDB) or die(mysql_error());
+			$result = mysql_fetch_assoc($sql);
+			echo json_encode($result);		
+		
+	}
+
 	// Deposit Calculator
 	if (isset($_POST['deposit'])) {
 		
@@ -95,6 +105,6 @@ mysql_select_db($database_YBDB, $YBDB);
 				echo json_encode($result_obj);								
 		} // end  else for invisibles
 
-	}
+	} // End Deposit Calculator
 
 ?>
