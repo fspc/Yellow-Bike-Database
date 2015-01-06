@@ -64,6 +64,7 @@ if($_GET['trans_type']=='all_types'){
 //record_count
 if($_GET['record_count']>0){
 	$record_count = $_GET['record_count'];
+	$number_of_transactions = $record_count;
 } else {
 	$record_count = $number_of_transactions;
 }
@@ -90,9 +91,11 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 //Action on form update
 
 if (isset($_GET[record_count])) { 
-	$editFormAction = $_SERVER['PHP_SELF'];
+	//$editFormAction = $_SERVER['PHP_SELF'];
+	$editFormAction = "";
 } else {		  				
-	$editFormAction = $_SERVER['PHP_SELF'];
+	//$editFormAction = $_SERVER['PHP_SELF'];
+	$editFormAction = "";
 }
 
 //$editFormAction = $_SERVER['PHP_SELF'];
@@ -145,6 +148,13 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
 	header(sprintf("Location: %s", $LoadPage));
 } // end Form Submit New Transaction
 
+
+// Form Close Record
+if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_POST["EditSubmit"] == "Close")) {
+
+	header(sprintf("Location: %s",$editFormAction . "?record_count=$record_count"));   //$editFormAction
+	
+}
 
 //Form Edit Record ===============================================================================
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_POST["EditSubmit"] == "Save")) {
