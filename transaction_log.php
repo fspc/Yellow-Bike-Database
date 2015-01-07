@@ -89,14 +89,7 @@ $Recordset1 = mysql_query($query_Recordset1, $YBDB) or die(mysql_error());
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
 //Action on form update
-
-if (isset($_GET[record_count])) { 
-	//$editFormAction = $_SERVER['PHP_SELF'];
-	$editFormAction = "";
-} else {		  				
-	//$editFormAction = $_SERVER['PHP_SELF'];
-	$editFormAction = "";
-}
+$editFormAction = "";
 
 //$editFormAction = $_SERVER['PHP_SELF'];
 
@@ -447,7 +440,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
         <form method="post" name="FormNew" action="<?php echo $editFormAction; ?>">
           <tr  bordercolor="#CCCCCC" bgcolor="#CCCC33">
             <td colspan="9"><p><strong>Start New Transaction:</strong><br />&nbsp;&nbsp;&nbsp;&nbsp;Select Type: <?php list_transaction_types('transaction_type',$default_transaction_type); ?> 
-              <input type="submit" name="Submit43" value="Create Transaction" />
+              <input type="submit" name="Submit43" value="Create Transaction" /><span id="current_shop"></span>
               </p>	      </td>
 	      </tr>
           <input type="hidden" name="MM_insert" value="FormNew">
@@ -522,10 +515,9 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
     <td height="40" valign="bottom"><form id="form1" name="form1" method="post" action="">
       <p><br />
         Show
-        <input name="record_count" type="text" value="<?php echo $number_of_transactions;  ?>" size="3"
+        <input name="record_count" type="text" value="<?php echo $number_of_transactions;  ?>" size="3">
         transactions on or before:
         <input name="trans_date" type="text" id="trans_date" value="<?php echo current_date(); ?>" size="10" maxlength="10" />
-        (date format YYYY-MM-DD) Day of week:
         <select name="dayname">
           <option value="alldays" selected="selected">All Days</option>
           <option value="Monday">Monday</option>

@@ -10,6 +10,22 @@ $(function() {
 	$("select[name='transaction_type']").attr("tabindex",1);
 	$("select[name='transaction_type']").focus();
 	$("input[value='Create Transaction']").attr("tabindex",2);
+	$("#trans_date").mask("0000-00-00", {placeholder: "yyyy-mm-dd" });
+
+	// Does a current shop exist?
+	$.post("json/transaction.php", {shop_exist: 1}, function(data) { 
+		if (data == "no_shop") {
+			
+			$("input[name='Submit43']").click(function(){
+				$("#current_shop").html("&nbsp<a style='color:red' href='shop_log.php'>Start New Shop</a>");				
+				event.preventDefault();		
+			});
+			$('[href*="trans_id="]').click(function(){
+				$("#current_shop").html("&nbsp<a style='color:red' href='shop_log.php'>Start New Shop</a>");				
+				event.preventDefault();			
+			});		
+		}
+	} );
 
 	// paid or not?
 	$(":checked").parent("td").prev().children().hide();

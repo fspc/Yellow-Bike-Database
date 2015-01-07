@@ -1,8 +1,14 @@
 <?php
 
+require_once('../Connections/database_functions.php');
 require_once('../Connections/YBDB.php');
 mysql_select_db($database_YBDB, $YBDB);
 
+
+	// Is there a current shop?
+	if(isset($_POST['shop_exist'])) {
+		if(current_shop_by_ip()>=1) echo "current_shop"; else echo "no_shop";
+	}
 
 	// update whether paid or not
 	if(isset($_POST['paid'])) {
