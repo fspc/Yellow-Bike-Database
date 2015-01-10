@@ -496,8 +496,29 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 	    </tr>
 	    <?php  			
   			if ($row_Recordset1['transaction_type'] == "Deposit") {
+
+				$difference = "";
+				$diff = "";
+				if (isset($row_Recordset1['change_fund'])) {
+					$cf = $row_Recordset1['change_fund'];
+					$difference = $cf - $change_fund;
+					if ($difference <> $change_fund && $difference != 0) {
+						$diff = "(" . number_format((float)$difference, 2, '.', '') . ")";					
+					} else {
+						$diff = "";					
+					}				
+				} else {
+					$cf = $change_fund;				
+				}
+  				
 				echo "<tr class='deposit_calculator'><td colspan='9'><div style='text-align:right;'>";  				
-  				echo '<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_change">Change Fund:' . " $$change_fund" . '  <span></span></span>|
+  				echo '<span style="padding-left:10px; padding-right:10px;" id="' . $ti .
+  					  '_change" title="Mouse over number to change.  Change Fund should always balance out to the same amount it started with.">Change Fund:' . 
+  						" $<span class='editable_change' id='" . $ti . "_editable_change'>$cf</span>";
+  				if ($diff != "") {		 
+					echo "<span id='" . $ti . "_different_change' style='padding-left: 5px; padding-right: 5px; color: red;'>$diff</span>";  								
+				}	  				
+  				echo 	'</span>|
   						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_credit">Credit Card:  <span></span></span>|
   						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_check">Check:  <span></span></span>+
   						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_cash">Cash:  <span></span></span>=

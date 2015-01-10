@@ -21,6 +21,14 @@ form[name=FormEdit] select:focus {
     color: green;
 }
 
+.editable_change {
+	color: gray;
+}
+
+.editable_change form {
+	display: inline;
+}
+
 /*
 input[value=Save]:focus, input[value=Close]:focus {
 	background: green;

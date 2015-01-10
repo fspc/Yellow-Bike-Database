@@ -13,16 +13,24 @@ $(function() {
 	$("#trans_date").mask("0000-00-00", {placeholder: "yyyy-mm-dd" });
 
 	// Does a current shop exist?
+	var open_shop;
 	$.post("json/transaction.php", {shop_exist: 1}, function(data) { 
 		if (data == "no_shop") {
 			
+			open_shop = data;
+			var start_new_shop = "Start New Shop";			
+			
 			$("input[name='Submit43']").click(function(){
-				$("#current_shop").html("&nbsp<a style='color:red' href='shop_log.php'>Start New Shop</a>");				
+				$("#current_shop").html("&nbsp<a style='color:red' href='shop_log.php'>" + start_new_shop + "</a>");				
 				event.preventDefault();		
 			});
 			$('[href*="trans_id="]').click(function(){
-				$("#current_shop").html("&nbsp<a style='color:red' href='shop_log.php'>Start New Shop</a>");				
+				$("#current_shop").html("&nbsp<a style='color:red' href='shop_log.php'>" + start_new_shop + "</a>");				
 				event.preventDefault();			
+			});
+			$(".paid").click(function() {  
+				$("#current_shop").html("&nbsp<a style='color:red' href='shop_log.php'>" + start_new_shop + "</a>");								
+				return false; 
 			});		
 		}
 	} );
@@ -31,6 +39,7 @@ $(function() {
 	$(":checked").parent("td").prev().children().hide();
 	$(".paid").click(function() {
 
+		if (open_shop == "no_shop") {  return false; }
 		
 		if ($(this).prop("checked")) { 
 		
@@ -56,6 +65,34 @@ $(function() {
 			deposit_calculator();
 	
 	}
+
+	// Make change editable - could turn off when no shop
+	$('.editable_change input').mask("#0.00",{reverse: true, placeholder: "000"});
+	$('.editable_change').editable("json/transaction.php", 
+	{ 
+		tooltip: "edit", 
+		event: "mouseover", 
+		onblur: "submit",
+		name: "editable_change",
+		height: "auto", 
+		callback : function(value, settings) {
+      	var obj = $.parseJSON(value)
+		   $("#" + this.id).text(obj.changed_change);
+			var diff = Number(obj.changed_change) - Number(obj.change);
+			var str = this.id;			
+			var id = str.match(/\d+/);	
+			if (diff != 0) {
+				if(!$("#" + id[0] + "_different_change").length) {
+					$("#" + this.id).after("<span id=" + id[0] + "_different_change style='padding-left: 5px; padding-right: 5px; color: red;'></span>")				
+				} else {
+					$("#" + id[0] + "_different_change").show();
+				}		
+				$("#" + id[0] + "_different_change").text("(" + diff.toFixed(2) + ")");	
+			} else {
+				$("#" + id[0] + "_different_change").hide();
+			}		
+     }
+	});
 
 	// null or real number
 	function payment_result(result) { 

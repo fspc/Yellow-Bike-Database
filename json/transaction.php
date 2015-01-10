@@ -4,6 +4,7 @@ require_once('../Connections/database_functions.php');
 require_once('../Connections/YBDB.php');
 mysql_select_db($database_YBDB, $YBDB);
 
+$change_fund = CHANGE_FUND;
 
 	// Is there a current shop?
 	if(isset($_POST['shop_exist'])) {
@@ -43,6 +44,19 @@ mysql_select_db($database_YBDB, $YBDB);
 			$result = mysql_fetch_assoc($sql);
 			echo json_encode($result);		
 		
+	}
+
+	// Editable Change Fund
+	if(isset($_POST['editable_change'])) {
+		
+		$transaction_id = split('_', $_POST['id'], 1);
+		$query = 'UPDATE transaction_log set change_fund="' . $_POST['editable_change'] . '" WHERE transaction_id="' . $transaction_id[0] . '";';
+		$result = mysql_query($query, $YBDB) or die(mysql_error());
+		$send_back = array(
+			"changed_change" => $_POST['editable_change'], 
+			"change" => $change_fund,
+		);
+		echo json_encode($send_back);	
 	}
 
 	// Deposit Calculator
