@@ -79,8 +79,8 @@ $(function() {
       	var obj = $.parseJSON(value)
 		   $("#" + this.id).text(obj.changed_change);
 			var diff = Number(obj.changed_change) - Number(obj.change);
-			var str = this.id;			
-			var id = str.match(/\d+/);	
+			// var str = this.id;			
+			// var id = str.match(/\d+/);	
 			if (diff != 0) {
 				/*				
 				if(!$("#" + id[0] + "_different_change").length) {
