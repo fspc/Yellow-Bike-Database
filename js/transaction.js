@@ -82,11 +82,15 @@ $(function() {
 			var str = this.id;			
 			var id = str.match(/\d+/);	
 			if (diff != 0) {
+				/*				
 				if(!$("#" + id[0] + "_different_change").length) {
-					$("#" + this.id).after("<span id=" + id[0] + "_different_change style='padding-left: 5px; padding-right: 5px; color: red;'></span>")				
+					$("#" + this.id).after("<span id=" + id[0] + 
+													"_different_change style='padding-left: 5px; padding-right: 5px; color: red;'></span>")				
 				} else {
 					$("#" + id[0] + "_different_change").show();
-				}		
+				}
+				*/	
+				$("#" + id[0] + "_different_change").show();	
 				$("#" + id[0] + "_different_change").text("(" + diff.toFixed(2) + ")");	
 			} else {
 				$("#" + id[0] + "_different_change").hide();

@@ -517,6 +517,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
   						" $<span class='editable_change' id='" . $ti . "_editable_change'>$cf</span>";
   				if ($diff != "") {		 
 					echo "<span id='" . $ti . "_different_change' style='padding-left: 5px; padding-right: 5px; color: red;'>$diff</span>";  								
+				} else {
+					echo "<span id='" . $ti . "_different_change' style='padding-left: 5px; padding-right: 5px; color: red; display: none;'></span>";
 				}	  				
   				echo 	'</span>|
   						<span style="padding-left:10px; padding-right:10px;" id="' . $ti . '_credit">Credit Card:  <span></span></span>|
