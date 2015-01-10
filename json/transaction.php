@@ -59,6 +59,15 @@ $change_fund = CHANGE_FUND;
 		echo json_encode($send_back);	
 	}
 
+
+	// reset payment_type && amount for storage transaction
+	if(isset($_POST['storage_payment_reset'])) {
+		
+		$query = 'UPDATE transaction_log SET payment_type=NULL, amount=NULL WHERE transaction_id="' . 
+					$_POST['transaction_id'] . '";';
+		$result = mysql_query($query, $YBDB) or die(mysql_error());
+	}
+
 	// Deposit Calculator
 	if (isset($_POST['deposit'])) {
 		

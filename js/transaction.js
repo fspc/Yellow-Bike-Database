@@ -70,7 +70,7 @@ $(function() {
 	
 	}
 
-	// Make change editable - could turn off when no shop
+	// Make Change Fund editable
 	$('.editable_change input').mask("#0.00",{reverse: true, placeholder: "000"});
 	$('.editable_change').editable("json/transaction.php", 
 	{ 
@@ -151,7 +151,7 @@ $(function() {
 	
 	} // Deposit Calculator
 
-	
+
 	// editing a transaction
 	if ( $("input[name='shop_id']").length ) {
 	
@@ -237,8 +237,15 @@ $(function() {
 					$("#price").show();			
 					$("#payment_type").show();
 				} else {
-					$("#price").hide();			
-					$("#payment_type").hide();	
+					$("#amount").val("");					
+					$("#price").hide();
+			
+					$('input[type=radio]').prop('checked',false).trigger('updateState');
+					$("#payment_type").hide();					
+					
+					// reset payment_type && amount	
+					$.post("json/transaction.php",{storage_payment_reset: 1, transaction_id: $transaction_id});										
+						
 				}
 			});
 	
