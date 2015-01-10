@@ -31,6 +31,10 @@ $(function() {
 			$(".paid").click(function() {  
 				$("#current_shop").html("&nbsp<a style='color:red' href='shop_log.php'>" + start_new_shop + "</a>");								
 				return false; 
+			});
+			$('.editable_change').mouseover(function() {
+				$("#current_shop").html("&nbsp<a style='color:red' href='shop_log.php'>" + start_new_shop + "</a>");								
+				$('.editable_change').editable("disable");
 			});		
 		}
 	} );
@@ -79,8 +83,8 @@ $(function() {
       	var obj = $.parseJSON(value)
 		   $("#" + this.id).text(obj.changed_change);
 			var diff = Number(obj.changed_change) - Number(obj.change);
-			// var str = this.id;			
-			// var id = str.match(/\d+/);	
+			var str = this.id;			
+			var id = str.match(/\d+/);	
 			if (diff != 0) {
 				/*				
 				if(!$("#" + id[0] + "_different_change").length) {
