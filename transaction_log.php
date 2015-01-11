@@ -108,25 +108,18 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
 	$row_Recordset5 = mysql_fetch_assoc($Recordset5);
 	$totalRows_Recordset5 = mysql_num_rows($Recordset5);
 	$initial_date_startstorage = $row_Recordset5['show_startdate'];
-	
+
+	// Note: storage of time via current_datetime()) seems futile since updated or customized dates do not have a time	
 	if ($initial_date_startstorage) {
 		$date_startstorage = current_datetime();
 		$date = "NULL";
+		$amount = "NULL";
 	} else {
 		$date_startstorage = "NULL";
 		$date = current_datetime();
+		$amount = 0;
 	} //end if
-	
-	$insertSQL = sprintf("INSERT INTO transaction_log (transaction_type,shop_id, date_startstorage, date, quantity) VALUES (%s,%s, %s ,%s,%s)",
-					   GetSQLValueString($_POST['transaction_type'], "text"),
-					   GetSQLValueString($shop_id, "text"),
-					   GetSQLValueString($date_startstorage, "date"),
-					   GetSQLValueString($date, "date"),
-					   GetSQLValueString(1, "int"));
-					   
-	//echo $insertSQL; 
-	mysql_select_db($database_YBDB, $YBDB);
-	$Result1 = mysql_query($insertSQL, $YBDB) or die(mysql_error());
+
 
 	// gets newest transaction ID
 	mysql_select_db($database_YBDB, $YBDB);
@@ -135,7 +128,23 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
 	$row_Recordset4 = mysql_fetch_assoc($Recordset4);
 	$totalRows_Recordset4 = mysql_num_rows($Recordset4);
 	$newtrans = $row_Recordset4['newtrans'];  //This field is used to set edit box preferences
+
+	$newtrans = $newtrans + 1;
 	
+	$insertSQL = sprintf("INSERT INTO transaction_log (transaction_type,shop_id, date_startstorage, date, quantity, amount, transaction_id) 
+								VALUES (%s,%s, %s ,%s,%s, %s, %s)",
+					   GetSQLValueString($_POST['transaction_type'], "text"),
+					   GetSQLValueString($shop_id, "text"),
+					   GetSQLValueString($date_startstorage, "date"),
+					   GetSQLValueString($date, "date"),
+					   GetSQLValueString(1, "int"),
+					   GetSQLValueString($amount, "float"),
+					   GetSQLValueString($newtrans, "int")
+					   );
+					   
+	//echo $insertSQL; 
+	mysql_select_db($database_YBDB, $YBDB);
+	$Result1 = mysql_query($insertSQL, $YBDB) or die(mysql_error());	
 	
 	$LoadPage = $_SERVER['PHP_SELF'] . "?trans_id={$newtrans}";
 	header(sprintf("Location: %s", $LoadPage));
@@ -160,6 +169,40 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_PO
 	$date = date_update_wo_timestamp($_POST['date'], $_POST['db_date']);
 	$description = (($_POST['description'] == "") ? "No Description" : $_POST['description'] );	
 	$check_number = (($_POST['check_number'] == "") ? "" : $_POST['check_number'] );
+	$transaction_id = $_POST['transaction_id'];
+
+	// If storage transaction finalized, change transaction_id to most recent transaction_id
+	$current_date = current_date();
+	$storage_date = split(' ', $_POST['db_date_startstorage']);	
+	$transaction_date = split(' ', $_POST['date']);
+
+	
+	mysql_select_db($database_YBDB, $YBDB);
+	$query = 'SELECT MAX(transaction_id) AS "ti" FROM transaction_log;';
+	$sql = mysql_query($query, $YBDB) or die(mysql_error());
+	$result = mysql_fetch_assoc($sql);
+
+		
+	if($date_startstorage) {
+
+
+		$new_transaction_id = $result['ti'] + 1;		
+		
+		// If startstorage >= current date (transaction_id stays the same)
+		// If startstorage < current date (transaction_id becomes > than last)
+		if ($current_date > $storage_date[0] && $storage_date[0] != $transaction_date[0]) {
+			if($_POST['amount'] != "" && $_POST['payment_type'] != "") {			
+				$query = 'UPDATE transaction_log SET transaction_id="' . $new_transaction_id . 
+				'" WHERE transaction_id="' . $_POST['transaction_id'] . '";';
+				$sql = mysql_query($query, $YBDB) or die(mysql_error());
+				$transaction_id = $new_transaction_id;						
+			} else {
+				$new_transaction_id = "";				
+			}
+			
+		}		
+
+	}
 
 	// keep the order
 	$updateSQL = sprintf("UPDATE transaction_log SET transaction_type=%s, date_startstorage=%s,
@@ -176,7 +219,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_PO
 						   GetSQLValueString($sold_by, "int"),
 						   GetSQLValueString($_POST['shop_id'], "int"),
 						   GetSQLValueString($check_number, "text"),
-						   GetSQLValueString($_POST['transaction_id'], "int")
+						   GetSQLValueString($transaction_id, "int")
 						   );
 						   //"2006-10-12 18:15:00"
 	
@@ -184,7 +227,9 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_PO
 	mysql_select_db($database_YBDB, $YBDB);
 	$Result1 = mysql_query($updateSQL, $YBDB) or die(mysql_error());	
 	
-	$trans_id = $_POST['transaction_id'];
+	$trans_id = $transaction_id;
+		
+	
 	header(sprintf("Location: %s",$editFormAction . "?trans_id={$trans_id}&record_count=$record_count"));   //$editFormAction
 }
 
@@ -448,7 +493,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 	    <?php } // if ?>
         <tr bordercolor="#CCCCCC" bgcolor="#99CC33">
         <td width="50"><strong>Shop</strong></td>
-		  <td width="100"><strong>Date</strong></td>
+		  <td width="100"><strong>Trans. Date</strong></td>
 		  <td width="200" bgcolor="#99CC33"><strong>Sale Type </strong></td>
 		  <td><strong>Patron</strong></td>
 		  <td width="300"><strong>Description</strong></td>
