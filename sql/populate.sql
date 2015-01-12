@@ -36,10 +36,10 @@ DELETE FROM shop_user_roles;
 INSERT INTO shop_user_roles (
   shop_user_role_id, hours_rank, volunteer, sales, paid
 ) VALUES 
-  ("Coordinator",0,0,1,0), 
+  ("Coordinator",0,1,1,0), 
   ("Personal",0,0,0,0), 
   ("Volunteer",0,1,0,0), 
-  ("Greeter",0,0,1,0),
+  ("Greeter",0,1,1,0),
   ("Staff",0,0,1,1),
   ("Student Volunteer",0,0,0,0),
   ("Shopping",0,0,0,0);
@@ -76,7 +76,7 @@ INSERT INTO contacts (
 -- This is object orienteed like :)
 --
 -- TEXT FIELDS (some presentation logic that is in the business logic, rather than kept cleanly separated from it)
--- Although, there are some advantages to this approach.
+-- Although, there are some clear advantages to this approach.
 -- NOTE - (:colon is appended by default:)
 --
 -- fieldname_date: text field for the day the transaction transpires, e.g. "Sale Date"
@@ -86,12 +86,16 @@ INSERT INTO contacts (
 -- show_soldto_location: while not a presentation, without it, previous field is useless. (Also, see discussion about location) 
 -- fieldname_description: text field for description text area, e.g. "Description"
 --
--- DISCUSSION ABOUT LOCATIONS in transaction_log.php 
--- show_soldto_location is now used to show patrons. The history of this name is 
--- that YBP was using it to keep track of donation locations.  However, there is an
--- option in transaction_log.php that would show current shop users that was 
--- commented out.  Not sure what the usefullness of location_add_edit_select.php is yet.
--- With that thought, need more than 1 shop with its own accounting?  Run a different instance of YBDB.
+-- (Developers) DISCUSSION ABOUT LOCATIONS - In transaction_log.php 
+-- "show_soldto_location" is now used to show patrons. The probable history of this name is 
+-- that YBP was using it to keep track of donation locations (ignore the "sold" word).  However, there is an
+-- option in transaction_log.php that was meant to show current shop users that was 
+-- commented out, basically, things were still being developed.  
+-- The usefullness of location_add_edit_select.php (inserts new records into contact table) is that it allows
+-- donors to be added who are not present at the shop, usually locations like Department stores, etc. without a password.
+-- It looks like the end result was a compromise with list_donation_locations_withheader() for unlogged donors/patrons
+-- being used for everything, rather than list_CurrentShopUsers_select when appropriate.  However, associating
+-- certain types transactions with different behavior makes good sense .. just needs some renaming.
 --
 -- USELESS or RESERVED FIELDS
 -- show_soldto and show_soldby currently do not do anything, 
@@ -115,48 +119,60 @@ INSERT INTO contacts (
 --  show_startdate - is used by transactions where an item (usually a bicycle) is stored for
 --  a defined period before it is purchased.  If this is set,
 --  the behavior is to hide price (show_amount) and payment types (show_payment)
---  until a date (label defined by fieldname_date) is entered.
+--  until a date (label defined by fieldname_date) is entered.  When the transaction is complete,
+--  it rises to the current shop day, and is assigned the most recent transaction id.
 --
--- Storage period may be defined in Connections/database_functions.php - STORAGE_PERIOD
+--  Storage period may be defined in Connections/database_functions.php - STORAGE_PERIOD
 --
 -- DEPOSITS
 -- Deposit (transaction_type_id) is a special transaction type that behaves differently in the log
 -- for a good reason.
+--
+-- DONATIONS (or option to allow an anonymous transactions)
+-- Anonymous (transaction_type_id) provides a checkbox if show_soldto_location is set to allow donations and other types
+-- of desired transactions to be anonymous.
+--
+-- "show_payment" shows cash, credit, and check payment types if selected.
+-- "anonymous" allows anonymous transactions with a check box.
 
 ALTER TABLE transaction_types ADD show_payment tinyint(1) NOT NULL DEFAULT '1';
+ALTER TABLE transaction_types ADD anonymous tinyint(1) NOT NULL DEFAULT '0';
 INSERT INTO transaction_types 
   (transaction_type_id, rank, 
    active, community_bike, show_transaction_id, show_type, show_startdate, 
    show_amount, show_description, show_soldto, show_soldby, 
    fieldname_date, fieldname_soldby, message_transaction_id, 
    fieldname_soldto, show_soldto_location, fieldname_description, 
-   accounting_group, show_payment
+   accounting_group, show_payment, anonymous
 ) VALUES 
-  ("Build Your Own Bike", 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
-  ("Bicycles", 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
-  ("Non-inventory Parts", 3, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
-  ("Trade-ups/Ins", 4, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
-  ("Helmets", 5, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
-  ("Donations", 6, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),     
-  ("Memberships", 7, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
-  ("Inventory Parts", 8, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
-  ("Cargo Related", 9, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
-  ("Car Racks", 10, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
-  ("DIY Repairs", 11, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),
-  ("Accounts Receivable Invoice", 12, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 0), 
-  ("Accounts Receivable Payment", 13, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1), 
-  ("Deposit", 14, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Deposit Date", "Deposited By"," ", "", 0, "Description", "Sales", 0),
-  ("Metrics - Completed Mechanic Operation Bike", 15, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),
-  ("Metrics - Completed Mechanic Operation Wheel", 16, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),
-  ("Metrics - New Parts on a Completed Bike", 17, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),
-  ("Sale - Used Parts", 18, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),
-  ("Sale - New Parts", 19, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),
-  ("Sale - Complete Bike", 20, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1),
-  ("Giveaway", 21, 1, 0, 1, 1, 0, 0, 1, 1, 1, "Sale Date", "Given By"," ", "Given To", 1, "Description", "Sales", 0);
+  ("Build Your Own Bike", 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0), 
+  ("Bicycles", 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0), 
+  ("Non-inventory Parts", 3, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0), 
+  ("Trade-ups/Ins", 4, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0), 
+  ("Helmets", 5, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0), 
+  ("Donations", 6, 1, 0, 1, 1, 0, 0, 1, 1, 1, "Sale Date", "Received by"," ", "Given by", 1, "Description", "Sales", 0, 1),
+  ("Monentary Donations", 7, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Received by"," ", "Given by", 1, "Description", "Sales", 1, 1),     
+  ("Memberships", 8, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0), 
+  ("Inventory Parts", 9, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0), 
+  ("Cargo Related", 10, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0), 
+  ("Car Racks", 11, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0), 
+  ("DIY Repairs", 12, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0),
+  ("Accounts Receivable Invoice", 13, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 0, 0), 
+  ("Accounts Receivable Payment", 14, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0), 
+  ("Deposit", 15, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Deposit Date", "Deposited By"," ", "", 0, "Description", "Sales", 0, 0),
+  ("Metrics - Completed Mechanic Operation Bike", 16, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0),
+  ("Metrics - Completed Mechanic Operation Wheel", 17, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0),
+  ("Metrics - New Parts on a Completed Bike", 18, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0),
+  ("Sale - Used Parts", 19, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0),
+  ("Sale - New Parts", 20, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0),
+  ("Sale - Complete Bike", 21, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0),
+  ("Giveaway", 22, 1, 0, 1, 1, 0, 0, 1, 1, 1, "Sale Date", "Given By"," ", "Given To", 1, "Description", "Sales", 0, 0);
 
 -- transaction_log - added paid or not
 --                 - added payment_type (cash, check or cc)
 --						 - added check_number (Check#)
+--						 - added change_fund to keep track of changes in the fund
+--						 - added anonymous to store whether set or not for a transaction
 -- transaction_id, date_startstorage, date,transaction_type, amount,
 -- description, sold_to, sold_by, quantity, shop_id, paid
 
@@ -164,3 +180,4 @@ ALTER TABLE transaction_log ADD paid tinyint(1) NOT NULL DEFAULT '0';
 ALTER TABLE transaction_log ADD payment_type varchar(6) DEFAULT NULL;
 ALTER TABLE transaction_log ADD check_number int(10) unsigned DEFAULT NULL;
 ALTER TABLE transaction_log ADD change_fund float DEFAULT NULL;
+ALTER TABLE transaction_log ADD anonymous tinyint(1) NOT NULL DEFAULT '0';

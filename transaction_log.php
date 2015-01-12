@@ -122,7 +122,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
 
 
 	// gets newest transaction ID
-	mysql_select_db($database_YBDB, $YBDB);
+	//mysql_select_db($database_YBDB, $YBDB);
 	$query_Recordset4 = "SELECT MAX(transaction_id) as newtrans FROM transaction_log;";
 	$Recordset4 = mysql_query($query_Recordset4, $YBDB) or die(mysql_error());
 	$row_Recordset4 = mysql_fetch_assoc($Recordset4);
@@ -143,7 +143,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
 					   );
 					   
 	//echo $insertSQL; 
-	mysql_select_db($database_YBDB, $YBDB);
+	//mysql_select_db($database_YBDB, $YBDB);
 	$Result1 = mysql_query($insertSQL, $YBDB) or die(mysql_error());	
 	
 	$LoadPage = $_SERVER['PHP_SELF'] . "?trans_id={$newtrans}";
@@ -182,15 +182,15 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_PO
 	$sql = mysql_query($query, $YBDB) or die(mysql_error());
 	$result = mysql_fetch_assoc($sql);
 
-		
+	// percolate transaction_id for completed storage transactions		
 	if($date_startstorage) {
-
 
 		$new_transaction_id = $result['ti'] + 1;		
 		
-		// If startstorage >= current date (transaction_id stays the same)
-		// If startstorage < current date (transaction_id becomes > than last)
-		if ($current_date > $storage_date[0] && $storage_date[0] != $transaction_date[0]) {
+		// If startstorage > current date (transaction_id stays the same)
+		// If startstorage =< current date (transaction_id becomes > than last)
+		// not necessary - && $storage_date[0] != $transaction_date[0]
+		if ($current_date >= $storage_date[0] ) {
 			if($_POST['amount'] != "" && $_POST['payment_type'] != "") {			
 				$query = 'UPDATE transaction_log SET transaction_id="' . $new_transaction_id . 
 				'" WHERE transaction_id="' . $_POST['transaction_id'] . '";';
@@ -204,8 +204,32 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_PO
 
 	}
 
-	// keep the order
-	$updateSQL = sprintf("UPDATE transaction_log SET transaction_type=%s, date_startstorage=%s,
+
+
+	$query = 'SELECT anonymous FROM transaction_log WHERE transaction_id="' . $transaction_id . '";';
+	$sql = mysql_query($query, $YBDB) or die(mysql_error());
+	$result = mysql_fetch_assoc($sql);
+	
+	if($result['anonymous']) {
+
+		// keep the order
+		$updateSQL = sprintf("UPDATE transaction_log SET transaction_type=%s, date_startstorage=%s,
+																	 date=%s, amount=%s, quantity=%s, description=%s, 
+																	 sold_by=%s, 
+																	 shop_id=%s, check_number=%s WHERE transaction_id=%s",
+						   GetSQLValueString($_POST['transaction_type'], "text"),
+						   GetSQLValueString($date_startstorage, "date"),
+						   GetSQLValueString($date, "date"),
+						   GetSQLValueString($_POST['amount'], "double"),
+						   GetSQLValueString($_POST['quantity'], "int"),
+						   GetSQLValueString($description, "text"),
+						   GetSQLValueString($sold_by, "int"),
+						   GetSQLValueString($_POST['shop_id'], "int"),
+						   GetSQLValueString($check_number, "text"),
+						   GetSQLValueString($transaction_id, "int")
+						   );
+	} else {
+		$updateSQL = sprintf("UPDATE transaction_log SET transaction_type=%s, date_startstorage=%s,
 																	 date=%s, amount=%s, quantity=%s, description=%s, 
 																	 sold_to=%s, sold_by=%s, 
 																	 shop_id=%s, check_number=%s WHERE transaction_id=%s",
@@ -220,11 +244,10 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_PO
 						   GetSQLValueString($_POST['shop_id'], "int"),
 						   GetSQLValueString($check_number, "text"),
 						   GetSQLValueString($transaction_id, "int")
-						   );
-						   //"2006-10-12 18:15:00"
+						   );	
+	}
 	
-	
-	mysql_select_db($database_YBDB, $YBDB);
+	//mysql_select_db($database_YBDB, $YBDB);
 	$Result1 = mysql_query($updateSQL, $YBDB) or die(mysql_error());	
 	
 	$trans_id = $transaction_id;
@@ -311,7 +334,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 	  $trans_type = $row_Recordset2['transaction_type'];  //This field is used to set edit box preferences
 	  
 	  // gets preferences of edit based on Transaction Type
-	  mysql_select_db($database_YBDB, $YBDB);
+	  //mysql_select_db($database_YBDB, $YBDB);
 	  $query_Recordset3 = "SELECT * FROM transaction_types WHERE transaction_type_id = \"$trans_type\";";
 	  $Recordset3 = mysql_query($query_Recordset3, $YBDB) or die(mysql_error());
 	  $row_Recordset3 = mysql_fetch_assoc($Recordset3);
@@ -433,15 +456,28 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 				if($row_Recordset3['show_soldto_location']){ // if location show row?>
                 <tr><td>&nbsp;</td>
 		  	  <td><label><?php echo $row_Recordset3['fieldname_soldto']; ?>:</label></td>
-		  	  <td><?php
+		  	 
+		  	 <?php  // Patron
 			if($row_Recordset3['show_soldto_location']){				
-				// list_donation_locations_withheader('sold_to', $row_Recordset2['sold_to']); 
+				// list_donation_locations_withheader('sold_to', $row_Recordset2['sold_to']); - not required to be signed in.
+				echo "<td>";				
 				list_CurrentShopUsers_select('sold_to', $row_Recordset2['sold_to']);		
-				$record_trans_id = $row_Recordset2['transaction_id']; 
+				$record_trans_id = $row_Recordset2['transaction_id'];
+				if ($row_Recordset3['anonymous']) {
+					echo "<span id='anon' style='display:show;'><label for='anonymous' id='anonymous_label'>Anonymous:</label>";
+					if ($row_Recordset2['anonymous']) {					
+							echo "<input type='checkbox' id='anonymous' checked>";
+					} else {
+							echo "<input type='checkbox' id='anonymous'>";
+					}
+					echo "</span>";
+				} else {				
+					echo "<span id='anon' style='display:none;'><label for='anonymous' id='anonymous_label'>Anonymous:</label></span>";
+				}
+				echo "</td>"; 
 				// echo " <a href=\"location_add_edit.php?trans_id={$record_trans_id}&contact_id=new_contact\">Create New Location</a> | <a href=\"location_add_edit_select.php?trans_id={$record_trans_id}&contact_id=new_contact\">Edit Existing Location</a>";
-			} else {
-				//list_CurrentShopUsers_select('sold_to', $row_Recordset2['sold_to']);
-			}  ?></td>
+			}  ?>
+			
 		  	  </tr> <?php } //end if show location row ?>
                 <tr><td>&nbsp;</td>
 			  <td><label><?php echo $row_Recordset3['fieldname_soldby']; ?>:</label></td>
@@ -514,7 +550,20 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
           <td><?php echo $row_Recordset1['shop_id']; ?></td>
 		  <td><?php echo $row_Recordset1['date_wday']; ?></td>
 		  <td><?php echo $row_Recordset1['transaction_type']; ?></td>
-		  <td><?php echo $row_Recordset1['full_name']; ?>&nbsp;</td>
+		  
+		  <td><?php  // Patron or Anonymous	  
+		  
+		  			$query = 'SELECT anonymous FROM transaction_log WHERE transaction_id="' . $row_Recordset1['transaction_id'] . '";';
+					$sql = mysql_query($query, $YBDB) or die(mysql_error());
+					$result = mysql_fetch_assoc($sql);	
+		  
+		  			if($result['anonymous']) {
+					  echo  "Anonymous"; 
+		  			} else {
+		  				echo $row_Recordset1['full_name'];
+		  			}
+		  ?>&nbsp;</td>
+
 		  <td><?php echo $row_Recordset1['description_with_locations']; ?>&nbsp;</td>
 		  <td><?php echo $row_Recordset1['payment_type']; ?>&nbsp;</td>
 		  <td><?php echo $row_Recordset1['format_amount']; ?>&nbsp;</td>

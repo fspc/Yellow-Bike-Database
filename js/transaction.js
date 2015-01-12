@@ -177,6 +177,22 @@ $(function() {
 	
 		$transaction_id = $("input[name='transaction_id']").val();
 		//var check_number = $("#check_number").on("input");
+	
+		// Anonymous Transaction?
+		if ($("#anonymous").prop("checked")) { // on reload
+			$("select[name='sold_to']").hide();
+		} else {
+			$("select[name='sold_to']").show();
+		} 
+		$("#anonymous").click(function() { // on click
+			if ($(this).prop("checked")) { 
+				$("select[name='sold_to']").hide();
+				$.post("json/transaction.php",{ anonymous: 1, transaction_id: $transaction_id } );
+			} else {
+				$("select[name='sold_to']").show();
+				$.post("json/transaction.php",{ anonymous: 0, transaction_id: $transaction_id } );
+			}
+		});
 		
 		// what type of payment? cash, credit or check?
 		$("input[name='payment_type']").click(function() { 

@@ -60,6 +60,21 @@ $change_fund = CHANGE_FUND;
 	}
 
 
+	// Anonymous transaction - save and communicate back settings
+	if(isset($_POST['anonymous'])) {
+		
+		if ($_POST['anonymous'] == 1) {
+			$query = 'UPDATE transaction_log SET anonymous=1, sold_to=NULL WHERE transaction_id="' . 
+						$_POST['transaction_id'] . '";';
+			$result = mysql_query($query, $YBDB) or die(mysql_error());
+		} else {
+			$query = 'UPDATE transaction_log SET anonymous=0 WHERE transaction_id="' . 
+						$_POST['transaction_id'] . '";';
+			$result = mysql_query($query, $YBDB) or die(mysql_error());		
+		}
+	} 
+
+
 	// reset payment_type && amount for storage transaction
 	if(isset($_POST['storage_payment_reset'])) {
 		
