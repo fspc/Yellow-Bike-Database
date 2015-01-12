@@ -132,7 +132,7 @@ $(function() {
 					var sum = Number(v.check) + Number(v.cash);				
 					$("#" + k + "_sum span").text("$" + sum.toFixed(2));				
 					
-					// Difference					
+					// Difference (regexp - good up to 6 places and 2 digits)					
 					var deposit_amount = $('input[name="' + k + '"]').parent().prev().prev().text().replace(/\$(\d*(?:,\d{3})*\.\d*)\s+/, "$1" );
 					deposit_amount = deposit_amount.replace(/,/, "");										
 					if (deposit_amount != 0) {					
