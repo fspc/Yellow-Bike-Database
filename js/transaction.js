@@ -133,7 +133,8 @@ $(function() {
 					$("#" + k + "_sum span").text("$" + sum.toFixed(2));				
 					
 					// Difference					
-					var deposit_amount = $('input[name="' + k + '"]').parent().prev().prev().text().replace(/\$(\d*\.\d*)\s+/, "$1" );										
+					var deposit_amount = $('input[name="' + k + '"]').parent().prev().prev().text().replace(/\$(\d*(?:,\d{3})*\.\d*)\s+/, "$1" );
+					deposit_amount = deposit_amount.replace(/,/, "");										
 					if (deposit_amount != 0) {					
 						var diff = deposit_amount - sum;
 						$("#" + k + "_difference span").text("$"+ diff.toFixed(2));
