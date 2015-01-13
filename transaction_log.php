@@ -628,11 +628,13 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
           </form>
 	  <?php } //while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)); // while Recordset1 ?>
         </table>  </tr>
+        
   <tr>
     <td height="40" valign="bottom"><form id="form1" name="form1" method="post" action="">
-      <p><br />
-        Show
-        <input name="record_count" type="text" value="<?php echo $number_of_transactions;  ?>" size="3">
+    	<br \>
+		<label for="transaction_search" style="font-weight:bold;">Transaction Search:</label>     
+      <br \> 
+        Show <input name="record_count" type="text" value="<?php echo $number_of_transactions;  ?>" size="3">
         transactions on or before:
         <input name="trans_date" type="text" id="trans_date" value="<?php echo current_date(); ?>" size="10" maxlength="10" />
         <select name="dayname">
@@ -645,14 +647,29 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
           <option value="Saturday">Saturday</option>
           <option value="Sunday">Sunday</option>
           </select>
-        </p>
-        <p>Type of transaction <?php list_transaction_types_withheader('trans_type', 'all_types'); ?> 
-          <input type="submit" name="Submit" value="Add Filter" />
+        
+         transaction type <?php list_transaction_types_withheader('trans_type', 'all_types'); ?> 
+		          
+          <input type="submit" name="Submit" value="Submit" />
           <input type="hidden" name="MM_insert" value="ChangeDate" />
-          </p>
+          
   	  </form>
   	  
-      <?php if(current_shop_by_ip()>=1) echo "current shop"; else echo "no shop"; ?>
+  	  </td>
+  		</tr>
+  		<tr>
+  		<td>
+      <?php 
+			$shop_id = current_shop_by_ip();
+	   	$sql = "SELECT *, IF(date <> curdate() AND shop_type = 'Mechanic Operation Shop',0,1) as CanEdit 
+	        			FROM shops WHERE shop_id = $shop_id;";
+			$query = mysql_query($sql, $YBDB) or die(mysql_error());
+			$result = mysql_fetch_assoc($query);
+     
+      	if(current_shop_by_ip()>=1) echo '<label id="open_shop" for="shop" style="font-weight:bold;">Current Shop:</label>'; 
+      	else echo '<label id="open_shop" for="shop" style="font-weight:bold">No Shop</label>'; 
+      	echo "<br \>" . $result['shop_location'] . " - " . $result['shop_type'] . " - " . $result['date'];
+      	?>
       </td>
     </tr>
 </table>

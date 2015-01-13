@@ -1,7 +1,7 @@
 /* sensible UI defaults for transaction views */
 
 /* right-align labels */
-td > label:not(.payment_type) {
+td > label:not(.payment_type):not(#open_shop) {
 	float: right; 
 	padding-right: 5px;
 }
