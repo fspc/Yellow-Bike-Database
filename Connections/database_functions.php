@@ -39,10 +39,20 @@ define("TIMEZONE", "America/New_York");
 */
 define("NONSHOP",0);
 
-// How many transactions do you want shown
+// How many transactions do you want shown by default
 define("NUMBER_OF_TRANSACTIONS", 11);
 
-//constants
+
+// Define csv directory (see directions below for creating it)
+define("CSV_DIRECTORY","csv"); 
+
+// Make a directory to store csv accounting files.  Currently used for GnuCash format.
+// Assuming the root of the website, and directory is called csv, and a Debian-based distribution:
+// mkdir csv
+// chown www-data:www-data csv 
+// chmod 0700 csv 
+
+// other constants
 define("PAGE_START_SHOP", "/start_shop.php");
 define("PAGE_SHOP_LOG", "/shop_log.php");
 define("PAGE_EDIT_CONTACT", "/contact_add_edit.php");

@@ -266,6 +266,14 @@ $(function() {
 				}
 			});
 	
+			// If storage date is NULL, update to 0000-00-00 on save
+			$("#save_transaction").click(function() {
+				if ( !$("#date").val().length ) {
+					$("#date").val("0000-00-00");				
+				}
+				
+			});	
+	
 		} // end testing for storage presentation		   
 			
 			
