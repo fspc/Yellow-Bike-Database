@@ -128,12 +128,10 @@ INSERT INTO contacts (
 -- Deposit (transaction_type_id) is a special transaction type that behaves differently in the log
 -- for a good reason.
 --
--- DONATIONS (or option to allow an anonymous transactions)
--- Anonymous (transaction_type_id) provides a checkbox if show_soldto_location is set to allow donations and other types
--- of desired transactions to be anonymous.
+-- DONATIONS are best complimented with anonymous, see below.
 --
 -- "show_payment" shows cash, credit, and check payment types if selected.
--- "anonymous" allows anonymous transactions with a check box.
+-- Assuming show_soldto_location is set, "anonymous" allows anonymous transactions with a check box.
 
 ALTER TABLE transaction_types ADD show_payment tinyint(1) NOT NULL DEFAULT '1';
 ALTER TABLE transaction_types ADD anonymous tinyint(1) NOT NULL DEFAULT '0';

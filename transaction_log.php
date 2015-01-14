@@ -637,7 +637,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
         Show <input name="record_count" type="text" value="<?php echo $number_of_transactions;  ?>" size="3">
         transactions on or before:
         <input name="trans_date" type="text" id="trans_date" value="<?php echo current_date(); ?>" size="10" maxlength="10" />
-        <select name="dayname">
+        <select class="yb_standard" name="dayname">
           <option value="alldays" selected="selected">All Days</option>
           <option value="Monday">Monday</option>
           <option value="Tuesday">Tuesday</option>
@@ -656,21 +656,30 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
   	  </form>
   	  
   	  </td>
-  		</tr>
-  		<tr>
+  	</tr>
+  	<tr>
   		<td>
       <?php 
 			$shop_id = current_shop_by_ip();
-	   	$sql = "SELECT *, IF(date <> curdate() AND shop_type = 'Mechanic Operation Shop',0,1) as CanEdit 
-	        			FROM shops WHERE shop_id = $shop_id;";
-			$query = mysql_query($sql, $YBDB) or die(mysql_error());
-			$result = mysql_fetch_assoc($query);
-     
-      	if(current_shop_by_ip()>=1) echo '<label id="open_shop" for="shop" style="font-weight:bold;">Current Shop:</label>'; 
-      	else echo '<label id="open_shop" for="shop" style="font-weight:bold">No Shop</label>'; 
-      	echo "<br \>" . $result['shop_location'] . " - " . $result['shop_type'] . " - " . $result['date'];
+			if ($shop_id) {
+		   	$sql = "SELECT *, IF(date <> curdate() AND shop_type = 'Mechanic Operation Shop',0,1) as CanEdit 
+		        			FROM shops WHERE shop_id = $shop_id;";
+				$query = mysql_query($sql, $YBDB) or die(mysql_error());
+				$result = mysql_fetch_assoc($query);
+     		}
+     		
+      	if(current_shop_by_ip()>=1) echo '<label class="open_shop" for="shop" style="font-weight:bold;">Current Shop:</label>'; 
+      	else echo '<label class="open_shop" for="shop" style="font-weight:bold">No Shop</label>'; 
+      	if (current_shop_by_ip()>=1) echo "<br \>" . "(" . $result['shop_id'] . ") " . 
+      												$result['shop_location'] . " - " . $result['shop_type'] . " - " . $result['date'];
       	?>
       </td>
+    </tr>
+    <tr>
+		<td>
+		<br \>
+		<label style="font-weight:bold;" class="open_shop" for="gnucash_csv">GnuCash CSV:</label>		
+		</td>	    
     </tr>
 </table>
 <p>&nbsp;</p>
