@@ -8,7 +8,11 @@ $change_fund = CHANGE_FUND;
 
 	// Is there a current shop?
 	if(isset($_POST['shop_exist'])) {
-		if(current_shop_by_ip()>=1) echo "current_shop"; else echo "no_shop";
+		if(current_shop_by_ip()>=1) { 
+			echo "current_shop"; 
+		} else {
+			echo "no_shop";
+		}
 	}
 
 	// update whether paid or not

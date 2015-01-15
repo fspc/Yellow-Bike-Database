@@ -1,4 +1,6 @@
 <?php
+
+error_reporting(E_STRICT);
 require_once('Connections/YBDB.php');
 require_once('Connections/database_functions.php'); 
 
@@ -71,7 +73,7 @@ if($_GET['record_count']>0){
 
 
 // This is the recordset for the list of logged transactions	
-
+// What is seen on the main page.
 
 mysql_select_db($database_YBDB, $YBDB);
 $query_Recordset1 = "SELECT *,
@@ -80,7 +82,8 @@ CONCAT('$',FORMAT(amount,2)) as format_amount,
 CONCAT(contacts.last_name, ', ', contacts.first_name, ' ',contacts.middle_initial) AS full_name,
 LEFT(IF(show_startdate, CONCAT(' [',
 		DATE_FORMAT(DATE_ADD(date_startstorage,INTERVAL $storage_period DAY),'%W, %M %D'), '] ', transaction_log.description),
-		IF(community_bike,CONCAT('Quantity(', quantity, ')  ', transaction_log.description), description)),100) as description_with_locations
+		IF(community_bike,CONCAT('Quantity(', quantity, ')  ', transaction_log.description), description)),100) 
+		as description_with_locations
 FROM transaction_log
 LEFT JOIN contacts ON transaction_log.sold_to=contacts.contact_id
 LEFT JOIN transaction_types ON transaction_log.transaction_type=transaction_types.transaction_type_id
@@ -144,7 +147,12 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
 					   
 	//echo $insertSQL; 
 	//mysql_select_db($database_YBDB, $YBDB);
-	$Result1 = mysql_query($insertSQL, $YBDB) or die(mysql_error());	
+	$Result1 = mysql_query($insertSQL, $YBDB); // or die(mysql_error());
+	// Here is the error to check for: "Column 'shop_id' cannot be null" when there is no shop and create transaction is pressed	
+	if (mysql_error()) {
+		header("Refresh:0;");
+		exit();
+	}	
 	
 	$LoadPage = $_SERVER['PHP_SELF'] . "?trans_id={$newtrans}";
 	header(sprintf("Location: %s", $LoadPage));
@@ -320,6 +328,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 	  } elseif($trans_id <> -1 ) {
 	  
 	  // Gets data for the transaction being edited
+	  // shows transaction if edit link is clicked
 	  mysql_select_db($database_YBDB, $YBDB);
 	  $query_Recordset2 = "SELECT *,
 								DATE_FORMAT(date_startstorage,'%Y-%m-%d') as date_startstorage_day,
@@ -355,6 +364,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                     <input id="save_transaction" type="submit" name="EditSubmit" value="Save" align="right">
                     <input type="submit" name="EditSubmit" value="Close">
                     <input type="submit" name="EditSubmit" value="Delete">
+                    <span id="transaction_start_error"></span>
                     <!-- Save before using paypal ->> -->
                     </td>
 		  	    </tr>

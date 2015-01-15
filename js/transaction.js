@@ -2,6 +2,7 @@
 
 // currently css is just hardwired, but that reflects the coding style of YBDB :)
 
+
 $(function() {
 
 	$.ajaxSetup({async:false}); // best to do this in $.ajax, 
@@ -12,11 +13,53 @@ $(function() {
 	$("input[value='Create Transaction']").attr("tabindex",2);
 	$("#trans_date").mask("0000-00-00", {placeholder: "yyyy-mm-dd" });
 
+
+	// If page has not been reloaded after a shop period ends, prevent edit from working.
+   // Note: create transaction covered via a mysql_error()), but with a reload.
+	$('[href*="trans_id="]').click(function(e){  
+ 		var remember_me;
+		$.post("json/transaction.php", {shop_exist: 1}, function(data) {
+  
+  			if (data == "no_shop") {
+    			var start_new_shop = "Start New Shop";	
+    			$("#current_shop").html("&nbsp<a style='color:red' href='shop_log.php'>" + start_new_shop + "</a>");
+  			} else {
+    			remember_me = "unbind";
+  			}
+		});
+  		if (remember_me == "unbind") { 
+  		 $('[href*="trans_id="]').unbind('click'); 
+  		 }
+  		 else {  
+  		 	e.preventDefault(); 
+  		 }
+	} );
+
+  // Do the same thing as previously, but for editing a transaction (could make a function :)
+	$('#save_transaction').click(function(e){  
+ 		var remember_me;
+		$.post("json/transaction.php", {shop_exist: 1}, function(data) {
+  
+  			if (data == "no_shop") {
+    			var start_new_shop = "Start New Shop";	
+    			$("#transaction_start_error").html("&nbsp<a style='color:red' href='shop_log.php'>" + start_new_shop + "</a>");
+  			} else {
+    			remember_me = "unbind";
+  			}
+		});
+  		if (remember_me == "unbind") { 
+  		 $('#save_transaction').unbind('click'); 
+  		 }
+  		 else {  
+  		 	e.preventDefault(); 
+  		 }
+	} );
+
 	// Does a current shop exist?
 	var open_shop;
 	$.post("json/transaction.php", {shop_exist: 1}, function(data) { 
 		if (data == "no_shop") {
-			
+		
 			open_shop = data;
 			var start_new_shop = "Start New Shop";			
 			
