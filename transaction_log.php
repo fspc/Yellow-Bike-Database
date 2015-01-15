@@ -688,7 +688,32 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
     <tr>
 		<td>
 		<br \>
-		<label style="font-weight:bold;" class="open_shop" for="gnucash_csv">GnuCash CSV:</label>		
+		<label style="font-weight:bold;" class="open_shop" for="gnucash_csv">GnuCash CSV:</label>
+		<br \>		
+		<?php
+			echo "<form method='post' name='gnucash_csv'><table><tr>";
+			// populate year pull-down list
+			echo "<td style='vertical-align:top;'><label class='gnucash_csv' for='gnucash_csv_year'>Year</label><br \>";
+			list_distinct_shop_years("gnucash_csv_year","");				
+			echo "</td>";
+			
+			// populate Accounts pull-down list
+			echo "<td style='vertical-align:top; padding-left:10px; padding-right:10px'>
+					<label  class='gnucash_csv' for='gnucash_csv_year'>Accounts</label><br \>";
+			
+			echo "<select id='gnucash_csv_accounts' class='yb_standard' multiple>";	
+				foreach ( $gnucash_accounts as $key => $value ) {
+					echo "<option value='$value'>$value</option>";
+				}
+			echo "</select>";
+
+			echo "<td style='vertical-align:top; padding-left:10px; padding-right:10px; padding-bottom:10px;'>
+								<label class='gnucash_csv' for='gnucash_csv_range'>Deposit Range</label><br \>";			
+			echo "<div id='range_slider'><div id='gnucash_csv_range'></div></div>";			
+			
+			echo "</td></tr></table></form>";
+		
+		?>
 		</td>	    
     </tr>
 </table>

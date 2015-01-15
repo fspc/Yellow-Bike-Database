@@ -145,6 +145,22 @@ $(function() {
      }
 	});
 
+	// gnucash deposit range slider
+		$('#gnucash_csv_range').noUiSlider({
+		start: [ 20, 30 ],
+		range: {
+			'min': 10,
+			'max': 40
+		}
+	});
+	// gnucash account multi-select
+	$("#gnucash_csv_accounts").chosen({
+		placeholder_text_multiple: "Select Accounts",
+		width: "260px"
+	});
+	
+	$("[name='gnucash_csv_year']").chosen();
+
 	// null or real number
 	function payment_result(result) { 
 		if (result == null) {

@@ -52,6 +52,12 @@ define("CSV_DIRECTORY","csv");
 // chown www-data:www-data csv 
 // chmod 0700 csv 
 
+// Define array mapping for Accounts.  Usually Assets since Income is the main type of transaction. 
+$gnucash_accounts = array(	"Assets:Current Assets:Checking",
+									"Assets:Current Assets:PayPal",
+									"Assets:Account Receivable"
+								);
+
 // other constants
 define("PAGE_START_SHOP", "/start_shop.php");
 define("PAGE_SHOP_LOG", "/shop_log.php");
@@ -75,7 +81,7 @@ function generate_list($querySQL,$list_value,$list_text, $form_name, $default_va
 	$default_delimiter = '';
 	
 	// if a form name is supplied HTML listbox code is inserted
-	if($form_name == "transaction_type"){
+	if($form_name == "transaction_type" || $form_name == "gnucash_csv_year"){
 		echo "<select class=\"yb_standard\" name=\"$form_name\">";
 	} elseif($form_name <> "none"){ 
 		echo "<select name=\"$form_name\">";	
@@ -99,13 +105,6 @@ function generate_list($querySQL,$list_value,$list_text, $form_name, $default_va
 	if($form_name <> "none"){echo "</select>";}
 }
 
-// Function provides specific MySQL parameters to the function that generates the list box code
-function list_contacts($form_name = "none", $default_value = "", $max_name_length = 20){
-	$querySQL = "SELECT LEFT(CONCAT(last_name, ', ', first_name, ' ',middle_initial),$max_name_length) AS full_name, contact_id, hidden FROM contacts WHERE (first_name <> '' OR last_name <> '') AND hidden <> 1 ORDER BY last_name, first_name, middle_initial";
-	$list_value = "contact_id";
-	$list_text = "full_name";
-	generate_list($querySQL,$list_value,$list_text,$form_name, $default_value);
-}
 
 function list_CurrentShopUsers($form_name = "none", $default_value = "", $max_name_length = 20){
 	$current_shop = current_shop_by_ip();
@@ -117,6 +116,18 @@ ORDER BY full_name;";
 	$list_text = "full_name";
 	generate_list($querySQL,$list_value,$list_text,$form_name, $default_value);
 }
+
+// #####################
+// Drop down list queries - functions below could be made into one function if query, $list_value and $list_text parameters were passed
+
+// Function provides specific MySQL parameters to the function that generates the list box code
+function list_contacts($form_name = "none", $default_value = "", $max_name_length = 20){
+	$querySQL = "SELECT LEFT(CONCAT(last_name, ', ', first_name, ' ',middle_initial),$max_name_length) AS full_name, contact_id, hidden FROM contacts WHERE (first_name <> '' OR last_name <> '') AND hidden <> 1 ORDER BY last_name, first_name, middle_initial";
+	$list_value = "contact_id";
+	$list_text = "full_name";
+	generate_list($querySQL,$list_value,$list_text,$form_name, $default_value);
+}
+
 
 function list_coordinators($form_name = "none", $default_value = "", $max_name_length = 20){
 	$querySQL = "SELECT LEFT(CONCAT(last_name, ', ', first_name, ' ',middle_initial),40) AS full_name, contacts.contact_id, hidden, shop_user_role FROM contacts
@@ -206,7 +217,17 @@ function list_donation_locations($form_name = "none", $default_value = "", $max_
 	generate_list($querySQL,$list_value,$list_text,$form_name, $default_value);
 }
 
-//
+// Function provides specific MySQL parameters to the function that generates the list box code
+function list_distinct_shop_years($form_name = "none", $default_value = ""){
+	$querySQL = "SELECT DISTINCT YEAR(date) AS date FROM shops WHERE date!='NULL' ORDER BY date DESC;";
+	$list_value = "date";
+	$list_text = "date";
+	generate_list($querySQL,$list_value,$list_text,$form_name, $default_value);
+}
+
+// #####################
+
+// Date/Time functions
 function currency_format($value, $places = 2){
 	echo "$ "; 
 	if(is_null($value)) echo number_format(0,$places); 
@@ -215,10 +236,6 @@ function currency_format($value, $places = 2){
 
 //function to convert server time to local time.  To be used by all other current date / time requests. 
 function local_datetime(){
-	// $hours_offset = UTC_TIME_OFFSET;
-	// $min_offset = 0;
-	//return time() + ( $hours_offset *  60  * 60 + $min_offset * 60 );
-					//offset hours; 60 mins; 60secs offset
 	date_default_timezone_set(TIMEZONE); 
 	return time();
 }
@@ -271,6 +288,8 @@ function datetime_to_date($date_in){
 	$date_out = date("Y-m-d", mktime($H, $i, $s, $m,$d,$Y));
 	return $date_out;
 }
+
+// END Date/Time functions
 
 //Function creates list box with times every 15 minutes for the specified number of hours
 function list_15min($start_time, $start_offset_min, $form_name, $hours, $display_elapsed_hours, $default_value){
@@ -363,6 +382,9 @@ function dateandtimein($date, $time){
   }
   return $time;
 }
+
+
+// Drop-Down lists
 
 function list_contacts_edit_add($form_name = "contact_id", $default_value = "")
 {
@@ -461,6 +483,8 @@ function list_yes_no($form_name = "list_yes_no", $default_value = 0)
 	echo "</select>\n";
 }
 
+// END Drop-Down lists
+
 function max_shop_id(){
 	global $database_YBDB, $YBDB;	
     
@@ -472,6 +496,7 @@ function max_shop_id(){
 	return $row_Recordset1['shop_id'];
 }
 
+// Is there currently a shop?
 function current_shop_by_ip(){
 	global $database_YBDB, $YBDB;
 	$IP = $_SERVER['REMOTE_ADDR'];
