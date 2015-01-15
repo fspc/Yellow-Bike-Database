@@ -28,7 +28,7 @@ $(function() {
   			}
 		});
   		if (remember_me == "unbind") { 
-  		 $('[href*="trans_id="]').unbind('click'); 
+  		 $('[href*="trans_id="]').on('click'); 
   		 }
   		 else {  
   		 	e.preventDefault(); 
@@ -48,7 +48,7 @@ $(function() {
   			}
 		});
   		if (remember_me == "unbind") { 
-  		 $('#save_transaction').unbind('click'); 
+  		 $('#save_transaction').on('click'); 
   		 }
   		 else {  
   		 	e.preventDefault(); 
