@@ -77,7 +77,7 @@ if($_GET['record_count']>0){
 
 mysql_select_db($database_YBDB, $YBDB);
 $query_Recordset1 = "SELECT *,
-DATE_FORMAT(date,'%m/%d (%a)') as date_wday,
+DATE_FORMAT(date,'%m/%d/%y (%a)') as date_wday,
 CONCAT('$',FORMAT(amount,2)) as format_amount,
 CONCAT(contacts.last_name, ', ', contacts.first_name, ' ',contacts.middle_initial) AS full_name,
 LEFT(IF(show_startdate, CONCAT(' [',
@@ -558,7 +558,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
           	if ($row_Recordset1['transaction_type'] == "Deposit") { echo "class='deposit'"; }
           ?> >
           <td><?php echo $row_Recordset1['shop_id']; ?></td>
-		  <td><?php echo $row_Recordset1['date_wday']; ?></td>
+		  <td><span id="wday" style="font-size:96%;"><?php echo $row_Recordset1['date_wday']; ?></span></td>
 		  <td><?php echo $row_Recordset1['transaction_type']; ?></td>
 		  
 		  <td><?php  // Patron or Anonymous	  

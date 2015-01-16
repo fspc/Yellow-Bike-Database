@@ -100,9 +100,9 @@ $change_fund = CHANGE_FUND;
 			
 		
 		if ( $visible_count == $result["count"] ) { // 1 or more deposits, and all deposits are visible	
-						
-							
+			
 			foreach ( $deposit as $key => $value ) {
+							
 				if ( $c > $key ) {				
 					$query = 'SELECT  SUM(IF(payment_type="check", amount, 0)) AS "check",  
 				    			SUM(IF(payment_type="credit", amount, 0)) AS "credit",  
@@ -112,7 +112,7 @@ $change_fund = CHANGE_FUND;
 					$sql = mysql_query($query, $YBDB) or die(mysql_error());
 					$result = mysql_fetch_assoc($sql);
 					$result_obj[$deposit[$key]] = $result; 
-				} else {
+				} else { 
 					$query = 'SELECT  SUM(IF(payment_type="check", amount, 0)) AS "check",  
 							   			SUM(IF(payment_type="credit", amount, 0)) AS "credit",  
 							   			SUM(IF(payment_type="cash", amount, 0)) AS "cash"
@@ -129,16 +129,18 @@ $change_fund = CHANGE_FUND;
 
 				$limit = $visible_count + 1;
 				$query = 'SELECT transaction_id FROM transaction_log 
-							WHERE transaction_type="Deposit" ORDER BY transaction_id DESC LIMIT ' . $limit . ';';
+							WHERE transaction_type="Deposit" AND transaction_id<=' . $deposit[0] . 
+							' ORDER BY transaction_id DESC LIMIT ' . $limit . ';';	
+						   
 				$sql = mysql_query($query, $YBDB) or die(mysql_error());
 				
 				while ( $result = mysql_fetch_assoc($sql) ) {
 					$transaction_id[] = $result['transaction_id'];					
 				} 
 				
-				foreach ( $transaction_id as $key => $value ) {
-				
-						if ($key <= $c) {
+				foreach ( $transaction_id as $key => $value ) { 
+						
+					if ($key <= $c && $transaction_id[$key + 1]) {
 						$query = 'SELECT  SUM(IF(payment_type="check", amount, 0)) AS "check",  
 					    			SUM(IF(payment_type="credit", amount, 0)) AS "credit",  
 					    			SUM(IF(payment_type="cash", amount, 0)) AS "cash"  
@@ -147,6 +149,14 @@ $change_fund = CHANGE_FUND;
 						$sql = mysql_query($query, $YBDB) or die(mysql_error());
 						$result = mysql_fetch_assoc($sql);
 						$result_obj[$transaction_id[$key]] = $result; 	
+					} elseif ($key <= $c && !$transaction_id[$key + 1] ) {
+						$query = 'SELECT  SUM(IF(payment_type="check", amount, 0)) AS "check",  
+						    		SUM(IF(payment_type="credit", amount, 0)) AS "credit",  
+						    		SUM(IF(payment_type="cash", amount, 0)) AS "cash"  
+						    		FROM transaction_log WHERE paid=1 AND transaction_id <' . $transaction_id[$key] .  ';';
+						$sql = mysql_query($query, $YBDB) or die(mysql_error());
+						$result = mysql_fetch_assoc($sql);
+						$result_obj[$transaction_id[$key]] = $result; 					
 					}									
 				
 				} // foreach
