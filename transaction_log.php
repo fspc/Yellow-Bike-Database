@@ -289,7 +289,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ConfirmDelete") && 
 
 //Change Date     isset($_POST["MM_update"]) =========================================================
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
-  $editFormAction = $_SERVER['PHP_SELF'] . "?trans_date={$_POST['trans_date']}&trans_type={$_POST['trans_type']}&shop_dayname={$_POST['dayname']}&record_count={$_POST['record_count']}";
+  $editFormAction = "?trans_date={$_POST['trans_date']}&trans_type={$_POST['trans_type']}&shop_dayname={$_POST['dayname']}&record_count={$_POST['record_count']}";
   header(sprintf("Location: %s",$editFormAction ));   //$editFormAction
 }
 
@@ -646,7 +646,29 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
       <br \> 
         Show <input name="record_count" type="text" value="<?php echo $number_of_transactions;  ?>" size="3">
         transactions on or before:
-        <input name="trans_date" type="text" id="trans_date" value="<?php echo current_date(); ?>" size="10" maxlength="10" />
+        <input name="trans_date" type="text" id="trans_date" value="<?php         
+	        	if ($_GET['trans_date']) { 
+	        		echo $_GET['trans_date'];
+	        	} else { 
+	        		echo current_date(); 
+	        	}
+        ?>" size="10" maxlength="10" />
+       
+			<script>
+				<?php
+					if(isset( $_GET["shop_dayname"] )){
+						$selected_shop_dayname =  $_GET["shop_dayname"];
+					} else { $selected_shop_dayname = "alldays"; }
+					if(isset( $_GET["trans_type"] )){
+						$selected_trans_type =  $_GET["trans_type"];
+					} else { $selected_trans_type = "all_types"; }
+				?>			
+				 $(function() {
+				   	$("[name='dayname']").val("<?php echo $selected_shop_dayname; ?>").prop("selected","selected");
+				   	$("[name='trans_type']").val("<?php echo $selected_trans_type; ?>").prop("selected","selected");		  
+				  });
+			</script>        
+        
         <select class="yb_standard" name="dayname">
           <option value="alldays" selected="selected">All Days</option>
           <option value="Monday">Monday</option>
@@ -707,6 +729,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 				}
 			echo "</select>";
 
+			// range bar	
 			echo "<td style='vertical-align:top; padding-left:10px; padding-right:10px; padding-bottom:10px;'>
 								<label class='gnucash_csv' for='gnucash_csv_range'>Deposit Range</label><br \>";			
 			echo "<div id='range_slider'><div id='gnucash_csv_range'></div></div>";			

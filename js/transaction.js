@@ -13,6 +13,8 @@ $(function() {
 	$("input[value='Create Transaction']").attr("tabindex",2);
 	$("#trans_date").mask("0000-00-00", {placeholder: "yyyy-mm-dd" });
 
+	// Add focus for easier tab browsing
+	// use .paid parent and hover & classes
 
 	// If page has not been reloaded after a shop period ends, prevent edit from working.
    // Note: create transaction covered via a mysql_error()), but with a reload.
