@@ -94,7 +94,6 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 //Action on form update
 $editFormAction = "";
 
-//$editFormAction = $_SERVER['PHP_SELF'];
 
 //Form Submit New Transaction===================================================================
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
@@ -662,7 +661,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 					if(isset( $_GET["trans_type"] )){
 						$selected_trans_type =  $_GET["trans_type"];
 					} else { $selected_trans_type = "all_types"; }
-				?>			
+				?>
+				 // remember pull-down list selections			
 				 $(function() {
 				   	$("[name='dayname']").val("<?php echo $selected_shop_dayname; ?>").prop("selected","selected");
 				   	$("[name='trans_type']").val("<?php echo $selected_trans_type; ?>").prop("selected","selected");		  
