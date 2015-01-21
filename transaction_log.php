@@ -153,7 +153,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
 		exit();
 	}	
 	
-	$LoadPage = $_SERVER['PHP_SELF'] . "?trans_id={$newtrans}";
+	$LoadPage = "?trans_id={$newtrans}";
 	header(sprintf("Location: %s", $LoadPage));
 } // end Form Submit New Transaction
 
@@ -584,9 +584,9 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 						}
 						
 						if (isset($trans_url)) { 
-							echo "<a href=\"{$_SERVER['PHP_SELF']}?trans_id={$record_trans_id}$trans_url\">edit</a></td>";	
+							echo "<a href=\"?trans_id={$record_trans_id}$trans_url\">edit</a></td>";	
 						} else {		  				
-		  					echo "<a href=\"{$_SERVER['PHP_SELF']}?trans_id={$record_trans_id}\">edit</a></td>";
+		  					echo "<a href=\"?trans_id={$record_trans_id}\">edit</a></td>";
 		  				}
 		  				$trans_url = "";	 
 		  				?>
@@ -725,7 +725,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 			
 			echo "<select id='gnucash_csv_accounts' class='yb_standard' multiple>";	
 				foreach ( $gnucash_accounts as $key => $value ) {
-					echo "<option value='$value'>$value</option>";
+					echo "<option value='$value'>$key</option>";
 				}
 			echo "</select>";
 
