@@ -182,8 +182,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
 			            <td colspan="6"><table border="0" cellspacing="0" cellpadding="1">
 			              <tbody><tr>
 			                <td width="125"><div align="right">Project:</div></td>
-			              <td><select name="project">
-			<option value="" selected="selected"></option>\n<option value="Bike Building">Bike Building</option>\n<option value="Computers">Computers</option>\n<option value="Inventory">Inventory</option>\n<option value="Organization">Organization</option>\n<option value="Website">Website</option>\n</select></td>
+								<td><?php list_projects_collective('project'); ?></td>
 			            </tr>
 			              <tr>
 			                <td><div align="right">Comment:</div></td>

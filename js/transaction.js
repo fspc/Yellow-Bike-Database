@@ -147,6 +147,8 @@ $(function() {
      }
 	});
 
+// SELECT transaction_id, IF(amount > 0, "yes", "no") AS "deposited", date FROM transaction_log WHERE transaction_type= "Deposit";
+	// deposit range is based on year, but need to go back to past year if deposits included.
 	// gnucash deposit range slider
 		$('#gnucash_csv_range').noUiSlider({
 		start: [ 20, 30 ],
@@ -155,6 +157,7 @@ $(function() {
 			'max': 40
 		}
 	});
+
 	// gnucash account multi-select
 	$("#gnucash_csv_accounts").chosen({
 		placeholder_text_multiple: "Select Accounts",
@@ -162,6 +165,7 @@ $(function() {
 	});
 	
 	$("[name='gnucash_csv_year']").chosen();
+
 
 	// null or real number
 	function payment_result(result) { 

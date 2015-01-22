@@ -54,8 +54,8 @@ define("CSV_DIRECTORY","csv");
 
 // Define array mapping for Accounts.  Usually Asset Accounts since Income is generally the main type of transaction.
 // Currently three types of accounts are supported:  checking, credit, account_receivable 
-// 	checking/credit = transaction has been 1). paid and is 2) cash & check [checking] or a credit card [credit]
-//	   account_receivable =  there is an account receivable invoice and it has been paid
+// 	checking/credit = transaction has been 1) paid and is 2) cash & check [checking] or a credit card [credit] and 3) deposited
+//	   account_receivable =  there is an 1). account receivable invoice and it has been 2) paid and 3) deposited
 $gnucash_accounts = array(	"Assets:Current Assets:Checking" => "checking",
 									"Assets:Current Assets:PayPal" => "credit",
 									"Assets:Account Receivable" => "account_receivable"
