@@ -36,34 +36,42 @@ if($_GET['delete_trans_id']>0){
 } else {
 	$delete_trans_id =-1;}
 	
-//shop_date
+//shop_date ($trans_date => SQL) ($trans_date_state => state)
 if($_GET['trans_date']>0){
 	$trans_date = "AND date <= ADDDATE('{$_GET['trans_date']}',1)" ;
+	$trans_date_state = $_GET['trans_date'];
 } else {
 	$datetoday = current_date();
+	$trans_date_state = $datetoday;
 	$trans_date ="AND date <= ADDDATE('{$datetoday}',1)"; 
-	$trans_date = "";  }	   
-	
-//dayname
+	$trans_date = "";  
+}
+
+//dayname ($shop_dayname => SQL) ($shop_dayname_state => state)
 if($_GET['shop_dayname']=='alldays'){
 	$shop_dayname = '';
+	$shop_dayname_state = 'alldays';
 } elseif(isset($_GET['shop_dayname'])) {
 	$shop_dayname = "AND DAYNAME(date) = '" . $_GET['shop_dayname'] . "'";
+	$shop_dayname_state = $_GET['shop_dayname'];
 } else {
 	$shop_dayname = '';
+	$shop_dayname_state = 'alldays';
 }	
 
-//Transaction_type
+//Transaction_type ($trans_type => SQL) ($trans_type_state => state)
 if($_GET['trans_type']=='all_types'){
 	$trans_type = '';
+	$trans_type_state = 'all_types';
 } elseif(isset($_GET['trans_type'])) {
 	$trans_type = "AND transaction_log.transaction_type = '" . $_GET['trans_type'] . "'";
+	$trans_type_state = $_GET['trans_type'];
 } else {
 	$trans_type = '';
+	$trans_type_state = 'all_types';
 }	
 
-
-//record_count
+//record_count (state)
 if($_GET['record_count']>0){
 	$record_count = $_GET['record_count'];
 	$number_of_transactions = $record_count;
@@ -71,6 +79,24 @@ if($_GET['record_count']>0){
 	$record_count = $number_of_transactions;
 }
 
+// create a string to remember state
+$search_state_array = array(
+								"trans_date" => $trans_date_state, 
+								"trans_type" => $trans_type_state, 
+								"shop_dayname" => $shop_dayname_state, 
+								"record_count" => $record_count
+							);
+$count = count($search_state_array);
+$c = 1;
+foreach ( $search_state_array as $key => $value ) {
+	if (isset($value)) {
+		$search_state .= $key . "=" . $value;
+		if ($c < $count) {
+			$search_state = $search_state . "&";
+		}	
+	}	
+	$c++;
+}
 
 // This is the recordset for the list of logged transactions	
 // What is seen on the main page.
@@ -160,9 +186,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
 
 // Form Close Record
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_POST["EditSubmit"] == "Close")) {
-
-	header(sprintf("Location: %s",$editFormAction . "?record_count=$record_count"));   //$editFormAction
-	
+	  
+	header(sprintf("Location: %s",$editFormAction . "?" . $search_state)); //$editFormAction
 }
 
 //Form Edit Record ===============================================================================
@@ -258,16 +283,15 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_PO
 	$Result1 = mysql_query($updateSQL, $YBDB) or die(mysql_error());	
 	
 	$trans_id = $transaction_id;
-		
-	
-	header(sprintf("Location: %s",$editFormAction . "?trans_id={$trans_id}&record_count=$record_count"));   //$editFormAction
+		   
+	header(sprintf("Location: %s",$editFormAction . "?trans_id={$trans_id}&" . $search_state));  //$editFormAction
 }
 
 //Form Edit Record Delete ===============================================================================
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_POST["EditSubmit"] == "Delete")) {
 
 	$trans_id = $_POST['transaction_id'];
-	header(sprintf("Location: %s",$editFormAction . "?delete_trans_id={$trans_id}" ));   //$editFormAction
+	header(sprintf("Location: %s",$editFormAction . "?delete_trans_id={$trans_id}&" . $search_state ));   //$editFormAction
 }
 
 //Form Confirm Delete ===============================================================================
@@ -278,12 +302,12 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ConfirmDelete") && 
 	mysql_select_db($database_YBDB, $YBDB);
 	$Result1 = mysql_query($insertSQL, $YBDB) or die(mysql_error());
 	
-	header(sprintf("Location: %s", PAGE_SALE_LOG ));   //$editFormAction
+	header(sprintf("Location: %s", PAGE_SALE_LOG . "?" . $search_state));   //$editFormAction
 
 //Cancel and go back to transaction ================================================================
 } elseif ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ConfirmDelete") && ($_POST["DeleteConfirm"] == "Cancel")) { 
 	$delete_trans_id = $_POST['delete_trans_id'];
-	header(sprintf("Location: %s", PAGE_SALE_LOG . "?trans_id={$delete_trans_id}" ));   //$editFormAction
+	header(sprintf("Location: %s", PAGE_SALE_LOG . "?trans_id={$delete_trans_id}&" . $search_state ));   //$editFormAction
 }
 
 //Change Date     isset($_POST["MM_update"]) =========================================================
