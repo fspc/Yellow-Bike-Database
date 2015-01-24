@@ -71,7 +71,7 @@ if($_GET['trans_type']=='all_types'){
 	$trans_type_state = 'all_types';
 }	
 
-//record_count (state)
+//record_count (SQL or state)
 if($_GET['record_count']>0){
 	$record_count = $_GET['record_count'];
 	$number_of_transactions = $record_count;

@@ -147,22 +147,70 @@ $(function() {
      }
 	});
 
-// SELECT transaction_id, IF(amount > 0, "yes", "no") AS "deposited", date FROM transaction_log WHERE transaction_type= "Deposit";
-	// deposit range is based on year, but need to go back to past year if deposits included.
-	// gnucash deposit range slider
-		$('#gnucash_csv_range').noUiSlider({
-		start: [ 20, 30 ],
-		range: {
-			'min': 10,
-			'max': 40
-		}
-	});
+	// on reload
+	transaction_slider();	
 
+	// on date change
+	$("[name='gnucash_csv_year']").change(function() { transaction_slider(); });
+	
+	var slider;
+	function transaction_slider() {
+
+		// Establish range - transaction_id | deposited (yes or no) | date
+		var range = [];	
+		$.post("json/transaction.php",{ transaction_slider: 1}, function(data) {
+				
+				var obj = $.parseJSON(data);
+				// currently go by a Jan - Dec year as fiscal year			
+				var year = $("[name='gnucash_csv_year']").val();
+		
+				$.each(obj,function(k,v){
+					var trans = obj[k];
+					var trans_year = trans.date.split(" ",1);
+					trans_year = trans_year[0].split("-",1).toString();		
+					
+					// find min and max for year
+					if (trans.deposited == "yes" && trans_year == year) {
+						range.push(trans.transaction_id);		
+					}
+					
+				});
+			
+		} );
+		
+		// gnucash deposit range
+		var min_range = Number(range[0]);
+		var max_range = Number(range[range.length - 1]);
+		var prev_trans = Number(range[range.length - 2]);
+		
+		//initialize slider 
+		if (!slider) {		
+			slider = $('#gnucash_csv_range').noUiSlider({
+				start: [ prev_trans, max_range ],
+				range: {
+					"min": min_range,
+					"max": max_range
+				}
+			});
+		} else {	
+			slider.noUiSlider({
+				start: [ prev_trans, max_range ],
+				range: {
+					"min": min_range,
+					"max": max_range
+				}
+			}, true);			
+		}
+		
+	} // end function transaction_slider
+	
+		
 	// gnucash account multi-select
 	$("#gnucash_csv_accounts").chosen({
 		placeholder_text_multiple: "Select Accounts",
 		width: "260px"
 	});
+	
 	
 	$("[name='gnucash_csv_year']").chosen();
 
@@ -183,8 +231,11 @@ $(function() {
 			$(".deposit input").each(function(count){ 
 				deposit[count] =  this.name;
 			});			
+			
+							
 								
 			$.post("json/transaction.php",{"deposit": deposit}, function(data) {
+				
 				var obj = $.parseJSON(data);
 				$.each(obj,function(k,v){
 					
@@ -211,9 +262,11 @@ $(function() {
 					} else {
 						$("#" + k + "_difference span").text("n/a");
 					}
-				});
-			
-			});			
+					
+				});		
+								
+				
+			}); // end function		
 	
 	} // Deposit Calculator
 

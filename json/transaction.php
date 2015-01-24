@@ -87,6 +87,17 @@ $change_fund = CHANGE_FUND;
 		$result = mysql_query($query, $YBDB) or die(mysql_error());
 	}
 
+	// populate transaction slider for accounting programs
+	if (isset($_POST['transaction_slider'])) {
+		$query = 'SELECT transaction_id, IF(amount > 0, "yes", "no") AS "deposited", date 
+					FROM transaction_log WHERE transaction_type= "Deposit";';
+		$sql = mysql_query($query, $YBDB) or die(mysql_error());
+		while ( $result = mysql_fetch_assoc($sql) ) {
+					$slider_range[] = $result;					
+		} 
+		echo json_encode($slider_range);
+	}
+
 	// Deposit Calculator
 	if (isset($_POST['deposit'])) {
 		
