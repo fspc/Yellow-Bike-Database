@@ -157,12 +157,15 @@ $(function() {
 	function transaction_slider() {
 
 		// Establish range - transaction_id | deposited (yes or no) | date
-		var range = [];	
+		var range = [];
+		var range_last_year = [];	
 		$.post("json/transaction.php",{ transaction_slider: 1}, function(data) {
 				
 				var obj = $.parseJSON(data);
-				// currently go by a Jan - Dec year as fiscal year			
+				// currently go by a Jan - Dec year as fiscal year	
+				// max deposit from previous year needs to be included in range		
 				var year = $("[name='gnucash_csv_year']").val();
+				var last_year = year - 1;		
 		
 				$.each(obj,function(k,v){
 					var trans = obj[k];
@@ -173,33 +176,68 @@ $(function() {
 					if (trans.deposited == "yes" && trans_year == year) {
 						range.push(trans.transaction_id);		
 					}
+					// find max for last year
+					if (trans.deposited == "yes" && trans_year == last_year) {
+						range_last_year.push(trans.transaction_id);		
+					}						
 					
 				});
 			
 		} );
 		
-		// gnucash deposit range
+		// gnucash deposit range - min, max, and previous to max
 		var min_range = Number(range[0]);
 		var max_range = Number(range[range.length - 1]);
+		var max_range_last_year = Number(range_last_year[range_last_year.length - 1]);
 		var prev_trans = Number(range[range.length - 2]);
+
+		// ranges between min and max in percentages with min prepended and max appended as an object
+		var range_obj = {};
+		console.log(max_range_last_year);
+		console.log(range.toString());
+		console.log(percentage_amounts);
+
+		// add last deposit from last year if it exists		
+		if(max_range_last_year) {
+			range.unshift(max_range_last_year);
+			min_range = max_range_last_year;
+		}					
+		var percentage_amounts = 100 / (range.length - 1);
+		var percentage = percentage_amounts;
+
+		$.each(range,function(k,v) {
+			if (v == min_range) {
+				range_obj["min"] = min_range;
+			} else if (v == max_range) {
+				range_obj["max"] = max_range;
+			} else {
+			 	range_obj[percentage_amounts + '%'] = Number(v);
+			 	percentage_amounts = percentage_amounts + percentage;
+			}
+						
+		});
+
+		console.dir(range_obj);		
 		
 		//initialize slider 
 		if (!slider) {		
 			slider = $('#gnucash_csv_range').noUiSlider({
 				start: [ prev_trans, max_range ],
-				range: {
-					"min": min_range,
-					"max": max_range
-				}
+				range: range_obj,
+				format: wNumb({decimals:0, prefix: "Transaction ID: "}),
+				snap: true
 			});
-		} else {	
+			slider.Link('lower').to($('#slider_lower'));	
+			slider.Link('upper').to($('#slider_upper'));
+		} else {  // on change	
 			slider.noUiSlider({
 				start: [ prev_trans, max_range ],
-				range: {
-					"min": min_range,
-					"max": max_range
-				}
+				range: range_obj,
+				format: wNumb({decimals:0, prefix: "Transaction ID: "}),
+				snap: true
 			}, true);			
+			slider.Link('lower').to($('#slider_lower'));	
+			slider.Link('upper').to($('#slider_upper'));	
 		}
 		
 	} // end function transaction_slider

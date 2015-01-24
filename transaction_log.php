@@ -758,7 +758,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 								<label class='gnucash_csv' for='gnucash_csv_range'>Deposit Range</label><br \>";			
 			echo "<div id='range_slider'><div id='gnucash_csv_range'></div></div>";			
 			
-			echo "</td></tr></table></form>";
+			echo "</td></tr><tr><td></td><td></td>
+					<td><span id='slider_lower'></span>&nbsp;&nbsp;&nbsp;&nbsp;<span id='slider_upper'></span></td></tr></table></form>";
 		
 		?>
 		</td>	    
