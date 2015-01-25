@@ -239,14 +239,51 @@ $(function() {
 	} // end function transaction_slider
 
 
-	// make transaction slider keyboard friendly
-	// Listen to keydown events on the input field.
+	// make transaction slider keyboard friendly for lower and upper handle
 	var slider_pointer = $('#gnucash_csv_range'); // slider does exist globally, but keeping namespaces clean
 	var first_handle = $('#slider_lower');
 	var second_handle = $('#slider_upper');
-	
 	slider_keyboard(slider_pointer,first_handle,"lower");
 	slider_keyboard(slider_pointer,second_handle,"upper");	
+	
+	
+	// Do not allow both handles to have the same value
+	slider_pointer.on("set",function(){
+		
+		if( $(this).val()[0] == $(this).val()[1] ) {
+			console.log("slider handle is on the same value");
+			
+			var Format = wNumb({decimals:0});
+			var value = Format.from( $(this).val()[0] );			
+			var options_object = slider_pointer.noUiSlider('options');
+			
+			// make an array from the range options 
+			var options_range = [], c = 0;			
+			$.each(options_object.range, function(k,v){
+				options_range[c] = v;
+				c++;
+			});			
+			
+			// create a lookup object to map arrays to proper plus or minus value array for when both handles have the same value
+			var lookup_object = {};
+			lookup_object.minus = {};
+			$.each(options_range, function(k,v) {
+				// last array element
+				if (k == options_range.length - 1) {
+					lookup_object.minus[v] =  [options_range[k-1],v];				
+				// first array element				
+				} else if (k == 0) {
+					lookup_object.minus[v] = [ options_range[k], options_range[k + 1] ];
+				} else {
+					lookup_object.minus[v] = [options_range[k - 1],v];				
+				}
+			});			
+			
+			$(this).val(lookup_object.minus[value]);
+		}
+		
+	});  // End - Do not let both handles have the same value
+	
 	
 	// keyboard friendly slider
 	function slider_keyboard(slider_pointer, input, handle) {		
@@ -316,6 +353,7 @@ $(function() {
 			}
 		}); // keyboard friendly slider
 	}
+
 		
 	// gnucash account multi-select
 	$("#gnucash_csv_accounts").chosen({
@@ -323,7 +361,8 @@ $(function() {
 		width: "260px"
 	});
 	
-	
+
+	// year pull-down for transaction slider	
 	$("[name='gnucash_csv_year']").chosen();
 
 
