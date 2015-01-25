@@ -147,6 +147,7 @@ $(function() {
      }
 	});
 
+
 	// on reload
 	transaction_slider();	
 
@@ -193,9 +194,6 @@ $(function() {
 
 		// ranges between min and max in percentages with min prepended and max appended as an object
 		var range_obj = {};
-		console.log(max_range_last_year);
-		console.log(range.toString());
-		console.log(percentage_amounts);
 
 		// add last deposit from last year if it exists		
 		if(max_range_last_year) {
@@ -217,8 +215,6 @@ $(function() {
 						
 		});
 
-		console.dir(range_obj);		
-		
 		//initialize slider 
 		if (!slider) {		
 			slider = $('#gnucash_csv_range').noUiSlider({
@@ -241,7 +237,84 @@ $(function() {
 		}
 		
 	} // end function transaction_slider
+
+
+	// make transaction slider keyboard friendly
+	// Listen to keydown events on the input field.
+	var slider_pointer = $('#gnucash_csv_range'); // slider does exist globally, but keeping namespaces clean
+	var first_handle = $('#slider_lower');
+	var second_handle = $('#slider_upper');
 	
+	slider_keyboard(slider_pointer,first_handle,"lower");
+	slider_keyboard(slider_pointer,second_handle,"upper");	
+	
+	function slider_keyboard(slider_pointer, input, handle) {		
+					
+		input.keydown(function( e ) {
+
+			var Format = wNumb({decimals:0});
+			var options_object = slider_pointer.noUiSlider('options');
+			var value;
+
+			// Select the first handle.
+			if (handle == "lower") {
+				value = Format.from( slider_pointer.val()[0] );
+			// Select the second handle.
+			} else if (handle == "upper") {
+				value = Format.from( slider_pointer.val()[1] );
+			}	
+
+			// create and array for plus (38) and minus (40) events 
+			var plus_and_minus = [], c = 0;			
+			$.each(options_object.range, function(k,v){
+				plus_and_minus[c] = v;
+				c++;
+			});			
+			
+			// create a lookup object to map arrays to proper plus or minus value for respective event
+			var lookup_object = {};
+			lookup_object.plus = {};
+			lookup_object.minus = {};		
+			$.each(plus_and_minus, function(k,v) {
+				// last array element
+				if (k == plus_and_minus.length - 1) {
+					lookup_object.plus[v] =  0;				
+				} else {
+					lookup_object.plus[v] = plus_and_minus[k + 1] - v;				
+				}
+			});
+			$.each(plus_and_minus, function(k,v) {
+				// first array element
+				if (k == 0) {
+					lookup_object.minus[v] =  0;				
+				} else {
+					lookup_object.minus[v] = v - plus_and_minus[k - 1];				
+				}
+			});
+			
+
+			// 13 is enter,
+			// 38 is key up,
+			// 40 is key down.
+			switch ( e.which ) {
+				case 13:
+					$(this).change();
+					break;
+				case 38: if (handle == "lower") { // +
+								slider_pointer.val( [value + lookup_object.plus[value] , null] ); 
+							} else if (handle == "upper") {
+								slider_pointer.val( [null, value + lookup_object.plus[value]] );							
+							}
+					break;
+				case 40: if (handle == "lower") {
+								slider_pointer.val( [value - lookup_object.minus[value], null] );
+							} else if (handle == "upper") {
+								slider_pointer.val( [null, value - lookup_object.minus[value]] );
+							} 				
+					break;
+			}
+		}); // keyboard friendly slider
+	}
 		
 	// gnucash account multi-select
 	$("#gnucash_csv_accounts").chosen({
