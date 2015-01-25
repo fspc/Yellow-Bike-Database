@@ -148,10 +148,10 @@ $(function() {
 	});
 
 
-	// on reload
+	// transaction slider - on reload
 	transaction_slider();	
 
-	// on date change
+	// transaction slider - on date change
 	$("[name='gnucash_csv_year']").change(function() { transaction_slider(); });
 	
 	var slider;
@@ -166,6 +166,10 @@ $(function() {
 				// currently go by a Jan - Dec year as fiscal year	
 				// max deposit from previous year needs to be included in range		
 				var year = $("[name='gnucash_csv_year']").val();
+				if (!year) {
+					var d = new Date();
+					year = d.getFullYear();				
+				}
 				var last_year = year - 1;		
 		
 				$.each(obj,function(k,v){
