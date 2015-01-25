@@ -248,6 +248,7 @@ $(function() {
 	slider_keyboard(slider_pointer,first_handle,"lower");
 	slider_keyboard(slider_pointer,second_handle,"upper");	
 	
+	// keyboard friendly slider
 	function slider_keyboard(slider_pointer, input, handle) {		
 					
 		input.keydown(function( e ) {
