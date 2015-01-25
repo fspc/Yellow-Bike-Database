@@ -279,17 +279,17 @@ $(function() {
 			$.each(plus_and_minus, function(k,v) {
 				// last array element
 				if (k == plus_and_minus.length - 1) {
-					lookup_object.plus[v] =  0;				
+					lookup_object.plus[v] =  v;				
 				} else {
-					lookup_object.plus[v] = plus_and_minus[k + 1] - v;				
+					lookup_object.plus[v] = plus_and_minus[k + 1];				
 				}
 			});
 			$.each(plus_and_minus, function(k,v) {
 				// first array element
 				if (k == 0) {
 					lookup_object.minus[v] =  0;				
-				} else {
-					lookup_object.minus[v] = v - plus_and_minus[k - 1];				
+				} else {	
+					lookup_object.minus[v] = plus_and_minus[k - 1];			
 				}
 			});
 			
@@ -302,15 +302,15 @@ $(function() {
 					$(this).change();
 					break;
 				case 38: if (handle == "lower") { // +
-								slider_pointer.val( [value + lookup_object.plus[value] , null] ); 
+								slider_pointer.val( [lookup_object.plus[value] , null] ); 
 							} else if (handle == "upper") {
-								slider_pointer.val( [null, value + lookup_object.plus[value]] );							
+								slider_pointer.val( [null, lookup_object.plus[value]] );							
 							}
 					break;
-				case 40: if (handle == "lower") {
-								slider_pointer.val( [value - lookup_object.minus[value], null] );
+				case 40: if (handle == "lower") { // -
+								slider_pointer.val( [lookup_object.minus[value], null] );
 							} else if (handle == "upper") {
-								slider_pointer.val( [null, value - lookup_object.minus[value]] );
+								slider_pointer.val( [null, lookup_object.minus[value]] );
 							} 				
 					break;
 			}
