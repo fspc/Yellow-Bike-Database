@@ -455,7 +455,8 @@ $(function() {
 		var sold_to = $("[name='sold_to']").val();
 		if (sold_to == "no_selection") {
 			$.post("json/transaction.php",{ not_logged_in: 1, transaction_id: $transaction_id }, function(data) {
-				if (data) {
+				var obj = $.parseJSON(data);
+				if (obj.sold_to) {
 					var obj = $.parseJSON(data);				
 					$("[name='sold_to']").replaceWith("<span name='sold_to'>" + obj.full_name + 
 																 "</span><input value='" + obj.sold_to + "' type='hidden' name='sold_to'>");
