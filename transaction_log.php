@@ -492,29 +492,47 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                 <?php } // end if show_payment 
 			
 				// Patron
-				if($row_Recordset3['show_soldto_location']){ // if location show row?>                <tr><td>&nbsp;</td>
+			if($row_Recordset3['show_soldto_signed_in'] ||$row_Recordset3['show_soldto_not_signed_in'] ){ // if location show row?>                <tr><td>&nbsp;</td>
 		  	  
 		  	  <td><label><?php echo $row_Recordset3['fieldname_soldto']; ?>:</label></td>		  	 
 		  	 <?php  
-		   	if($row_Recordset3['show_soldto_location']){				
-				// list_donation_locations_withheader('sold_to', $row_Recordset2['sold_to']); - not required to be signed in.
+			   if($row_Recordset3['show_soldto_signed_in']){				
 					echo "<td>";				
-				list_CurrentShopUsers_select('sold_to', $row_Recordset2['sold_to']);		
-				$record_trans_id = $row_Recordset2['transaction_id'];
-				if ($row_Recordset3['anonymous']) {
-					echo "<span id='anon' style='display:show;'><label for='anonymous' id='anonymous_label'>Anonymous:</label>";
-					if ($row_Recordset2['anonymous']) {					
-							echo "<input type='checkbox' id='anonymous' checked>";
-					} else {
-							echo "<input type='checkbox' id='anonymous'>";
+					list_CurrentShopUsers_select('sold_to', $row_Recordset2['sold_to']);		
+					$record_trans_id = $row_Recordset2['transaction_id'];
+					if ($row_Recordset3['anonymous']) {
+						echo "<span id='anon' style='display:show;'><label for='anonymous' id='anonymous_label'>Anonymous:</label>";
+						if ($row_Recordset2['anonymous']) {					
+								echo "<input type='checkbox' id='anonymous' checked>";
+						} else {
+								echo "<input type='checkbox' id='anonymous'>";
+						}
+						echo "</span>";
+					} else {				
+						echo "<span id='anon' style='display:none;'><label for='anonymous' id='anonymous_label'>Anonymous:</label></span>";
 					}
-					echo "</span>";
-				} else {				
-					echo "<span id='anon' style='display:none;'><label for='anonymous' id='anonymous_label'>Anonymous:</label></span>";
-				}
-				echo "<span id='sold_to_error'></span></td>"; 
-				// echo " <a href=\"location_add_edit.php?trans_id={$record_trans_id}&contact_id=new_contact\">Create New Location</a> | <a href=\"location_add_edit_select.php?trans_id={$record_trans_id}&contact_id=new_contact\">Edit Existing Location</a>";
-			}  ?>
+					echo "<span id='sold_to_error'></span></td>"; 
+
+				} elseif($row_Recordset3['show_soldto_not_signed_in']) {
+					echo "<td>";
+					list_donation_locations_withheader('sold_to', $row_Recordset2['sold_to']); //- not required to be signed in.
+					// echo " <a href=\"location_add_edit.php?trans_id={$record_trans_id}&contact_id=new_contact\">Create New Location</a> | 
+					// <a href=\"location_add_edit_select.php?trans_id={$record_trans_id}&contact_id=new_contact\">Edit Existing Location</a>";
+					$record_trans_id = $row_Recordset2['transaction_id'];
+					if ($row_Recordset3['anonymous']) {
+						echo "<span id='anon' style='display:show;'><label for='anonymous' id='anonymous_label'>Anonymous:</label>";
+						if ($row_Recordset2['anonymous']) {					
+								echo "<input type='checkbox' id='anonymous' checked>";
+						} else {
+								echo "<input type='checkbox' id='anonymous'>";
+						}
+						echo "</span>";
+					} else {				
+						echo "<span id='anon' style='display:none;'><label for='anonymous' id='anonymous_label'>Anonymous:</label></span>";
+					}
+					echo "<span id='sold_to_error'></span></td>"; 				
+				} 
+				?>
 			
 		  	  </tr> <?php } //end if show location row ?>
                 <tr><td>&nbsp;</td>
