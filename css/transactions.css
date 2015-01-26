@@ -56,3 +56,18 @@ input[value=Save]:focus, input[value=Close]:focus {
 #range_slider {
 	padding-top: 8px;
 }
+
+/* center error text by description when editing transactions */
+[name=description], #description_error {
+	vertical-align: middle;
+}
+
+/* errors */
+#current_shop,
+#transaction_start_error, 
+#sold_by_error, #sold_to_error, 
+#description_error, 
+#payment_error, #payment_type_error,
+#quantity_error {
+	color: red;
+}

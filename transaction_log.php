@@ -333,7 +333,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
         <tr bordercolor="#CCCCCC" bgcolor="#99CC33">
           <td colspan="9" bgcolor="#99CC33"><div align="center"><strong>Bike, Sale and Donation Log</strong></div></td>
 		  </tr>
-        <?php 		// show delete tranaction confirmation =========================================
+        <?php 		// show delete transaction confirmation =========================================
 		if($delete_trans_id <> -1 ) { ?>
         <form method="post" name="FormConfirmDelete" action="<?php echo $editFormAction; ?>">
           <tr bordercolor="#CCCCCC" bgcolor="#CCCC33">
@@ -438,18 +438,20 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 				} ?></td>
 		  	  </tr>
            
-                <?php  // end if show amount
+                <?php  // start show amount
 			if($row_Recordset3['community_bike']){ //community bike will allow a quantity to be selected for Yellow Bikes and Kids Bikes?>
                 <tr>
                   <td>&nbsp;</td>
 		  	    <td valign="top"><label for="quantity">Quantity:</label></td>
-		  	    <td><input name="quantity" type="text" id="quantity" value="<?php echo $row_Recordset2['quantity']; ?>" size="3" maxlength="3" /></td>
+		  	    <td><input name="quantity" type="text" id="quantity" value="<?php echo $row_Recordset2['quantity']; ?>" size="3" maxlength="3" />
+		  	    <span id="quantity_error"></span></td>
 		  	    </tr>
-                <?php } // end if show quanitity for community bikes
+                <?php } // end if show quantity for community bikes
 			if($row_Recordset3['show_description']){ ?>
                 <tr><td>&nbsp;</td>
 		  	  <td valign="top"><label><?php echo $row_Recordset3['fieldname_description']; ?>:</label></td>
-		  	  <td><textarea name="description" cols="45" rows="3"><?php echo $row_Recordset2['description']; ?></textarea></td>
+		  	  <td><textarea name="description" cols="45" rows="3"><?php echo $row_Recordset2['description']; ?></textarea>
+		  	  <span id="description_error"></span></td>
 		  	  </tr>
 		  	  
 			 <?php if($row_Recordset3['show_amount']){ ?>
@@ -459,7 +461,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 				<?php } else { ?>
 					<td><label>Paid:</label></td>
 				<?php } ?>
-			  	<td><input name="amount" type="text" id="amount" value="<?php echo $row_Recordset2['format_amount']; ?>" size="6" /></td>
+			  	<td><input name="amount" type="text" id="amount" value="<?php echo $row_Recordset2['format_amount']; ?>" size="6" />
+			  	<span id="payment_error"></span></td>
 			  </tr>
 			  <?php } ?>		  	  
 		  	  
@@ -482,18 +485,19 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 											$row_Recordset2['check_number'] .  '".>'; 
 								} 
 						?>	
-					</td>		  	  
+					<span id="payment_type_error"></span></td>		  	  
 		  	  </tr>
 		  	  <?php } ?>
-                <?php } // end if show_description 
-				if($row_Recordset3['show_soldto_location']){ // if location show row?>
-                <tr><td>&nbsp;</td>
-		  	  <td><label><?php echo $row_Recordset3['fieldname_soldto']; ?>:</label></td>
-		  	 
-		  	 <?php  // Patron
-			if($row_Recordset3['show_soldto_location']){				
+                <?php } // end if show_payment 
+			
+				// Patron
+				if($row_Recordset3['show_soldto_location']){ // if location show row?>                <tr><td>&nbsp;</td>
+		  	  
+		  	  <td><label><?php echo $row_Recordset3['fieldname_soldto']; ?>:</label></td>		  	 
+		  	 <?php  
+		   	if($row_Recordset3['show_soldto_location']){				
 				// list_donation_locations_withheader('sold_to', $row_Recordset2['sold_to']); - not required to be signed in.
-				echo "<td>";				
+					echo "<td>";				
 				list_CurrentShopUsers_select('sold_to', $row_Recordset2['sold_to']);		
 				$record_trans_id = $row_Recordset2['transaction_id'];
 				if ($row_Recordset3['anonymous']) {
@@ -507,19 +511,22 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 				} else {				
 					echo "<span id='anon' style='display:none;'><label for='anonymous' id='anonymous_label'>Anonymous:</label></span>";
 				}
-				echo "</td>"; 
+				echo "<span id='sold_to_error'></span></td>"; 
 				// echo " <a href=\"location_add_edit.php?trans_id={$record_trans_id}&contact_id=new_contact\">Create New Location</a> | <a href=\"location_add_edit_select.php?trans_id={$record_trans_id}&contact_id=new_contact\">Edit Existing Location</a>";
 			}  ?>
 			
 		  	  </tr> <?php } //end if show location row ?>
                 <tr><td>&nbsp;</td>
-			  <td><label><?php echo $row_Recordset3['fieldname_soldby']; ?>:</label></td>
+			  
+			  
+			  <td><label><?php  // sold by or received by 
+			  echo $row_Recordset3['fieldname_soldby']; ?>:</label></td>
 			  <td><?php if(current_shop_by_ip()>0) list_current_coordinators_select('sold_by', $row_Recordset2['sold_by']); 
 			  				else list_contacts_coordinators('sold_by//,', $row_Recordset2['sold_by']); 
 			  //list_contacts_coordinators('sold_by', $row_Recordset2['sold_by']);
               //list_current_coordinators_select('sold_by', $row_Recordset2['sold_by']);
 			  ?>
-               </td>
+               <span id="sold_by_error"></span></td>
 			  </tr>
                 </table>
 		    <input type="hidden" name="MM_insert" value="FormEdit">

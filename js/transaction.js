@@ -1,6 +1,6 @@
 /* jQuery fun with transactions - Jonathan Rosenbaum */
 
-// currently css is just hardwired, but that reflects the coding style of YBDB :)
+// currently some css is just hardwired, but that reflects the coding style of YBDB :)
 
 
 $(function() {
@@ -24,7 +24,7 @@ $(function() {
   
   			if (data == "no_shop") {
     			var start_new_shop = "Start New Shop";	
-    			$("#current_shop").html("&nbsp<a style='color:red' href='shop_log.php'>" + start_new_shop + "</a>");
+    			$("#current_shop").html("&nbsp<a href='shop_log.php'>" + start_new_shop + "</a>");
   			} else {
     			remember_me = "unbind";
   			}
@@ -44,7 +44,7 @@ $(function() {
   
   			if (data == "no_shop") {
     			var start_new_shop = "Start New Shop";	
-    			$("#transaction_start_error").html("&nbsp<a style='color:red' href='shop_log.php'>" + start_new_shop + "</a>");
+    			$("#transaction_start_error").html("&nbsp<a href='shop_log.php'>" + start_new_shop + "</a>");
   			} else {
     			remember_me = "unbind";
   			}
@@ -66,19 +66,19 @@ $(function() {
 			var start_new_shop = "Start New Shop";			
 			
 			$("input[name='Submit43']").click(function(){
-				$("#current_shop").html("&nbsp<a style='color:red' href='shop_log.php'>" + start_new_shop + "</a>");				
+				$("#current_shop").html("&nbsp<a href='shop_log.php'>" + start_new_shop + "</a>");				
 				event.preventDefault();		
 			});
 			$('[href*="trans_id="]').click(function(){
-				$("#current_shop").html("&nbsp<a style='color:red' href='shop_log.php'>" + start_new_shop + "</a>");				
+				$("#current_shop").html("&nbsp<a href='shop_log.php'>" + start_new_shop + "</a>");				
 				event.preventDefault();			
 			});
 			$(".paid").click(function() {  
-				$("#current_shop").html("&nbsp<a style='color:red' href='shop_log.php'>" + start_new_shop + "</a>");								
+				$("#current_shop").html("&nbsp<a href='shop_log.php'>" + start_new_shop + "</a>");								
 				return false; 
 			});
 			$('.editable_change').mouseover(function() {
-				$("#current_shop").html("&nbsp<a style='color:red' href='shop_log.php'>" + start_new_shop + "</a>");								
+				$("#current_shop").html("&nbsp<a href='shop_log.php'>" + start_new_shop + "</a>");								
 				$('.editable_change').editable("disable");
 			});		
 		}
@@ -255,7 +255,6 @@ $(function() {
 	slider_pointer.on("set",function(){
 		
 		if( $(this).val()[0] == $(this).val()[1] ) {
-			console.log("slider handle is on the same value");
 			
 			var Format = wNumb({decimals:0});
 			var value = Format.from( $(this).val()[0] );			
@@ -451,6 +450,16 @@ $(function() {
 	
 		$transaction_id = $("input[name='transaction_id']").val();
 		//var check_number = $("#check_number").on("input");
+
+		// If patron isn't logged in replace pull-down with patrons name
+		var sold_to = $("[name='sold_to']").val();
+		if (sold_to == "no_selection") {
+			$.post("json/transaction.php",{ not_logged_in: 1, transaction_id: $transaction_id }, function(data) {
+				if (data) {				
+					$("[name='sold_to']").replaceWith("<span name='sold_to'>" + data + "</span>");
+				}
+			} );
+		}
 	
 		// Anonymous Transaction?
 		if ($("#anonymous").prop("checked")) { // on reload
