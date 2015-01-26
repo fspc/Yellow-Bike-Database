@@ -448,15 +448,17 @@ $(function() {
 		$("#amount").mask("#0.00", {reverse: true, placeholder: "000.00"});
 		$("#check_number").mask("#0", {reverse: true, placeholder: "check number"});	
 	
-		$transaction_id = $("input[name='transaction_id']").val();
+		var $transaction_id = $("input[name='transaction_id']").val();
 		//var check_number = $("#check_number").on("input");
 
 		// If patron isn't logged in replace pull-down with patrons name
 		var sold_to = $("[name='sold_to']").val();
 		if (sold_to == "no_selection") {
 			$.post("json/transaction.php",{ not_logged_in: 1, transaction_id: $transaction_id }, function(data) {
-				if (data) {				
-					$("[name='sold_to']").replaceWith("<span name='sold_to'>" + data + "</span>");
+				if (data) {
+					var obj = $.parseJSON(data);				
+					$("[name='sold_to']").replaceWith("<span name='sold_to'>" + obj.full_name + 
+																 "</span><input value='" + obj.sold_to + "' type='hidden' name='sold_to'>");
 				}
 			} );
 		}

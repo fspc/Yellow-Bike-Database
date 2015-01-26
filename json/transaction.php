@@ -65,13 +65,14 @@ $change_fund = CHANGE_FUND;
 
 	// Patron who made a transaction not logged in.
 	if (isset($_POST['not_logged_in'])) {
-		$query = "SELECT CONCAT(contacts.last_name, ', ', contacts.first_name, ' ',contacts.middle_initial) AS full_name
+		$query = "SELECT CONCAT(contacts.last_name, ', ', contacts.first_name, ' ',contacts.middle_initial) AS full_name, 
+					transaction_log.sold_to
 					FROM transaction_log, contacts 
 					WHERE transaction_id=" . $_POST['transaction_id'] .
 					" AND contacts.contact_id = transaction_log.sold_to;";
 		 $sql = mysql_query($query, $YBDB) or die(mysql_error());
 		 $result = mysql_fetch_assoc($sql);
-		 echo $result["full_name"];			
+		 echo json_encode($result);		
 	}
 
 	// Anonymous transaction - save and communicate back settings
