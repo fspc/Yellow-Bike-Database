@@ -97,7 +97,7 @@ $change_fund = CHANGE_FUND;
 		}
 		
 		// this is the first real deposit
-		if ($slider_range && !$slider_range[1]["transaction_id"]) { 
+		if ( ($slider_range && !$slider_range[1]["transaction_id"]) || ($slider_range && $slider_range[1]["deposited"] == "no") ) { 
 			$fake_trans_id = $slider_range[0]["transaction_id"] - 1;
 			$real_trans = $slider_range[0];
 			$year = date("Y");
