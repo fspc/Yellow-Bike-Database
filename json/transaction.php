@@ -98,7 +98,7 @@ $change_fund = CHANGE_FUND;
 		
 		// this is the first real deposit
 		if ( ($slider_range && !$slider_range[1]["transaction_id"]) || ($slider_range && $slider_range[1]["deposited"] == "no") ) { 
-			$fake_trans_id = $slider_range[0]["transaction_id"] - 1;
+			$fake_trans_id = 0;
 			$real_trans = $slider_range[0];
 			$year = date("Y");
 			$slider_range[0] = array("transaction_id" => "$fake_trans_id","deposited" => "yes","date" => "$year-01-01 22:22:22");
@@ -110,8 +110,8 @@ $change_fund = CHANGE_FUND;
 		// send fake data
 			$year = date("Y");
 			$slider_range = array
-							(	array("transaction_id" => "1","deposited" => "yes","date" => "$year-01-01 22:22:22"),
-								array("transaction_id" => "2","deposited" => "yes","date" => "$year-01-02 22:22:22"),
+							(	array("transaction_id" => "0","deposited" => "yes","date" => "$year-01-01 22:22:22"),
+								array("transaction_id" => "1","deposited" => "yes","date" => "$year-01-02 22:22:22"),
 							);
 			echo json_encode($slider_range);
 		
