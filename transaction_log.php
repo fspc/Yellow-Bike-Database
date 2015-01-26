@@ -417,6 +417,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                 <tr><td>&nbsp;</td>
 		  	    <td><label for="date"><?php echo $row_Recordset3['fieldname_date']; ?>:</label></td>
 		  	    <td><input name="date" type="text" id="date" value="<?php echo $row_Recordset2['date_day']; ?>" size="10" maxlength="10" />
+		  	        <span id="date_error"></span>
 		  	
 		  	        <SCRIPT>
 					function FillDate() { 
