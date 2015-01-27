@@ -199,7 +199,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_PO
 	$sold_by = (($_POST['sold_by'] == 'no_selection') ? 1268 : $_POST['sold_by'] );
 	$date_startstorage = date_update_wo_timestamp($_POST['date_startstorage'], $_POST['db_date_startstorage']);
 	$date = date_update_wo_timestamp($_POST['date'], $_POST['db_date']);
-	$description = (($_POST['description'] == "") ? "No Description" : $_POST['description'] );	
+	$description = $_POST['description'];	
 	$check_number = (($_POST['check_number'] == "") ? "" : $_POST['check_number'] );
 	$transaction_id = $_POST['transaction_id'];
 
