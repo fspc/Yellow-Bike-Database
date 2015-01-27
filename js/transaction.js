@@ -484,17 +484,18 @@ $(function() {
 			var err1 = 0, err2 = 0, err3 = 0, err4 = 0, err5 = 0, err6 = 0, err7 = 0, err8 = 0;		
 			
 			// sold_to error		
-			if ( !$("#anonymous").prop("checked") ) {
-				err1 = error_handler(sold_to.val(), sold_to_error, "no_selection", "*Required&nbsp;&nbsp;&nbsp;",e);	
-			} else if ( $("#anonymous").prop("checked") ) {
-				sold_to_error.hide();
-			}	
+			if ( !$("[name='sold_to']").is("span") ) { // Patron already performed transaction and isn't logged in
+				if ( !$("#anonymous").prop("checked") ) {
+					err1 = error_handler(sold_to.val(), sold_to_error, "no_selection", "*Required&nbsp;&nbsp;&nbsp;",e);	
+				} else if ( $("#anonymous").prop("checked") ) {
+					sold_to_error.hide();
+				}	
+			}
 			
 			// sold_by error
 			err2 = error_handler(sold_by.val(), sold_by_error, "no_selection", "*Required",e);
 			
-			// for storage transactions don't check for payment_type and payment until there is an actual date			
-			console.log("Date: " + date.val());						
+			// for storage transactions don't check for payment_type and payment until there is an actual date								
 			var payment_type_result;
 			if ( date.val() != "0000-00-00" && date.val() != "") {
 				
