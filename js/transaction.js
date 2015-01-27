@@ -456,7 +456,6 @@ $(function() {
 		var payment_type = $("input[name='payment_type']");
 		var amount = $("#amount");
 		var description = $("#description");
-		var check_number = $("#check_number");
 		var quantity = $("#quantity");
 		var date = $("#date");
 
@@ -464,7 +463,7 @@ $(function() {
 		amount.mask("#0.00", {reverse: true, placeholder: "000.00"});		
 		quantity.mask("#0", {placeholder: "0"});
 		date.mask("0000-00-00", {placeholder: "yyyy-mm-dd" });
-		check_number.mask("#0", {reverse: true, placeholder: "check number"});
+		$("#check_number").mask("#0", {reverse: true, placeholder: "check number"});
 
 		// error spans & handling	
 		var transaction_error = $("#transaction_start_error");	
@@ -505,10 +504,15 @@ $(function() {
 			// description error			
 			err5 = error_handler(description.val(), description_error, "","*Required: a detailed description",e);
 			
-			// check number error - error_handler()
-			// currently works only when it is already visible .. probably because it is created in the dom			
-			if ( check_number.is(":visible") ) {
-			 err6 = error_handler(check_number.val(), check_number_error, "","*Required: enter a check number",e);
+			// check number error - error_handler()					
+			var check_number = $("#check_number");	 // check number variable needs to be within this scope
+			if ( check_number.is(":visible") || payment_type_result == "check" ) {
+			 console.log("Made it here");
+			 if (check_number.val() == undefined) {
+			 	err6 = error_handler(check_number.val(), check_number_error, undefined,"*Required: enter a check number",e);
+			 } else {
+			 	err6 = error_handler(check_number.val(), check_number_error, "","*Required: enter a check number",e);
+			 }
 			} else if ( !check_number.is(":visible") ) {
 				check_number_error.hide();	
 			}
