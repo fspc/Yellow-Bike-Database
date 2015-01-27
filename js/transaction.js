@@ -500,11 +500,15 @@ $(function() {
 			if ( date.val() != "0000-00-00" && date.val() != "") {
 				
 				// payment type error
-				payment_type.each(function(){ if ($(this).prop("checked") == true) { payment_type_result = true; } });			
-				err3 = error_handler(payment_type_result, payment_type_error, undefined,"*Required",e);				
+				if (payment_type.length) {
+					payment_type.each(function(){ if ($(this).prop("checked") == true) { payment_type_result = true; } });			
+					err3 = error_handler(payment_type_result, payment_type_error, undefined,"*Required",e);				
+				}
 				
 				// payment error
-				err4 = error_handler(amount.val(), payment_error, "","*Required",e);
+				if (amount.length) {
+					err4 = error_handler(amount.val(), payment_error, "","*Required",e);
+				}
 				
 			}
 			
