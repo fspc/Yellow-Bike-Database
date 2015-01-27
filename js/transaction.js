@@ -486,7 +486,9 @@ $(function() {
 			// sold_to error		
 			if ( !$("[name='sold_to']").is("span") ) { // Patron already performed transaction and isn't logged in
 				if ( !$("#anonymous").prop("checked") ) {
-					err1 = error_handler(sold_to.val(), sold_to_error, "no_selection", "*Required&nbsp;&nbsp;&nbsp;",e);	
+					if (sold_to.length) {
+						err1 = error_handler(sold_to.val(), sold_to_error, "no_selection", "*Required&nbsp;&nbsp;&nbsp;",e);
+					}	
 				} else if ( $("#anonymous").prop("checked") ) {
 					sold_to_error.hide();
 				}	
@@ -512,8 +514,10 @@ $(function() {
 				
 			}
 			
-			// description error			
-			err5 = error_handler(description.val(), description_error, "","*Required: a detailed description",e);
+			// description error		
+			if ( $("[name='transaction_type']").val() != "Deposit" ) {	// Deposit description is implicit
+				err5 = error_handler(description.val(), description_error, "","*Required: a detailed description",e);
+			}
 			
 			// check number error - error_handler()					
 			var check_number = $("#check_number");	 // check number variable needs to be within this scope
@@ -589,17 +593,17 @@ $(function() {
 		$("#anonymous").click(function() { // on click
 			if ($(this).prop("checked")) { 
 				sold_to.hide();
-				$.post("json/transaction.php",{ anonymous: 1, transaction_id: transaction_id } );
+				$.post("json/transaction.php",{ anonymous: 1, transaction_id: $("input[name='transaction_id']").val() } );
 			} else {
 				sold_to.show();
-				$.post("json/transaction.php",{ anonymous: 0, transaction_id: transaction_id } );
+				$.post("json/transaction.php",{ anonymous: 0, transaction_id: $("input[name='transaction_id']").val() } );
 			}
 		});
 		
 		// what type of payment? cash, credit or check?
 		payment_type.click(function() { 
 			if ($(this).prop("checked")) { 
-				$.post("json/transaction.php",{ payment_type: this.value, transaction_id: transaction_id } );
+				$.post("json/transaction.php",{ payment_type: this.value, transaction_id: $("input[name='transaction_id']").val() } );
 		
 				// check number?				
 				if (this.value == "check") {					
@@ -611,7 +615,7 @@ $(function() {
 					}
 					
 					// return check #					
-					$.post("json/transaction.php",{ check_number: true, transaction_id: transaction_id }, function(data) {
+					$.post("json/transaction.php",{ check_number: true, transaction_id: $("input[name='transaction_id']").val() }, function(data) {
 						var obj = $.parseJSON(data);			
 	   				if (obj.check_number) {
 							$("#check_number").val(obj.check_number);		
@@ -663,7 +667,7 @@ $(function() {
 					$("#payment_type").hide();					
 					
 					// reset payment_type && amount	
-					$.post("json/transaction.php",{storage_payment_reset: 1, transaction_id: transaction_id});										
+					$.post("json/transaction.php",{storage_payment_reset: 1, transaction_id: $("input[name='transaction_id']").val() });										
 						
 				}
 			});
