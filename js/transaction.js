@@ -493,13 +493,19 @@ $(function() {
 			// sold_by error
 			err2 = error_handler(sold_by.val(), sold_by_error, "no_selection", "*Required",e);
 			
-			// payment type error
+			// for storage transactions don't check for payment_type and payment until there is an actual date			
+			console.log("Date: " + date.val());						
 			var payment_type_result;
-			payment_type.each(function(){ if ($(this).prop("checked") == true) { payment_type_result = true; } });			
-			err3 = error_handler(payment_type_result, payment_type_error, undefined,"*Required",e);			
-			
-			// payment error			
-			err4 = error_handler(amount.val(), payment_error, "","*Required",e);
+			if ( date.val() != "0000-00-00" && date.val() != "") {
+				
+				// payment type error
+				payment_type.each(function(){ if ($(this).prop("checked") == true) { payment_type_result = true; } });			
+				err3 = error_handler(payment_type_result, payment_type_error, undefined,"*Required",e);				
+				
+				// payment error
+				err4 = error_handler(amount.val(), payment_error, "","*Required",e);
+				
+			}
 			
 			// description error			
 			err5 = error_handler(description.val(), description_error, "","*Required: a detailed description",e);
@@ -521,9 +527,11 @@ $(function() {
 			err7 = error_handler(quantity.val(), quantity_error, "","*Required",e);			
 			
 			// date
-			err8 = error_handler(date.val(), date_error, "","*Required",e);			
+			if (!$("#date_startstorage").length) { // not a storage transaction
+				err8 = error_handler(date.val(), date_error, "","*Required",e);
+			}				
 			
-			// for storage transactions don't check for payment_type and payment until there is an actual date
+			// Decides whether or not to post a parent error message (at the top)
 			if ( ( err1 + err2 + err3 + err4 + err5 + err6 + err7) > 0) {
 				if ( !transaction_error.is(":visible") ) {
 				 	transaction_error.show();		
