@@ -494,8 +494,10 @@ $(function() {
 			// sold_by error
 			err2 = error_handler(sold_by.val(), sold_by_error, "no_selection", "*Required",e);
 			
-			// payment type error			
-			err3 = error_handler(payment_type.prop("checked"), payment_type_error, false,"*Required",e);			
+			// payment type error
+			var payment_type_result;
+			payment_type.each(function(){ if ($(this).prop("checked") == true) { payment_type_result = true; } });			
+			err3 = error_handler(payment_type_result, payment_type_error, undefined,"*Required",e);			
 			
 			// payment error			
 			err4 = error_handler(amount.val(), payment_error, "","*Required",e);
@@ -503,7 +505,8 @@ $(function() {
 			// description error			
 			err5 = error_handler(description.val(), description_error, "","*Required: a detailed description",e);
 			
-			// check number error - error_handler() is set-up to work with visible elements, not hidden			
+			// check number error - error_handler()
+			// currently works only when it is already visible .. probably because it is created in the dom			
 			if ( check_number.is(":visible") ) {
 			 err6 = error_handler(check_number.val(), check_number_error, "","*Required: enter a check number",e);
 			} else if ( !check_number.is(":visible") ) {
@@ -516,6 +519,7 @@ $(function() {
 			// date
 			err8 = error_handler(date.val(), date_error, "","*Required",e);			
 			
+			// for storage transactions don't check for payment_type and payment until there is an actual date
 			if ( ( err1 + err2 + err3 + err4 + err5 + err6 + err7) > 0) {
 				if ( !transaction_error.is(":visible") ) {
 				 	transaction_error.show();		
