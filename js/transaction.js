@@ -448,17 +448,98 @@ $(function() {
 		$("#amount").mask("#0.00", {reverse: true, placeholder: "000.00"});
 		$("#check_number").mask("#0", {reverse: true, placeholder: "check number"});	
 	
-		var $transaction_id = $("input[name='transaction_id']").val();
+		var transaction_id = $("input[name='transaction_id']").val();
+		
+		// common ids
+		var sold_to = $("[name='sold_to']");
+		var sold_by = $("[name='sold_by']");
+		var payment_type = $("input[name='payment_type']");
+		var amount = $("#amount");
+		var description = $("#description");
+		var check_number = $("#check_number");
+
+		// error spans & handling	
+		var transaction_error = $("#transaction_start_error");	
+		var date_error = $("#date_error");
+		var sold_by_error = $("#sold_by_error"); 
+		var sold_to_error = $("#sold_to_error"); 
+		var description_error =	$("#description_error"); 
+		var payment_error	= $("#payment_error"); 
+		var payment_type_error = $("#payment_type_error");
+		var check_number_error = $("#check_number_error");
+		var quantity_error =	$("#quantity_error");
+		var check_number_error = $("#check_number_error");
 		//var check_number = $("#check_number").on("input");
 
-		// If patron isn't logged in replace pull-down with patrons name
-		var sold_to = $("[name='sold_to']").val();
-		if (sold_to == "no_selection") {
-			$.post("json/transaction.php",{ not_logged_in: 1, transaction_id: $transaction_id }, function(data) {
+		// On save check for errors
+		$("#save_transaction").click(function(e) {
+			//function error_handler(input,error_span,error,error_text,event)
+			var err1 = 0, err2 = 0, err3 = 0, err4 = 0, err5 = 0, err6 = 0;		
+			
+			// sold_to error		
+			if ( !$("#anonymous").prop("checked") ) {
+				err1 = error_handler(sold_to.val(), sold_to_error, "no_selection", "*Required&nbsp;&nbsp;&nbsp;",e);	
+			} else if ( $("#anonymous").prop("checked") ) {
+				sold_to_error.hide();
+			}	
+			
+			// sold_by error
+			err2 = error_handler(sold_by.val(), sold_by_error, "no_selection", "*Required",e);
+			
+			// payment type error			
+			err3 = error_handler(payment_type.prop("checked"), payment_type_error, false,"*Required",e);			
+			
+			// payment error			
+			err4 = error_handler(amount.val(), payment_error, "","*Required",e);
+			
+			// description error			
+			err5 = error_handler(description.val(), description_error, "","*Required: a detailed description",e);
+			
+			// check number error - error_handler() is set-up to work with visible elements, not hidden			
+			if ( check_number.is(":visible") ) {
+			 err6 = error_handler(check_number.val(), check_number_error, "","*Required: enter a check number",e);
+			} else if ( !check_number.is(":visible") ) {
+				check_number_error.hide();	
+			}
+			
+			if ( ( err1 + err2 + err3 + err4 + err5 + err6) > 0) {
+				if ( !transaction_error.is(":visible") ) {
+				 	transaction_error.show();		
+				}
+				transaction_error.text("Correct errors below");
+			} else {
+				transaction_error.hide();			
+			}		
+		});	
+
+		// error handler for edited transactions		
+		function error_handler(input,error_span,error,error_text,event) {		
+			var trans_error = 0;
+			if ( input == error ) {
+				if ( !error_span.is(":visible") ) {
+					error_span.show();		
+				}									
+				error_span.html(error_text);
+				trans_error = 1;
+			} else {
+				trans_error = 0;
+				error_span.hide();	
+			}						
+				
+			if (trans_error) {
+				event.preventDefault();
+			} 
+			return trans_error;			
+		} 
+
+
+      // On reload if patron isn't logged in replace pull-down with patrons name 
+		if (sold_to.val() == "no_selection") {
+			$.post("json/transaction.php",{ not_logged_in: 1, transaction_id: transaction_id }, function(data) {
 				var obj = $.parseJSON(data);
 				if (obj.sold_to) {
 					var obj = $.parseJSON(data);				
-					$("[name='sold_to']").replaceWith("<span name='sold_to'>" + obj.full_name + 
+					sold_to.replaceWith("<span name='sold_to'>" + obj.full_name + 
 																 "</span><input value='" + obj.sold_to + "' type='hidden' name='sold_to'>");
 				}
 			} );
@@ -466,24 +547,24 @@ $(function() {
 	
 		// Anonymous Transaction?
 		if ($("#anonymous").prop("checked")) { // on reload
-			$("select[name='sold_to']").hide();
+			sold_to.hide();
 		} else {
-			$("select[name='sold_to']").show();
+			sold_to.show();
 		} 
 		$("#anonymous").click(function() { // on click
 			if ($(this).prop("checked")) { 
-				$("select[name='sold_to']").hide();
-				$.post("json/transaction.php",{ anonymous: 1, transaction_id: $transaction_id } );
+				sold_to.hide();
+				$.post("json/transaction.php",{ anonymous: 1, transaction_id: transaction_id } );
 			} else {
-				$("select[name='sold_to']").show();
-				$.post("json/transaction.php",{ anonymous: 0, transaction_id: $transaction_id } );
+				sold_to.show();
+				$.post("json/transaction.php",{ anonymous: 0, transaction_id: transaction_id } );
 			}
 		});
 		
 		// what type of payment? cash, credit or check?
-		$("input[name='payment_type']").click(function() { 
+		payment_type.click(function() { 
 			if ($(this).prop("checked")) { 
-				$.post("json/transaction.php",{ payment_type: this.value, transaction_id: $transaction_id } );
+				$.post("json/transaction.php",{ payment_type: this.value, transaction_id: transaction_id } );
 		
 				// check number?				
 				if (this.value == "check") {					
@@ -495,7 +576,7 @@ $(function() {
 					}
 					
 					// return check #					
-					$.post("json/transaction.php",{ check_number: true, transaction_id: $transaction_id }, function(data) {
+					$.post("json/transaction.php",{ check_number: true, transaction_id: transaction_id }, function(data) {
 						var obj = $.parseJSON(data);			
 	   				if (obj.check_number) {
 							$("#check_number").val(obj.check_number);		
@@ -542,17 +623,20 @@ $(function() {
 					$("#amount").val("");					
 					$("#price").hide();
 			
+					// this unchecks the payment type
 					$('input[type=radio]').prop('checked',false).trigger('updateState');
 					$("#payment_type").hide();					
 					
 					// reset payment_type && amount	
-					$.post("json/transaction.php",{storage_payment_reset: 1, transaction_id: $transaction_id});										
+					$.post("json/transaction.php",{storage_payment_reset: 1, transaction_id: transaction_id});										
 						
 				}
 			});
 	
-			// If storage date is NULL, update to 0000-00-00 on save
-			$("#save_transaction").click(function() {
+				
+			// If storage date is NULL, update to 0000-00-00 on save	
+			$("#save_transaction").click(function(e) {
+							
 				if ( !$("#date").val().length ) {
 					$("#date").val("0000-00-00");				
 				}

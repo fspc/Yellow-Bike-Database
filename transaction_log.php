@@ -145,7 +145,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormNew")) {
 	} else {
 		$date_startstorage = "NULL";
 		$date = current_datetime();
-		$amount = 0;
+		$amount = "NULL";
 	} //end if
 
 
@@ -451,7 +451,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 			if($row_Recordset3['show_description']){ ?>
                 <tr><td>&nbsp;</td>
 		  	  <td valign="top"><label><?php echo $row_Recordset3['fieldname_description']; ?>:</label></td>
-		  	  <td><textarea name="description" cols="45" rows="3"><?php echo $row_Recordset2['description']; ?></textarea>
+		  	  <td><textarea id="description" name="description" cols="45" rows="3"><?php echo $row_Recordset2['description']; ?></textarea>
 		  	  <span id="description_error"></span></td>
 		  	  </tr>
 		  	  
@@ -480,13 +480,15 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 						<label id="credit_card" class="payment_type" for="payment_type">Credit Card</label>
 						<input type="radio" name="payment_type" value="check"
 						<?php if ($row_Recordset2['payment_type'] == "check") { echo "  checked"; } ?>   >
-						<label id="check" class="payment_type" for="payment_type">Check</label>
+						
+						<label id="check" class="payment_type" for="payment_type">Check</label>	
+						<span id="payment_type_error"></span>					
 						<?php if ($row_Recordset2['payment_type'] == "check") { 						
 									echo '&nbsp;<input type="text" id="check_number" size="10" name="check_number" value="' . 
 											$row_Recordset2['check_number'] .  '".>'; 
 								} 
 						?>	
-					<span id="payment_type_error"></span></td>		  	  
+					<span id="check_number_error"></span></td>		  	  
 		  	  </tr>
 		  	  <?php } ?>
                 <?php } // end if show_payment 
@@ -498,7 +500,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  	 <?php  
 			   if($row_Recordset3['show_soldto_signed_in']){				
 					echo "<td>";				
-					list_CurrentShopUsers_select('sold_to', $row_Recordset2['sold_to']);		
+					list_CurrentShopUsers_select('sold_to', $row_Recordset2['sold_to']);	
+					echo "<span id='sold_to_error'></span>";	
 					$record_trans_id = $row_Recordset2['transaction_id'];
 					if ($row_Recordset3['anonymous']) {
 						echo "<span id='anon' style='display:show;'><label for='anonymous' id='anonymous_label'>Anonymous:</label>";
@@ -511,11 +514,12 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 					} else {				
 						echo "<span id='anon' style='display:none;'><label for='anonymous' id='anonymous_label'>Anonymous:</label></span>";
 					}
-					echo "<span id='sold_to_error'></span></td>"; 
+					echo "<span id='anonymous_error'></span></td>"; 
 
 				} elseif($row_Recordset3['show_soldto_not_signed_in']) {
 					echo "<td>";
 					list_donation_locations_withheader('sold_to', $row_Recordset2['sold_to']); //- not required to be signed in.
+					echo "<span id='sold_to_error'></span></td>"; 
 					// echo " <a href=\"location_add_edit.php?trans_id={$record_trans_id}&contact_id=new_contact\">Create New Location</a> | 
 					// <a href=\"location_add_edit_select.php?trans_id={$record_trans_id}&contact_id=new_contact\">Edit Existing Location</a>";
 					$record_trans_id = $row_Recordset2['transaction_id'];
@@ -530,7 +534,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 					} else {				
 						echo "<span id='anon' style='display:none;'><label for='anonymous' id='anonymous_label'>Anonymous:</label></span>";
 					}
-					echo "<span id='sold_to_error'></span></td>"; 				
+					echo "<span id='anonymous_error'></span></td>";				
 				} 
 				?>
 			
