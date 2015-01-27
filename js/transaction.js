@@ -205,6 +205,7 @@ $(function() {
 			min_range = max_range_last_year;
 		}					
 		var percentage_amounts = 100 / (range.length - 1);
+		percentage_amounts = Number(Math.round(percentage_amounts+'e2')+'e-2');
 		var percentage = percentage_amounts;
 
 		$.each(range,function(k,v) {
@@ -216,7 +217,10 @@ $(function() {
 			 	range_obj[percentage_amounts + '%'] = Number(v);
 			 	percentage_amounts = percentage_amounts + percentage;
 			}
-						
+
+			// watch that percentage don't aquire too many decimal points.
+			//console.dir(range_obj);			
+			
 		});
 
 		//initialize slider 
@@ -283,6 +287,7 @@ $(function() {
 			});			
 			
 			$(this).val(lookup_object.minus[value]);
+			
 		}
 		
 	});  // End - Do not let both handles have the same value
