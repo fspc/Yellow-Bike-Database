@@ -442,21 +442,24 @@ $(function() {
 		$("select[name='sold_by']").attr("tabindex",11);
 		$("input[value='Save']").attr("tabindex",12);
 		$("input[value='Close']").attr("tabindex",13);		
-		
-		// require that values be filled in a particular fashion
-		$("#date").mask("0000-00-00", {placeholder: "yyyy-mm-dd" });
-		$("#amount").mask("#0.00", {reverse: true, placeholder: "000.00"});
-		$("#check_number").mask("#0", {reverse: true, placeholder: "check number"});	
-	
-		var transaction_id = $("input[name='transaction_id']").val();
+
 		
 		// common ids
+		var transaction_id = $("input[name='transaction_id']").val();
 		var sold_to = $("[name='sold_to']");
 		var sold_by = $("[name='sold_by']");
 		var payment_type = $("input[name='payment_type']");
 		var amount = $("#amount");
 		var description = $("#description");
 		var check_number = $("#check_number");
+		var quantity = $("#quantity");
+		var date = $("#date");
+
+		// require that values be filled in a particular fashion
+		amount.mask("#0.00", {reverse: true, placeholder: "000.00"});		
+		quantity.mask("#0", {placeholder: "0"});
+		date.mask("0000-00-00", {placeholder: "yyyy-mm-dd" });
+		check_number.mask("#0", {reverse: true, placeholder: "check number"});
 
 		// error spans & handling	
 		var transaction_error = $("#transaction_start_error");	
@@ -474,7 +477,7 @@ $(function() {
 		// On save check for errors
 		$("#save_transaction").click(function(e) {
 			//function error_handler(input,error_span,error,error_text,event)
-			var err1 = 0, err2 = 0, err3 = 0, err4 = 0, err5 = 0, err6 = 0;		
+			var err1 = 0, err2 = 0, err3 = 0, err4 = 0, err5 = 0, err6 = 0, err7 = 0, err8 = 0;		
 			
 			// sold_to error		
 			if ( !$("#anonymous").prop("checked") ) {
@@ -501,8 +504,14 @@ $(function() {
 			} else if ( !check_number.is(":visible") ) {
 				check_number_error.hide();	
 			}
+
+			// quantity
+			err7 = error_handler(quantity.val(), quantity_error, "","*Required",e);			
 			
-			if ( ( err1 + err2 + err3 + err4 + err5 + err6) > 0) {
+			// date
+			err8 = error_handler(date.val(), date_error, "","*Required",e);			
+			
+			if ( ( err1 + err2 + err3 + err4 + err5 + err6 + err7) > 0) {
 				if ( !transaction_error.is(":visible") ) {
 				 	transaction_error.show();		
 				}
