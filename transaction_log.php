@@ -10,6 +10,7 @@ $storage_period = STORAGE_PERIOD;
 $default_transaction_type = DEFAULT_TRANSACTION_TYPE;
 $number_of_transactions = NUMBER_OF_TRANSACTIONS;
 $change_fund = CHANGE_FUND;
+$show_shop_id = SHOW_SHOP_ID;
 
 //transaction ID	
 if($_GET['trans_id']>0){
@@ -391,15 +392,39 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                     <!-- Save before using paypal ->> -->
                     </td>
 		  	    </tr>
-                
-                <tr><td>&nbsp;</td>
-		  	    <td><label>Transaction ID:</label></td>
-                <td><?php echo $row_Recordset2['transaction_id']; ?><em><?php echo $row_Recordset3['message_transaction_id']; ?></em></em></td>
-		  	  </tr>
-		  	    <tr><td>&nbsp;</td>
-		  	    <td><label for="shop_id">ShopID:</label> </td>
-                <td><input name="shop_id" type="text" id="shop_id" value="<?php echo $row_Recordset2['shop_id']; ?>" size="6" /></td>
-		  	  </tr>
+               
+          	<?php if ($show_shop_id) { ?> 
+	          	<tr><td>&nbsp;</td>
+	            	
+			  	    	<td><label>Transaction ID:</label></td>
+	               <td><?php echo $row_Recordset2['transaction_id']; ?><em>
+	               <?php echo $row_Recordset3['message_transaction_id']; ?></em>
+	               </td>
+			  	 	
+			  	 	</tr>
+			  	 	<tr><td>&nbsp;</td>
+			  	   
+			  	    <td><label for="shop_id">ShopID:</label> </td>
+	                <td><input name="shop_id" type="text" id="shop_id" 
+	                value="<?php echo $row_Recordset2['shop_id']; ?>" size="6" />
+	                </td>
+	
+			  	  	</tr>
+		  	  	<?php } else { ?>
+         		<tr><td>&nbsp;</td>
+	            	
+			  	    	<td><label>Transaction #:</label></td>
+	               <td><?php echo $row_Recordset2['transaction_id']; ?>
+	               <em><?php echo $row_Recordset3['message_transaction_id']; ?>
+	               -
+	               <?php echo $row_Recordset2['shop_id']; ?></em>
+	               <input name="shop_id" type="hidden" id="shop_id" 
+	                value="<?php echo $row_Recordset2['shop_id']; ?>" />
+	               </td>
+			  	 	
+			  	 	</tr>		  	  
+		  	  	<?php } ?>
+		  	  	
                 <?php ?>
                 <tr><td>&nbsp;</td><td><label for="trans_type_info">Transaction Type:</label></td>
 		  	    <td><?php echo "<span id='trans_type_info'>" . $row_Recordset2['transaction_type'] . "</span>";
