@@ -690,9 +690,16 @@ $(function() {
 				
 			// If storage date is NULL, update to 0000-00-00 on save	
 			$("#save_transaction").click(function(e) {
+				
+				var span_or_select = $("[name='sold_to']").is("span"), err0;
+				if(span_or_select) {
+					err0 = error_handler(span_or_select, date_error, true, "*Patron must be signed in to complete this transaction.",e);
+				}				
 							
 				if ( !$("#date").val().length ) {
-					$("#date").val("0000-00-00");				
+					if (err0 != 1) {
+						$("#date").val("0000-00-00");
+					}				
 				}
 				
 			});	
