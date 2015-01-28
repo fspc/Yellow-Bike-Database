@@ -85,7 +85,7 @@ $(function() {
 	} );
 
 	// paid or not?
-	$(":checked").parent("td").prev().children().hide();
+	//$(":checked").parent("td").prev().children().hide(); // with validation testing this seems to be unnecessary
 	$(".paid").click(function() {
 
 		if (open_shop == "no_shop") {  return false; }
@@ -453,7 +453,7 @@ $(function() {
 		var transaction_id = $("input[name='transaction_id']").val();
 		var sold_to = $("[name='sold_to']");
 		var sold_by = $("[name='sold_by']");
-		var payment_type = $("input[name='payment_type']");
+		//var payment_type = $("input[name='payment_type']");
 		var amount = $("#amount");
 		var description = $("#description");
 		var quantity = $("#quantity");
@@ -497,7 +497,8 @@ $(function() {
 			// sold_by error
 			err2 = error_handler(sold_by.val(), sold_by_error, "no_selection", "*Required",e);
 			
-			// for storage transactions don't check for payment_type and payment until there is an actual date								
+			// for storage transactions don't check for payment_type and payment until there is an actual date	
+			var payment_type = $("input[name='payment_type']"); // payment_type variable needs to be kept within scope							
 			var payment_type_result;
 			if ( date.val() != "0000-00-00" && date.val() != "") {
 				
@@ -548,7 +549,7 @@ $(function() {
 				transaction_error.text("Correct errors below");
 			} else {
 				transaction_error.hide();			
-			}		
+			}
 		});	
 
 		// error handler for edited transactions		
@@ -601,7 +602,7 @@ $(function() {
 		});
 		
 		// what type of payment? cash, credit or check?
-		payment_type.click(function() { 
+		$("input[name='payment_type']").click(function() { 
 			if ($(this).prop("checked")) { 
 				$.post("json/transaction.php",{ payment_type: this.value, transaction_id: $("input[name='transaction_id']").val() } );
 		

@@ -476,7 +476,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  	  <?php if($row_Recordset3['show_payment']) { ?>
 		  	  <tr id="payment_type">
 		  	  		<td></td>
-					<td><label>Payment Type:</label></td>
+					<td><label for="payment_type" id="payment_type_label">Payment Type:</label></td>
 					<td>
 						<input type="radio" name="payment_type" value="cash"
 						<?php if ($row_Recordset2['payment_type'] == "cash") { echo "  checked"; }  ?>	>
