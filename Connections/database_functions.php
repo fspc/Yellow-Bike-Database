@@ -64,7 +64,7 @@ $gnucash_accounts = array(	"Assets:Current Assets:Checking" => "checking",
 // Most collectives require only one shop at a time, but YBDB provides a way to handle 2 concurrent
 // shops in the same location.  The current shop will be shown, and users will have to remember the 
 // number of the previous shop to enter into the transaction.  
-// Note: Remote shops function independently via there IP identification.
+// Note: Remote shops function independently via their IP identification.
 //
 // Normally, you will want this set at 0.
 define('SHOW_SHOP_ID',0);

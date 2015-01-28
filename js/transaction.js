@@ -85,7 +85,7 @@ $(function() {
 	} );
 
 	// paid or not?
-	//$(":checked").parent("td").prev().children().hide(); // with validation testing this seems to be unnecessary
+	$(":checked").parent("td").prev().children().not("#payment_type_label").hide();  // need to watch that not introduction bugs
 	$(".paid").click(function() {
 
 		if (open_shop == "no_shop") {  return false; }
