@@ -401,8 +401,14 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                 <td><input name="shop_id" type="text" id="shop_id" value="<?php echo $row_Recordset2['shop_id']; ?>" size="6" /></td>
 		  	  </tr>
                 <?php ?>
-                <tr><td>&nbsp;</td><td><label>Select Type:</label></td>
-		  	    <td><?php list_transaction_types('transaction_type',$row_Recordset2['transaction_type'] ); ?></td>
+                <tr><td>&nbsp;</td><td><label for="trans_type_info">Transaction Type:</label></td>
+		  	    <td><?php echo "<span id='trans_type_info'>" . $row_Recordset2['transaction_type'] . "</span>";
+		  	    			  echo "<input type='hidden' id='transaction_type' name='transaction_type' value='" . 
+		  	    			  			$row_Recordset2['transaction_type'] . "'>";
+		  	    
+		  	    			//list_transaction_types('transaction_type',$row_Recordset2['transaction_type'] ); 
+		  	    
+		  	    ?></td>
 		  	  </tr>
                 <?php //date_startstorage ==============================================================
 			if($row_Recordset3['show_startdate']){?>

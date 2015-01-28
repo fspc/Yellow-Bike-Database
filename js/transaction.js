@@ -1,4 +1,4 @@
-/* jQuery fun with transactions - Jonathan Rosenbaum */
+/* jQuery fun with transactions - Jonathan Rosenbaum <gnuser@gmail.com> */
 
 // currently some css is just hardwired, but that reflects the coding style of YBDB :)
 
@@ -8,8 +8,8 @@ $(function() {
 	$.ajaxSetup({async:false}); // best to do this in $.ajax, 
 										 // but all ajax needs to be synchronous in this program because of the use of mysql
 
-	$("select[name='transaction_type']").attr("tabindex",1);
-	$("select[name='transaction_type']").focus();
+	$("#transaction_type").attr("tabindex",1);
+	$("#transaction_type").focus();
 	$("input[value='Create Transaction']").attr("tabindex",2);
 	$("#trans_date").mask("0000-00-00", {placeholder: "yyyy-mm-dd" });
 
@@ -218,7 +218,7 @@ $(function() {
 			 	percentage_amounts = percentage_amounts + percentage;
 			}
 
-			// watch that percentage don't aquire too many decimal points.
+			// watch that percentage doesn't acquire too many decimal points.
 			//console.dir(range_obj);			
 			
 		});
@@ -435,7 +435,7 @@ $(function() {
 	
 		// make tabbing more predictable
 		$("input[name='shop_id']").attr("tabindex",1);
-		$("select[name='transaction_type']").attr("tabindex",2);
+		// $("#transaction_type").attr("tabindex",2);
 		$("input[name='date_startstorage']").attr("tabindex",3);
 		$("input[name='date']").attr("tabindex",4);		
 		$("input[name='quantity']").attr("tabindex",5);
@@ -515,7 +515,7 @@ $(function() {
 			}
 			
 			// description error		
-			if ( $("[name='transaction_type']").val() != "Deposit" ) {	// Deposit description is implicit
+			if ( $("#transaction_type").val() != "Deposit" ) {	// Deposit description is implicit
 				err5 = error_handler(description.val(), description_error, "","*Required: a detailed description",e);
 			}
 			

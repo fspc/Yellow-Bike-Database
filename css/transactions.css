@@ -6,6 +6,11 @@ td > label:not(.payment_type):not(.open_shop):not(.gnucash_csv) {
 	padding-right: 5px;
 }
 
+/* bold transaction type */
+#trans_type_info {
+	font-weight: bolder;
+}
+
 /* make unimportant buttons into links */
 input[value=Delete], input[name=date_fill] {
 	background:none!important;
