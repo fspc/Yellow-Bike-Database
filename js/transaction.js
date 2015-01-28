@@ -7,7 +7,7 @@ $(function() {
 
 	$.ajaxSetup({async:false}); // best to do this in $.ajax, 
 										 // but all ajax needs to be synchronous in this program because of the use of mysql
-
+	
 	$("#transaction_type").attr("tabindex",1);
 	$("#transaction_type").focus();
 	$("input[value='Create Transaction']").attr("tabindex",2);
@@ -128,8 +128,9 @@ $(function() {
       	var obj = $.parseJSON(value)
 		   $("#" + this.id).text(obj.changed_change);
 			var diff = Number(obj.changed_change) - Number(obj.change);
-			var str = this.id;			
+			var str = this.id;						
 			var id = str.match(/\d+/);	
+
 			if (diff != 0) {
 				/*				
 				if(!$("#" + id[0] + "_different_change").length) {
@@ -648,17 +649,30 @@ $(function() {
 				$("#payment_type").hide();	
 			}
 			
-			$("#date_fill").click(function(){ 
+			$("#date_fill").click(function(e){ 
+				var span_or_select = $("[name='sold_to']").is("span"), err0;
+				if(span_or_select) {
+					err0 = error_handler(span_or_select, date_error, true, "*Patron must be signed in to complete this transaction.",e);
+				}
+				if (err0 != 1) {
 					$("#price").show();			
 					$("#payment_type").show();
+				}
 			})			
 			
-			$("#date").on("input", function(){ 
+			$("#date").on("input", function(e){ 
+
+				var span_or_select = $("[name='sold_to']").is("span"), err0;
+				if(span_or_select) {
+					err0 = error_handler(span_or_select, date_error, true, "*Patron must be signed in to complete this transaction.",e);
+				}
 				
 				date_test = /^\d{4}-((0\d)|(1[012]))-(([012]\d)|3[01])$/.test(this.value);
 				if ( date_test && this.value != "0000-00-00" ) {
-					$("#price").show();			
-					$("#payment_type").show();
+					if (err0 != 1) {						
+						$("#price").show();			
+						$("#payment_type").show();
+					}
 				} else {
 					$("#amount").val("");					
 					$("#price").hide();

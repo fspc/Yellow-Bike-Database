@@ -414,10 +414,10 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
          		<tr><td>&nbsp;</td>
 	            	
 			  	    	<td><label>Transaction #:</label></td>
-	               <td><?php echo $row_Recordset2['transaction_id']; ?>
-	               <em><?php echo $row_Recordset3['message_transaction_id']; ?>
+	               <td><em><?php echo $row_Recordset2['transaction_id']; ?>
 	               -
-	               <?php echo $row_Recordset2['shop_id']; ?></em>
+	               <?php echo $row_Recordset2['shop_id'];
+	               		echo "&nbsp;&nbsp" . $row_Recordset3['message_transaction_id'];?></em>
 	               <input name="shop_id" type="hidden" id="shop_id" 
 	                value="<?php echo $row_Recordset2['shop_id']; ?>" />
 	               </td>
