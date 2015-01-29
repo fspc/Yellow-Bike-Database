@@ -68,11 +68,11 @@ input[value=Save]:focus, input[value=Close]:focus {
 }
 
 /* errors */
-#current_shop, #date_error,
+#current_shop > a, #date_error,
 #transaction_start_error, 
 #sold_by_error, #sold_to_error, 
 #description_error, #check_number_error, 
 #payment_error, #payment_type_error,
 #quantity_error, #anonymous_error {
-	color: red;
+	color: red; 
 }

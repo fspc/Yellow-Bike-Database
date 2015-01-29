@@ -89,6 +89,16 @@ $change_fund = CHANGE_FUND;
 		}
 	} 
 
+	// check if start storage date has been changed since original shop date
+	if(isset($_POST['date_startstorage'])) {
+		$query = 'SELECT shops.date FROM transaction_log, shops WHERE transaction_id=' . $_POST['transaction_id'] .
+					 ' AND transaction_log.shop_id = shops.shop_id;';
+		$sql = mysql_query($query, $YBDB) or die(mysql_error());	
+		$result = mysql_fetch_assoc($sql);	
+		if ($result['date'] != $_POST['date_startstorage']) {
+			echo $result['date'];		
+		}
+	}
 
 	// reset payment_type && amount for storage transaction
 	if(isset($_POST['storage_payment_reset'])) {

@@ -286,6 +286,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit") && ($_PO
 	$trans_id = $transaction_id;
 		   
 	header(sprintf("Location: %s",$editFormAction . "?trans_id={$trans_id}&" . $search_state));  //$editFormAction
+
 }
 
 //Form Edit Record Delete ===============================================================================
@@ -441,7 +442,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  	    <td for="date_startstorage"><label>Storage Start Date:</label></td>
 		  	    <td><input name="date_startstorage" type="text" id="date_startstorage" value="<?php 
 			  echo $row_Recordset2['date_startstorage_day']; ?>" size="10" maxlength="10" />
-		  	    </td>
+		  	    <span id="original_shop_date"></span></td>
 		  	  </tr>
                 <?php } //end if storage | start of date ================================================
 			?>

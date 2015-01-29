@@ -4,10 +4,10 @@
 
 
 $(function() {
-
+    
 	$.ajaxSetup({async:false}); // best to do this in $.ajax, 
 										 // but all ajax needs to be synchronous in this program because of the use of mysql
-	
+
 	$("#transaction_type").attr("tabindex",1);
 	$("#transaction_type").focus();
 	$("input[value='Create Transaction']").attr("tabindex",2);
@@ -17,7 +17,7 @@ $(function() {
 	// use .paid parent and hover & classes
 
 	// If page has not been reloaded after a shop period ends, prevent edit from working.
-   // Note: create transaction covered via a mysql_error()), but with a reload.
+   // Note: create transaction covered via a mysql_error()), but with a reload - header("Refresh:0;")
 	$('[href*="trans_id="]').click(function(e){  
  		var remember_me;
 		$.post("json/transaction.php", {shop_exist: 1}, function(data) {
@@ -50,11 +50,11 @@ $(function() {
   			}
 		});
   		if (remember_me == "unbind") { 
-  		 $('#save_transaction').on('click'); 
-  		 }
-  		 else {  
+  			$('#save_transaction').on('click'); 
+  		}
+  		else {  
   		 	e.preventDefault(); 
-  		 }
+  		}
 	} );
 
 	// Does a current shop exist?
@@ -448,7 +448,6 @@ $(function() {
 		$("select[name='sold_by']").attr("tabindex",11);
 		$("input[value='Save']").attr("tabindex",12);
 		$("input[value='Close']").attr("tabindex",13);		
-
 		
 		// common ids
 		var transaction_id = $("input[name='transaction_id']").val();
@@ -551,6 +550,26 @@ $(function() {
 			} else {
 				transaction_error.hide();			
 			}
+					
+			// store the transaction's history
+			var transaction_history = { 
+									transaction_id: $("input[name='transaction_id']").val(),
+									date_startstorage: $("#date_startstorage").val(),
+									date: $("#date").val(),
+									transaction_type: $("#transaction_type").val(),
+									amount: $("#amount").val(),
+									description: $("#description").val(), 
+									sold_to: $("#sold_to").val(),
+									sold_by: $("[name='sold_by']").val(),
+									quantity: $("#quantity").val(),
+									shop_id: $("#shop_id").val(),
+									payment_type: $("#payment_type").val(),
+									check_number: $("#check_number").val(),
+									anonymous: $("#anonymous").val()
+								};	
+			
+			console.dir(transaction_history);			
+
 		});	
 
 		// error handler for edited transactions		
@@ -568,9 +587,11 @@ $(function() {
 			}						
 				
 			if (trans_error) {
-				event.preventDefault();
+		   	event.preventDefault();
 			} 
-			return trans_error;			
+			
+			return trans_error;
+
 		} 
 
 
@@ -581,7 +602,7 @@ $(function() {
 				if (obj.sold_to) {
 					var obj = $.parseJSON(data);				
 					sold_to.replaceWith("<span name='sold_to'>" + obj.full_name + 
-																 "</span><input value='" + obj.sold_to + "' type='hidden' name='sold_to'>");
+																 "</span><input value='" + obj.sold_to + "' type='hidden' id='sold_to' name='sold_to'>");
 				}
 			} );
 		}
@@ -634,6 +655,16 @@ $(function() {
 		/* When the transaction is storage based, only show price and payment_type 
 		   when a full date (yyyy-mm-dd) is entered. */
 		if ( $("#date_startstorage").length ) {
+			
+			var date_startstorage =	$("#date_startstorage").val();		
+			
+			// If storage start date has changed since original shop trans, show the original shop day. 
+			$.post("json/transaction.php",{date_startstorage: date_startstorage, 
+													transaction_id: $("input[name='transaction_id']").val() }, function(data) {
+				if (data) {
+					$("#original_shop_date").html("(transaction date: " + data + ")");
+				}
+			});
 			
 			// require that values be filled in a particular fashion
 			$("#date_startstorage").mask("0000-00-00", {placeholder: "yyyy-mm-dd" });
@@ -690,19 +721,11 @@ $(function() {
 				
 			// If storage date is NULL, update to 0000-00-00 on save	
 			$("#save_transaction").click(function(e) {
-				
-				/*
-				var span_or_select = $("[name='sold_to']").is("span"), err0;
-				if(span_or_select) {
-					err0 = error_handler(span_or_select, date_error, true, "*Patron must be signed in to complete this transaction.",e);
-				}				
-				*/
 							
 				if ( !$("#date").val().length ) {
-					//if (err0 != 1) {
-						$("#date").val("0000-00-00");
-					//}				
+						$("#date").val("0000-00-00");			
 				}
+				
 				
 			});	
 	
