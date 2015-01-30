@@ -22,7 +22,7 @@ input[value=Delete], input[name=date_fill] {
 	cursor: pointer;
 }
 
-form[name=FormEdit] select:focus { 
+	select[name=transaction_type], form[name=FormEdit] select:focus { 
     color: green;
 }
 

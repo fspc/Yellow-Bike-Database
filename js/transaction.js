@@ -8,8 +8,8 @@ $(function() {
 	$.ajaxSetup({async:false}); // best to do this in $.ajax, 
 										 // but all ajax needs to be synchronous in this program because of the use of mysql
 
-	$("#transaction_type").attr("tabindex",1);
-	$("#transaction_type").focus();
+	$("[name='transaction_type']").attr("tabindex",1);
+	$("[name='transaction_type']").focus();
 	$("input[value='Create Transaction']").attr("tabindex",2);
 	$("#trans_date").mask("0000-00-00", {placeholder: "yyyy-mm-dd" });
 
