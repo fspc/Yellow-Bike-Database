@@ -5,6 +5,8 @@
 
 $(function() {
     
+	"use strict";
+    
 	$.ajaxSetup({async:false}); // best to do this in $.ajax, 
 										 // but all ajax needs to be synchronous in this program because of the use of mysql
 
@@ -431,6 +433,28 @@ $(function() {
 	} // Deposit Calculator
 
 
+	// error handler for edited transactions		
+	function error_handler(input,error_span,error,error_text,event) {		
+		var trans_error = 0;
+		if ( input == error ) {
+			if ( !error_span.is(":visible") ) {
+				error_span.show();		
+			}									
+			error_span.html(error_text);
+			trans_error = 1;
+		} else {
+			trans_error = 0;
+			error_span.hide();	
+		}						
+			
+		if (trans_error) {
+	   	event.preventDefault();
+		} 
+		
+		return trans_error;
+
+	} 
+
 	// editing a transaction
 	if ( $("input[name='shop_id']").length ) {
 	
@@ -523,7 +547,6 @@ $(function() {
 			// check number error - error_handler()					
 			var check_number = $("#check_number");	 // check number variable needs to be within this scope
 			if ( check_number.is(":visible") || payment_type_result == "check" ) {
-			 console.log("Made it here");
 			 if (check_number.val() == undefined) {
 			 	err6 = error_handler(check_number.val(), check_number_error, undefined,"*Required: enter a check number",e);
 			 } else {
@@ -551,9 +574,11 @@ $(function() {
 				transaction_error.hide();			
 			}
 					
+			transaction_id = $("input[name='transaction_id']").val();
 			// store the transaction's history
-			var transaction_history = { 
-									transaction_id: $("input[name='transaction_id']").val(),
+			var transaction_history = [];
+			var current_transaction =
+							{   			
 									date_startstorage: $("#date_startstorage").val(),
 									date: $("#date").val(),
 									transaction_type: $("#transaction_type").val(),
@@ -565,35 +590,15 @@ $(function() {
 									shop_id: $("#shop_id").val(),
 									payment_type: $("#payment_type").val(),
 									check_number: $("#check_number").val(),
-									anonymous: $("#anonymous").val()
-								};	
+									anonymous: $("#anonymous").val()							
+							};
+			//transaction_history[transaction_id].push(current_transaction);
 			
-			console.dir(transaction_history);			
+			console.dir(current_transaction);			
 
 		});	
 
-		// error handler for edited transactions		
-		function error_handler(input,error_span,error,error_text,event) {		
-			var trans_error = 0;
-			if ( input == error ) {
-				if ( !error_span.is(":visible") ) {
-					error_span.show();		
-				}									
-				error_span.html(error_text);
-				trans_error = 1;
-			} else {
-				trans_error = 0;
-				error_span.hide();	
-			}						
-				
-			if (trans_error) {
-		   	event.preventDefault();
-			} 
-			
-			return trans_error;
-
-		} 
-
+		
 
       // On reload if patron isn't logged in replace pull-down with patrons name 
 		if (sold_to.val() == "no_selection") {
