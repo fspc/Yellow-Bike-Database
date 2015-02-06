@@ -456,7 +456,7 @@ $(function() {
 
 
 	// On save (or close) check for errors	
-	function save_or_close(button_choice) {		
+	function save_or_close(button_choice, type_of_button) {		
 		
 		//function error_handler(input,error_span,error,error_text,event)
 		var err1 = 0, err2 = 0, err3 = 0, err4 = 0, err5 = 0, err6 = 0, err7 = 0, err8 = 0;			
@@ -526,7 +526,11 @@ $(function() {
 				if ( !transaction_error.is(":visible") ) {
 				 	transaction_error.show();		
 				}
-				transaction_error.text("Correct errors below");
+				if (type_of_button === "Save") {
+					transaction_error.text("Correct errors below");
+				} else {
+					transaction_error.text("Correct errors below, and save before closing.");
+				}
 			} else {
 				transaction_error.hide();		
 			}			
@@ -586,13 +590,16 @@ $(function() {
 		var check_number_error = $("#check_number_error");
 		//var check_number = $("#check_number").on("input");
 
-		var result = save_or_close($("#save_transaction"));
-		save_or_close($("#close_transaction")); // kind of a trick
+		var result = save_or_close($("#save_transaction"), "Save");
+		// note: it is possible to close with all error conditions being satisfied,
+		//       however, it is no biggy.		
+		save_or_close($("#close_transaction"), "Close"); 
 		
 		// Save history 				
 		if (result === "Success") {
-			
+
 			transaction_id = $("input[name='transaction_id']").val();
+
 			// store the transaction's history
 			var transaction_history = [];
 			var current_transaction =
@@ -610,10 +617,25 @@ $(function() {
 									check_number: $("#check_number").val(),
 									anonymous: $("#anonymous").val()							
 							};
-			//transaction_history[transaction_id].push(current_transaction);
-			console.dir(current_transaction);			
 
-		}
+			// check for prior transactions
+			$.post("json/transaction.php",{ history_select: 1, transaction_id: transaction_id }, function(data) {
+		
+				if (data === "First Transaction") {
+						console.log(data);
+						transaction_history.push(current_transaction);
+				} else {
+					transaction_history = $.parseJSON(data);
+					transaction_history.push(current_transaction);				
+					//var obj = $.parseJSON(data);				
+				}
+				
+			} );	
+			
+			$.post("json/transaction.php",{ history_update: 1, transaction_id: transaction_id, history: transaction_history });
+			
+
+		} // End Save History
 		
 		
 

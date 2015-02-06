@@ -89,6 +89,25 @@ $change_fund = CHANGE_FUND;
 		}
 	} 
 
+	if(isset($_POST['history_select'])) {
+		$query = 'SELECT history FROM transaction_log WHERE transaction_id="' . $_POST['transaction_id'] . '";';
+		$sql = mysql_query($query, $YBDB) or die(mysql_error());	
+		$result = mysql_fetch_assoc($sql);			
+		if ($result['history'] == "") {
+			echo "First Transaction";		
+		} else {
+			echo $result['history'];		
+		}
+	}
+
+	if(isset($_POST['history_update'])) {
+		$json = json_encode($_POST['history']);
+		$query = "UPDATE transaction_log SET history='$json'" .  
+					' WHERE transaction_id="' . $_POST['transaction_id'] . '";';
+		$result = mysql_query($query, $YBDB) or die(mysql_error());	
+		//echo ;	
+	}
+
 	// check if start storage date has been changed since original shop date
 	if(isset($_POST['date_startstorage'])) {
 		$query = 'SELECT shops.date FROM transaction_log, shops WHERE transaction_id=' . $_POST['transaction_id'] .
