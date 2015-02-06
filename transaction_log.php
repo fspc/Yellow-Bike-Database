@@ -617,9 +617,10 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
           <tr  bordercolor="#CCCCCC" bgcolor="#CCCC33">
             <td colspan="9"><p><strong>Start New Transaction:</strong><br />&nbsp;&nbsp;&nbsp;&nbsp;Select Type: <?php list_transaction_types('transaction_type',$default_transaction_type); ?> 
               <input type="submit" name="Submit43" value="Create Transaction" /><span id="current_shop"></span>
-              </p>	      </td>
+              </p>	      
+             </td>
 	      </tr>
-          <input type="hidden" name="MM_insert" value="FormNew">
+          <input type="hidden" name="MM_insert" value="FormNew" />
           </form>
 	    <?php } // if ?>
         <tr bordercolor="#CCCCCC" bgcolor="#99CC33">
