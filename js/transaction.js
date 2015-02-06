@@ -2,7 +2,6 @@
 
 // currently some css is just hardwired, but that reflects the coding style of YBDB :)
 
-
 $(function() {
     
 	"use strict";
@@ -453,60 +452,18 @@ $(function() {
 		
 		return trans_error;
 
-	} 
+	} // end error_handling function
 
-	// editing a transaction
-	if ( $("input[name='shop_id']").length ) {
-	
-		// make tabbing more predictable
-		$("input[name='shop_id']").attr("tabindex",1);
-		// $("#transaction_type").attr("tabindex",2);
-		$("input[name='date_startstorage']").attr("tabindex",3);
-		$("input[name='date']").attr("tabindex",4);		
-		$("input[name='quantity']").attr("tabindex",5);
-		$("textarea[name='description']").attr("tabindex",6);
-		$("input[name='amount']").attr("tabindex",7);
-		$("input[name='payment_type']").attr("tabindex",8);
-		$("#check_number").attr("tabindex",9);
-		$("select[name='sold_to']").attr("tabindex",10);
-		$("select[name='sold_by']").attr("tabindex",11);
-		$("input[value='Save']").attr("tabindex",12);
-		$("input[value='Close']").attr("tabindex",13);		
+
+	// On save (or close) check for errors	
+	function save_or_close(button_choice) {		
 		
-		// common ids
-		var transaction_id = $("input[name='transaction_id']").val();
-		var sold_to = $("[name='sold_to']");
-		var sold_by = $("[name='sold_by']");
-		//var payment_type = $("input[name='payment_type']");
-		var amount = $("#amount");
-		var description = $("#description");
-		var quantity = $("#quantity");
-		var date = $("#date");
-
-		// require that values be filled in a particular fashion
-		amount.mask("#0.00", {reverse: true, placeholder: "000.00"});		
-		quantity.mask("#0", {placeholder: "0"});
-		date.mask("0000-00-00", {placeholder: "yyyy-mm-dd" });
-		$("#check_number").mask("#0", {reverse: true, placeholder: "check number"});
-
-		// error spans & handling	
-		var transaction_error = $("#transaction_start_error");	
-		var date_error = $("#date_error");
-		var sold_by_error = $("#sold_by_error"); 
-		var sold_to_error = $("#sold_to_error"); 
-		var description_error =	$("#description_error"); 
-		var payment_error	= $("#payment_error"); 
-		var payment_type_error = $("#payment_type_error");
-		var check_number_error = $("#check_number_error");
-		var quantity_error =	$("#quantity_error");
-		var check_number_error = $("#check_number_error");
-		//var check_number = $("#check_number").on("input");
-
-		// On save check for errors
-		$("#save_transaction").click(function(e) {
-			//function error_handler(input,error_span,error,error_text,event)
-			var err1 = 0, err2 = 0, err3 = 0, err4 = 0, err5 = 0, err6 = 0, err7 = 0, err8 = 0;		
+		//function error_handler(input,error_span,error,error_text,event)
+		var err1 = 0, err2 = 0, err3 = 0, err4 = 0, err5 = 0, err6 = 0, err7 = 0, err8 = 0;			
+		
+		$(button_choice).click(function(e) {
 			
+					
 			// sold_to error		
 			if ( !$("[name='sold_to']").is("span") ) { // Patron already performed transaction and isn't logged in
 				if ( !$("#anonymous").prop("checked") ) {
@@ -571,9 +528,70 @@ $(function() {
 				}
 				transaction_error.text("Correct errors below");
 			} else {
-				transaction_error.hide();			
-			}
+				transaction_error.hide();		
+			}			
+
+		});
+		
+		if ( ( err1 + err2 + err3 + err4 + err5 + err6 + err7) == 0) {
+			return "Success";
+		}
 					
+	} // end function save_or_close
+
+	// editing a transaction
+	if ( $("input[name='shop_id']").length ) {
+	
+		// make tabbing more predictable
+		$("input[name='shop_id']").attr("tabindex",1);
+		// $("#transaction_type").attr("tabindex",2);
+		$("input[name='date_startstorage']").attr("tabindex",3);
+		$("input[name='date']").attr("tabindex",4);		
+		$("input[name='quantity']").attr("tabindex",5);
+		$("textarea[name='description']").attr("tabindex",6);
+		$("input[name='amount']").attr("tabindex",7);
+		$("input[name='payment_type']").attr("tabindex",8);
+		$("#check_number").attr("tabindex",9);
+		$("select[name='sold_to']").attr("tabindex",10);
+		$("select[name='sold_by']").attr("tabindex",11);
+		$("input[value='Save']").attr("tabindex",12);
+		$("input[value='Close']").attr("tabindex",13);		
+		
+		// common ids
+		var transaction_id = $("input[name='transaction_id']").val();
+		var sold_to = $("[name='sold_to']");
+		var sold_by = $("[name='sold_by']");
+		//var payment_type = $("input[name='payment_type']");
+		var amount = $("#amount");
+		var description = $("#description");
+		var quantity = $("#quantity");
+		var date = $("#date");
+
+		// require that values be filled in a particular fashion
+		amount.mask("#0.00", {reverse: true, placeholder: "000.00"});		
+		quantity.mask("#0", {placeholder: "0"});
+		date.mask("0000-00-00", {placeholder: "yyyy-mm-dd" });
+		$("#check_number").mask("#0", {reverse: true, placeholder: "check number"});
+
+		// error spans & handling	
+		var transaction_error = $("#transaction_start_error");	
+		var date_error = $("#date_error");
+		var sold_by_error = $("#sold_by_error"); 
+		var sold_to_error = $("#sold_to_error"); 
+		var description_error =	$("#description_error"); 
+		var payment_error	= $("#payment_error"); 
+		var payment_type_error = $("#payment_type_error");
+		var check_number_error = $("#check_number_error");
+		var quantity_error =	$("#quantity_error");
+		var check_number_error = $("#check_number_error");
+		//var check_number = $("#check_number").on("input");
+
+		var result = save_or_close($("#save_transaction"));
+		save_or_close($("#close_transaction")); // kind of a trick
+		
+		// Save history 				
+		if (result === "Success") {
+			
 			transaction_id = $("input[name='transaction_id']").val();
 			// store the transaction's history
 			var transaction_history = [];
@@ -593,11 +611,10 @@ $(function() {
 									anonymous: $("#anonymous").val()							
 							};
 			//transaction_history[transaction_id].push(current_transaction);
-			
 			console.dir(current_transaction);			
 
-		});	
-
+		}
+		
 		
 
       // On reload if patron isn't logged in replace pull-down with patrons name 
