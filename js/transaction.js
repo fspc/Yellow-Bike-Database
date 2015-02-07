@@ -611,6 +611,12 @@ $(function() {
 			if (success === "Success") {
 	
 				transaction_id = $("input[name='transaction_id']").val();
+				var span_or_select = $("[name='sold_to']").is("span"), sold_to;
+				if (span_or_select) {
+					sold_to = $("#sold_to").val();
+				}	else {
+					sold_to = $("[name='sold_to']").val();				
+				}
 	
 				// store the transaction's history
 				var transaction_history = [];
@@ -622,7 +628,7 @@ $(function() {
 										transaction_type: $("#transaction_type").val(),
 										amount: $("#amount").val(),
 										description: $("#description").val(), 
-										sold_to: $("#sold_to").val(),
+										sold_to: sold_to,
 										sold_by: $("[name='sold_by']").val(),
 										quantity: $("#quantity").val(),
 										shop_id: $("#shop_id").val(),
@@ -635,10 +641,10 @@ $(function() {
 				$.post("json/transaction.php",{ history_select: 1, transaction_id: transaction_id }, function(data) {
 			
 					if (data === "First Transaction") {
-							transaction_history.push(current_transaction);
-							$.post("json/transaction.php",{ history_update: 1, 
-																		transaction_id: transaction_id, 
-																		history: transaction_history });
+						transaction_history.push(current_transaction);
+						$.post("json/transaction.php",{ history_update: 1, 
+																	transaction_id: transaction_id, 
+																	history: transaction_history });
 					
 					} else { // more than 1 transaction in the history
 
@@ -660,7 +666,7 @@ $(function() {
 		
 		})  // end function save_and_close
 				
-		// show history if more than 1 transaction						
+		// show history if more than 1 transaction can also be done within transactions.php						
 		$.post("json/transaction.php",{ history_select: 1, transaction_id: transaction_id }, function(data) {
 			
 			if (data !== "First Transaction") {				
