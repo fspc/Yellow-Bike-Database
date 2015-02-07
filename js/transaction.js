@@ -17,8 +17,9 @@ $(function() {
 	// Add focus for easier tab browsing
 	// use .paid parent and hover & classes
 
-	// If page has not been reloaded after a shop period ends, prevent edit from working.
+	// 1.  If page has not been reloaded after a shop period ends, prevent edit from working.
    // Note: create transaction covered via a mysql_error()), but with a reload - header("Refresh:0;")
+   // 2.  Don't send event signal to the save button when shop is open
 	$('[href*="trans_id="]').click(function(e){  
  		var remember_me;
 		$.post("json/transaction.php", {shop_exist: 1}, function(data) {
@@ -27,11 +28,13 @@ $(function() {
     			var start_new_shop = "Start New Shop";	
     			$("#current_shop").html("&nbsp<a href='shop_log.php'>" + start_new_shop + "</a>");
   			} else {
+  				// First successful click
     			remember_me = "unbind";
   			}
 		});
   		if (remember_me == "unbind") { 
-  		 $('[href*="trans_id="]').on('click'); 
+  		 // Second successful click
+  		 //$('[href*="trans_id="]').on('click'); 
   		 }
   		 else {  
   		 	e.preventDefault(); 
@@ -39,7 +42,7 @@ $(function() {
 	} );
 
   // Do the same thing as previously, but for editing a transaction (could make a function :)
-	$('#save_transaction').click(function(e){  
+	$('#save_transaction').on("click keypress", function(e){  
  		var remember_me;
 		$.post("json/transaction.php", {shop_exist: 1}, function(data) {
   
@@ -51,7 +54,7 @@ $(function() {
   			}
 		});
   		if (remember_me == "unbind") { 
-  			$('#save_transaction').on('click'); 
+  			$('#save_transaction').on('click keypress'); 
   		}
   		else {  
   		 	e.preventDefault(); 
@@ -66,7 +69,7 @@ $(function() {
 			open_shop = data;
 			var start_new_shop = "Start New Shop";			
 			
-			$("input[name='Submit43']").click(function(){
+			$("input[name='Submit43']").on("click keypress", function(){
 				$("#current_shop").html("&nbsp<a href='shop_log.php'>" + start_new_shop + "</a>");				
 				event.preventDefault();		
 			});
@@ -456,91 +459,100 @@ $(function() {
 
 
 	// On save (or close) check for errors	
-	function save_or_close(button_choice, type_of_button) {		
-		
-		//function error_handler(input,error_span,error,error_text,event)
-		var err1 = 0, err2 = 0, err3 = 0, err4 = 0, err5 = 0, err6 = 0, err7 = 0, err8 = 0;			
-		
-		$(button_choice).click(function(e) {
+	
+	function save_or_close(button_choice, type_of_button) {				
+
+		// Deferred Promise, since we don't know when the click will be made,
+		// it is an asynchronous function, and we need to know the returned result.		
+		var dfd = $.Deferred();
+							
+		$(button_choice).on("click keypress", function(e) {			
 			
+			//function error_handler(input,error_span,error,error_text,event)
+			var err1 = 0, err2 = 0, err3 = 0, err4 = 0, err5 = 0, err6 = 0, err7 = 0, err8 = 0;				
+
+			console.log(e.which);
+
+			if (e.which === 13 || e.which === 1) {			
 					
-			// sold_to error		
-			if ( !$("[name='sold_to']").is("span") ) { // Patron already performed transaction and isn't logged in
-				if ( !$("#anonymous").prop("checked") ) {
-					if (sold_to.length) {
-						err1 = error_handler(sold_to.val(), sold_to_error, "no_selection", "*Required&nbsp;&nbsp;&nbsp;",e);
+				// sold_to error		
+				if ( !$("[name='sold_to']").is("span") ) { // Patron already performed transaction and isn't logged in
+					if ( !$("#anonymous").prop("checked") ) {
+						if (sold_to.length) {
+							err1 = error_handler(sold_to.val(), sold_to_error, "no_selection", "*Required&nbsp;&nbsp;&nbsp;",e);
+						}	
+					} else if ( $("#anonymous").prop("checked") ) {
+						sold_to_error.hide();
 					}	
-				} else if ( $("#anonymous").prop("checked") ) {
-					sold_to_error.hide();
-				}	
-			}
-			
-			// sold_by error
-			err2 = error_handler(sold_by.val(), sold_by_error, "no_selection", "*Required",e);
-			
-			// for storage transactions don't check for payment_type and payment until there is an actual date	
-			var payment_type = $("input[name='payment_type']"); // payment_type variable needs to be kept within scope							
-			var payment_type_result;
-			if ( date.val() != "0000-00-00" && date.val() != "") {
-				
-				// payment type error
-				if (payment_type.length) {
-					payment_type.each(function(){ if ($(this).prop("checked") == true) { payment_type_result = true; } });			
-					err3 = error_handler(payment_type_result, payment_type_error, undefined,"*Required",e);				
 				}
 				
-				// payment error
-				if (amount.length) {
-					err4 = error_handler(amount.val(), payment_error, "","*Required",e);
-				}
+				// sold_by error
+				err2 = error_handler(sold_by.val(), sold_by_error, "no_selection", "*Required",e);
 				
-			}
-			
-			// description error		
-			if ( $("#transaction_type").val() != "Deposit" ) {	// Deposit description is implicit
-				err5 = error_handler(description.val(), description_error, "","*Required: a detailed description",e);
-			}
-			
-			// check number error - error_handler()					
-			var check_number = $("#check_number");	 // check number variable needs to be within this scope
-			if ( check_number.is(":visible") || payment_type_result == "check" ) {
-			 if (check_number.val() == undefined) {
-			 	err6 = error_handler(check_number.val(), check_number_error, undefined,"*Required: enter a check number",e);
-			 } else {
-			 	err6 = error_handler(check_number.val(), check_number_error, "","*Required: enter a check number",e);
-			 }
-			} else if ( !check_number.is(":visible") ) {
-				check_number_error.hide();	
-			}
-
-			// quantity
-			err7 = error_handler(quantity.val(), quantity_error, "","*Required",e);			
-			
-			// date
-			if (!$("#date_startstorage").length) { // not a storage transaction
-				err8 = error_handler(date.val(), date_error, "","*Required",e);
-			}				
-			
-			// Decides whether or not to post a parent error message (at the top)
-			if ( ( err1 + err2 + err3 + err4 + err5 + err6 + err7) > 0) {
-				if ( !transaction_error.is(":visible") ) {
-				 	transaction_error.show();		
-				}
-				if (type_of_button === "Save") {
-					transaction_error.text("Correct errors below");
-				} else {
-					transaction_error.text("Correct errors below, and save before closing.");
-				}
-			} else {
-				transaction_error.hide();		
-			}			
-
-		});
-		
-		if ( ( err1 + err2 + err3 + err4 + err5 + err6 + err7) == 0) {
-			return "Success";
-		}
+				// for storage transactions don't check for payment_type and payment until there is an actual date	
+				var payment_type = $("input[name='payment_type']"); // payment_type variable needs to be kept within scope							
+				var payment_type_result;
+				if ( date.val() != "0000-00-00" && date.val() != "") {
 					
+					// payment type error
+					if (payment_type.length) {
+						payment_type.each(function(){ if ($(this).prop("checked") == true) { payment_type_result = true; } });			
+						err3 = error_handler(payment_type_result, payment_type_error, undefined,"*Required",e);				
+					}
+					
+					// payment error
+					if (amount.length) {
+						err4 = error_handler(amount.val(), payment_error, "","*Required",e);
+					}
+					
+				}
+				
+				// description error		
+				if ( $("#transaction_type").val() != "Deposit" ) {	// Deposit description is implicit
+					err5 = error_handler(description.val(), description_error, "","*Required: a detailed description",e);
+				}
+				
+				// check number error - error_handler()					
+				var check_number = $("#check_number");	 // check number variable needs to be within this scope
+				if ( check_number.is(":visible") || payment_type_result == "check" ) {
+				 if (check_number.val() == undefined) {
+				 	err6 = error_handler(check_number.val(), check_number_error, undefined,"*Required: enter a check number",e);
+				 } else {
+				 	err6 = error_handler(check_number.val(), check_number_error, "","*Required: enter a check number",e);
+				 }
+				} else if ( !check_number.is(":visible") ) {
+					check_number_error.hide();	
+				}
+	
+				// quantity
+				err7 = error_handler(quantity.val(), quantity_error, "","*Required",e);			
+				
+				// date
+				if (!$("#date_startstorage").length) { // not a storage transaction
+					err8 = error_handler(date.val(), date_error, "","*Required",e);
+				}				
+				
+				// Decides whether or not to post a parent error message (at the top)
+				if ( ( err1 + err2 + err3 + err4 + err5 + err6 + err7) > 0) {
+					if ( !transaction_error.is(":visible") ) {
+					 	transaction_error.show();		
+					}
+					if (type_of_button === "Save") {
+						transaction_error.text("Correct errors below");
+					} else {
+						transaction_error.text("Correct errors below, and save before closing.");
+					}
+				} else {
+					transaction_error.hide();
+					dfd.resolve("Success");	
+				}			
+			
+			} // event type
+		
+		});
+			
+		return dfd.promise()			
+			
 	} // end function save_or_close
 
 	// editing a transaction
@@ -590,54 +602,60 @@ $(function() {
 		var check_number_error = $("#check_number_error");
 		//var check_number = $("#check_number").on("input");
 
-		var result = save_or_close($("#save_transaction"), "Save");
 		// note: it is possible to close with all error conditions being satisfied,
 		//       however, it is no biggy.		
 		save_or_close($("#close_transaction"), "Close"); 
 		
-		// Save history 				
-		if (result === "Success") {
+		// Using deferred.promise .. pretty cool
+		save_or_close($("#save_transaction"), "Save").done(function(success) { 
+			
+			console.log(success);
 
-			transaction_id = $("input[name='transaction_id']").val();
-
-			// store the transaction's history
-			var transaction_history = [];
-			var current_transaction =
-							{   			
-									date_startstorage: $("#date_startstorage").val(),
-									date: $("#date").val(),
-									transaction_type: $("#transaction_type").val(),
-									amount: $("#amount").val(),
-									description: $("#description").val(), 
-									sold_to: $("#sold_to").val(),
-									sold_by: $("[name='sold_by']").val(),
-									quantity: $("#quantity").val(),
-									shop_id: $("#shop_id").val(),
-									payment_type: $("#payment_type").val(),
-									check_number: $("#check_number").val(),
-									anonymous: $("#anonymous").val()							
-							};
-
-			// check for prior transactions
-			$.post("json/transaction.php",{ history_select: 1, transaction_id: transaction_id }, function(data) {
-		
-				if (data === "First Transaction") {
-						console.log(data);
-						transaction_history.push(current_transaction);
-				} else {
-					transaction_history = $.parseJSON(data);
-					transaction_history.push(current_transaction);				
-					//var obj = $.parseJSON(data);				
-				}
+			// Save history 				
+			if (success === "Success") {
+	
+				transaction_id = $("input[name='transaction_id']").val();
+	
+				// store the transaction's history
+				var transaction_history = [];
+				var current_transaction =
+								{   			
+										date_startstorage: $("#date_startstorage").val(),
+										date: $("#date").val(),
+										transaction_type: $("#transaction_type").val(),
+										amount: $("#amount").val(),
+										description: $("#description").val(), 
+										sold_to: $("#sold_to").val(),
+										sold_by: $("[name='sold_by']").val(),
+										quantity: $("#quantity").val(),
+										shop_id: $("#shop_id").val(),
+										payment_type: $("#payment_type").val(),
+										check_number: $("#check_number").val(),
+										anonymous: $("#anonymous").val()							
+								};
+	
+				// check for prior transactions
+				$.post("json/transaction.php",{ history_select: 1, transaction_id: transaction_id }, function(data) {
+			
+					if (data === "First Transaction") {
+							console.log(data);
+							transaction_history.push(current_transaction);
+					} else {
+						transaction_history = $.parseJSON(data);
+						transaction_history.push(current_transaction);				
+						//var obj = $.parseJSON(data);				
+					}
+					
+				} );	
 				
-			} );	
-			
-			$.post("json/transaction.php",{ history_update: 1, transaction_id: transaction_id, history: transaction_history });
-			
+				$.post("json/transaction.php",{ history_update: 1, transaction_id: transaction_id, history: transaction_history });
+				
+	
+			} // End Save History		
 
-		} // End Save History
 		
-		
+		})  // end function save_and_close
+				
 
       // On reload if patron isn't logged in replace pull-down with patrons name 
 		if (sold_to.val() == "no_selection") {
@@ -764,7 +782,7 @@ $(function() {
 	
 				
 			// If storage date is NULL, update to 0000-00-00 on save	
-			$("#save_transaction").click(function(e) {
+			$("#save_transaction").on("click keypress", function(e) {
 							
 				if ( !$("#date").val().length ) {
 						$("#date").val("0000-00-00");			
