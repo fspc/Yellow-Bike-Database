@@ -471,8 +471,6 @@ $(function() {
 			//function error_handler(input,error_span,error,error_text,event)
 			var err1 = 0, err2 = 0, err3 = 0, err4 = 0, err5 = 0, err6 = 0, err7 = 0, err8 = 0;				
 
-			console.log(e.which);
-
 			if (e.which === 13 || e.which === 1) {			
 					
 				// sold_to error		
@@ -608,8 +606,6 @@ $(function() {
 		
 		// Using deferred.promise .. pretty cool
 		save_or_close($("#save_transaction"), "Save").done(function(success) { 
-			
-			console.log(success);
 
 			// Save history 				
 			if (success === "Success") {
@@ -620,6 +616,7 @@ $(function() {
 				var transaction_history = [];
 				var current_transaction =
 								{   			
+										transaction_id: transaction_id,
 										date_startstorage: $("#date_startstorage").val(),
 										date: $("#date").val(),
 										transaction_type: $("#transaction_type").val(),
@@ -638,17 +635,24 @@ $(function() {
 				$.post("json/transaction.php",{ history_select: 1, transaction_id: transaction_id }, function(data) {
 			
 					if (data === "First Transaction") {
-							console.log(data);
 							transaction_history.push(current_transaction);
-					} else {
+							$.post("json/transaction.php",{ history_update: 1, 
+																		transaction_id: transaction_id, 
+																		history: transaction_history });
+					
+					} else { // more than 1 transaction in the history
+
 						transaction_history = $.parseJSON(data);
-						transaction_history.push(current_transaction);				
-						//var obj = $.parseJSON(data);				
-					}
+						transaction_history.push(current_transaction);
+						$.post("json/transaction.php",{ history_update: 1, 
+																		transaction_id: transaction_id, 
+																		history: transaction_history });
+					
+					
+					} // more than 1 transaction in the history
 					
 				} );	
 				
-				$.post("json/transaction.php",{ history_update: 1, transaction_id: transaction_id, history: transaction_history });
 				
 	
 			} // End Save History		
@@ -656,6 +660,13 @@ $(function() {
 		
 		})  // end function save_and_close
 				
+		// show history if more than 1 transaction						
+		$.post("json/transaction.php",{ history_select: 1, transaction_id: transaction_id }, function(data) {
+			
+			if (data !== "First Transaction") {				
+				var transaction_history = $.parseJSON(data);
+			}
+		} );
 
       // On reload if patron isn't logged in replace pull-down with patrons name 
 		if (sold_to.val() == "no_selection") {
