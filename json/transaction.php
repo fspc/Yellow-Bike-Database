@@ -89,6 +89,7 @@ $change_fund = CHANGE_FUND;
 		}
 	} 
 
+	// Transaction history - fetch history
 	if(isset($_POST['history_select'])) {
 		$query = 'SELECT history FROM transaction_log WHERE transaction_id="' . $_POST['transaction_id'] . '";';
 		$sql = mysql_query($query, $YBDB) or die(mysql_error());	
@@ -100,6 +101,7 @@ $change_fund = CHANGE_FUND;
 		}
 	}
 
+	// Transaction history - update transaction history
 	if(isset($_POST['history_update'])) {
 		$json = json_encode($_POST['history']);
 		$query = "UPDATE transaction_log SET history='$json'" .  
@@ -107,6 +109,14 @@ $change_fund = CHANGE_FUND;
 		$result = mysql_query($query, $YBDB) or die(mysql_error());	
 		//echo ;	
 	}
+
+	// Check for most recent transaction_id if transaction_id has changed
+	if(isset($_POST['most_recent_transaction_id'])) {
+		$query = 'SELECT MAX(transaction_id) as transaction_id FROM transaction_log;';
+		$sql = mysql_query($query, $YBDB) or die(mysql_error());	
+		$result = mysql_fetch_assoc($sql);	
+		echo $result['transaction_id'];	
+	}	
 
 	// check if start storage date has been changed since original shop date
 	if(isset($_POST['date_startstorage'])) {

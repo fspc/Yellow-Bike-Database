@@ -609,8 +609,24 @@ $(function() {
 
 			// Save history 				
 			if (success === "Success") {
-	
+
 				transaction_id = $("input[name='transaction_id']").val();
+
+				var date = $("#date").val();
+				if (date === "") {
+					date = "0000-00-00";				
+				}
+
+
+				// find new transaction_id if date has changed for a storage transaction
+				//  this is the most recent transaction_id					
+				if ($("#date_startstorage").val() && date !== "0000-00-00") {
+					$.post("json/transaction.php",{ most_recent_transaction_id: 1 }, function(data) {
+						transaction_id = Number(data) + 1;
+					} );
+				}	
+	
+				
 				var span_or_select = $("[name='sold_to']").is("span"), sold_to;
 				if (span_or_select) {
 					sold_to = $("#sold_to").val();
@@ -645,7 +661,7 @@ $(function() {
 								{   			
 										transaction_id: transaction_id,
 										date_startstorage: $("#date_startstorage").val(),
-										date: $("#date").val(),
+										date: date,
 										transaction_type: $("#transaction_type").val(),
 										amount: $("#amount").val(),
 										description: $("#description").val(), 
@@ -658,6 +674,11 @@ $(function() {
 										anonymous: anonymous				
 								};
 	
+				// transaction_id hasn't changed yet if it is a storage transaction
+				if ($("#date_startstorage").val() && date !== "0000-00-00") {
+					transaction_id = transaction_id - 1;
+				}	
+	
 				// check for prior transactions
 				$.post("json/transaction.php",{ history_select: 1, transaction_id: transaction_id }, function(data) {
 			
@@ -668,6 +689,7 @@ $(function() {
 																	history: transaction_history });
 					
 					} else { // more than 1 transaction in the history
+					
 
 						transaction_history = $.parseJSON(data);
 						transaction_history.push(current_transaction);
