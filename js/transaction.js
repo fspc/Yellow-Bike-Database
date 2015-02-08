@@ -618,6 +618,15 @@ $(function() {
 					sold_to = $("[name='sold_to']").val();				
 				}
 	
+				var payment_type_group = $("input[name='payment_type']"), payment_type; 
+				if (payment_type_group.length) {
+						payment_type_group.each(function(){ 
+							if ($(this).prop("checked") === true) { 
+								payment_type = $(this).val(); 
+							} 
+						} ); 
+				}	
+	
 				// store the transaction's history
 				var transaction_history = [];
 				var current_transaction =
@@ -632,7 +641,7 @@ $(function() {
 										sold_by: $("[name='sold_by']").val(),
 										quantity: $("#quantity").val(),
 										shop_id: $("#shop_id").val(),
-										payment_type: $("#payment_type").val(),
+										payment_type: payment_type,
 										check_number: $("#check_number").val(),
 										anonymous: $("#anonymous").val()							
 								};
@@ -666,7 +675,8 @@ $(function() {
 		
 		})  // end function save_and_close
 				
-		// show history if more than 1 transaction can also be done within transactions.php						
+		// show history if more than 1 transaction can also be done within transactions.php	& 
+		// choosen dis-activating  active trans.					
 		$.post("json/transaction.php",{ history_select: 1, transaction_id: transaction_id }, function(data) {
 			
 			if (data !== "First Transaction") {				
