@@ -631,6 +631,13 @@ $(function() {
 							} 
 						} ); 
 				}	
+				
+				var anonymous;
+				if ($("#anonymous").prop("checked")) { 
+					anonymous = 1; 
+				} else {
+					anonymous = undefined;				
+				}
 	
 				// store the transaction's history
 				var transaction_history = [];
@@ -648,7 +655,7 @@ $(function() {
 										shop_id: $("#shop_id").val(),
 										payment_type: payment_type,
 										check_number: check_number,
-										anonymous: $("#anonymous").val()							
+										anonymous: anonymous				
 								};
 	
 				// check for prior transactions
