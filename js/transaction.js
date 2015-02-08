@@ -624,7 +624,7 @@ $(function() {
 							if ($(this).prop("checked") === true) { 
 								payment_type = $(this).val();
 								if (payment_type === "credit" || payment_type === "cash") {
-									check_number = "";								
+									check_number = undefined;								
 								} else {
 									check_number = $("#check_number").val();								
 								}
