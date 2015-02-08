@@ -618,11 +618,16 @@ $(function() {
 					sold_to = $("[name='sold_to']").val();				
 				}
 	
-				var payment_type_group = $("input[name='payment_type']"), payment_type; 
+				var payment_type_group = $("input[name='payment_type']"), payment_type, check_number; 
 				if (payment_type_group.length) {
 						payment_type_group.each(function(){ 
 							if ($(this).prop("checked") === true) { 
-								payment_type = $(this).val(); 
+								payment_type = $(this).val();
+								if (payment_type === "credit" || payment_type === "cash") {
+									check_number = "";								
+								} else {
+									check_number = $("#check_number").val();								
+								}
 							} 
 						} ); 
 				}	
@@ -642,7 +647,7 @@ $(function() {
 										quantity: $("#quantity").val(),
 										shop_id: $("#shop_id").val(),
 										payment_type: payment_type,
-										check_number: $("#check_number").val(),
+										check_number: check_number,
 										anonymous: $("#anonymous").val()							
 								};
 	
