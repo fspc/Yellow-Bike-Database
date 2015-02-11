@@ -22,21 +22,51 @@ default:
 $page_shop_log = PAGE_SHOP_LOG . "?shop_id=$shop_id";
 
 if($_GET['contact_id'] == 'new_contact'){
-	//adds contact is new_contact is selected
-	$insertSQL = sprintf("INSERT INTO contacts (date_created) VALUES (%s)",
+			
+	
+	/* Discover if previous contact creation attempt was abandoned
+		There should be at least a first and last name, if not we use
+		previous contact_id, update it and start fresh	
+	*/
+	mysql_select_db($database_YBDB, $YBDB);
+	
+	// Find previous contact_id	
+   $sql = "SELECT MAX(contact_id) as previous_contact_id FROM contacts;";
+	$query = mysql_query($sql, $YBDB) or die(mysql_error());
+	$result = mysql_fetch_assoc($query);
+	$previous_contact_id = $result['previous_contact_id'];
+	
+	// If full_name is empty we will use this contact_id
+	$sql = "SELECT CONCAT(first_name, ' ', last_name) as full_name FROM contacts WHERE contact_id=" . $previous_contact_id. ";";
+	$query = mysql_query($sql, $YBDB) or die(mysql_error());
+	$result = mysql_fetch_assoc($query);		
+	
+	$full_name = $result['full_name'];
+		
+	//adds contact if new_contact is selected .. it's " " not ""
+	if ($full_name != " ") {
+		
+		$new_contact_id = $previous_contact_id + 1;
+	
+		$insertSQL = sprintf("INSERT INTO contacts (date_created) VALUES (%s)",
+							   GetSQLValueString('current_time', "date"));
+		$Result1 = mysql_query($insertSQL, $YBDB) or die(mysql_error());
+	
+		$contact_id = $new_contact_id;
+		$contact_id_entry = 'new_contact';	
+
+	} else {
+
+		$insertSQL = sprintf("UPDATE contacts SET  date_created=%s WHERE contact_id=" . $previous_contact_id,
 						   GetSQLValueString('current_time', "date"));
-	mysql_select_db($database_YBDB, $YBDB);
-	$Result1 = mysql_query($insertSQL, $YBDB) or die(mysql_error());
+		$Result1 = mysql_query($insertSQL, $YBDB) or die(mysql_error());	
+		
+		$contact_id = $previous_contact_id;
+		$contact_id_entry = 'new_contact';		
+			
+	}		
+
 	
-	mysql_select_db($database_YBDB, $YBDB);
-	$query_Recordset2 = "SELECT MAX(contact_id) as new_contact_id FROM contacts;";
-	$Recordset2 = mysql_query($query_Recordset2, $YBDB) or die(mysql_error());
-	$row_Recordset2 = mysql_fetch_assoc($Recordset2);
-	$totalRows_Recordset2 = mysql_num_rows($Recordset2);
-	
-	$contact_id = $row_Recordset2['new_contact_id'];
-	$contact_id_entry = 'new_contact';
-	mysql_free_result($Recordset2);
 } elseif(isset($_GET['contact_id'])) {
 	//else contact_id is assigned from passed value
 	$contact_id = $_GET['contact_id'];

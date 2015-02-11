@@ -82,7 +82,6 @@ $(function(){
 	function phone_validator(val, e) {
 				var re = /^\(\d{3}\)\s?\d{3}-\d{4}$/;
 				if ( !re.test(val) ) {
-					console.log("hello");
 					error_handler(false, phone_error, false,"*Enter a correct phone number",e);
 				}
 	}  	
