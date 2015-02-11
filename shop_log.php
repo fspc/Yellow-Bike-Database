@@ -135,71 +135,73 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
 
 <?php include("include_header.html"); ?>
 
-<table   border="0" cellpadding="1" cellspacing="0">
-  <tr>
-    <td align="left" valign="bottom"><?php echo $error_message;?>
-      Shop ID: <span class="yb_standarditalics"><?php echo $shop_id;?></span>; &nbsp;Location: <span class="yb_standarditalics"><?php echo $shop_location;?></span>; &nbsp;Date: <span class="yb_standarditalics"><?php echo $shop_date;?></span>; &nbsp;Shop Type: <span class="yb_standarditalics"><?php echo $shop_type;?></span>		</td>
-    </tr>
-  <tr>
-    <td>
-      <table   border="1" cellpadding="1" cellspacing="0" bordercolor="#CCCCCC">
-        <tr bordercolor="#CCCCCC" bgcolor="#99CC33">
-          <td width="100" height="35"><strong>Shop User </strong></td>
-		  <td height="35" bgcolor="#99CC33"><strong>Status</strong></td>
-		  <td width="70" height="35"><strong>Time In </strong></td>
-		  <td width="70" height="35"><strong>Time Out </strong></td>
-		  <td height="35"><strong>Update Hours </strong></td>
-		  <td height="35"><strong>Edit Data </strong></td>
-	    </tr>
-	    
-	    
-        <form method="post" name="form_new" action="<?php echo $editFormAction; ?>">
-          
-          
-        <tr bordercolor="#CCCCCC">
-            <td height="40" valign="bottom">
-              <span class="yb_standard_small">&nbsp;&nbsp;Not in the list: Create <a href="<?php echo $page_edit_contact; ?>?contact_id=new_contact&shop_id=<?php echo $shop_id?>">New User</a><br>&nbsp;&nbsp;Hint: Click on dropdown below and type <br />
-              &nbsp;&nbsp;&nbsp;&nbsp;last name quickly</span>
-              <?php list_contacts_select_user('contact_id', $new_user_id); ?></td>
-		  <td valign="bottom"><strong>
+	<table>
+  		<tr>
+    		<td align="left" valign="bottom"><?php echo $error_message;?></td>
+  		</tr>
+      <form method="post" name="form_new" action="<?php echo $editFormAction; ?>">
+		  <tr>
+			<td><label>Shop ID:</label></td>
+	      <td><?php echo $shop_id;?>; &nbsp;Location: 
+	      	 <?php echo $shop_location;?>; &nbsp;Date: 
+	      	 <?php echo $shop_date;?>; &nbsp;Shop Type: 
+	      	 <?php echo $shop_type;?>
+	      </td>		  
+		  </tr>	        
+        <tr>
+          <td><label>Shop User:</label></td>
+          <td>
+              <?php list_contacts_select_user('contact_id', $new_user_id); ?>
+          </td>
+        </tr>
+        <tr>
+		  	<td><label>Status:</label></td>
+		  	<td>
 		    <?php list_shop_user_roles('user_role', $default_shop_user); ?>
-		    </strong></td>
-		  <td valign="bottom"><strong>
+		   </td>
+		  </tr>
+		  <tr>
+		  	<td><label>Time In:</label></td>
+		  	<td><strong>
 		    <?php if($totalRows_Recordset1 <> 0){ 
 									list_time($shop_start_time,'0000-00-00 00:00:00','time_in',-60,0,'none',16); 
 									} else {
 									list_time("{$shop_date} 08:00:00",'0000-00-00 00:00:00','time_in',-15, 0, 'none',16);				
 									}
 									?>
-		    </strong></td>
-		  <td valign="bottom"><img src="150_10.jpg" width="150" height="10" /></td>
-		  <td valign="bottom"><input name="Submit" type="submit" value="Sign In" /></td>
-		  <td valign="bottom">&nbsp;</td>
-	    </tr>
-
-			<!-- testing this -->
-			<tr bordercolor="#CCCCCC" bgcolor="transparent">
-			            <td colspan="6"><table border="0" cellspacing="0" cellpadding="1">
-			              <tbody><tr>
-			                <td width="125"><div align="right">Project:</div></td>
-								<td><?php list_projects_collective('project'); ?></td>
-			            </tr>
-			              <tr>
-			                <td><div align="right">Comment:</div></td>
-			              <td><input name="comment" type="text" value="" size="90"></td>
-			            </tr>
-			                            <tr>
-			                
-			            </tr>               </tbody></table>	    </td>
-			</tr>      	    
-	    
-          <input type="hidden" name="MM_insert" value="form_new">
-          </form>
+		   </td>
+		  </tr>
+		  <tr>
+		   <td><label>Project:</label></td>
+			<td><?php list_projects_collective('project'); ?></td>
+		  </tr>
+		  <tr>
+				<td><div align="right">Comments:</div></td>
+			<td><textarea  name="comment" cols="45" rows="3">
+             </textarea>
+			</td>		  
+		  </tr>
+		  <tr>
+		  	<td></td>
+		  	<td valign="bottom"><input name="Submit" type="submit" value="Sign In" /></td>
+		  </tr>
+	     <input type="hidden" name="MM_insert" value="form_new">
+       </form>     
+       </tbody>
+ 	</table>
           
+   <br /><br />
           
-	  <tr valign="bottom" bordercolor="#CCCCCC" bgcolor="#99CC33">
-	    <td height="25" colspan="6" bgcolor="#99CC33">&nbsp;&nbsp;&nbsp;&nbsp;Existing Shop Users:</td>
-	      </tr>
+   <table  width="850px" border="1" cellpadding="1" cellspacing="0" bordercolor="#CCCCCC">
+     <tbody     
+	  <tr valign="bottom" bordercolor="#CCCCCC">
+	    <td height="25" colspan="1" bgcolor="#99CC33">Existing Shop Users</td>
+	    <td height="25" colspan="1" bgcolor="#99CC33">Status</td>
+	    <td height="25" colspan="1" bgcolor="#99CC33">Time In</td>
+	    <td height="25" colspan="1" bgcolor="#99CC33">Time Out</td>
+	    <td height="25" colspan="1" bgcolor="#99CC33">Update Hours</td>
+	    <td height="25" colspan="1" bgcolor="#99CC33">Edit</td>
+	   </tr>
         <?php while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)) { //do { 
 	  if($visit_id == $row_Recordset1['shop_visit_id']) {?>
         <form method="post" name="FormUpdate_<?php echo $row_Recordset1['shop_visit_id']; ?>" action="<?php echo $editFormAction; ?>">
@@ -223,14 +225,17 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
             </tr>
               <tr>
                 <td><div align="right">Comment:</div></td>
-              <td><input name="comment" type="text" value="<?php echo $row_Recordset1['comment']; ?>" size="90" /></td>
+              <td><textarea  name="comment" cols="45" rows="3">
+              		<?php echo $row_Recordset1['comment']; ?>
+              		</textarea>
+              </td>
             </tr>
               <?php if(current_shop_by_ip()>=$shop_id & (current_shop_by_ip()-5)<=$shop_id ) { ?>
               <tr>
                 <td><div align="right">Delete:</div></td>
               <td>Click to Delete this Shop User's Visit: <a href="<?php echo PAGE_SHOP_LOG_DELETE_VISIT . "?visit_id={$visit_id}&shop_id={$shop_id}";?>">Delete</a> </td>
             </tr> <?php } //end if current shop?>
-              </table>	    </td>
+         </table>	   
 	      </tr>
           <input type="hidden" name="MM_insert" value="FormEdit">
           <input type="hidden" name="shop_visit_id" value="<?php echo $row_Recordset1['shop_visit_id']; ?>">

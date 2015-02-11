@@ -19,6 +19,10 @@ $(function(){
 	email.mask('#',{placeholder: "_@_", translation: {"#": {pattern: /[A-Za-z0-9@.]/, recursive: true} } });
 	zip.mask('00000-0000', {placeholder: "00000-0000"});
 	state_abbreviation.mask('AA',{placeholder: "WV", translation: {"A": {pattern: /[A-Za-z]/, recursive: false} } });
+	
+	// spiff up contact pull down	
+	$("select[name='contact_id']").chosen();
+	
 	$("#submit_contact").on("click keypress", function(e) {				
 		
 		// check for errors
