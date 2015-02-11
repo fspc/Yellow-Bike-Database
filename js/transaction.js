@@ -617,7 +617,6 @@ $(function() {
 					date = "0000-00-00";				
 				}
 
-
 				// find new transaction_id if date has changed for a storage transaction
 				//  this is the most recent transaction_id					
 				if ($("#date_startstorage").val() && date !== "0000-00-00") {
@@ -695,29 +694,19 @@ $(function() {
 						transaction_history.push(current_transaction);
 						$.post("json/transaction.php",{ history_update: 1, 
 																		transaction_id: transaction_id, 
-																		history: transaction_history });
-					
-					
+																		history: transaction_history,
+																		more_than_one: 1 });
+						
 					} // more than 1 transaction in the history
 					
-				} );	
-				
-				
+				} );	// check for prior transactions
+					
 	
 			} // End Save History		
 
 		
 		})  // end function save_and_close
 				
-		// show history if more than 1 transaction can also be done within transactions.php	& 
-		// choosen dis-activating  active trans.					
-		$.post("json/transaction.php",{ history_select: 1, transaction_id: transaction_id }, function(data) {
-			
-			if (data !== "First Transaction") {				
-				var transaction_history = $.parseJSON(data);
-			}
-		} );
-
       // On reload if patron isn't logged in replace pull-down with patrons name 
 		if (sold_to.val() == "no_selection") {
 			$.post("json/transaction.php",{ not_logged_in: 1, transaction_id: transaction_id }, function(data) {

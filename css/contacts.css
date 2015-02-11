@@ -1,0 +1,7 @@
+
+/* errors */
+#waiver_error, #phone_error, #email_error,
+#first_name_error, #last_name_error
+ {
+	color: red; 
+}

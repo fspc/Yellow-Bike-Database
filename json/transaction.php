@@ -97,17 +97,28 @@ $change_fund = CHANGE_FUND;
 		if ($result['history'] == "") {
 			echo "First Transaction";		
 		} else {
-			echo $result['history'];		
+			// Description may have newlines			
+			$history_result = str_replace("\n", "\\n",$result['history']);
+			echo $history_result;		
 		}
 	}
 
 	// Transaction history - update transaction history
+	// Note:  This could easily be turned into its own table with a foreign key
+	// referencing transaction_log.transaction_id, but most transactions
+	// will probably only occur 1 time, and there probably isn't that much
+	// need to do many things with this data other than rollback a transaction, or
+	// research what happened on a particular shop day.
 	if(isset($_POST['history_update'])) {
 		$json = json_encode($_POST['history']);
 		$query = "UPDATE transaction_log SET history='$json'" .  
 					' WHERE transaction_id="' . $_POST['transaction_id'] . '";';
 		$result = mysql_query($query, $YBDB) or die(mysql_error());	
-		//echo ;	
+
+		// show history
+		if(isset($_POST['more_than_one'])) {
+			list_history($_POST['history']);
+		}
 	}
 
 	// Check for most recent transaction_id if transaction_id has changed

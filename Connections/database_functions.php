@@ -236,6 +236,15 @@ function list_distinct_shop_years($form_name = "none", $default_value = ""){
 	generate_list($querySQL,$list_value,$list_text,$form_name, $default_value);
 }
 
+
+function list_history($object) {
+/*	require_once('../php-console/src/PhpConsole/__autoload.php');
+	$handler = PhpConsole\Handler::getInstance();
+	$handler->start();
+	$handler->debug($object);*/
+	
+}
+
 // #####################
 
 // Date/Time functions
