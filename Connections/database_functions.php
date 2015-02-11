@@ -37,7 +37,7 @@ define("TIMEZONE", "America/New_York");
    The first shop created, 1, makes sense.  A link will show in start_shop.php.
 	If you do not want this functionality at all, choose 0.   
 */
-define("NONSHOP",0);
+define("NONSHOP", 0);
 
 // How many transactions do you want shown by default
 define("NUMBER_OF_TRANSACTIONS", 11);

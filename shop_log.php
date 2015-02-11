@@ -164,10 +164,10 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
 		  	<td><label>Time In:</label></td>
 		  	<td><strong>
 		    <?php if($totalRows_Recordset1 <> 0){ 
-									list_time($shop_start_time,'0000-00-00 00:00:00','time_in',-60,0,'none',16); 
-									} else {
-									list_time("{$shop_date} 08:00:00",'0000-00-00 00:00:00','time_in',-15, 0, 'none',16);				
-									}
+						 list_time($shop_start_time,'0000-00-00 00:00:00','time_in',-60,0,'none',16); 						
+						} else {
+						 list_time("{$shop_date} 08:00:00",'0000-00-00 00:00:00','time_in',-15, 0, 'none',16);				
+						}
 									?>
 		   </td>
 		  </tr>
@@ -177,8 +177,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
 		  </tr>
 		  <tr>
 				<td><div align="right">Comments:</div></td>
-			<td><textarea  name="comment" cols="45" rows="3">
-             </textarea>
+			<td><textarea  name="comment" cols="45" rows="3"></textarea>
 			</td>		  
 		  </tr>
 		  <tr>
@@ -225,9 +224,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
             </tr>
               <tr>
                 <td><div align="right">Comment:</div></td>
-              <td><textarea  name="comment" cols="45" rows="3">
-              		<?php echo $row_Recordset1['comment']; ?>
-              		</textarea>
+              <td><textarea  name="comment" cols="45" rows="3"><?php echo $row_Recordset1['comment']; ?></textarea>
               </td>
             </tr>
               <?php if(current_shop_by_ip()>=$shop_id & (current_shop_by_ip()-5)<=$shop_id ) { ?>
