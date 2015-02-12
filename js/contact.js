@@ -12,11 +12,12 @@ $(function(){
 	var state_abbreviation = $("#state_abbreviation");
 
 	// sensible defaults
-	first_name.mask('#',{placeholder: "first", translation: {"#": {pattern: /[A-Za-z0-9@.]/, recursive: true} } });
-	last_name.mask('#',{placeholder: "last", translation: {"#": {pattern: /[A-Za-z0-9@.]/, recursive: true} } });
+	first_name.mask('#',{placeholder: "first", translation: {"#": {pattern: /[A-Za-z0-9.\-]/, recursive: true} } });
+	last_name.mask('#',{placeholder: "last", translation: {"#": {pattern: /[A-Za-z0-9.\-]/, recursive: true} } });
 	birth_date.mask("0000-00-00", {placeholder: "yyyy-mm-dd" });
 	phone.mask('(000) 000-0000', {placeholder: "(000) 000-0000"});
-	email.mask('#',{placeholder: "_@_", translation: {"#": {pattern: /[A-Za-z0-9@.]/, recursive: true} } });
+	email.mask('#',{placeholder: "_@_", translation: {"#": {pattern: /[A-Za-z0-9@._\-+~!\$&''\(\)\*,;=:\%}{]/,
+																			  recursive: true} } });
 	zip.mask('00000-0000', {placeholder: "00000-0000"});
 	state_abbreviation.mask('AA',{placeholder: "WV", translation: {"A": {pattern: /[A-Za-z]/, recursive: false} } });
 	
@@ -44,8 +45,13 @@ $(function(){
 			
 			email_error.hide();
 			phone_error.hide();
-			phone_validator(phone.val(),e);
-						
+			var r = phone_validator(phone.val(),e);
+			if (r) {
+				if($("#email_list_toggle").val() == 1) {
+					console.log("here i am s" + r);
+				}						
+			}
+			
 		} else if ( (email.val() !== "" && phone.val() === "") ) {
 
 			email_error.hide();
@@ -80,13 +86,17 @@ $(function(){
 	   	$('#waiver').slideUp();
 	   	$(this).attr("value","Show Waiver");
 	    	c--;
-  	} });
+  	} 
+  	
+  	});
   	
   	
 	function phone_validator(val, e) {
 				var re = /^\(\d{3}\)\s?\d{3}-\d{4}$/;
 				if ( !re.test(val) ) {
 					error_handler(false, phone_error, false,"*Enter a correct phone number",e);
+				} else {
+					return true;				
 				}
 	}  	
   	
@@ -121,5 +131,43 @@ $(function(){
 		return trans_error;
 
 	} // end error_handling function
+  	
+  	
+  	// email_list_toggle
+  	function toggle( value ){
+		$(this).toggleClass('off', value === "0");
+		$(this).toggleClass('on', value === "1");
+	}
+
+	$("#email_list_toggle").noUiSlider({
+		orientation: "horizontal",
+		start: 1,
+		range: {
+			'min': [0, 1],
+			'max': 1
+		},
+		format: wNumb({
+			decimals: 0
+		})
+	})
+	
+	$("#email_list_toggle").addClass('toggle');
+	$("#email_list_toggle").addClass('noUi-extended');
+	$("#email_list_toggle > div > div > div").addClass("hello");	
+	
+	$('.noUi-handle').hover(function(){
+    $(this).attr('data-content','none');
+	});
+	
+		
+	$("#email_list_toggle").Link('lower').to(toggle);
+  	$("#email_list_toggle").Link('lower').to('-inline-<div id="off_or_on"></div>', function(value) {
+		if (value == 0) {
+			$(this).html("no");
+		} else if (value == 1) {
+			$(this).html("yes");
+		}
+  	});
+	// end email_list_toggle  	
   		
 });

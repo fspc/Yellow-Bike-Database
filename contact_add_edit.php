@@ -150,6 +150,13 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 			    <td><input id="email" type="text" name="email" value="<?php echo $row_Recordset1['email']; ?>" size="32">
 			    <span id="email_error"></span></td>
 			 </tr>
+			 <tr>
+			  	<td><label>Email List:</label></td>
+				<td>
+				<div id="email_list_toggle" style="width: 50px;"></div>
+				<span id="email_list_error"></span>				
+				</td>			 
+			 </tr>
           <tr >
             <td ><label>Phone:</label></td>
 			    <td><input id="phone" type="text" name="phone" value="<?php echo $row_Recordset1['phone']; ?>" size="32">

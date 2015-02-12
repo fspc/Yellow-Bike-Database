@@ -418,7 +418,7 @@ function list_contacts_edit_add($form_name = "contact_id", $default_value = "")
 function list_contacts_select_user($form_name = "contact_id", $default_value = "")
 {
 	echo "<select name={$form_name} class='yb_standard'>\n";
-	echo "<option value='no_selection'>Select User</option>\n";
+	echo "<option value='no_selection'>Select Yourself<section></section></option>\n";
 	echo "<option value='no_selection'>--------------</option>";
 	list_contacts("none",$default_value);	
 	echo "</select>\n";

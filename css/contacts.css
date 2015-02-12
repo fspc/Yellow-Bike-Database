@@ -5,3 +5,41 @@
  {
 	color: red; 
 }
+
+/* toggle for mailman or other email list */
+.toggle {
+	height: 50px;
+}
+.toggle.off .noUi-handle {
+	border-color: red;
+}
+
+.toggle.on .noUi-handle {
+	border-color: green;
+}
+
+/* get rid of the pesky handle stripping with specificity */
+#email_list_toggle > div > div > div.hello:before, #email_list_toggle > div > div > div.hello:after,
+{
+	content: none;
+}
+
+.toggle.noUi-horizontal .noUi-handle {
+	width: 34px;
+	height: 20px;
+	top: -2px;
+}
+
+.toggle.noUi-horizontal.noUi-extended {
+	padding-right: 32px;
+}
+
+.toggle.noUi-horizontal.noUi-extended .noUi-handle {
+	left: -1px;
+}
+.toggle.noUi-horizontal.noUi-extended .noUi-origin  {
+	right: -32px;
+}
+
+
+
