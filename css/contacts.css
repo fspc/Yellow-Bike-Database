@@ -1,7 +1,7 @@
 
 /* errors */
 #waiver_error, #phone_error, #email_error,
-#first_name_error, #last_name_error
+#first_name_error, #last_name_error, #email_list_error
  {
 	color: red; 
 }
@@ -18,8 +18,9 @@
 	border-color: green;
 }
 
-/* get rid of the pesky handle stripping with specificity */
-#email_list_toggle > div > div > div.hello:before, #email_list_toggle > div > div > div.hello:after,
+
+/* get rid of the pesky handle stripping with specificity (when figured out) */
+#email_list_toggle > div > div > div:before, #email_list_toggle > div > div > div:after,
 {
 	content: none;
 }
@@ -41,5 +42,10 @@
 	right: -32px;
 }
 
+#email_list_block > div {
+	display: inline-block;
+}
+
+/* end email list toggle */
 
 

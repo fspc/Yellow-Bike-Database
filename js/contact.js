@@ -21,7 +21,8 @@ $(function(){
 	zip.mask('00000-0000', {placeholder: "00000-0000"});
 	state_abbreviation.mask('AA',{placeholder: "WV", translation: {"A": {pattern: /[A-Za-z]/, recursive: false} } });
 	
-	// spiff up contact pull down	
+	// spiff up contact pull down
+	var email_list_choice;	
 	$("select[name='contact_id']").chosen();
 	
 	$("#submit_contact").on("click keypress", function(e) {				
@@ -30,6 +31,9 @@ $(function(){
 		//error_handler(input,error_span,error,error_text,event);
 		
 		var err0 = 0,  err1 = 0;
+		
+		// if it is showing
+		$("#email_list_error").hide();
 
 		// first name & last name input
 		error_handler(first_name.val(), first_name_error, "","*Required",e);
@@ -46,10 +50,14 @@ $(function(){
 			email_error.hide();
 			phone_error.hide();
 			var r = phone_validator(phone.val(),e);
+			
+			var email_list_toggle = $("#email_list_toggle");
+			var email_list_error = $("#email_list_error");
 			if (r) {
-				if($("#email_list_toggle").val() == 1) {
-					console.log("here i am s" + r);
-				}						
+				if(email_list_toggle.val() == 1) {
+					error_handler(1, email_list_error, 1,"*Email address required for email list",e);
+					email_list_choice = 1;
+				} 				
 			}
 			
 		} else if ( (email.val() !== "" && phone.val() === "") ) {
@@ -88,8 +96,14 @@ $(function(){
 	    	c--;
   	} 
   	
-  	});
   	
+  	}); // end submit_contact
+  	
+ 	$("#email_list_toggle").on("set",function() {  
+  		if ($(this).val() == 0 && email_list_choice) {
+  			$("#email_list_error").hide();
+  		} 
+  	} );	
   	
 	function phone_validator(val, e) {
 				var re = /^\(\d{3}\)\s?\d{3}-\d{4}$/;
@@ -153,11 +167,6 @@ $(function(){
 	
 	$("#email_list_toggle").addClass('toggle');
 	$("#email_list_toggle").addClass('noUi-extended');
-	$("#email_list_toggle > div > div > div").addClass("hello");	
-	
-	$('.noUi-handle').hover(function(){
-    $(this).attr('data-content','none');
-	});
 	
 		
 	$("#email_list_toggle").Link('lower').to(toggle);

@@ -153,8 +153,10 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 			 <tr>
 			  	<td><label>Email List:</label></td>
 				<td>
+				<div id="email_list_block">
 				<div id="email_list_toggle" style="width: 50px;"></div>
-				<span id="email_list_error"></span>				
+				<div id="email_list_error"></div>
+				</div>				
 				</td>			 
 			 </tr>
           <tr >
