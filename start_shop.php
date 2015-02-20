@@ -135,7 +135,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                 <form action="<?php echo $editFormAction; ?>" method="post" name="form_new" id="form_new">
                   <tr>
                     <td height="30"><span class="yb_heading3red">Start New Shop:</span></td>
-                    <td><input name="ctrl_date" type="text" class="yb_standard" value="<?php echo current_date();  ?>" /></td>
+                    <td><input id="ctrl_date" name="ctrl_date" type="text" class="yb_standard" value="<?php echo current_date();  ?>" /></td>
                     <td><?php list_shop_locations($ctrl_shoplocation,"Treasure City") ?></td>
                     <td><?php list_shop_types($ctrl_shoptype) ?></td>
                     <td>&nbsp;</td>
@@ -194,7 +194,6 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                   <option value="Sunday">Sunday</option>
                 </select>
                 <input type="submit" name="Submit" value="Submit" />
-                (date format YYYY-MM-DD)
                 <input type="hidden" name="MM_insert" value="ChangeDate" />
             </form></td>
         </tr>

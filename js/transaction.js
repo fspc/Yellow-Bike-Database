@@ -549,7 +549,7 @@ $(function() {
 		
 		});
 			
-		return dfd.promise()			
+		return dfd.promise();			
 			
 	} // end function save_or_close
 

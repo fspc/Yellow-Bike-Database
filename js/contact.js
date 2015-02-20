@@ -25,62 +25,89 @@ $(function(){
 	var email_list_choice;	
 	$("select[name='contact_id']").chosen();
 	
-	$("#submit_contact").on("click keypress", function(e) {				
-		
-		// check for errors
-		//error_handler(input,error_span,error,error_text,event);
-		
-		var err0 = 0,  err1 = 0;
-		
-		// if it is showing
-		$("#email_list_error").hide();
+	function save_contact() {				
 
-		// first name & last name input
-		error_handler(first_name.val(), first_name_error, "","*Required",e);
-		error_handler(last_name.val(), last_name_error, "","*Required",e);		
-		
-		// email and phone input
-		if (email.val() === "" && phone.val() === "") {
-			
-			error_handler(email.val(), email_error, "","*Required - email address and/or phone number",e);
-			error_handler(phone.val(), phone_error, "","*Required - email address and/or phone number",e);	
-			
-		} else if ( (email.val() === "" && phone.val() !== "") ) {
-			
-			email_error.hide();
-			phone_error.hide();
-			var r = phone_validator(phone.val(),e);
-			
-			var email_list_toggle = $("#email_list_toggle");
-			var email_list_error = $("#email_list_error");
-			if (r) {
-				if(email_list_toggle.val() == 1) {
-					error_handler(1, email_list_error, 1,"*Email address required for email list",e);
-					email_list_choice = 1;
-				} 				
-			}
-			
-		} else if ( (email.val() !== "" && phone.val() === "") ) {
-
-			email_error.hide();
-			phone_error.hide();
-			email_validator(email.val(),e);
-
-		} else if ( email.val()  && phone.val() ) {
-
-			email_error.hide();
-			phone_error.hide();				
-			phone_validator(phone.val(),e);
-			email_validator(email.val(),e);
-			
-		}
-		
-		// waiver checkbox
-		error_handler(waiver_checkbox.prop("checked"),waiver_error,false,"*Required",event);
+		// Deferred Promise, since we don't know when the click will be made,
+		// it is an asynchronous function, and we need to know the returned result.
+		// Provides a clean separation of code.		
+		var dfd = $.Deferred();	
 	
-	} );
+			$("#submit_contact").on("click keypress", function(e) {					
+				
+				// check for errors
+				//error_handler(input,error_span,error,error_text,event);
+				
+				var err0 = 0, err1 = 0, err2 = 0, err3 = 0, err4 = 0, err5 = 0;
+				
+				// if it is showing
+				$("#email_list_error").hide();
+		
+				// first name & last name input
+				err0 = error_handler(first_name.val(), first_name_error, "","*Required",e);
+				err1 = error_handler(last_name.val(), last_name_error, "","*Required",e);		
+				
+				// email and phone input
+				if (email.val() === "" && phone.val() === "") {
+					
+					err2 = error_handler(email.val(), email_error, "","*Required - email address and/or phone number",e);
+					err3 = error_handler(phone.val(), phone_error, "","*Required - email address and/or phone number",e);	
+					
+				} else if (email.val() === "" && phone.val() !== "")  {
+					
+					email_error.hide();
+					phone_error.hide();
+					var r = phone_validator(phone.val(),e);
+					
+					var email_list_toggle = $("#email_list_toggle");
+					var email_list_error = $("#email_list_error");
+					if (r) {
+						if(email_list_toggle.val() == 1) {
+							err4 = error_handler(1, email_list_error, 1,"*Email address required for email list",e);
+							email_list_choice = 1;
+						} 				
+					}
+					
+				} else if (email.val() !== "" && phone.val() === "") {
+		
+					email_error.hide();
+					phone_error.hide();
+					email_validator(email.val(),e);
+		
+				} else if (email.val()  && phone.val() ) {
+		
+					email_error.hide();
+					phone_error.hide();				
+					phone_validator(phone.val(),e);
+					email_validator(email.val(),e);
+					
+				}
+				
+				// waiver checkbox
+				err5 = error_handler(waiver_checkbox.prop("checked"),waiver_error,false,"*Required",event);
+			
+				if ((err0 + err1 + err2 + err3 + err4 + err5) > 0 ) {
+					
+				} else {
+					e.preventDefault();
+					dfd.resolve("Success");
+				}
+	  	
+	  	}); // end submit_contact
 
-	
+		return dfd.promise();  	
+  	
+  	} // end save_contact
+  	
+  	save_contact().done(function(success) { 
+  		
+  		if (success === "Success") {
+  			var name = first_name.val() + " " + last_name.val() + " " + email.val() + " " + $("#email_list_toggle").val(); 
+			console.log(name);
+			  		
+  		}
+  	
+  	 } );
+  		
 	// waiver slideup/slidedown
   	$('#waiver').hide();
   	var c=0;
@@ -94,11 +121,9 @@ $(function(){
 	   	$('#waiver').slideUp();
 	   	$(this).attr("value","Show Waiver");
 	    	c--;
-  	} 
-  	
-  	
-  	}); // end submit_contact
-  	
+	    }
+  	 } );  		
+  		
  	$("#email_list_toggle").on("set",function() {  
   		if ($(this).val() == 0 && email_list_choice) {
   			$("#email_list_error").hide();
