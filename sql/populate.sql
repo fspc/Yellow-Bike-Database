@@ -61,16 +61,20 @@ INSERT INTO projects (project_id, date_established, active, public) VALUES
 --  select GROUP_CONCAT(COLUMN_NAME) from information_schema.COLUMNS where TABLE_NAME='contacts'
 -- Then take that output and find the values ..
 -- SELECT CONCAT_WS('","', col1, col2, ..., coln) FROM my_table;
+--
+--  Added waiver
 
 DELETE FROM shop_hours;
 DELETE FROM contacts;
 ALTER TABLE contacts AUTO_INCREMENT = 1;
+ALTER TABLE contacts ADD waiver tinyint(1) NOT NULL DEFAULT '0';
 INSERT INTO contacts (
   contact_id, first_name, middle_initial, last_name, email, phone, address1, 
   address2, city, state, country, receive_newsletter, date_created, 
-  invited_newsletter, DOB, pass, zip, hidden, location_name, location_type
+  invited_newsletter, DOB, pass, zip, hidden, location_name, location_type,
+  waiver
 ) VALUES 
-  (1,"Jonathan","","Rosenbaum","info@positivespin.org","","","","Morgantown","WV","","1","2014-12-12 18:19:35",0,"2005-11-09","test","26501","0","",NULL);
+  (1,"Jonathan","","Rosenbaum","info@positivespin.org","","","","Morgantown","WV","","1","2014-12-12 18:19:35",0,"2005-11-09","test","26501","0","",NULL, 1);
 
 -- Set-up transaction types
 -- This is object orienteed like :)

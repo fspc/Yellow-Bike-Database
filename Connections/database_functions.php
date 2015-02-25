@@ -1,11 +1,19 @@
 <?php
 require_once('YBDB.php');
 
+// Allow waiver (recommended) in Add/Edit Contacts; 1 = yes, 0 = no
+// Waiver text may be modified in Connections/waiver.txt
+define("WAIVER", 1);
+
+// Allow email_list option in Add/Edit Contacts; 1 = yes, 0 = no 
+define("EMAIL_LIST", 1);
+
 // User defined constants - read sql/populate.sql for an explanation
 define("STORAGE_PERIOD", 14);
 define("ACCOUNTING_GROUP", "Sales");
 define("DEFAULT_TRANSACTION_TYPE", "Sale - Used Parts");
 define("DEFAULT_SHOP_USER", "Volunteer");
+
 
 /* Change Fund - A specific amount of money for the purpose of making change. 
    The amount on hand should remain the same at all times; 

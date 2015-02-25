@@ -3,6 +3,10 @@
 require_once('Connections/YBDB.php'); 
 require_once('Connections/database_functions.php');
 
+$waiver = WAIVER;
+$email_list = EMAIL_LIST;
+
+
 if($_GET['shop_id']>0){
 	$shop_id = $_GET['shop_id'];
 } else {
@@ -81,14 +85,13 @@ $editFormAction = "?contact_id={$contact_id}&shop_id={$shop_id}";
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 
 	$updateSQL = sprintf("UPDATE contacts SET first_name=%s, middle_initial=%s, last_name=%s, email=%s, 
-  								DOB=%s, receive_newsletter=%s, phone=%s, address1=%s, address2=%s, city=%s, 
+  								DOB=%s, phone=%s, address1=%s, address2=%s, city=%s, 
   								`state`=%s, zip=%s, pass=ENCODE(%s,'yblcatx') WHERE contact_id=%s",
                     	GetSQLValueString($_POST['first_name'], "text"),
                     	GetSQLValueString($_POST['middle_initial'], "text"),
                     	GetSQLValueString($_POST['last_name'], "text"),
                    	GetSQLValueString($_POST['email'], "text"),
 					   	GetSQLValueString($_POST['DOB'], "date"),
-					   	GetSQLValueString($_POST['list_yes_no'], "int"),
                     	GetSQLValueString($_POST['phone'], "text"),
                     	GetSQLValueString($_POST['address1'], "text"),
                     	GetSQLValueString($_POST['address2'], "text"),
@@ -150,6 +153,7 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 			    <td><input id="email" type="text" name="email" value="<?php echo $row_Recordset1['email']; ?>" size="32">
 			    <span id="email_error"></span></td>
 			 </tr>
+			 <?php if($email_list) { ?>
 			 <tr>
 			  	<td><label>Email List:</label></td>
 				<td>
@@ -159,6 +163,7 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 				</div>				
 				</td>			 
 			 </tr>
+			 <?php } ?>
           <tr >
             <td ><label>Phone:</label></td>
 			    <td><input id="phone" type="text" name="phone" value="<?php echo $row_Recordset1['phone']; ?>" size="32">
@@ -190,40 +195,27 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 			    <input name="password" type="password" id="password" value="<?php echo $row_Recordset1['passdecode']; ?>" size="32">
 			    </td>
 			 </tr>
+			 <?php if($waiver) { ?>
 			<tr>
 				<td><label>Waiver of Liability:</label></td>
 			   <td>			  	<div id="waiver">
 				  <p>
-				  I, and my heirs, in consideration of my participation in the Positive Spin Community 
-				  Bike Project's Open Workshop hereby release Positive Spin,
-				  its officers, employees and agents, and any other people officially connected with this 
-				  organization, from any and all liability for damage to or loss of personal
-				  property, sickness, or injury from whatever source, legal entanglements, imprisonment, 
-				  death, or loss of money, which might occur while participating in said event/activity/class.
-				  Specifically, I release Positive Spin from any liability or 
-				  responsibility for my personal well-being, condition of tools and equipment provided 
-				  and produced thereof, including, but not limited to, bicycles and modes of transportation 
-				  produced by participants. The Positive Spin Community Bike Project is a working, 
-				  mechanical environment and I am aware of the risks of participation. I hereby state 
-				  that I am in sufficient physical condition to accept a rigorous level of physical 
-				  activity and exertion, as is sometimes the case when working in a mechanical environment. 
-				  I understand that participation in this program is strickly voluntary and I 
-				  freely chose to participate. I understand Positive Spin does not provide medical coverage for me. 
-				  I verify that I will be responsible  for any medical costs I incur as a result of my participation.
+				  <?php include("Connections/waiver.txt"); ?>
 				  </p>
 				  </div><input id="waiver_checkbox" type="checkbox"> I agree <span id="waiver_error"></span>
 			  	<input type="submit" id="waiver_button" value="Show Waiver" \>
 
 				</td>
 			  </tr>
+			  <?php } ?>
           	<tr>
           	 <td></td>
 			    <td><br /><input id="submit_contact" type="submit" value="Submit"></td>
 		    	</tr>
           </table>
-		    <input type="hidden" name="list_yes_no" value="1">  <!--This overides the option not to be invited to the newsletter list.-->
+          
         <input type="hidden" name="MM_insert" value="form1">
-        <input type="hidden" name="contact_id" value="<?php echo $row_Recordset1['contact_id']; ?>">
+        <input type="hidden" id="contact_id" name="contact_id" value="<?php echo $row_Recordset1['contact_id']; ?>">
         <input type="hidden" name="contact_id_entry" value="<?php echo $contact_id_entry; ?>">
         </form>
 	  </tr>

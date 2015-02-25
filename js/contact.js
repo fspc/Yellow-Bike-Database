@@ -2,6 +2,7 @@ $(function(){
 
 	"use strict";
 
+	var contact_id = $("#contact_id").val();
 	var birth_date = $("#birth_date");
 	var waiver_checkbox = $("#waiver_checkbox"), waiver_error = $("#waiver_error");
 	var first_name = $("#first_name"), first_name_error = $("#first_name_error");
@@ -88,7 +89,7 @@ $(function(){
 				if ((err0 + err1 + err2 + err3 + err4 + err5) > 0 ) {
 					
 				} else {
-					e.preventDefault();
+					//e.preventDefault();
 					dfd.resolve("Success");
 				}
 	  	
@@ -99,12 +100,25 @@ $(function(){
   	} // end save_contact
   	
   	save_contact().done(function(success) { 
-  		
+  	
+  		// Process contact selects here (other than $_POST), waiver is always 1	unless not configured.
   		if (success === "Success") {
-  			var name = first_name.val() + " " + last_name.val() + " " + email.val() + " " + $("#email_list_toggle").val(); 
-			console.log(name);
-			  		
-  		}
+  		
+	  		var email_list = $("#email_list_toggle").val();
+	  		var waiver = waiver_checkbox.prop("checked");
+	  		if (!email_list) {
+				email_list = 0;  		
+	  		}
+	  		if (!waiver) {
+				waiver = 0;  		
+	  		} else if (waiver === true) {
+				waiver = 1;  		
+	  		} else if (waiver === false) {
+	  			waiver = 0;
+	  		}
+	  		$.post("json/contact.php", {contact_id: contact_id, email_list: email_list , waiver: waiver });
+
+		}  	
   	
   	 } );
   		
@@ -172,23 +186,41 @@ $(function(){
 	} // end error_handling function
   	
   	
-  	// email_list_toggle
+  	// email_list_toggle //
   	function toggle( value ){
 		$(this).toggleClass('off', value === "0");
 		$(this).toggleClass('on', value === "1");
 	}
 
-	$("#email_list_toggle").noUiSlider({
-		orientation: "horizontal",
-		start: 1,
-		range: {
-			'min': [0, 1],
-			'max': 1
-		},
-		format: wNumb({
-			decimals: 0
-		})
-	})
+
+	// set waiver state
+	$.post("json/contact.php", {contact_id: contact_id, waiver_value: 1 }, function(data) {
+			if(data == 1) {
+				$("#waiver_checkbox").prop("checked",true);			
+			} else {
+				$("#waiver_checkbox").prop("checked",false);		
+			}		
+		
+	} );
+
+
+	// beginning or stored state	
+  	$.post("json/contact.php", {contact_id: contact_id, email_list_value: 1 }, function(data) {
+	
+		$("#email_list_toggle").noUiSlider({
+			orientation: "horizontal",
+			start: data,
+			range: {
+				'min': [0, 1],
+				'max': 1
+			},
+			format: wNumb({
+				decimals: 0
+			})
+		});
+		
+  	});
+
 	
 	$("#email_list_toggle").addClass('toggle');
 	$("#email_list_toggle").addClass('noUi-extended');
@@ -202,6 +234,6 @@ $(function(){
 			$(this).html("yes");
 		}
   	});
-	// end email_list_toggle  	
+	// end email_list_toggle //  	
   		
 });
