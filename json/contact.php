@@ -51,25 +51,31 @@ $ssl_certificate = SSL_CERTIFICATE;
 	// send data to connector (local or remote)
 	if (isset($_POST['email_list_connector'])) {
 
+		$json = array(
+		      	'password'	=> $email_list_connector_password,
+				 	'email'		=> $_POST['email'],
+				  	'first_name' => $_POST['first_name'],
+				  	'last_name'	=> $_POST['last_name'],
+		    );
+
 		$ch = curl_init();
 		$curlConfig = array(
-		    CURLOPT_URL            =>  $email_list_connector . '/api/parsetime',
+		    CURLOPT_URL            =>  $email_list_connector,
 		    CURLOPT_POST           => true,
 			 CURLOPT_SSL_VERIFYPEER => true,
 		    CURLOPT_RETURNTRANSFER => true,
-		    CURLOPT_POSTFIELDS     => array(
-		        'password' => $email_list_connector_password,
-		    ),
+		    CURLOPT_POSTFIELDS     => json_encode($json),
 		);
   
   		if ($ssl_certificate) {    
       	$curlConfig[CURLOPT_CAINFO] = $ssl_certificate;		
-		}		
+		}				
 		
 		curl_setopt_array($ch, $curlConfig);
 		$result = curl_exec($ch);
 		curl_close($ch);
 		
+		// just to test
 		echo $result;		
 						
 	}
