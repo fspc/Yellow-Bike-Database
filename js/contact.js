@@ -89,7 +89,7 @@ $(function(){
 				if ((err0 + err1 + err2 + err3 + err4 + err5) > 0 ) {
 					
 				} else {
-					//e.preventDefault();
+					e.preventDefault();
 					dfd.resolve("Success");
 				}
 	  	
@@ -116,7 +116,14 @@ $(function(){
 	  		} else if (waiver === false) {
 	  			waiver = 0;
 	  		}
-	  		$.post("json/contact.php", {contact_id: contact_id, email_list: email_list , waiver: waiver });
+			// update receive_newsletter and waiver in the database
+	  		$.post("json/contact.php", {contact_id: contact_id, email_list: email_list, waiver: waiver });
+
+			// email subscribe
+			if (email_list == 1) {
+				$.post("json/contact.php", {email_list_connector: 1, email: email.val(), 
+													 first_name: first_name.val(), last_name: last_name.val()});
+			}
 
 		}  	
   	

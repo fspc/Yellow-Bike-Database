@@ -1,30 +1,6 @@
 <?php
 require_once('YBDB.php');
 
-// Allow waiver (recommended) in Add/Edit Contacts; 1 = yes, 0 = no
-// Waiver text may be modified in Connections/waiver.txt
-define("WAIVER", 1);
-
-// Allow email_list option in Add/Edit Contacts; 1 = yes, 0 = no 
-define("EMAIL_LIST", 1);
-
-// User defined constants - read sql/populate.sql for an explanation
-define("STORAGE_PERIOD", 14);
-define("ACCOUNTING_GROUP", "Sales");
-define("DEFAULT_TRANSACTION_TYPE", "Sale - Used Parts");
-define("DEFAULT_SHOP_USER", "Volunteer");
-
-
-/* Change Fund - A specific amount of money for the purpose of making change. 
-   The amount on hand should remain the same at all times; 
-   therefore a change funds does not require replenishment.
-*/
-define("CHANGE_FUND", 20);
-
-// How many hours should the shop be open from the time a person logins?  Hours display in pulldown in shop_log.php
-// No overtime for volunteers.  :)
-// shop will be current shop for the 24hr day yyyy-mm-dd (currently no check for hrs, only date)
-define("SHOP_HOURS_LENGTH", 10);  
 
 /*    
 	Choose your timezone from http://php.net/manual/en/timezones.php 
@@ -40,6 +16,56 @@ define("SHOP_HOURS_LENGTH", 10);
 
 */
 define("TIMEZONE", "America/New_York");
+
+
+/*******
+CONTACTS
+********/
+
+// Allow waiver (recommended) in Add/Edit Contacts; 1 = yes, 0 = no
+// Waiver text may be modified in Connections/waiver.txt
+define("WAIVER", 1);
+
+// Allow email_list option in Add/Edit Contacts; 1 = yes, 0 = no 
+define("EMAIL_LIST", 1);
+
+// Define a url for an email connector that will connect to an email list.
+// The url can be a server:port, program, etc.  
+// Name (First, Last) email address, and connector password will be sent to the connector.
+//
+// The purpose of email connectors is to provide autonomy in the choice
+// of email services and programs.  E.g. mailman, googlegroups
+// See ./examples for an example connector
+define("EMAIL_LIST_CONNECTOR","https://wvcompletestreets.org:9987");
+
+// Define the password that is unique to the connector.
+define("EMAIL_LIST_CONNECTOR_PASSWORD","bikebike");
+
+// If a self-signed ssl certificate that is associated with the email connector is being provided, 
+// designate an absolute path, if not, change to false.
+define("SSL_CERTIFICATE", "/var/www/html/examples/cert.pem");
+
+/***********
+TRANSACTIONS
+************/
+
+// User defined constants - read sql/populate.sql for an explanation
+define("STORAGE_PERIOD", 14);
+define("ACCOUNTING_GROUP", "Sales");
+define("DEFAULT_TRANSACTION_TYPE", "Sale - Used Parts");
+define("DEFAULT_SHOP_USER", "Volunteer");
+
+/* Change Fund - A specific amount of money for the purpose of making change. 
+   The amount on hand should remain the same at all times; 
+   therefore a change funds does not require replenishment.
+*/
+define("CHANGE_FUND", 20);
+
+// How many hours should the shop be open from the time a person logins?  Hours display in pulldown in shop_log.php
+// No overtime for volunteers.  :)
+// shop will be current shop for the 24hr day yyyy-mm-dd (currently no check for hrs, only date)
+define("SHOP_HOURS_LENGTH", 10);  
+
 
 /* If you elect to keep records for non-shop hours, decide which shop should be used for that purpose.
    The first shop created, 1, makes sense.  A link will show in start_shop.php.

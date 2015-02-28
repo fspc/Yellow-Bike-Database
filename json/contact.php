@@ -3,6 +3,9 @@
 require_once('../Connections/database_functions.php');
 require_once('../Connections/YBDB.php');
 mysql_select_db($database_YBDB, $YBDB);
+$email_list_connector = EMAIL_LIST_CONNECTOR;
+$email_list_connector_password = EMAIL_LIST_CONNECTOR_PASSWORD;
+$ssl_certificate = SSL_CERTIFICATE;
 
 	// update waiver 
 	if( isset($_POST['waiver']) ) {		
@@ -45,5 +48,31 @@ mysql_select_db($database_YBDB, $YBDB);
 				
 	}
 
+	// send data to connector (local or remote)
+	if (isset($_POST['email_list_connector'])) {
+
+		$ch = curl_init();
+		$curlConfig = array(
+		    CURLOPT_URL            =>  $email_list_connector . '/api/parsetime',
+		    CURLOPT_POST           => true,
+			 CURLOPT_SSL_VERIFYPEER => true,
+		    CURLOPT_RETURNTRANSFER => true,
+		    CURLOPT_POSTFIELDS     => array(
+		        'password' => $email_list_connector_password,
+		    ),
+		);
+  
+  		if ($ssl_certificate) {    
+      	$curlConfig[CURLOPT_CAINFO] = $ssl_certificate;		
+		}		
+		
+		curl_setopt_array($ch, $curlConfig);
+		$result = curl_exec($ch);
+		curl_close($ch);
+		
+		echo $result;		
+						
+	}
+	
 
 ?>

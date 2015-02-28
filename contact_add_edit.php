@@ -6,7 +6,6 @@ require_once('Connections/database_functions.php');
 $waiver = WAIVER;
 $email_list = EMAIL_LIST;
 
-
 if($_GET['shop_id']>0){
 	$shop_id = $_GET['shop_id'];
 } else {
@@ -210,7 +209,8 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 			  <?php } ?>
           	<tr>
           	 <td></td>
-			    <td><br /><input id="submit_contact" type="submit" value="Submit"></td>
+			    <td><br />				    
+			    <input id="submit_contact" type="submit" value="Submit"></td>
 		    	</tr>
           </table>
           
