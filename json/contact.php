@@ -49,9 +49,10 @@ $ssl_certificate = SSL_CERTIFICATE;
 	}
 
 	// send data to connector (local or remote)
-	if (isset($_POST['email_list_connector'])) {
+	if (isset($_POST['email_list_connector']) == 'subscribe' || isset($_POST['email_list_connector']) == 'unsubscribe' ) {
 
 		$json = array(
+					'subscribe' => $_POST['email_list_connector'],
 		      	'password'	=> $email_list_connector_password,
 				 	'email'		=> $_POST['email'],
 				  	'first_name' => $_POST['first_name'],
@@ -73,10 +74,9 @@ $ssl_certificate = SSL_CERTIFICATE;
 		
 		curl_setopt_array($ch, $curlConfig);
 		$result = curl_exec($ch);
-		curl_close($ch);
-		
-		// just to test
-		echo $result;		
+		curl_close($ch);	
+
+		echo $result;	
 						
 	}
 	

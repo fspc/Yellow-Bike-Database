@@ -89,7 +89,7 @@ $(function(){
 				if ((err0 + err1 + err2 + err3 + err4 + err5) > 0 ) {
 					
 				} else {
-					e.preventDefault();
+					//e.preventDefault();
 					dfd.resolve("Success");
 				}
 	  	
@@ -121,8 +121,11 @@ $(function(){
 
 			// email subscribe
 			if (email_list == 1) {
-				$.post("json/contact.php", {email_list_connector: 1, email: email.val(), 
+				$.post("json/contact.php", {email_list_connector: 'subscribe', email: email.val(), 
 													 first_name: first_name.val(), last_name: last_name.val()});
+			} else {
+				$.post("json/contact.php", {email_list_connector: 'unsubscribe', email: email.val(), 
+											 		first_name: first_name.val(), last_name: last_name.val()});					
 			}
 
 		}  	
