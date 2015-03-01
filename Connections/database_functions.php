@@ -31,11 +31,11 @@ define("EMAIL_LIST", 1);
 
 // Define a url for an email connector that will connect to an email list.
 // The url can be a server:port, program, etc.  
-// Name (First, Last) email address, and connector password will be sent to the connector.
+// Name (First, Last), email address, subscription choice and connector password will be sent to the connector.
 //
 // The purpose of email connectors is to provide autonomy in the choice
 // of email services and programs.  E.g. mailman, googlegroups
-// See ./examples for an example connector
+// See ./examples for an example mailman connector
 define("EMAIL_LIST_CONNECTOR","https://wvcompletestreets.org:9987");
 
 // Define the password that is unique to the connector.
@@ -44,6 +44,27 @@ define("EMAIL_LIST_CONNECTOR_PASSWORD","bikebike");
 // If a self-signed ssl certificate that is associated with the email connector is being provided, 
 // designate an absolute path, if not, change to false.
 define("SSL_CERTIFICATE", "/var/www/html/examples/cert.pem");
+
+//// "Volunteer Interest" form ////
+define("VOLUNTEER_INTEREST_FORM", true);
+
+// Form name
+define("VOLUNTEER_INTEREST_FORM_NAME","Volunteer Interest");
+
+// note: Introductory text can be modified in Connections/volunteer_interest_form_introduction.txt
+
+// Define volunteer interests.
+$volunteer_interests = array(	
+									"Repairing Bikes", "Organizing Volunteers", "Serving as a Board Member",
+									"Arranging Events", "Volunteering at Events", "Writing Grants",
+									"Answering our Phone", "Fundraising", "Bicycle Valeting",		
+									"Publicizing", "Graphic Design", "Working at the Front Desk",
+									"Accounting/Record Keeping", "Ordering parts/supplies", "Picking up Donated Bikes/Parts",
+									"Fabricating", "Open Source Programming", "Other/Contact me for general help"
+								);
+								
+// Provide a comment box
+define("VOLUNTEER_INTEREST_COMMENTS", true);
 
 /***********
 TRANSACTIONS
