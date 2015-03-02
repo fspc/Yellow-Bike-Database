@@ -210,13 +210,14 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 				</td>
 			 </tr>
 			 <?php } ?>
-			 <?php if($volunteer_interest_form) { ?>
+			 <?php if($volunteer_interest_form) { ?>			 
 			 <tr>
-			 	<td><label class="contacts"><?php echo $volunteer_interest_form_name; ?>:</label></td>			
+			 	<td><label class="contacts"><?php echo $volunteer_interest_form_name; ?>:</label></td>
+			 				
 			   <td>			  
 			  		<div id="interest_form">
 				  	<p>
-				  	<?php echo "<br />"; include("Connections/volunteer_interest_form_introduction.txt"); ?>
+				  	<?php include("Connections/volunteer_interest_form_introduction.txt"); ?>
 				  	</p>		
 					<table>
 						<?php 
@@ -230,8 +231,8 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 				  		<?php } ?>
 				  	</table>
 		    		</div>
-		    	<input type="submit" id="interest_form_button" value="Show Form" \>
-		    	</td>	  
+		    	<input type="submit" id="interest_form_button" value="Fill-in Form" \>
+		    	</td>  
 		    </tr>
 			 <?php } ?>
           	<tr>
