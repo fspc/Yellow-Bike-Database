@@ -99,6 +99,7 @@ $(function(){
   	
   	} // end save_contact
   	
+  	// successful submit of contact form
   	save_contact().done(function(success) { 
   	
   		// Process contact selects here (other than $_POST), waiver is always 1	unless not configured.
@@ -130,24 +131,31 @@ $(function(){
 
 		}  	
   	
-  	 } );
+  	 } ); // end successful submit of contact form
   		
-	// waiver slideup/slidedown
-  	$('#waiver').hide();
-  	var c=0;
-  	$('#waiver_button').click(function(e){
-  		e.preventDefault();
-	  	if (c == 0) {
-		$('#waiver').slideDown();
-			$(this).attr("value","Hide Waiver");
-			c++;
-	  	} else {
-	   	$('#waiver').slideUp();
-	   	$(this).attr("value","Show Waiver");
-	    	c--;
-	    }
-  	 } );  		
-  		
+  	
+  	// show more button	
+	function show_more(demo,demo_button) {
+	  	$(demo).hide();
+	  	var c=0;
+	  	var button_value = demo_button.val();
+	  	$(demo_button).click(function(e){
+	  		e.preventDefault();
+		  	if (c == 0) {
+			$(demo).slideDown();
+				$(this).attr("value","Show Less");
+				c++;
+		  	} else {
+		   	$(demo).slideUp();
+		   	$(this).attr("value",button_value);
+		    	c--;
+		    }
+	  	} );  
+	}  		
+  	 
+	show_more($('#waiver'),$('#waiver_button'));
+	show_more($('#interest_form'),$('#interest_form_button'));
+	  	 
  	$("#email_list_toggle").on("set",function() {  
   		if ($(this).val() == 0 && email_list_choice) {
   			$("#email_list_error").hide();

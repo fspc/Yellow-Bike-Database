@@ -49,7 +49,7 @@ define("SSL_CERTIFICATE", "/var/www/html/examples/cert.pem");
 define("VOLUNTEER_INTEREST_FORM", true);
 
 // Form name
-define("VOLUNTEER_INTEREST_FORM_NAME","Volunteer Interest");
+define("VOLUNTEER_INTEREST_FORM_NAME","Volunteer Interests");
 
 // note: Introductory text can be modified in Connections/volunteer_interest_form_introduction.txt
 
@@ -63,7 +63,7 @@ $volunteer_interests = array(
 									"Fabricating", "Open Source Programming", "Other/Contact me for general help"
 								);
 								
-// Provide a comment box
+// Provide a comment box - true of false
 define("VOLUNTEER_INTEREST_COMMENTS", true);
 
 /***********

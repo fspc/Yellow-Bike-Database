@@ -5,6 +5,9 @@ require_once('Connections/database_functions.php');
 
 $waiver = WAIVER;
 $email_list = EMAIL_LIST;
+$volunteer_interest_form = VOLUNTEER_INTEREST_FORM;
+$volunteer_interest_form_name = VOLUNTEER_INTEREST_FORM_NAME;
+$volunteer_interest_comments = VOLUNTEER_INTEREST_COMMENTS;
 
 if($_GET['shop_id']>0){
 	$shop_id = $_GET['shop_id'];
@@ -130,11 +133,11 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
       <form method="post" name="form1" action="<?php echo $editFormAction; ?>">
         <table border="0" cellpadding="1" cellspacing="0" bordercolor="#CCCCCC">
           <tr>
-            <td><label>Contact_id:</label></td>
+            <td><label class="contacts">Contact_id:</label></td>
 			    <td><?php echo $row_Recordset1['contact_id']; ?></td>
 			 </tr>
           <tr >
-            <td><label>Name:</label></td>
+            <td><label class="contacts">Name:</label></td>
 			    <td><input id="first_name" type="text" name="first_name" value="<?php echo $row_Recordset1['first_name']; ?>" size="32">
 			    		<span id="first_name_error"></span>
 			    		<input name="middle_initial" type="text" value="<?php echo $row_Recordset1['middle_initial']; ?>" size="1" maxlength="1">
@@ -143,18 +146,18 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 			   </td>
 			    </tr>
           <tr>
-            <td><label>Date of Birth:</label></td>
+            <td><label class="contacts">Date of Birth:</label></td>
 			    <td><input id="birth_date" type="text" name="DOB" value="<?php echo $row_Recordset1['DOB']; ?>" size="10" /> 
 			    </td>
 			 </tr>			 
           <tr>
-            <td><label>Email:</label></td>
+            <td><label class="contacts">Email:</label></td>
 			    <td><input id="email" type="text" name="email" value="<?php echo $row_Recordset1['email']; ?>" size="32">
 			    <span id="email_error"></span></td>
 			 </tr>
 			 <?php if($email_list) { ?>
 			 <tr>
-			  	<td><label>Email List:</label></td>
+			  	<td><label class="contacts">Email List:</label></td>
 				<td>
 				<div id="email_list_block">
 				<div id="email_list_toggle" style="width: 50px;"></div>
@@ -164,39 +167,39 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 			 </tr>
 			 <?php } ?>
           <tr >
-            <td ><label>Phone:</label></td>
+            <td ><label class="contacts">Phone:</label></td>
 			    <td><input id="phone" type="text" name="phone" value="<?php echo $row_Recordset1['phone']; ?>" size="32">
 			    <span id="phone_error"></span></td>
 			 </tr>
           <tr>
-            <td><label>Address1:</label></td>
+            <td><label class="contacts">Address1:</label></td>
 			    <td><input type="text" name="address1" value="<?php echo $row_Recordset1['address1']; ?>" size="32"></td>
 			 </tr>
           <tr >
-            <td><label>Address2:</label></td>
+            <td><label class="contacts">Address2:</label></td>
 			    <td><input type="text" name="address2" value="<?php echo $row_Recordset1['address2']; ?>" size="32"></td>
 			 </tr>
           <tr>
-            <td><label>City:</label></td>
+            <td><label class="contacts">City:</label></td>
 			    <td><input type="text" name="city" value="<?php echo $row_Recordset1['city']; ?>" size="32"></td>
 			 </tr>
           <tr>
-            <td><label>State:</label></td>
+            <td><label class="contacts">State:</label></td>
 			    <td><input id="state_abbreviation" name="state" type="text" value="<?php echo $row_Recordset1['state']; ?>" size="2" maxlength="2"></td>
 			 </tr>
           <tr >
-            <td><label>zip:</label></td>
+            <td><label class="contacts">zip:</label></td>
 			    <td><input id="zip" type="text" name="zip" value="<?php echo $row_Recordset1['zip']; ?>" size="10"></td>
 			 </tr>
           <tr>
-            <td><label>New Password:</label></td>
+            <td><label class="contacts">New Password:</label></td>
 			    <td>
 			    <input name="password" type="password" id="password" value="<?php echo $row_Recordset1['passdecode']; ?>" size="32">
 			    </td>
 			 </tr>
-			 <?php if($waiver) { ?>
+			<?php if($waiver) { ?>
 			<tr>
-				<td><label>Waiver of Liability:</label></td>
+				<td><label class="contacts">Waiver of Liability:</label></td>
 			   <td>			  	<div id="waiver">
 				  <p>
 				  <?php include("Connections/waiver.txt"); ?>
@@ -205,8 +208,32 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 			  	<input type="submit" id="waiver_button" value="Show Waiver" \>
 
 				</td>
-			  </tr>
-			  <?php } ?>
+			 </tr>
+			 <?php } ?>
+			 <?php if($volunteer_interest_form) { ?>
+			 <tr>
+			 	<td><label class="contacts"><?php echo $volunteer_interest_form_name; ?>:</label></td>			
+			   <td>			  
+			  		<div id="interest_form">
+				  	<p>
+				  	<?php echo "<br />"; include("Connections/volunteer_interest_form_introduction.txt"); ?>
+				  	</p>		
+					<table>
+						<?php 
+						
+						?>
+						<?php if($volunteer_interest_comments) { ?>	
+						<tr>			  	 
+				  	 		<td><label>Comments</label></td>
+				  	 		<td><textarea  name="comment" cols="45" rows="3"></textarea></td>
+				  		</tr>
+				  		<?php } ?>
+				  	</table>
+		    		</div>
+		    	<input type="submit" id="interest_form_button" value="Show Form" \>
+		    	</td>	  
+		    </tr>
+			 <?php } ?>
           	<tr>
           	 <td></td>
 			    <td><br />				    

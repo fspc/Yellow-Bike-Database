@@ -1,3 +1,9 @@
+.contacts {
+	display: inline-block;
+	text-align: right;
+	width: 161px;
+	font-weight: bold;
+}
 
 /* errors */
 #waiver_error, #phone_error, #email_error,
