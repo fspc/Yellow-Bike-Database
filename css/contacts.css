@@ -5,6 +5,10 @@
 	font-weight: bold;
 }
 
+.contact_comment {
+	display: inline-block;
+}
+
 #interest_form {
 	padding: 10px; 
 	display: block; 

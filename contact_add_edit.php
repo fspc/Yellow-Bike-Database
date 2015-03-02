@@ -203,6 +203,7 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 			   <td>			  	<div id="waiver">
 				  <p>
 				  <?php include("Connections/waiver.txt"); ?>
+				  <br />
 				  </p>
 				  </div><input id="waiver_checkbox" type="checkbox"> I agree <span id="waiver_error"></span>
 			  	<input type="submit" id="waiver_button" value="Show Waiver" \>
@@ -216,17 +217,27 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 			 				
 			   <td>			  
 			  		<div id="interest_form">
-				  	<p>
 				  	<?php include("Connections/volunteer_interest_form_introduction.txt"); ?>
-				  	</p>		
 					<table>
+						<tr><td>&nbsp;</td></tr>
 						<?php 
-						
+							$columns = 3;
+							$c = 0;
+							$interest_count = count($volunteer_interests);														
+							 while($rows < $interest_count + 1) {				
+								echo "<tr>";								
+								for($i = $rows - $columns; $i < $rows; $i++) {								
+									echo "<td><input value='$volunteer_interests[$i]' type='checkbox'>" . $volunteer_interests[$i] . "</td>";								
+								}
+								echo "</tr>";								
+								$rows = $rows + $columns;				
+							}
 						?>
-						<?php if($volunteer_interest_comments) { ?>	
-						<tr>			  	 
-				  	 		<td><label>Comments</label></td>
-				  	 		<td><textarea  name="comment" cols="45" rows="3"></textarea></td>
+						<?php if($volunteer_interest_comments) { ?>							
+						<tr><td>&nbsp;</td></tr>					
+						<tr>		  	 
+				  	 		<td colspan="2"><label id="contact_comment">Comments</label>
+				  	 		<textarea  name="comment" cols="45" rows="3"></textarea></td>
 				  		</tr>
 				  		<?php } ?>
 				  	</table>
