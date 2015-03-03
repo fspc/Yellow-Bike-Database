@@ -3,10 +3,16 @@
 	text-align: right;
 	width: 161px;
 	font-weight: bold;
+	padding-right: 5px;
 }
 
 .contact_comment {
 	display: inline-block;
+}
+
+/* center label with textarea */
+.center_comment * {
+	vertical-align: middle;
 }
 
 #interest_form {

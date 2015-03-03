@@ -122,7 +122,7 @@ $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 ?>
 
-<?php include("include_header.html"); ?>
+<?php include("include_header_contacts.html"); ?>
 
 <table>
   <tr valign="top">
@@ -224,10 +224,13 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 							$columns = 3;
 							$c = 0;
 							$interest_count = count($volunteer_interests);														
-							 while($rows < $interest_count + 1) {				
-								echo "<tr>";								
-								for($i = $rows - $columns; $i < $rows; $i++) {								
-									echo "<td><input value='$volunteer_interests[$i]' type='checkbox'>" . $volunteer_interests[$i] . "</td>";								
+							 while($rows < $interest_count + 3) {				
+								echo "<tr>";
+								
+								for($i = $rows - $columns; $i < $rows; $i++) {
+									if($volunteer_interests[$i]) {								
+										echo "<td><input value='$volunteer_interests[$i]' type='checkbox'>" . $volunteer_interests[$i] . "</td>";								
+									}
 								}
 								echo "</tr>";								
 								$rows = $rows + $columns;				
@@ -236,7 +239,7 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 						<?php if($volunteer_interest_comments) { ?>							
 						<tr><td>&nbsp;</td></tr>					
 						<tr>		  	 
-				  	 		<td colspan="2"><label id="contact_comment">Comments</label>
+				  	 		<td class="center_comment" colspan="2"><label id="contact_comment">Comments</label>
 				  	 		<textarea  name="comment" cols="45" rows="3"></textarea></td>
 				  		</tr>
 				  		<?php } ?>

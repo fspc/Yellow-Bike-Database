@@ -60,7 +60,7 @@ $volunteer_interests = array(
 									"Answering our Phone", "Fundraising", "Bicycle Valeting",		
 									"Publicizing", "Graphic Design", "Working at the Front Desk",
 									"Accounting/Record Keeping", "Ordering parts/supplies", "Picking up Donated Bikes/Parts",
-									"Fabricating", "Open Source Programming", "Other/Contact me for general help"
+									"Fabricating", "Open Source Programming", "Other/Contact me for general help",
 								);
 								
 // Provide a comment box - true of false

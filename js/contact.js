@@ -1,6 +1,8 @@
 $(function(){
 
 	"use strict";
+	
+	$.ajaxSetup({async:false});
 
 	var contact_id = $("#contact_id").val();
 	var birth_date = $("#birth_date");
