@@ -58,8 +58,9 @@ $volunteer_interests = array(
 									"Repairing Bikes", "Organizing Volunteers", "Serving as a Board Member",
 									"Arranging Events", "Volunteering at Events", "Writing Grants",
 									"Answering our Phone", "Fundraising", "Bicycle Valeting",		
-									"Publicizing", "Graphic Design", "Greeter at the Front Desk",
+									"Publicizing/Outreach", "Graphic Design", "Greeter at the Front Desk",
 									"Accounting/Record Keeping", "Ordering parts/supplies", "Picking up Donated Bikes/Parts",
+									"Teaching classes", "League Certified Instructor", "Pricing bikes",
 									"Fabricating", "Open Source Programming", "Other/Contact me for general help",
 								);
 								

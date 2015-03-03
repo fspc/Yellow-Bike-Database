@@ -188,7 +188,7 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 			    <td><input id="state_abbreviation" name="state" type="text" value="<?php echo $row_Recordset1['state']; ?>" size="2" maxlength="2"></td>
 			 </tr>
           <tr >
-            <td><label class="contacts">zip:</label></td>
+            <td><label class="contacts">Zip Code:</label></td>
 			    <td><input id="zip" type="text" name="zip" value="<?php echo $row_Recordset1['zip']; ?>" size="10"></td>
 			 </tr>
           <tr>
@@ -245,7 +245,8 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 				  		<?php } ?>
 				  	</table>
 		    		</div>
-		    	<input type="submit" id="interest_form_button" value="Fill-in Form" \>
+		    		<!-- Fill-in Form -->
+		    	<input type="submit" id="interest_form_button" value="Check them out!" \>
 		    	</td>  
 		    </tr>
 			 <?php } ?>

@@ -193,3 +193,14 @@ ALTER TABLE transaction_log ADD change_fund float DEFAULT NULL;
 ALTER TABLE transaction_log ADD anonymous tinyint(1) NOT NULL DEFAULT '0';
 ALTER TABLE transaction_log ADD history longblob NOT NULL;
 ALTER TABLE transaction_log MODIFY description text(2048) DEFAULT NULL;
+
+-- options 
+-- some what borrowed from WordPress 
+-- Currently just for variable values like found in the Volunteer Interest inventory
+-- where values may be 0 or 1 or text.
+CREATE TABLE IF NOT EXISTS options (
+	id int(10) unsigned NOT NULL,
+	option_name varchar(64) NOT NULL,
+	option_value text NOT NULL,
+	PRIMARY KEY (option_name)
+);
