@@ -62,8 +62,8 @@ define("VOLUNTEER_INTEREST_FORM_NAME","Volunteer Interests");
 //  "Delete an interest(s) name and "Change an interest(s) name"
 $volunteer_interests = array(	
 									"Repairing Bikes", "Organizing Volunteers", "Serving as a Board Member",
-									"Arranging Events", "Volunteering at Events", "Writing Grants",
-									"Answering our Phone", "Fundraising", "Bicycle Valeting",		
+									"Arranging Events", "Volunteering at Events", "Writing Grants/Fundraising",
+									"Answering our Phone", "3D-printing", "Bicycle Valeting",		
 									"Publicizing/Outreach", "Graphic Design", "Greeter at the Front Desk",
 									"Accounting/Record Keeping", "Ordering parts/supplies", "Picking up Donated Bikes/Parts",
 									"Teaching classes", "League Certified Instructor", "Pricing bikes",
