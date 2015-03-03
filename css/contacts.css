@@ -15,7 +15,7 @@
 	vertical-align: middle;
 }
 
-#interest_form {
+#interest_form, #waiver {
 	padding: 10px; 
 	display: block; 
 	border: 1px solid rgb(173, 216, 230);
@@ -23,6 +23,24 @@
 
 #interest_form > p {
 	margin-top: 0;
+}
+
+#submit_contact {
+	height: 36px;
+	width: 98px;
+	font-size: x-large;
+}
+
+#submit_contact:focus { 
+    color: green;
+}
+
+#interest_form_button:focus { 
+    color: green;
+}
+
+#waiver_button:focus { 
+    color: green;
 }
 
 /* errors */

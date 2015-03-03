@@ -14,6 +14,7 @@ $(function(){
 	var zip = $("#zip");
 	var state_abbreviation = $("#state_abbreviation");
 
+
 	// sensible defaults
 	first_name.mask('#',{placeholder: "first", translation: {"#": {pattern: /[A-Za-z0-9.\-]/, recursive: true} } });
 	last_name.mask('#',{placeholder: "last", translation: {"#": {pattern: /[A-Za-z0-9.\-]/, recursive: true} } });
@@ -23,7 +24,24 @@ $(function(){
 																			  recursive: true} } });
 	zip.mask('00000-0000', {placeholder: "00000-0000"});
 	state_abbreviation.mask('AA',{placeholder: "WV", translation: {"A": {pattern: /[A-Za-z]/, recursive: false} } });
-	
+
+	// make tabbing more predictable
+	first_name.attr("tabindex",1);
+	last_name.attr("tabindex",2);
+	birth_date.attr("tabindex",3);
+	email.attr("tabindex",4);
+	phone.attr("tabindex",5);
+	$('[name="address1"]').attr("tabindex",6);
+	$('[name="city"]').attr("tabindex",7);
+	$('[name="state"]').attr("tabindex",8);
+	$('[name="zip"]').attr("tabindex",9);
+	$('[name="password"]').attr("tabindex",10);
+	$('#waiver_button').attr("tabindex",12);
+	$('#interest_form_button').attr("tabindex",13);
+	$('#submit_contact').attr("tabindex",14);
+
+	first_name.focus();		
+		
 	// spiff up contact pull down
 	var email_list_choice;	
 	$("select[name='contact_id']").chosen();
