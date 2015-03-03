@@ -51,9 +51,15 @@ define("VOLUNTEER_INTEREST_FORM", true);
 // Form name
 define("VOLUNTEER_INTEREST_FORM_NAME","Volunteer Interests");
 
-// note: Introductory text can be modified in Connections/volunteer_interest_form_introduction.txt
+// NOTE: Introductory text can be modified in Connections/volunteer_interest_form_introduction.txt
 
-// Define volunteer interests.
+// Define volunteer interests:
+//
+//  You can add new interests to this array.  
+//  The order is kept as 3 columns, left to right.
+//
+//  If you want to delete or change the name of an interest, read instructions below carefully for
+//  "Delete an interest(s) name and "Change an interest(s) name"
 $volunteer_interests = array(	
 									"Repairing Bikes", "Organizing Volunteers", "Serving as a Board Member",
 									"Arranging Events", "Volunteering at Events", "Writing Grants",
@@ -66,6 +72,25 @@ $volunteer_interests = array(
 								
 // Provide a comment box - true of false
 define("VOLUNTEER_INTEREST_COMMENTS", true);
+
+// Change an interest(s) name:
+//
+// 1.  Associate the name you want to change with a different name to the right as show below.
+//     In this example "League Certified Instructor" will become "LCI".  
+// 2.  Visit contact_add_edit_select.php, reload the page and you are good to go
+//
+//$volunteer_interests_changename = array("League Certified Instructor" => "LCI");
+
+// Delete an interest(s) name.  
+//
+// 1.  Add the interest(s) you want to delete. Please understand
+//     that by doing this you will delete the interest and all associated data.
+// 2.  Remove the interest from $volunteer_interests at the same time before saving this page, 
+//     or it will be recreated.
+// 3.  Visit contact_add_edit_select.php, reload the page and you are good to go
+//
+//$volunteer_interests_deletename = array("LCI");
+
 
 /***********
 TRANSACTIONS
