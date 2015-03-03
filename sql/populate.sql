@@ -204,3 +204,5 @@ CREATE TABLE IF NOT EXISTS options (
 	option_value text NOT NULL,
 	PRIMARY KEY (option_name)
 );
+
+ALTER TABLE options ADD CONSTRAINT id FOREIGN KEY (id) REFERENCES contacts (contact_id) ON UPDATE CASCADE;
