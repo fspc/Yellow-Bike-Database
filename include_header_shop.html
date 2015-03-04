@@ -1,0 +1,50 @@
+<script type="text/javascript">
+var t;
+window.onload=resetTimer;
+document.onmousedown=resetTimer;
+document.onkeypress=resetTimer;
+
+function logout()
+{
+	location.href='shop_welcome.php' 
+}
+function resetTimer()
+{
+	clearTimeout(t);
+	t=setTimeout(logout,1000*240) //Shop welcome after 240 seconds of inactivity
+}
+</script>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>YBDB</title>
+<link href="css/transactions.css" rel="stylesheet" type="text/css" />
+<link href="css/contacts.css" rel="stylesheet" type="text/css" />
+<link href="css/css_yb_standard.css" rel="stylesheet" type="text/css" />
+<link href="css/jquery.nouislider.css" rel="stylesheet" type="text/css" />
+<link href="css/chosen.css" rel="stylesheet" type="text/css" />
+
+<script src="js/jquery-2.1.1.js"></script>
+<script src="js/transaction.js"></script>
+<script src="js/contact.js"></script>
+<script src="js/shop.js"></script>
+<script src="js/jquery.mask.js"></script>
+<script src="js/jquery.jeditable.js"></script>
+<script src="js/jquery.nouislider.js"></script>
+<script src="js/chosen.jquery.js"></script>
+<script src="js/jquery.liblink.js"></script> 
+<script src="js/wNumb.js"></script>
+
+</head>
+
+<body class="yb_standard">
+<table align="center" width="1000" border="0" cellpadding="1" cellspacing="0">
+	<tr valign="top">
+	  <td height="40" align="left"><a href="/shop_welcome.php">About/Help</a></td>	
+	  <td height="40" align="right"><a href="/shop_log.php">Current Shop</a> | <a href="/start_shop.php"> All Shops</a> | <a href="/contact_add_edit_select.php">Add/Edit Contact</a> | <a href="/stats.php">Statistics</a>  | <a href="/transaction_log.php">Transaction Log</a> |   <a href="http://www.positivespin.org/home2/" target="_blank">PS Home</a></td>
+	</tr>
+</table>
+	  

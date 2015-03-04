@@ -133,9 +133,9 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
 ?>
 
 
-<?php include("include_header.html"); ?>
+<?php include("include_header_shop.html"); ?>
 
-	<table>
+	<table width="2200px">
   		<tr>
     		<td align="left" valign="bottom"><?php echo $error_message;?></td>
   		</tr>
@@ -191,7 +191,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
           
    <br /><br />
           
-   <table  width="850px" border="1" cellpadding="1" cellspacing="0" bordercolor="#CCCCCC">
+   <table  width="850px" style="margin-left:170px" border="1" cellpadding="1" cellspacing="0" bordercolor="#CCCCCC">
      <tbody     
 	  <tr valign="bottom" bordercolor="#CCCCCC">
 	    <td height="25" colspan="1" bgcolor="#99CC33">Existing Shop Users</td>

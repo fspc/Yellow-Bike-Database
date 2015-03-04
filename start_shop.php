@@ -110,9 +110,9 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
   header(sprintf("Location: %s",$editFormAction ));   //$editFormAction
 }
 ?>
-<?php include("include_header.html"); ?>
+<?php include("include_header_shop.html"); ?>
 
-	    <table>
+	    <table style="margin-left:170px">
 
         <tr valign="top">
           <td align="left"><span class="yb_heading3red"><?php echo $error_message; ?></span> </td>
