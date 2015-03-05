@@ -67,27 +67,35 @@ $volunteer_interests = array(
 									"Publicizing/Outreach", "Graphic Design", "Greeter at the Front Desk",
 									"Accounting/Record Keeping", "Ordering parts/supplies", "Picking up Donated Bikes/Parts",
 									"Teaching classes", "League Certified Instructor", "Pricing bikes",
-									"Fabricating", "Open Source Programming", "Other/Contact me for general help",
+									"Fabricating", "Open Source Programming", "Other/Contact me for general help"
 								);
 								
 // Provide a comment box - true of false
 define("VOLUNTEER_INTEREST_COMMENTS", true);
 
+// NOTE: The 2 variables ($volunteer_interest_changename & $volunteer_interests_deletename) 
+// below allow you to change or delete an interest.
+// Only uncomment one variable at a time, and follow the directions.
+
 // Change an interest(s) name:
 //
 // 1.  Associate the name you want to change with a different name to the right as show below.
-//     In this example "League Certified Instructor" will become "LCI".  
-// 2.  Visit contact_add_edit_select.php, reload the page and you are good to go
+//     In this example "League Certified Instructor" will become "LCI".
+//	2.  Change the interests name in $volunteer_interests above at the same time.  
+// 3.  Visit your own contact, e.g. contact_add_edit.php?contact_id=1 and click on the Submit button,
+//		 and the database will be updated.
+// 4.  Comment out //$volunteer_interests_changename
 //
-//$volunteer_interests_changename = array("League Certified Instructor" => "LCI");
+// $volunteer_interests_changename = array("League Certified Instructor" => "LCI");
 
 // Delete an interest(s) name.  
 //
 // 1.  Add the interest(s) you want to delete. Please understand
 //     that by doing this you will delete the interest and all associated data.
-// 2.  Remove the interest from $volunteer_interests at the same time before saving this page, 
+// 2.  Remove the interest from $volunteer_interests above at the same time before saving this page, 
 //     or it will be recreated.
-// 3.  Visit contact_add_edit_select.php, reload the page and you are good to go
+// 3.  Visit your own contact, e.g. contact_add_edit.php?contact_id=1 and click on the Submit button,
+//		 and the database will be updated.
 //
 //$volunteer_interests_deletename = array("LCI");
 

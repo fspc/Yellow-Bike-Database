@@ -15,6 +15,7 @@ if($_GET['shop_id']>0){
 	$shop_id = current_shop_by_ip();
 }
 
+
 switch ($_GET['error']) {
 case 'new_error_message':	//this is a sample error message.  insert error case here		
    $error_message = '';
@@ -26,6 +27,7 @@ default:
 }
 
 $page_shop_log = PAGE_SHOP_LOG . "?shop_id=$shop_id";
+
 
 if($_GET['contact_id'] == 'new_contact'){
 			
@@ -84,6 +86,10 @@ if($_GET['contact_id'] == 'new_contact'){
 
 $editFormAction = "?contact_id={$contact_id}&shop_id={$shop_id}";
 
+require_once('php-console/src/PhpConsole/__autoload.php');
+$handler = PhpConsole\Handler::getInstance();
+$handler->start();
+
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 
 	$updateSQL = sprintf("UPDATE contacts SET first_name=%s, middle_initial=%s, last_name=%s, email=%s, 
@@ -105,7 +111,45 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 
 	mysql_select_db($database_YBDB, $YBDB);
 	$Result1 = mysql_query($updateSQL, $YBDB) or die(mysql_error());
-  
+
+	// Are there any interests in the datatbase?
+	$sql = "SELECT option_name FROM options;";	
+	$query = mysql_query($sql, $YBDB) or die(mysql_error());
+	while ($result = mysql_fetch_assoc($query)) {
+		$interests[] = $result["option_name"];		
+	}	
+	$interests = array_combine($interests,$interests);
+	
+	if ($volunteer_interest_form && !isset($volunteer_interests_changename)) {
+				
+		// populate database with user defined interests if they do not exist
+		$volunteer_interest = array_combine($volunteer_interests,$volunteer_interests);		
+		
+		foreach ($volunteer_interest as $interest) {
+			// Insert new interest
+			if ( !$interests[$interest] ) {
+				$query = "INSERT INTO options (id, option_name, option_value) VALUES (" .
+							$_POST['contact_id'] . ",'" . $interest . "',0);";				 
+				$result = mysql_query($query, $YBDB) or die(mysql_error());
+			}	
+		}	
+		
+	} // end volunteer_interest_form populate and/or delete
+
+	// Change or delete an interest(s) name	
+	if( isset($volunteer_interests_changename) ) {
+		foreach ($volunteer_interests_changename as $key => $interest) { 
+			$sql = "UPDATE options SET option_name='" . $interest . 
+						"' WHERE option_name='" . $interests[$key] . "';";	
+			$query = mysql_query($sql, $YBDB) or die(mysql_error());
+		}
+	} else if( isset($volunteer_interests_deletename) ) {
+		foreach ($volunteer_interests_deletename as $interest) { 
+			$sql = "DELETE FROM options WHERE option_name='" . $interest . "';";	
+			$query = mysql_query($sql, $YBDB) or die(mysql_error());
+		}		
+	}
+
   if ($_POST['contact_id_entry'] == 'new_contact'){
   
   	//navigate back to shop that it came from
@@ -223,6 +267,7 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 						<?php 
 							$columns = 3;
 							$c = 0;
+							$rows = 0;
 							$interest_count = count($volunteer_interests);														
 							 while($rows < $interest_count + 3) {				
 								echo "<tr>";

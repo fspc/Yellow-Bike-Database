@@ -13,7 +13,9 @@ require_once('Connections/database_functions.php');
       </ul>
       <ul>
         <li>Positive Spin is an all-volunteer non-profit organization  
-        <span class="yb_heading3red">entirely supported by volunteer time, part donations, and money  donations</span>. </li>
+        <span class="yb_heading3red">entirely supported by volunteer time, bike, part and tool donations, 
+        										the purchase of reused bikes and parts, trade-ups, memberships
+        									   and financial donations</span>. </li>
       </ul>
       <ul>
         <li><span class="yb_heading3red">We expect that you volunteer time back  to the project</span> 
@@ -21,7 +23,7 @@ require_once('Connections/database_functions.php');
       </ul>
       <ul>
         <li>If you are unable to contribute time to the project <span class="yb_heading3red">
-        we suggest  a $5 donation for personal use of the shop</span> in addition to any donations made for  parts. </li>
+        we suggest  a $5 donation for personal use of the shop</span> in addition to any other donations. </li>
       </ul>
       <ul>
         <li><span class="yb_heading3red">Donations go towards</span> 
@@ -49,10 +51,22 @@ require_once('Connections/database_functions.php');
         <a href="http://positivespin.org/home2/content/view/34/71/" target="_blank">About PS</a> | 
         <a href="http://positivespin.org/home2/content/view/94/80/" target="_blank">Shop Schedule </a> | 
         <a href="http://positivespin.org/home2/content/view/13/14/" target="_blank">Shop Services</a><span class="yb_heading3red"><br />
-        Giving Back:</span> <a href="" target="_blank">Volunteering at YBP</a> | 
+        Giving Back:</span> <a href="" target="_blank">Volunteering at PS</a> | 
         <a href="http://positivespin.org/home2/content/view/94/80/" target="_blank">Volunteer Shops</a> | 
         <a href="http://positivespin.org/home2/content/view/92/79/" target="_blank">Projects</a> | 
         <a href="" target="_blank">Earn-A-Bike</a> | 
         <a href="" target="_blank">Donating Online</a><br />
     </p>
+    <span class="yb_pagetitle">Repairs Policy</span>:<br />
+    <blockquote style="height: 0px; width: 600px;">
+    <p>We are all volunteers, and<strong> </strong>during shop hours open to repairs <strong>
+    we will not repair your bike for you or schedule repairs</strong>, 
+    but rather we will help you do-it-yourself.&nbsp; At Positive Spin you can find work stations with tools, 
+    bicycle repair stands, repair manuals, reasonably priced bicycle parts, and volunteers with varying levels of
+    experience in various areas of bicycle maintenance and repair.&nbsp; Volunteers may help you diagnose, repair and 
+    provide instruction about your bicycle.&nbsp; You may discover that at the Spin even highly experienced volunteers learn 
+    new skills from others!&nbsp; If you have a physical issue or handicap preventing you from physically
+    repairing your bicycle, we still want you to be part of the process in whatever way you are able,
+    and we will gladly help facilitate the repair of your bicycle. </p>
+    </blockquote>
     <?php include("include_footer.html"); ?>
