@@ -194,15 +194,23 @@ ALTER TABLE transaction_log ADD anonymous tinyint(1) NOT NULL DEFAULT '0';
 ALTER TABLE transaction_log ADD history longblob NOT NULL;
 ALTER TABLE transaction_log MODIFY description text(2048) DEFAULT NULL;
 
--- options 
--- some what borrowed from WordPress 
--- Currently just for variable values like found in the Volunteer Interest inventory
--- where values may be 0 or 1 or text.
+-- options  
+-- currently creates/updates/deletes volunteer interests (checkboxes), 
+-- but could be used for other surveys
+--
 CREATE TABLE IF NOT EXISTS options (
-	id int(10) unsigned NOT NULL,
+	option_name_id int(10) unsigned NOT NULL AUTO_INCREMENT,
 	option_name varchar(64) NOT NULL,
-	option_value text NOT NULL,
-	PRIMARY KEY (option_name)
+	PRIMARY KEY (option_name_id)
 );
 
-ALTER TABLE options ADD CONSTRAINT id FOREIGN KEY (id) REFERENCES contacts (contact_id) ON UPDATE CASCADE;
+-- choices
+-- stores the volunteer interest choices made by people
+--
+CREATE TABLE IF NOT EXISTS choices (
+	contact_id int(10) unsigned,
+	choice int(10) unsigned,
+	choice_value int(10) unsigned,
+	FOREIGN KEY (contact_id) REFERENCES contacts (contact_id) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (choice) REFERENCES options (option_name_id) ON DELETE CASCADE ON UPDATE CASCADE	
+);

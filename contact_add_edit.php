@@ -3,6 +3,12 @@
 require_once('Connections/YBDB.php'); 
 require_once('Connections/database_functions.php');
 
+/*
+require_once('php-console/src/PhpConsole/__autoload.php');
+$handler = PhpConsole\Handler::getInstance();
+$handler->start();
+*/
+
 $waiver = WAIVER;
 $email_list = EMAIL_LIST;
 $volunteer_interest_form = VOLUNTEER_INTEREST_FORM;
@@ -86,9 +92,6 @@ if($_GET['contact_id'] == 'new_contact'){
 
 $editFormAction = "?contact_id={$contact_id}&shop_id={$shop_id}";
 
-require_once('php-console/src/PhpConsole/__autoload.php');
-$handler = PhpConsole\Handler::getInstance();
-$handler->start();
 
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 
@@ -128,8 +131,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 		foreach ($volunteer_interest as $interest) {
 			// Insert new interest
 			if ( !$interests[$interest] ) {
-				$query = "INSERT INTO options (id, option_name, option_value) VALUES (" .
-							$_POST['contact_id'] . ",'" . $interest . "',0);";				 
+				$query = "INSERT INTO options (option_name) VALUES ('" . $interest . "');";				 
 				$result = mysql_query($query, $YBDB) or die(mysql_error());
 			}	
 		}	
@@ -150,6 +152,27 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 		}		
 	}
 
+	// If checked, save in database	
+	$interest_checked = [];
+	if(!empty($_POST['interest_checkboxes'])) {
+   	foreach($_POST['interest_checkboxes'] as $check) {
+			$interest_checked[$check] = $check;
+    	}
+ 	}
+
+	foreach ($interests as $interest) {
+
+		if($interest_checked[$interest]) {
+			$sql = "UPDATE options SET option_value=1 WHERE option_name='" . $interests[$interest] . "';";	
+			$query = mysql_query($sql, $YBDB) or die(mysql_error());		
+		} else {
+			$sql = "UPDATE options SET option_value=0 WHERE option_name='" . $interests[$interest] . "';";	
+			$query = mysql_query($sql, $YBDB) or die(mysql_error());			
+		}
+		
+	}
+	 	
+
   if ($_POST['contact_id_entry'] == 'new_contact'){
   
   	//navigate back to shop that it came from
@@ -157,6 +180,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 	header(sprintf("Location: %s", $pagegoto));
 
   }
+
 }
 
 mysql_select_db($database_YBDB, $YBDB);
@@ -274,7 +298,9 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 								
 								for($i = $rows - $columns; $i < $rows; $i++) {
 									if($volunteer_interests[$i]) {								
-										echo "<td><input value='$volunteer_interests[$i]' type='checkbox'>" . $volunteer_interests[$i] . "</td>";								
+										echo "<td><input name='interest_checkboxes[]' class='interest_checkboxes' 
+														value='$volunteer_interests[$i]' type='checkbox'>" . 
+														$volunteer_interests[$i] . "</td>";								
 									}
 								}
 								echo "</tr>";								
