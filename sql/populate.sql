@@ -204,13 +204,13 @@ CREATE TABLE IF NOT EXISTS options (
 	PRIMARY KEY (option_name_id)
 );
 
--- choices
--- stores the volunteer interest choices made by people
+-- selections
+-- stores the volunteer interest selections made by people
 --
-CREATE TABLE IF NOT EXISTS choices (
+CREATE TABLE IF NOT EXISTS selections (
 	contact_id int(10) unsigned,
-	choice int(10) unsigned,
-	choice_value int(10) unsigned,
+	selection int(10) unsigned,
+	selection_value int(10) unsigned,
 	FOREIGN KEY (contact_id) REFERENCES contacts (contact_id) ON DELETE CASCADE ON UPDATE CASCADE,
-	FOREIGN KEY (choice) REFERENCES options (option_name_id) ON DELETE CASCADE ON UPDATE CASCADE	
+	FOREIGN KEY (selection) REFERENCES options (option_name_id) ON DELETE CASCADE ON UPDATE CASCADE	
 );
