@@ -174,7 +174,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 		if ( is_null($selections[$interest_id]) ) {  //INSERT
 			if( !is_null($interest_checked[$selection]) ) {
 				$sql = "INSERT INTO selections (contact_id, selection, selection_value) 
-							VALUES (" .	$_POST['contact_id'] . ",'" . $interest_id . "',1);";			 
+							VALUES (" .	$_POST['contact_id'] . "," . $interest_id . ",1);";			 
 				$result = mysql_query($sql, $YBDB) or die(mysql_error());	
 			}
 		} else {	 //DELETE
@@ -186,6 +186,11 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 		}		
 	}
 	 	
+	if ($_POST['comments']) {
+		$sql = "INSERT INTO selections (contact_id, selection, selection_value) 
+				VALUES (" .	$_POST['contact_id'] . ", 1,'" . $_POST['comments']  . "');";			 
+				$result = mysql_query($sql, $YBDB) or die(mysql_error());	
+	}	 	
 
   if ($_POST['contact_id_entry'] == 'new_contact'){
   
@@ -337,11 +342,17 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 								$rows = $rows + $columns;				
 							}
 						?>
-						<?php if($volunteer_interest_comments) { ?>							
+						<?php if($volunteer_interest_comments) { 
+									$sql = "SELECT selection_value AS comments FROM selections 
+											  WHERE selection=1 AND contact_id=" . $row_Recordset1['contact_id']  . ";";
+									$query = mysql_query($sql, $YBDB) or die(mysql_error());
+									$result = mysql_fetch_assoc($query);	
+										  						
+						?>							
 						<tr><td>&nbsp;</td></tr>					
 						<tr>		  	 
 				  	 		<td class="center_comment" colspan="2"><label id="contact_comment">Comments</label>
-				  	 		<textarea  name="comment" cols="45" rows="3"></textarea></td>
+				  	 		<textarea  name="comments" cols="45" rows="3"><?php echo $result['comments']; ?></textarea></td>
 				  		</tr>
 				  		<?php } ?>
 				  	</table>

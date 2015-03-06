@@ -202,7 +202,7 @@ CREATE TABLE IF NOT EXISTS options (
 	option_name_id int(10) unsigned NOT NULL AUTO_INCREMENT,
 	option_name varchar(64) NOT NULL UNIQUE,
 	PRIMARY KEY (option_name_id)
-) DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 -- selections
 -- stores the volunteer interest selections made by people
@@ -213,4 +213,7 @@ CREATE TABLE IF NOT EXISTS selections (
 	selection_value text,
 	FOREIGN KEY (contact_id) REFERENCES contacts (contact_id) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (selection) REFERENCES options (option_name_id) ON DELETE CASCADE ON UPDATE CASCADE	
-) DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- create the comment row first
+INSERT INTO options (option_name) VALUES("comments");
