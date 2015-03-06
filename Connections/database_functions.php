@@ -67,7 +67,7 @@ $volunteer_interests = array(
 									"Publicizing/Outreach", "Graphic Design", "Greeter at the Front Desk",
 									"Accounting/Record Keeping", "Ordering parts/supplies", "Picking up Donated Bikes/Parts",
 									"Teaching classes", "League Certified Instructor", "Pricing bikes",
-									"Fabricating", "Open Source Programming", "Other/Contact me for general help"
+									 "Fabricating", "Open Source Programming", "Other/Contact me for general help"
 								);
 								
 // Provide a comment box - true of false
@@ -98,7 +98,6 @@ define("VOLUNTEER_INTEREST_COMMENTS", true);
 //		 and the database will be updated.
 //
 //$volunteer_interests_deletename = array("LCI");
-
 
 /***********
 TRANSACTIONS

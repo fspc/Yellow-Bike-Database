@@ -3,11 +3,11 @@
 require_once('Connections/YBDB.php'); 
 require_once('Connections/database_functions.php');
 
-/*
-require_once('php-console/src/PhpConsole/__autoload.php');
+
+/*require_once('php-console/src/PhpConsole/__autoload.php');
 $handler = PhpConsole\Handler::getInstance();
-$handler->start();
-*/
+$handler->start();*/
+
 
 $waiver = WAIVER;
 $email_list = EMAIL_LIST;
@@ -116,22 +116,23 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 	$Result1 = mysql_query($updateSQL, $YBDB) or die(mysql_error());
 
 	// Are there any interests in the datatbase?
-	$sql = "SELECT option_name FROM options;";	
+	$interests = [];
+	$sql = "SELECT option_name, option_name_id FROM options;";	
 	$query = mysql_query($sql, $YBDB) or die(mysql_error());
 	while ($result = mysql_fetch_assoc($query)) {
-		$interests[] = $result["option_name"];		
+		$interests[$result["option_name"]] = $result["option_name_id"];		
 	}	
-	$interests = array_combine($interests,$interests);
 	
 	if ($volunteer_interest_form && !isset($volunteer_interests_changename)) {
 				
 		// populate database with user defined interests if they do not exist
 		$volunteer_interest = array_combine($volunteer_interests,$volunteer_interests);		
 		
+		$c = 0;
 		foreach ($volunteer_interest as $interest) {
 			// Insert new interest
-			if ( !$interests[$interest] ) {
-				$query = "INSERT INTO options (option_name) VALUES ('" . $interest . "');";				 
+			if ( is_null($interests[$interest]) ) {
+				$query = "INSERT INTO options (option_name) VALUES('" . $interest . "');";				 
 				$result = mysql_query($query, $YBDB) or die(mysql_error());
 			}	
 		}	
@@ -142,7 +143,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 	if( isset($volunteer_interests_changename) ) {
 		foreach ($volunteer_interests_changename as $key => $interest) { 
 			$sql = "UPDATE options SET option_name='" . $interest . 
-						"' WHERE option_name='" . $interests[$key] . "';";	
+						"' WHERE option_name='" . $key . "';";	
 			$query = mysql_query($sql, $YBDB) or die(mysql_error());
 		}
 	} else if( isset($volunteer_interests_deletename) ) {
@@ -160,16 +161,29 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
     	}
  	}
 
-	foreach ($interests as $interest) {
-
-		if($interest_checked[$interest]) {
-			$sql = "UPDATE options SET option_value=1 WHERE option_name='" . $interests[$interest] . "';";	
-			$query = mysql_query($sql, $YBDB) or die(mysql_error());		
-		} else {
-			$sql = "UPDATE options SET option_value=0 WHERE option_name='" . $interests[$interest] . "';";	
-			$query = mysql_query($sql, $YBDB) or die(mysql_error());			
-		}
-		
+	// Find out if any selections are in the database, 
+	// to decide whether an INSERT or DELETE needs to be done
+	$sql = "SELECT selection FROM selections;";	
+	$query = mysql_query($sql, $YBDB) or die(mysql_error());
+	$selections = [];
+	while ($result = mysql_fetch_assoc($query)) {
+		$selections[$result["selection"]] = $result["selection"];		
+	}	
+	
+	foreach ($interests as $selection => $interest_id) {
+		if ( is_null($selections[$interest_id]) ) {  //INSERT
+			if( !is_null($interest_checked[$selection]) ) {
+				$sql = "INSERT INTO selections (contact_id, selection, selection_value) 
+							VALUES (" .	$_POST['contact_id'] . ",'" . $interest_id . "',1);";			 
+				$result = mysql_query($sql, $YBDB) or die(mysql_error());	
+			}
+		} else {	 //DELETE
+			if( is_null($interest_checked[$selection]) ) {		
+				$sql = "DELETE FROM selections WHERE selection=" . $interest_id . 
+						  " AND contact_id=" . $_POST['contact_id'] . ";";	
+				$query = mysql_query($sql, $YBDB) or die(mysql_error());		
+			}
+		}		
 	}
 	 	
 
@@ -289,18 +303,33 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 					<table>
 						<tr><td>&nbsp;</td></tr>
 						<?php 
+							$sql = " SELECT options.option_name AS selection FROM selections, options 
+										WHERE selections.selection=options.option_name_id;";	
+							$query = mysql_query($sql, $YBDB) or die(mysql_error());
+							$selections = [];
+							while ($result = mysql_fetch_assoc($query)) {
+								$selections[$result["selection"]] = $result["selection"];		
+							}	
+
 							$columns = 3;
 							$c = 0;
 							$rows = 0;
 							$interest_count = count($volunteer_interests);														
 							 while($rows < $interest_count + 3) {				
-								echo "<tr>";
+								echo "<tr>";							
 								
 								for($i = $rows - $columns; $i < $rows; $i++) {
-									if($volunteer_interests[$i]) {								
-										echo "<td><input name='interest_checkboxes[]' class='interest_checkboxes' 
-														value='$volunteer_interests[$i]' type='checkbox'>" . 
-														$volunteer_interests[$i] . "</td>";								
+									if($volunteer_interests[$i]) {
+										
+										if($volunteer_interests[$i] === $selections[$volunteer_interests[$i]]) {								
+											echo "<td><input name='interest_checkboxes[]' class='interest_checkboxes' 
+															value='$volunteer_interests[$i]' type='checkbox' checked>" . 
+															$volunteer_interests[$i] . "</td>";	
+										} else {
+											echo "<td><input name='interest_checkboxes[]' class='interest_checkboxes' 
+															value='$volunteer_interests[$i]' type='checkbox'>" . 
+															$volunteer_interests[$i] . "</td>";										
+										}							
 									}
 								}
 								echo "</tr>";								

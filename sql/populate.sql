@@ -200,17 +200,17 @@ ALTER TABLE transaction_log MODIFY description text(2048) DEFAULT NULL;
 --
 CREATE TABLE IF NOT EXISTS options (
 	option_name_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-	option_name varchar(64) NOT NULL,
+	option_name varchar(64) NOT NULL UNIQUE,
 	PRIMARY KEY (option_name_id)
-);
+) DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 -- selections
 -- stores the volunteer interest selections made by people
 --
 CREATE TABLE IF NOT EXISTS selections (
 	contact_id int(10) unsigned,
-	selection int(10) unsigned,
-	selection_value int(10) unsigned,
+	selection int(10) unsigned UNIQUE,
+	selection_value text,
 	FOREIGN KEY (contact_id) REFERENCES contacts (contact_id) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (selection) REFERENCES options (option_name_id) ON DELETE CASCADE ON UPDATE CASCADE	
-);
+) DEFAULT CHARSET=latin1;
