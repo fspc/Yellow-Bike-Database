@@ -303,8 +303,9 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 					<table>
 						<tr><td>&nbsp;</td></tr>
 						<?php 
-							$sql = " SELECT options.option_name AS selection FROM selections, options 
-										WHERE selections.selection=options.option_name_id;";	
+							$sql = "SELECT options.option_name AS selection FROM selections, options 
+										WHERE selections.selection=options.option_name_id AND
+										contact_id=" . $row_Recordset1['contact_id']  . ";";	
 							$query = mysql_query($sql, $YBDB) or die(mysql_error());
 							$selections = [];
 							while ($result = mysql_fetch_assoc($query)) {
