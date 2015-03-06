@@ -88,7 +88,7 @@ define("VOLUNTEER_INTEREST_COMMENTS", true);
 //
 // $volunteer_interests_changename = array("League Certified Instructor" => "LCI");
 
-// Delete an interest(s) name.  
+// [BUGGY - don't use it] Delete an interest(s) name.  
 //
 // 1.  Add the interest(s) you want to delete. Please understand
 //     that by doing this you will delete the interest and all associated data.

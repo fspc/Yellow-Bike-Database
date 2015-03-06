@@ -163,7 +163,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 
 	// Find out if any selections are in the database, 
 	// to decide whether an INSERT or DELETE needs to be done
-	$sql = "SELECT selection FROM selections;";	
+	$sql = "SELECT selection FROM selections WHERE contact_id=" . $_POST['contact_id'] . ";";	
 	$query = mysql_query($sql, $YBDB) or die(mysql_error());
 	$selections = [];
 	while ($result = mysql_fetch_assoc($query)) {
@@ -185,7 +185,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 			}
 		}		
 	}
-	 	
+	 
+	// insert as update?  But it works. 	
 	if ($_POST['comments']) {
 		$sql = "INSERT INTO selections (contact_id, selection, selection_value) 
 				VALUES (" .	$_POST['contact_id'] . ", 1,'" . $_POST['comments']  . "');";			 

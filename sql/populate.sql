@@ -209,7 +209,7 @@ CREATE TABLE IF NOT EXISTS options (
 --
 CREATE TABLE IF NOT EXISTS selections (
 	contact_id int(10) unsigned,
-	selection int(10) unsigned UNIQUE,
+	selection int(10) unsigned,
 	selection_value text,
 	FOREIGN KEY (contact_id) REFERENCES contacts (contact_id) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (selection) REFERENCES options (option_name_id) ON DELETE CASCADE ON UPDATE CASCADE	
