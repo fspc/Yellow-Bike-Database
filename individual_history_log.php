@@ -143,7 +143,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 ?>
 
 
-<?php include("../include_header.html"); ?>
+<?php include("include_header.html"); ?>
 
 <table   border="0" cellpadding="1" cellspacing="0">
   <tr>
