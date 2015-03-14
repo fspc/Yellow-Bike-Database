@@ -104,7 +104,7 @@ $(function(){
 				}
 				
 				// waiver checkbox
-				err5 = error_handler(waiver_checkbox.prop("checked"),waiver_error,false,"*Required",event);
+				err5 = error_handler(waiver_checkbox.prop("checked"),waiver_error,false,"*Required",e);
 			
 				if ((err0 + err1 + err2 + err3 + err4 + err5) > 0 ) {
 					
