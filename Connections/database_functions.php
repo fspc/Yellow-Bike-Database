@@ -169,6 +169,8 @@ define("PAGE_SALE_LOG", "/transaction_log.php");
 define("PAGE_EDIT_LOCATION", "/location_add_edit.php");
 define("PAGE_SELECT_LOCATION", "/location_add_edit_select.php");
 
+
+
 //This is a general function to generate the contents of a list box based on a MySQL query.  All necessary parameters for the query are passed 
 function generate_list($querySQL,$list_value,$list_text, $form_name, $default_value)
 {
@@ -207,10 +209,11 @@ function generate_list($querySQL,$list_value,$list_text, $form_name, $default_va
 
 function list_CurrentShopUsers($form_name = "none", $default_value = "", $max_name_length = 20){
 	$current_shop = current_shop_by_ip();
-	$querySQL = "SELECT full_name, shop_hours.contact_id ,hidden FROM shop_hours
-LEFT JOIN (SELECT LEFT(CONCAT(last_name, ', ', first_name, ' ',middle_initial),$max_name_length) AS full_name, contact_id, hidden FROM contacts) as contacts ON shop_hours.contact_id=contacts.contact_id
-WHERE shop_hours.shop_id = $current_shop
-ORDER BY full_name;";
+	$querySQL = "SELECT DISTINCT full_name, shop_hours.contact_id ,hidden FROM shop_hours
+					LEFT JOIN (SELECT LEFT(CONCAT(last_name, ', ', first_name, ' ',middle_initial),$max_name_length)
+					AS full_name, contact_id, hidden FROM contacts) as contacts ON shop_hours.contact_id=contacts.contact_id
+					WHERE shop_hours.shop_id = $current_shop
+					ORDER BY full_name;";
 	$list_value = "contact_id";
 	$list_text = "full_name";
 	generate_list($querySQL,$list_value,$list_text,$form_name, $default_value);
