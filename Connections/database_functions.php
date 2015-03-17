@@ -18,6 +18,18 @@ require_once('YBDB.php');
 define("TIMEZONE", "America/New_York");
 
 
+/*********
+MEMBERSHIP
+**********/
+// Define when a volunteer becomes a member based hours and days for the calendar year vs a paid membership
+
+// Needs to volunteer at least this amount of defined hours before being considered a member
+define("MEMBERSHIP_HOURS",8);
+
+// Needs to volunteer at least this number of days before being considered a member
+define("MEMBERSHIP_DAYS",2);
+
+
 /*******
 CONTACTS
 ********/
@@ -107,7 +119,9 @@ TRANSACTIONS
 define("STORAGE_PERIOD", 14);
 define("ACCOUNTING_GROUP", "Sales");
 define("DEFAULT_TRANSACTION_TYPE", "Sale - Used Parts");
-define("DEFAULT_SHOP_USER", "Volunteer");
+
+// shop_user_role
+define("DEFAULT_SHOP_USER", "Personal");
 
 /* Change Fund - A specific amount of money for the purpose of making change. 
    The amount on hand should remain the same at all times; 

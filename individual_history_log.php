@@ -47,11 +47,20 @@ if($_GET['record_count']>0){
 } else {
 	$record_count = 40;}	
 	
-$query_Recordset1 = "SELECT shop_id, shop_hours.shop_visit_id, shop_hours.contact_id, shop_hours.shop_user_role, shop_hours.project_id, DATE(shop_hours.time_in) AS date, DAYNAME(shop_hours.time_in) AS dayname, shop_hours.time_in, shop_hours.time_out, TIME_FORMAT(TIMEDIFF(time_out, time_in),'%k:%i') as et, shop_hours.comment, CONCAT(contacts.last_name, ', ', contacts.first_name, ' ',contacts.middle_initial) AS full_name, contacts.first_name FROM shop_hours
-LEFT JOIN shop_user_roles ON shop_hours.shop_user_role=shop_user_roles.shop_user_role_id
-LEFT JOIN contacts ON shop_hours.contact_id=contacts.contact_id
-WHERE shop_hours.contact_id = {$contact_id} AND DATE(shop_hours.time_in) <= '{$shop_date_filter}' {$shop_dayname} ORDER BY time_in DESC
-LIMIT  0, {$record_count};";
+$query_Recordset1 = "SELECT shop_id, shop_hours.shop_visit_id, shop_hours.contact_id, shop_hours.shop_user_role, 
+									 shop_hours.project_id, DATE(shop_hours.time_in) 
+							AS date, DAYNAME(shop_hours.time_in) 
+							AS dayname, shop_hours.time_in, shop_hours.time_out, 
+								TIME_FORMAT(TIMEDIFF(time_out, time_in),'%k:%i') 
+							AS et, shop_hours.comment, 
+								CONCAT(contacts.last_name, ', ', contacts.first_name, ' ',contacts.middle_initial) 
+							AS full_name, contacts.first_name 
+							FROM shop_hours
+							LEFT JOIN shop_user_roles ON shop_hours.shop_user_role=shop_user_roles.shop_user_role_id
+							LEFT JOIN contacts ON shop_hours.contact_id=contacts.contact_id
+							WHERE shop_hours.contact_id = {$contact_id} 
+							AND DATE(shop_hours.time_in) <= '{$shop_date_filter}' {$shop_dayname} 
+							ORDER BY time_in DESC LIMIT  0, {$record_count};";
 $Recordset1 = mysql_query($query_Recordset1, $YBDB) or die(mysql_error());
 //$row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
@@ -82,7 +91,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form_new") && ($_PO
 	$error_message = '<span class="yb_heading3red">Please Select a User</span><br />';
 } elseif ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form_new")) {
   
-  $insertSQL = sprintf("INSERT INTO shop_hours (contact_id, shop_id, shop_user_role, time_in, comment, project_id) VALUES (%s, %s, %s, %s, %s, %s)",
+  $insertSQL = sprintf("INSERT INTO shop_hours (contact_id, shop_id, shop_user_role, time_in, comment, project_id) 
+  								VALUES (%s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['contact_id'], "int"),
                        GetSQLValueString($individual_shop_id, "int"),
                        GetSQLValueString($_POST['user_role'], "text"),
