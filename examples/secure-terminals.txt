@@ -55,11 +55,24 @@ Chrome:
 10. Good idea to restart chrome.
 11. In Chrome Settings "On Startup Continue where you left off"
 
+
+DESKTOP STARTUP
+
+1.  LXDE - put a file with this format in ~/.config/auto with name of *desktop, e.g. keepass.desktop:
+
+[Desktop Entry]
+Type=Application
+Exec=/usr/bin/mono /home/ps/KeePass/KeePass.exe
+
+2.  Gnome based Window manager, e.g. Mate - open gnome-session-properties from commandline, 
+	 and add startup application.
+
+
 There are other things that can be done within the terminal to prevent tampering, e.g., read-only environment, 
-but the above protects the password from hacking, eavesdropping, and from regular users
+but what is above protects the password from hacking, eavesdropping, and from regular users
 in the shop, basically, only the sysadmin and bookkeeper should have remote access via the password.  
-So, YBDB, although on the internet will be confined to the terminal(s) you allow it to be on, and
-the Point of Sale will be at the proper location .. at the front of the Community Bike Shop where people
+So while YBDB is on the internet, it will only be available to the terminal(s) you allow it to be on, and
+the Point of Sale will be at the proper location which is usually the front of the Community Bike Shop where people
 walk-in/walk-out.
 
 
