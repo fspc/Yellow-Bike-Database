@@ -67,6 +67,11 @@ Exec=/usr/bin/mono /home/ps/KeePass/KeePass.exe
 2.  Gnome based Window manager, e.g. Mate - open gnome-session-properties from commandline, 
 	 and add startup application.
 
+SUSPENDING COMPUTER
+
+Example commands that bring up the gui setting tool:
+1. xfce4-power-manager-settings (eg., used by wattos for LXDE)
+2. mate-power-manager-settings or mate-power-preferences
 
 There are other things that can be done within the terminal to prevent tampering, e.g., read-only environment, 
 but what is above protects the password from hacking, eavesdropping, and from regular users
