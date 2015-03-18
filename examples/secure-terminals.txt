@@ -1,0 +1,69 @@
+How to protect the password for YBDB in a public environment.
+
+PROTECTING A DIRECTORY UNDER A WEBSERVER (apache 2.4)
+
+A. The htpasswd command is found in the apache2-utils package.
+
+B. htpasswd  -Bc -C 10 htpasswd test  (note that bcrypt is used)
+
+C.  chown www-data:www-data /var/htpasswd; chmod 0400 /var/htpasswd; \
+
+D.   <Directory /var/www/html>
+            Authtype        Basic
+            Authname        "Amazing Community Bike Shop Login"
+            Require         user someuser
+            AuthUserFile    /var/htpasswd
+     </Directory>
+
+
+SSL (do not settle for anything less)
+
+Under Debian:
+A.  openssl req -new -x509 -nodes -out ssl-cert-snakeoil.pem -days 36500 -keyout ssl-cert-snakeoil.key (100 year certificate)
+B.  cp ssl-cert-snakeoil.key /etc/ssl/private/
+    cp ssl-cert-snakeoil.pem /etc/ssl/certs/
+C.  a2enmod ssl;
+    a2ensite default-ssl.conf; (standard on debian-based distributions .. add <Directory> stanza above)
+    a2dissite 000-default.conf; 
+   
+
+TERMINAL AUTOMATION AND SECURITY
+
+Firefox (IceWeasel):
+1. Download KeePass v2 zip - http://keepass.info/download.html
+2. Unzip in ~/KeePass
+3. cd ~/KeePass; mkdir plugins
+4. In Debian/Ubuntu:  apt-get install mono-runtime mono-devel
+5. Install KeeFox extension from https://addons.mozilla.org/en-us/firefox/addon/keefox/
+6. KeeFox will tell you where to copy KeePassRPC.plgx from into the plugins directory
+   Usually somewhere under  ~/.mozilla/firefox/*default/extensions/keefox*
+7. When setting up password database for KeePass use only a key file.
+8. Add the url along with username and password in the database.
+9. Once the login is working properly for the htpasswd setup for apache, 
+   the whole process can be completely automated in KeeFox options.
+10. In Firefox (IceWeasel) Preferences -> General use "When IceWeasel starts: Show my windows and tabs from the last time"
+
+Chrome:
+1. Download KeePass zip - http://keepass.info/download.html
+2. Unzip in ~/KeePass
+3. When setting up password database for KeePass use only a key file.
+4. Add the url along with username and password in the database.
+5. In Debian/Ubuntu:  apt-get install mono-runtime mono-devel
+7. Install extension chromeIPass
+8. Install keepasshttp as explained at https://github.com/pfn/keepasshttp/ (put KeePassHttp.plgx in ~/KeePass)
+9. Follow the directions chromeIPass gives you, creating an identifier
+10. Good idea to restart chrome.
+11. In Chrome Settings "On Startup Continue where you left off"
+
+There are other things that can be done within the terminal to prevent tampering, e.g., read-only environment, 
+but the above protects the password from hacking, eavesdropping, and from regular users
+in the shop, basically, only the sysadmin and bookkeeper should have remote access via the password.  
+So, YBDB, although on the internet will be confined to the terminal(s) you allow it to be on, and
+the Point of Sale will be at the proper location .. at the front of the Community Bike Shop where people
+walk-in/walk-out.
+
+
+
+
+
+
