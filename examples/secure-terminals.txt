@@ -88,8 +88,8 @@ Example commands that bring up the gui setting tool:
 SUMMARY
 
 There are other things that can be done within the terminal to prevent tampering, e.g., read-only environment, 
-but what is above protects the password from hacking, eavesdropping, and from regular users
-in the shop, basically, only the sysadmin and bookkeeper should have remote access via the password. 
+an expect script rather than KeePass, but what is above protects the password from hacking, eavesdropping, 
+and from regular users in the shop, basically, only the sysadmin and bookkeeper should have remote access via the password. 
 So while YBDB is on the internet, it will only be available to the terminal(s) you allow it to be on, and
 the Point of Sale will be at the proper location which is usually the front of the Community Bike Shop where people
 walk-in/walk-out.
