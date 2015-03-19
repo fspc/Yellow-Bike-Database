@@ -32,28 +32,40 @@ TERMINAL AUTOMATION AND SECURITY
 Firefox (IceWeasel):
 1. Download KeePass v2 zip - http://keepass.info/download.html
 2. Unzip in ~/KeePass
-3. cd ~/KeePass; mkdir plugins
-4. In Debian/Ubuntu:  apt-get install mono-runtime mono-devel
-5. Install KeeFox extension from https://addons.mozilla.org/en-us/firefox/addon/keefox/
-6. KeeFox will tell you where to copy KeePassRPC.plgx from into the plugins directory
+3. sudo chown root:root ~/KeePass; sudo chmod 0755 ~/KeePass;
+4. cd ~/KeePass; mkdir plugins
+5. mv KeePass.config.xml KeePass.config.enforced.xml
+6. sudo chown root:root KeePass.config.enforced.xml
+7. sudo chmod 0444 KeePass.config.enforced.xml
+8.	Most importantly in KeePass.config.enforced.xml change true to 
+	<UnhidePasswords>false</UnhidePasswords> so that passwords cannot be seen.
+9. In Debian/Ubuntu:  apt-get install mono-runtime mono-devel
+10. Install KeeFox extension from https://addons.mozilla.org/en-us/firefox/addon/keefox/
+11. KeeFox will tell you where to copy KeePassRPC.plgx from into the plugins directory
    Usually somewhere under  ~/.mozilla/firefox/*default/extensions/keefox*
-7. When setting up password database for KeePass use only a key file.
-8. Add the url along with username and password in the database.
-9. Once the login is working properly for the htpasswd setup for apache, 
+12. When setting up password database for KeePass use only a key file.
+13. Add the url along with username and password in the database.
+14. Once the login is working properly for the htpasswd setup for apache, 
    the whole process can be completely automated in KeeFox options.
-10. In Firefox (IceWeasel) Preferences -> General use "When IceWeasel starts: Show my windows and tabs from the last time"
+15. In Firefox (IceWeasel) Preferences -> General use "When IceWeasel starts: Show my windows and tabs from the last time"
 
 Chrome:
 1. Download KeePass zip - http://keepass.info/download.html
 2. Unzip in ~/KeePass
-3. When setting up password database for KeePass use only a key file.
-4. Add the url along with username and password in the database.
-5. In Debian/Ubuntu:  apt-get install mono-runtime mono-devel
-7. Install extension chromeIPass
-8. Install keepasshttp as explained at https://github.com/pfn/keepasshttp/ (put KeePassHttp.plgx in ~/KeePass)
-9. Follow the directions chromeIPass gives you, creating an identifier
-10. Good idea to restart chrome.
-11. In Chrome Settings "On Startup Continue where you left off"
+3. sudo chown root:root ~/KeePass; sudo chmod 0755 ~/KeePass;
+4. mv KeePass.config.xml KeePass.config.enforced.xml
+5. sudo chown root:root KeePass.config.enforced.xml
+6. sudo chmod 0444 KeePass.config.enforced.xml
+7.	Most importantly in KeePass.config.enforced.xml change true to 
+	<UnhidePasswords>false</UnhidePasswords> so that passwords cannot be seen.
+8. When setting up password database for KeePass use only a key file.
+9. Add the url along with username and password in the database.
+10. In Debian/Ubuntu:  apt-get install mono-runtime mono-devel
+11. Install extension chromeIPass
+12. Install keepasshttp as explained at https://github.com/pfn/keepasshttp/ (put KeePassHttp.plgx in ~/KeePass)
+13. Follow the directions chromeIPass gives you, creating an identifier
+14. Good idea to restart chrome.
+15. In Chrome Settings "On Startup Continue where you left off"
 
 
 DESKTOP STARTUP

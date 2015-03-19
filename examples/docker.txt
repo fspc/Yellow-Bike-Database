@@ -1,0 +1,61 @@
+DOCKER
+
+Assuming you have installed docker on a server, 
+it is much easier to setup YBDB with the docker image at 
+https://registry.hub.docker.com/u/bikebike/ybdb/ or build
+a customized version from the source code at https://github.com/fspc/ybdb .
+
+As part of Positive Spin's project to determine which software would best
+fit our needs, docker demos were created from all known existing F/OSS 
+community bike shop software at http://bikebike.wvcompletestreets.org .
+
+
+CUSTOMIZE
+
+If you want to build your own image to use at a Community Bike Shop,
+you will most likely want to setup ssl for the http server, create 
+self-signed certificates and a htpasswd file (see secure-terminals.txt), 
+and edit populate.sql and database_functions.php.  These changes will
+need to be reflected in the Dockerfile.
+
+Never forget, if you make changes to any Community Bike Shop code, 
+merge your changes back into the main project so that all collectives 
+may benefit from the awesomeness of Free Software.
+
+
+WHAT NEXT?
+
+You will want to keep regular backups, have scripts that start/stop the container, and 
+monitor the main docker process.
+
+BACKUPS
+
+Redundancy is great.  Save backups to at least two locations. 
+Obviously, the "YB" Database is the most important thing to backup, 
+and Docker makes backing up a container easy.
+
+START/STOP SCRIPTS
+
+Example of the standard upstart script used to start/stop bikebike docker containers:
+
+	description "Positive O Spin's container"
+	author "Jonathan Rosenbaum <gnuser@gmail.com>"
+	
+	start on started docker
+	stop on runlevel [016]
+	
+	respawn
+	
+	exec start-stop-daemon --start --make-pidfile --pidfile /var/run/pos.pid --exec /usr/bin/docker start pos
+
+
+MONITOR DOCKER PROCESS
+
+Because docker container processes are children processes that change,
+only the main docker pidfile is monitored by monit.
+
+	check process docker 
+       	with pidfile /var/run/docker.pid
+       	start = "/sbin/start docker"
+			stop  = "/sbin/stop docker"
+
