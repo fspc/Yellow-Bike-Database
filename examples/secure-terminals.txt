@@ -37,8 +37,8 @@ Firefox (IceWeasel):
 5. mv KeePass.config.xml KeePass.config.enforced.xml
 6. sudo chown root:root KeePass.config.enforced.xml
 7. sudo chmod 0444 KeePass.config.enforced.xml
-8.	Most importantly in KeePass.config.enforced.xml change true to 
-	<UnhidePasswords>false</UnhidePasswords> so that passwords cannot be seen.
+8.	Most importantly in KeePass.config.enforced.xml between <Security> change true to 
+	<Policy><UnhidePasswords>false</UnhidePasswords></Policy> so that passwords cannot be seen.
 9. In Debian/Ubuntu:  apt-get install mono-runtime mono-devel
 10. Install KeeFox extension from https://addons.mozilla.org/en-us/firefox/addon/keefox/
 11. KeeFox will tell you where to copy KeePassRPC.plgx from into the plugins directory
@@ -56,8 +56,8 @@ Chrome:
 4. mv KeePass.config.xml KeePass.config.enforced.xml
 5. sudo chown root:root KeePass.config.enforced.xml
 6. sudo chmod 0444 KeePass.config.enforced.xml
-7.	Most importantly in KeePass.config.enforced.xml change true to 
-	<UnhidePasswords>false</UnhidePasswords> so that passwords cannot be seen.
+7.	Most importantly in KeePass.config.enforced.xml between <Security> change true to 
+	<Policy><UnhidePasswords>false</UnhidePasswords></Policy> so that passwords cannot be seen.
 8. When setting up password database for KeePass use only a key file.
 9. Add the url along with username and password in the database.
 10. In Debian/Ubuntu:  apt-get install mono-runtime mono-devel
@@ -85,12 +85,16 @@ Example commands that bring up the gui setting tool:
 1. xfce4-power-manager-settings (eg., used by wattos for LXDE)
 2. mate-power-manager-settings or mate-power-preferences
 
+SUMMARY
+
 There are other things that can be done within the terminal to prevent tampering, e.g., read-only environment, 
 but what is above protects the password from hacking, eavesdropping, and from regular users
-in the shop, basically, only the sysadmin and bookkeeper should have remote access via the password.  
+in the shop, basically, only the sysadmin and bookkeeper should have remote access via the password. 
 So while YBDB is on the internet, it will only be available to the terminal(s) you allow it to be on, and
 the Point of Sale will be at the proper location which is usually the front of the Community Bike Shop where people
 walk-in/walk-out.
+
+Word of wisdom:  It is always good practice to occasionally change the password. 
 
 
 
