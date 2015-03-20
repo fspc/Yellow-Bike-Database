@@ -36,7 +36,7 @@ Firefox (IceWeasel):
 4. cd ~/KeePass; mkdir plugins
 5. run .. mono KeePass.exe, create database and optionally a key file in ~/KeePass
 6. mv KeePass.config.xml KeePass.config.enforced.xml
-7. sudo chown root:root KeePass.config.enforced.xml
+7. sudo chown root:root KeePass.config.enforced.xml (and database/key file)
 8. sudo chmod 0444 KeePass.config.enforced.xml
 9.	Most importantly in KeePass.config.enforced.xml between <Security> change true to 
 	<Policy><UnhidePasswords>false</UnhidePasswords></Policy> so that passwords cannot be seen.
@@ -49,6 +49,8 @@ Firefox (IceWeasel):
 15. Once the login is working properly for the htpasswd setup for apache, 
    the whole process can be completely automated in KeeFox options.
 16. In Firefox (IceWeasel) Preferences -> General use "When IceWeasel starts: Show my windows and tabs from the last time"
+17. Afterwards, you can sudo chown -R root:root ~/KeePass/*
+	 You may need to make adjustments for plugins.
 
 Chrome:
 1. Download KeePass zip - http://keepass.info/download.html
@@ -56,7 +58,7 @@ Chrome:
 3. sudo chown root:root ~/KeePass; sudo chmod 0755 ~/KeePass;
 4. run .. mono KeePass.exe, create database and optionally a key file in ~/KeePass
 5. mv KeePass.config.xml KeePass.config.enforced.xml
-6. sudo chown root:root KeePass.config.enforced.xml
+6. sudo chown root:root KeePass.config.enforced.xml (and database/key file)
 7. sudo chmod 0444 KeePass.config.enforced.xml
 8.	Most importantly in KeePass.config.enforced.xml between <Security> change true to 
 	<Policy><UnhidePasswords>false</UnhidePasswords></Policy> so that passwords cannot be seen.
@@ -68,6 +70,8 @@ Chrome:
 14. Follow the directions chromeIPass gives you, creating an identifier
 15. Good idea to restart chrome.
 16. In Chrome Settings "On Startup Continue where you left off"
+17. Afterwards, you can sudo chown -R root:root ~/KeePass/*
+	 You may need to make adjustments for plugins.
 
 
 DESKTOP STARTUP
