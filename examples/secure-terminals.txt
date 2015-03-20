@@ -34,7 +34,7 @@ Firefox (IceWeasel):
 2. Unzip in ~/KeePass
 3. sudo chown root:root ~/KeePass; sudo chmod 0755 ~/KeePass;
 4. cd ~/KeePass; mkdir plugins
-5. run .. mono KeePass.exe, create database and optionally a key file in ~/KeePass
+5. run .. mono KeePass.exe, create database and a key file in ~/KeePass
 6. mv KeePass.config.xml KeePass.config.enforced.xml
 7. sudo chown root:root KeePass.config.enforced.xml (and database/key file)
 8. sudo chmod 0444 KeePass.config.enforced.xml
@@ -56,7 +56,7 @@ Chrome:
 1. Download KeePass zip - http://keepass.info/download.html
 2. Unzip in ~/KeePass
 3. sudo chown root:root ~/KeePass; sudo chmod 0755 ~/KeePass;
-4. run .. mono KeePass.exe, create database and optionally a key file in ~/KeePass
+4. run .. mono KeePass.exe, create database and a key file in ~/KeePass
 5. mv KeePass.config.xml KeePass.config.enforced.xml
 6. sudo chown root:root KeePass.config.enforced.xml (and database/key file)
 7. sudo chmod 0444 KeePass.config.enforced.xml
