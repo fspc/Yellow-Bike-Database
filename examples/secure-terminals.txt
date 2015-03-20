@@ -34,38 +34,40 @@ Firefox (IceWeasel):
 2. Unzip in ~/KeePass
 3. sudo chown root:root ~/KeePass; sudo chmod 0755 ~/KeePass;
 4. cd ~/KeePass; mkdir plugins
-5. mv KeePass.config.xml KeePass.config.enforced.xml
-6. sudo chown root:root KeePass.config.enforced.xml
-7. sudo chmod 0444 KeePass.config.enforced.xml
-8.	Most importantly in KeePass.config.enforced.xml between <Security> change true to 
+5. run .. mono KeePass.exe, create database and optionally a key file in ~/KeePass
+6. mv KeePass.config.xml KeePass.config.enforced.xml
+7. sudo chown root:root KeePass.config.enforced.xml
+8. sudo chmod 0444 KeePass.config.enforced.xml
+9.	Most importantly in KeePass.config.enforced.xml between <Security> change true to 
 	<Policy><UnhidePasswords>false</UnhidePasswords></Policy> so that passwords cannot be seen.
-9. In Debian/Ubuntu:  apt-get install mono-runtime mono-devel
-10. Install KeeFox extension from https://addons.mozilla.org/en-us/firefox/addon/keefox/
-11. KeeFox will tell you where to copy KeePassRPC.plgx from into the plugins directory
+10. In Debian/Ubuntu:  apt-get install mono-runtime mono-devel
+11. Install KeeFox extension from https://addons.mozilla.org/en-us/firefox/addon/keefox/
+12. KeeFox will tell you where to copy KeePassRPC.plgx from into the plugins directory
    Usually somewhere under  ~/.mozilla/firefox/*default/extensions/keefox*
-12. When setting up password database for KeePass use only a key file.
-13. Add the url along with username and password in the database.
-14. Once the login is working properly for the htpasswd setup for apache, 
+13. When setting up password database for KeePass use only a key file.
+14. Add the url along with username and password in the database.
+15. Once the login is working properly for the htpasswd setup for apache, 
    the whole process can be completely automated in KeeFox options.
-15. In Firefox (IceWeasel) Preferences -> General use "When IceWeasel starts: Show my windows and tabs from the last time"
+16. In Firefox (IceWeasel) Preferences -> General use "When IceWeasel starts: Show my windows and tabs from the last time"
 
 Chrome:
 1. Download KeePass zip - http://keepass.info/download.html
 2. Unzip in ~/KeePass
 3. sudo chown root:root ~/KeePass; sudo chmod 0755 ~/KeePass;
-4. mv KeePass.config.xml KeePass.config.enforced.xml
-5. sudo chown root:root KeePass.config.enforced.xml
-6. sudo chmod 0444 KeePass.config.enforced.xml
-7.	Most importantly in KeePass.config.enforced.xml between <Security> change true to 
+4. run .. mono KeePass.exe, create database and optionally a key file in ~/KeePass
+5. mv KeePass.config.xml KeePass.config.enforced.xml
+6. sudo chown root:root KeePass.config.enforced.xml
+7. sudo chmod 0444 KeePass.config.enforced.xml
+8.	Most importantly in KeePass.config.enforced.xml between <Security> change true to 
 	<Policy><UnhidePasswords>false</UnhidePasswords></Policy> so that passwords cannot be seen.
-8. When setting up password database for KeePass use only a key file.
-9. Add the url along with username and password in the database.
-10. In Debian/Ubuntu:  apt-get install mono-runtime mono-devel
-11. Install extension chromeIPass
-12. Install keepasshttp as explained at https://github.com/pfn/keepasshttp/ (put KeePassHttp.plgx in ~/KeePass)
-13. Follow the directions chromeIPass gives you, creating an identifier
-14. Good idea to restart chrome.
-15. In Chrome Settings "On Startup Continue where you left off"
+9. When setting up password database for KeePass use only a key file.
+10. Add the url along with username and password in the database.
+11. In Debian/Ubuntu:  apt-get install mono-runtime mono-devel
+12. Install extension chromeIPass
+13. Install keepasshttp as explained at https://github.com/pfn/keepasshttp/ (put KeePassHttp.plgx in ~/KeePass)
+14. Follow the directions chromeIPass gives you, creating an identifier
+15. Good idea to restart chrome.
+16. In Chrome Settings "On Startup Continue where you left off"
 
 
 DESKTOP STARTUP
@@ -88,7 +90,7 @@ Example commands that bring up the gui setting tool:
 SUMMARY
 
 There are other things that can be done within the terminal to prevent tampering, e.g., read-only environment, 
-an expect script rather than KeePass, but what is above protects the password from hacking, eavesdropping, 
+an expect or curl script, etc. rather than KeePass, but what is above protects the password from hacking, eavesdropping, 
 and from regular users in the shop, basically, only the sysadmin and bookkeeper should have remote access via the password. 
 So while YBDB is on the internet, it will only be available to the terminal(s) you allow it to be on, and
 the Point of Sale will be at the proper location which is usually the front of the Community Bike Shop where people
