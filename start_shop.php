@@ -152,7 +152,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                   <tr valign="bottom" bgcolor="#CCCC33">
                     <td>Edit Record:<br />
                         <?php echo "<a href=\"{$page_shop_log}?shop_id={$row_Recordset1['shop_id']}\">Shop ID: {$row_Recordset1['shop_id']}</a>";?></td>
-                    <td><input name="date" type="text" value="<?php echo $row_Recordset1['date']; ?>" /></td>
+                    <td><div><?php echo $row_Recordset1['date']; ?></div></td>
                     <td><?php list_shop_locations('shop_location', $row_Recordset1['shop_location']); ?></td>
                     <td><?php list_shop_types('shop_type', $row_Recordset1['shop_type']); ?></td>
                     <td><?php echo $row_Recordset1['num_visitors']; ?> Visitors<br />

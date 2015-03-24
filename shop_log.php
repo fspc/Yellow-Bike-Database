@@ -228,7 +228,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
               </td>
             </tr>
               <?php //if(current_shop_by_ip()>=$shop_id & (current_shop_by_ip()-5)<=$shop_id ) { 
-						 // Not really necessary, and should be an administrative function 
+						 // Not really necessary since the time can be zeroed out. 
 						 // shop_log_delete_shopvisitid.php has been moved to the attic              
               ?>
               <!--
