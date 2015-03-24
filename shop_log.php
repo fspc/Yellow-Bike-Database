@@ -227,11 +227,15 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
               <td><textarea  name="comment" cols="45" rows="3"><?php echo $row_Recordset1['comment']; ?></textarea>
               </td>
             </tr>
-              <?php if(current_shop_by_ip()>=$shop_id & (current_shop_by_ip()-5)<=$shop_id ) { ?>
+              <?php //if(current_shop_by_ip()>=$shop_id & (current_shop_by_ip()-5)<=$shop_id ) { 
+						 // Not really necessary, and should be an administrative function 
+						 // shop_log_delete_shopvisitid.php has been moved to the attic              
+              ?>
+              <!--
               <tr>
                 <td><div align="right">Delete:</div></td>
               <td>Click to Delete this Shop User's Visit: <a href="<?php echo PAGE_SHOP_LOG_DELETE_VISIT . "?visit_id={$visit_id}&shop_id={$shop_id}";?>">Delete</a> </td>
-            </tr> <?php } //end if current shop?>
+            </tr> --> <?php // } //end if current shop?>
          </table>	   
 	      </tr>
           <input type="hidden" name="MM_insert" value="FormEdit">
