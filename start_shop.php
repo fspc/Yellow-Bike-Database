@@ -161,6 +161,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                   </tr>
                   <input type="hidden" name="MM_insert" value="FormEdit" />
                   <input type="hidden" name="shop_id" value="<?php echo $row_Recordset1['shop_id']; ?>" />
+                  <input type="hidden" name="date" value="<?php echo $row_Recordset1['date']; ?>" />
                 </form>
               <?php } else { // end if EDIT RECORD ?>
                 <tr>
