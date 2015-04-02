@@ -149,8 +149,15 @@ $change_fund = CHANGE_FUND;
 	}
 
 	// populate transaction slider for accounting programs
+	
+	// Originally wasn't going to include deposits of $0 (amount > 0), however,
+	// there may be shops where only non-monetary transactions occurred (amount >= 0)
+	// which would be useful to record in an accounting program.
+	// One caveat, if a monetary transaction is recorded, but the depositor only
+	// enters $0, the deposit will show "Difference: n/a", however this should be a cue
+	// since obvious a real world $0 deposit wouldn't be recorded.
 	if (isset($_POST['transaction_slider'])) {
-		$query = 'SELECT transaction_id, IF(amount > 0, "yes", "no") AS "deposited", date 
+		$query = 'SELECT transaction_id, IF(amount >= 0, "yes", "no") AS "deposited", date 
 					FROM transaction_log WHERE transaction_type= "Deposit";';
 		$sql = mysql_query($query, $YBDB) or die(mysql_error());
 		while ( $result = mysql_fetch_assoc($sql) ) {
