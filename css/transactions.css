@@ -58,8 +58,9 @@ input[value=Save]:focus, input[value=Close]:focus {
 	 width: 80px; 
 }
 
+/* was 351 */
 #gnucash_csv_range {
-	width: 351px;
+	width: 496px;
 }
 
 #range_slider {
@@ -69,6 +70,10 @@ input[value=Save]:focus, input[value=Close]:focus {
 /* center error text by description when editing transactions */
 [name=description], #description_error {
 	vertical-align: middle;
+}
+
+#slider_upper {
+	margin-left: 147px;
 }
 
 /* errors */

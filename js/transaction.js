@@ -379,6 +379,8 @@ $(function() {
 	$("[name='gnucash_csv_year']").chosen();
 
 
+	// produce a GnuCash CSV file on submit
+
 	// null or real number
 	function payment_result(result) { 
 		if (result == null) {
@@ -387,6 +389,8 @@ $(function() {
 			return Number(result).toFixed(2);		
 		}
 	};
+	
+	
 
 	// Deposit Calculator function
 	function deposit_calculator() {

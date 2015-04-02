@@ -155,12 +155,19 @@ define("CSV_DIRECTORY","csv");
 // chmod 0700 csv 
 
 // Define array mapping for Accounts.  Usually Asset Accounts since Income is generally the main type of transaction.
-// Currently three types of accounts are supported:  checking, credit, account_receivable 
+// Currently four types of accounts are supported:  checking, credit, account_receivable, donation 
 // 	checking/credit = transaction has been 1) paid and is 2) cash & check [checking] or a credit card [credit] and 3) deposited
+//				note: checking type may include $0 transactions, e.g. earn-a-bike
 //	   account_receivable =  there is an 1). account receivable invoice and it has been 2) paid and 3) deposited
+//		donation = transaction that currently has no assessed monetary amount (NULL), 
+//					e.g. shop item giveaway or patron non-monetary donation
+//					note:  this is a hack for record keeping in an accounting program, and not recommended; 
+//					 bike donations/giveaways should be handled in a better way like using BikeBinder, 
+//					 an inventory system application,that may be tied into YBDB someday
 $gnucash_accounts = array(	"Assets:Current Assets:Checking" => "checking",
 									"Assets:Current Assets:PayPal" => "credit",
-									"Assets:Account Receivable" => "account_receivable"
+									"Assets:Account Receivable" => "account_receivable",
+									"Assets:Donations" => "donation"
 								);
 
 // Most collectives require only one shop at a time, but YBDB provides a way to handle 2 concurrent
