@@ -5,6 +5,7 @@ require_once('../Connections/YBDB.php');
 mysql_select_db($database_YBDB, $YBDB);
 
 $change_fund = CHANGE_FUND;
+$csv_directory = CSV_DIRECTORY;
 
 	// Is there a current shop?
 	if(isset($_POST['shop_exist'])) {
@@ -188,6 +189,43 @@ $change_fund = CHANGE_FUND;
 		} else {
 			echo json_encode($slider_range);
 		}
+		
+	}
+	
+	// Create csv file(s) for GnuCash with this format:
+	if(isset($_POST['gnucash_account_type'])) {
+		
+		$transaction_range = $_POST['transaction_range'];	
+		$account_type = $_POST['gnucash_account_type'];	
+		
+		// Date (yyyy-mm-dd), Num, Description, Deposit, Account		
+		
+		// checking (check or cash) || credit
+		// transaction has been 1) paid and is 2) cash & check [checking] or credit and 3) deposited
+		if( $account_type === 'checking' ) {
+			
+			
+		}
+
+		if ( $account_type === 'credit' ) {
+		
+		
+		}		
+		
+		/*
+		SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount 
+		FROM transaction_log WHERE paid=1 AND date!='NULL'
+		AND (payment_type="cash" OR payment_type="check") 
+		AND (transaction_id>256 AND transaction_id<259);
+		*/
+	
+	
+		/*
+		require_once('../php-console/src/PhpConsole/__autoload.php');
+		$handler = PhpConsole\Handler::getInstance();
+		$handler->start();
+		$handler->debug($transaction_range[0]);
+		*/
 		
 	}
 

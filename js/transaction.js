@@ -380,6 +380,8 @@ $(function() {
 
 
 	// produce a GnuCash CSV file on submit
+	gnucash_csv_submit();	
+	
 	function gnucash_csv_submit() {
 
 		// grab values
@@ -405,8 +407,7 @@ $(function() {
 	
 	}
 	
-	gnucash_csv_submit();
-
+	
 	// null or real number
 	function payment_result(result) { 
 		if (result == null) {
@@ -417,7 +418,6 @@ $(function() {
 	};
 	
 	
-
 	// Deposit Calculator function
 	function deposit_calculator() {
 
