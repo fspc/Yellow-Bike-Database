@@ -164,7 +164,7 @@ define("CSV_DIRECTORY","csv");
 //					note:  this is a hack for record keeping in an accounting program, and not recommended; 
 //					 bike donations/giveaways should be handled in a better way like using BikeBinder, 
 //					 an inventory system application,that may be tied into YBDB someday
-$gnucash_accounts = array(	"Assets:Current Assets:Checking" => "checking",
+$gnucash_accounts = array(	"Assets:Current Assets:Checking Account" => "checking",
 									"Assets:Current Assets:PayPal" => "credit",
 									"Assets:Account Receivable" => "account_receivable",
 									"Assets:Donations" => "donation"

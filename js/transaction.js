@@ -380,6 +380,32 @@ $(function() {
 
 
 	// produce a GnuCash CSV file on submit
+	function gnucash_csv_submit() {
+
+		// grab values
+		$("#gnucash_csv_submit").on("click keypress",function() {
+			
+			event.preventDefault();
+			var Format = wNumb({decimals:0});
+			
+			var transaction_range = [];
+			var gnucash_accounts = [];
+			$.each($("#gnucash_csv_range").val(), function(k,v) { 
+				transaction_range.push(Format.from(v));
+			});
+			gnucash_accounts = $("#gnucash_csv_accounts").val();
+			
+			// send values for processing individual csv files	for each selected account type
+			if (gnucash_accounts) {
+				$.each(gnucash_accounts, function(k,v) {
+					$.post("json/transaction.php",{ gnucash_account_type: v, transaction_range: transaction_range});		
+				});
+			}
+		});	
+	
+	}
+	
+	gnucash_csv_submit();
 
 	// null or real number
 	function payment_result(result) { 
