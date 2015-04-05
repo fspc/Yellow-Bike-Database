@@ -193,7 +193,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 				$result = mysql_query($sql, $YBDB) or die(mysql_error());	
 	}	 	
 
-  if ($_POST['contact_id_entry'] == 'new_contact'){
+  if ($_POST['contact_id_entry'] == 'new_contact' || $_POST['contact_id_entry'] == $_POST['contact_id']){
   
   	//navigate back to shop that it came from
 	$pagegoto = PAGE_SHOP_LOG . "?shop_id={$shop_id}&new_user_id={$contact_id}";

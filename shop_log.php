@@ -182,7 +182,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
 		  </tr>
 		  <tr>
 		  	<td></td>
-		  	<td valign="bottom"><input name="Submit" type="submit" value="Sign In" /></td>
+		  	<td valign="bottom"><input id="sign_in_button" name="Submit" type="submit" value="Sign In" /></td>
 		  </tr>
 	     <input type="hidden" name="MM_insert" value="form_new">
        </form>     
