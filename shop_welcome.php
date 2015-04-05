@@ -36,12 +36,14 @@ require_once('Connections/database_functions.php');
       </ul>
       <table height="40" border="1" align="center" cellpadding="1" cellspacing="0">
       <tr align="center">
-        <td width="187"><span class="style8"><span class="style9"><a href="<?php echo PAGE_EDIT_CONTACT; ?>?contact_id=new_contact">First Time User</a></span> <br />
-        </span><span class="yb_standardCENTERred">Fill out intial information </span></td>
-        <td width="195"><span class="style8"><span class="style9"><a href="shop_log.php">Sign In</a> to Get Started</span><br /> 
-          </span><span class="yb_standardCENTERred">Talk to a coordinator</span></td>
-        <td width="203"><span class="style8"><span class="style9"><a href="shop_log.php">Sign Out</a> Before Leaving</span><br /> 
-          </span><span class="yb_standardCENTERred">Workspace cleaned up?</span></td>
+        <td width="187"><span class="style8"><a href="<?php echo PAGE_EDIT_CONTACT; ?>?contact_id=new_contact">First Time User</a></span> <br />
+        <span class="yb_standardCENTERred">Fill out intial information </span></td>
+        <td width="250"><span class="style8"><a href="<?php echo PAGE_SELECT_CONTACT; ?>">Existing User</a></span> <br />
+        <span class="yb_standardCENTERred">Update information (e.g. Interests) </span></td>
+        <td width="195"><span class="style8"><a href="shop_log.php">Sign In</a> to Get Started</span><br /> 
+        <span class="yb_standardCENTERred">Talk to a coordinator</span></td>
+        <td width="203"><span class="style8"><a href="shop_log.php">Sign Out</a> Before Leaving</span><br /> 
+        <span class="yb_standardCENTERred">Workspace cleaned up?</span></td>
       </tr>
     </table>
     <p><br />
