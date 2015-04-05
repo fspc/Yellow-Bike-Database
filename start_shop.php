@@ -110,7 +110,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
   header(sprintf("Location: %s",$editFormAction ));   //$editFormAction
 }
 ?>
-<?php include("include_header_shop.html"); ?>
+<?php include("include_header_start_shop.html"); ?>
 
 	    <table style="margin-left:170px">
 
