@@ -56,6 +56,20 @@ require_once('Connections/database_functions.php');
         <span class="yb_standardCENTERred">Update information (e.g. Interests) </span></td>
      </tr>
      </table>   
+	 <br />	
+    <span class="yb_pagetitle">Repairs Policy</span>:<br />
+    <!-- <blockquote style="height: 0px; width: 600px;"> -->
+    <p>We are all volunteers, and<strong> </strong>during shop hours open to repairs <strong>
+    we will not repair your bike for you or schedule repairs</strong>, 
+    but rather we will help you do-it-yourself.&nbsp; At Positive Spin you can find work stations with tools, 
+    bicycle repair stands, repair manuals, reasonably priced bicycle parts, and volunteers with varying levels of
+    experience in various areas of bicycle maintenance and repair.&nbsp; Volunteers may help you diagnose, repair and 
+    provide instruction about your bicycle.&nbsp; You may discover that at the Spin even highly experienced volunteers learn 
+    new skills from others!&nbsp; If you have a physical issue or handicap preventing you from physically
+    repairing your bicycle, we still want you to be part of the process in whatever way you are able,
+    and we will gladly help facilitate the repair of your bicycle. </p>
+    <!-- </blockquote> -->
+
     <p><br />
       <span class="yb_pagetitle">Learn More</span>:<br />
         <span class="yb_heading3red">PS Info:   </span>
@@ -68,17 +82,6 @@ require_once('Connections/database_functions.php');
         <a href="http://positivespin.org/home2/content/view/92/79/" target="_blank">Projects</a> | 
         <a href="" target="_blank">Earn-A-Bike</a> | 
         <a href="" target="_blank">Donating Online</a><br />
-    </p>
-    <span class="yb_pagetitle">Repairs Policy</span>:<br />
-    <blockquote style="height: 0px; width: 600px;">
-    <p>We are all volunteers, and<strong> </strong>during shop hours open to repairs <strong>
-    we will not repair your bike for you or schedule repairs</strong>, 
-    but rather we will help you do-it-yourself.&nbsp; At Positive Spin you can find work stations with tools, 
-    bicycle repair stands, repair manuals, reasonably priced bicycle parts, and volunteers with varying levels of
-    experience in various areas of bicycle maintenance and repair.&nbsp; Volunteers may help you diagnose, repair and 
-    provide instruction about your bicycle.&nbsp; You may discover that at the Spin even highly experienced volunteers learn 
-    new skills from others!&nbsp; If you have a physical issue or handicap preventing you from physically
-    repairing your bicycle, we still want you to be part of the process in whatever way you are able,
-    and we will gladly help facilitate the repair of your bicycle. </p>
-    </blockquote>
+    </p>    
+    
     <?php include("include_footer.html"); ?>
