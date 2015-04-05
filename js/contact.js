@@ -155,10 +155,11 @@ $(function(){
   		
   	
   	// show more button	
-	function show_more(demo,demo_button) {
+	function show_more(demo,demo_button,div_click) {
 	  	$(demo).hide();
 	  	var c=0;
 	  	var button_value = demo_button.val();
+		// button
 	  	$(demo_button).click(function(e){
 	  		e.preventDefault();
 		  	if (c == 0) {
@@ -170,10 +171,18 @@ $(function(){
 		   	$(this).attr("value",button_value);
 		    	c--;
 		    }
-	  	} );  
+	  	} );
+	  	// div 
+	  	if (div_click) {
+			$(div_click).on("click submit", function(e){
+			   $(this).hide();
+			   $(demo_button).attr("value",button_value);
+			   c = 0;
+		  	} );
+	   }	  	  
 	}  		
   	 
-	show_more($('#waiver'),$('#waiver_button'));
+	show_more($('#waiver'),$('#waiver_button'),$('#waiver'));
 	show_more($('#interest_form'),$('#interest_form_button'));
 	  	 
  	$("#email_list_toggle").on("set",function() {  
