@@ -201,7 +201,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 
   }
 
-}
+} 
 
 mysql_select_db($database_YBDB, $YBDB);
 $query_Recordset1 = "SELECT *, DECODE(pass,'yblcatx') AS passdecode FROM contacts WHERE contact_id = $contact_id";
