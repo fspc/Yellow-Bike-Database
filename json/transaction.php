@@ -253,7 +253,6 @@ $csv_directory = CSV_DIRECTORY;
 						"AND  payment_type='credit'  " . 
 						"AND (transaction_id>" . $transaction_range[0] . " AND transaction_id<" . $transaction_range[1]  . ");";		
 			$sql = mysql_query($query, $YBDB) or die(mysql_error());	
-			$result = mysql_fetch_assoc($sql);
 			$gnucash_csv_file = "";	
 			while ( $result = mysql_fetch_assoc($sql) ) {
 				$description = preg_replace('/\n/', ' \r ', $result['description']);
