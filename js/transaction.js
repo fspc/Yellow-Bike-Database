@@ -401,7 +401,7 @@ $(function() {
 			if (gnucash_accounts) {
 				$.each(gnucash_accounts, function(k,v) {
 					$.post("json/transaction.php",{ gnucash_account_type: v, transaction_range: transaction_range}, function(data) {
-					
+  							$("body").append("<iframe src='" + data + "' style='display: none;' ></iframe>"); 
 					});		
 				});
 			}
