@@ -403,7 +403,7 @@ $(function() {
 					$.post("json/transaction.php",{ gnucash_account_type: v, transaction_range: transaction_range});		
 				});
 			}
-		});	
+		});			
 	
 	}
 	

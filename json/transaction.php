@@ -192,42 +192,88 @@ $csv_directory = CSV_DIRECTORY;
 		
 	}
 	
-	// Create csv file(s) for GnuCash with this format:
+	// Create csv file(s) for GnuCash
 	if(isset($_POST['gnucash_account_type'])) {
-		
+	
+
+/*		require_once('../php-console/src/PhpConsole/__autoload.php');
+		$handler = PhpConsole\Handler::getInstance();
+		$handler->start();*/
+	
 		$transaction_range = $_POST['transaction_range'];	
 		$account_type = $_POST['gnucash_account_type'];	
-		
+		$accounts_gnucash = array_flip($gnucash_accounts);
+
+						
 		// Date (yyyy-mm-dd), Num, Description, Deposit, Account		
 		
 		// checking (check or cash) || credit
 		// transaction has been 1) paid and is 2) cash & check [checking] or credit and 3) deposited
 		if( $account_type === 'checking' ) {
+			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount " .
+						"FROM transaction_log WHERE paid=1 AND date!='NULL' " .
+						"AND (payment_type='cash' OR payment_type='check') " . 
+						"AND (transaction_id>" . $transaction_range[0] . " AND transaction_id<" . $transaction_range[1]  . ");";		
+			$sql = mysql_query($query, $YBDB) or die(mysql_error());	
+			$gnucash_csv_file = "";
+			while ( $result = mysql_fetch_assoc($sql) ) {
+				$description = preg_replace('/\n/', ' \r ', $result['description']);
+				$description = preg_replace('/\r/', '\r', $description);
+				$description = preg_replace('/,/', ';', $description);
+				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . 
+											', (Income:' . $result['transaction_type'] . ') '  . $description . ', ' . $result['amount'] . ', ' . 
+											$accounts_gnucash['checking'] . "\n";
+			}	
 			
+			$file_name = preg_replace('/ /', '_', $accounts_gnucash['checking']);
+			$file_name = preg_replace('/:/', '-', $file_name);
+			$file_name = $file_name . '-' . $transaction_range[0] . '-' . $transaction_range[1] . '.csv';
+			$file = '../' . $csv_directory . '/' . $file_name;
+			$csv_file = fopen($file, "w") or die("Unable to open file for writing.");
+			fwrite($csv_file, $gnucash_csv_file);
+			fclose($csv_file);
 			
+			// download file to browser
+			/*
+	    	header('Content-Description: File Transfer');
+	    	header('Content-Type: application/octet-stream');
+	    	header('Content-Disposition: attachment; filename='.basename($file));
+	    	header('Expires: 0');
+	    	header('Cache-Control: must-revalidate');
+	    	header('Pragma: public');
+	    	header('Content-Length: ' . filesize($file));
+	    	readfile($file);			
+			*/
 		}
 
 		if ( $account_type === 'credit' ) {
-		
+			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount " .
+						"FROM transaction_log WHERE paid=1 AND date!='NULL' " .
+						"AND  payment_type='credit'  " . 
+						"AND (transaction_id>" . $transaction_range[0] . " AND transaction_id<" . $transaction_range[1]  . ");";		
+			$sql = mysql_query($query, $YBDB) or die(mysql_error());	
+			$result = mysql_fetch_assoc($sql);
+			$gnucash_csv_file = "";	
+			while ( $result = mysql_fetch_assoc($sql) ) {
+				$description = preg_replace('/\n/', ' \r ', $result['description']);
+				$description = preg_replace('/\r/', '\r', $description);
+				$description = preg_replace('/,/', ';', $description);
+				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . 
+											', (Income:' . $result['transaction_type'] . ') '  . $description . ', ' . $result['amount'] . ', ' . 
+											$accounts_gnucash['credit'] . "\n";							
+			}
+				
+			$file_name = preg_replace('/ /', '_', $accounts_gnucash['credit']);
+			$file_name = preg_replace('/:/', '-', $file_name);
+			$file_name = $file_name . '-' . $transaction_range[0] . '-' . $transaction_range[1] . '.csv';
+			$file = '../' . $csv_directory . '/' . $file_name;
+			$csv_file = fopen($file, "w") or die("Unable to open file for writing.");
+			fwrite($csv_file, $gnucash_csv_file);
+			fclose($csv_file);
 		
 		}		
 		
-		/*
-		SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount 
-		FROM transaction_log WHERE paid=1 AND date!='NULL'
-		AND (payment_type="cash" OR payment_type="check") 
-		AND (transaction_id>256 AND transaction_id<259);
-		*/
-	
-	
-		/*
-		require_once('../php-console/src/PhpConsole/__autoload.php');
-		$handler = PhpConsole\Handler::getInstance();
-		$handler->start();
-		$handler->debug($transaction_range[0]);
-		*/
-		
-	}
+	} // Create csv file(s) for GnuCash
 
 	// Deposit Calculator
 	if (isset($_POST['deposit'])) {

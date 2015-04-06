@@ -154,6 +154,7 @@ define("CSV_DIRECTORY","csv");
 // chown www-data:www-data csv 
 // chmod 0700 csv 
 
+
 // Define array mapping for Accounts.  Usually Asset Accounts since Income is generally the main type of transaction.
 // Currently four types of accounts are supported:  checking, credit, account_receivable, donation 
 // 	checking/credit = transaction has been 1) paid and is 2) cash & check [checking] or a credit card [credit] and 3) deposited
