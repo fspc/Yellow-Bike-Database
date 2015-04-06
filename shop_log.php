@@ -76,7 +76,7 @@ $editFormAction_novisit = $_SERVER['PHP_SELF'] . "?shop_id=$shop_id&welcome=yes"
 //Form Submit New Shop User
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form_new") && ($_POST["contact_id"] == "no_selection")){
 	//if no contact is selected
-	$error_message = '<span class="yb_heading3red">Please Select a User</span><br />';
+	$error_message = '<span class="yb_heading3red">Please Select Yourself</span><br />';
 } elseif ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form_new")) {
   $insertSQL = sprintf("INSERT INTO shop_hours (contact_id, shop_id, shop_user_role, time_in, comment, project_id) VALUES (%s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['contact_id'], "int"),
@@ -136,9 +136,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
 <?php include("include_header_shop.html"); ?>
 
 	<table width="2200px">
-  		<tr>
-    		<td align="left" valign="bottom"><?php echo $error_message;?></td>
-  		</tr>
+  
       <form method="post" name="form_new" action="<?php echo $editFormAction; ?>">
 		  <tr>
 			<td><label>Shop ID:</label></td>
@@ -151,7 +149,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
         <tr>
           <td><label>Shop User:</label></td>
           <td>
-              <?php list_contacts_select_user('contact_id', $new_user_id); ?>
+              <?php list_contacts_select_user('contact_id', $new_user_id); ?> <?php echo $error_message;?>
           </td>
         </tr>
         <tr>
