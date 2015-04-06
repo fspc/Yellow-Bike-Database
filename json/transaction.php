@@ -232,7 +232,8 @@ $csv_directory = CSV_DIRECTORY;
 			$csv_file = fopen($file, "w") or die("Unable to open file for writing.");
 			fwrite($csv_file, $gnucash_csv_file);
 			fclose($csv_file);
-			
+	
+			echo $file;		
 			// download file to browser
 			/*
 	    	header('Content-Description: File Transfer');
@@ -270,6 +271,8 @@ $csv_directory = CSV_DIRECTORY;
 			$csv_file = fopen($file, "w") or die("Unable to open file for writing.");
 			fwrite($csv_file, $gnucash_csv_file);
 			fclose($csv_file);
+
+			echo $file;		
 		
 		}		
 		

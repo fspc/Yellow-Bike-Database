@@ -400,7 +400,9 @@ $(function() {
 			// send values for processing individual csv files	for each selected account type
 			if (gnucash_accounts) {
 				$.each(gnucash_accounts, function(k,v) {
-					$.post("json/transaction.php",{ gnucash_account_type: v, transaction_range: transaction_range});		
+					$.post("json/transaction.php",{ gnucash_account_type: v, transaction_range: transaction_range}, function(data) {
+					
+					});		
 				});
 			}
 		});			
