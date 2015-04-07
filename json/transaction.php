@@ -210,9 +210,11 @@ $csv_directory = CSV_DIRECTORY;
 		// checking (check or cash) || credit
 		// transaction has been 1) paid and is 2) cash & check [checking] or credit and 3) deposited
 		if( $account_type === 'checking' ) {
-			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount " .
-						"FROM transaction_log WHERE paid=1 AND date!='NULL' " .
+			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount, " .
+						"CONCAT(contacts.first_name, ' ', contacts.last_name) AS 'patron' " .
+						"FROM transaction_log, contacts WHERE paid=1 AND date!='NULL' " .
 						"AND (payment_type='cash' OR payment_type='check') " . 
+						"AND contacts.contact_id = transaction_log.sold_to " .
 						"AND (transaction_id>" . $transaction_range[0] . " AND transaction_id<" . $transaction_range[1]  . ");";		
 			$sql = mysql_query($query, $YBDB) or die(mysql_error());	
 			$gnucash_csv_file = "";
@@ -221,7 +223,9 @@ $csv_directory = CSV_DIRECTORY;
 				$description = preg_replace('/\r/', '\r', $description);
 				$description = preg_replace('/,/', ';', $description);
 				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . 
-											', (Income:' . $result['transaction_type'] . ') '  . $description . ', ' . $result['amount'] . ', ' . 
+											', (Income:' . $result['transaction_type'] . ') '  . 
+											$description . ' [' . $result['patron'] . ']' .
+											', ' . $result['amount'] . ', ' . 
 											$accounts_gnucash['checking'] . "\n";
 			}	
 			
@@ -234,23 +238,14 @@ $csv_directory = CSV_DIRECTORY;
 			fclose($csv_file);
 	
 			echo $file;		
-			// download file to browser
-			/*
-	    	header('Content-Description: File Transfer');
-	    	header('Content-Type: application/octet-stream');
-	    	header('Content-Disposition: attachment; filename='.basename($file));
-	    	header('Expires: 0');
-	    	header('Cache-Control: must-revalidate');
-	    	header('Pragma: public');
-	    	header('Content-Length: ' . filesize($file));
-	    	readfile($file);			
-			*/
 		}
 
 		if ( $account_type === 'credit' ) {
-			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount " .
-						"FROM transaction_log WHERE paid=1 AND date!='NULL' " .
+			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount, " .
+						"CONCAT(contacts.first_name, ' ', contacts.last_name) AS 'patron' " .
+						"FROM transaction_log, contacts WHERE paid=1 AND date!='NULL' " .
 						"AND  payment_type='credit'  " . 
+						"AND contacts.contact_id = transaction_log.sold_to " .
 						"AND (transaction_id>" . $transaction_range[0] . " AND transaction_id<" . $transaction_range[1]  . ");";		
 			$sql = mysql_query($query, $YBDB) or die(mysql_error());	
 			$gnucash_csv_file = "";	
@@ -259,7 +254,9 @@ $csv_directory = CSV_DIRECTORY;
 				$description = preg_replace('/\r/', '\r', $description);
 				$description = preg_replace('/,/', ';', $description);
 				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . 
-											', (Income:' . $result['transaction_type'] . ') '  . $description . ', ' . $result['amount'] . ', ' . 
+											', (Income:' . $result['transaction_type'] . ') '  . 
+											$description . ' [' . $result['patron'] . ']' . 
+											', ' . $result['amount'] . ', ' . 
 											$accounts_gnucash['credit'] . "\n";							
 			}
 				
