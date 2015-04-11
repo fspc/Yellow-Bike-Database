@@ -225,7 +225,7 @@ $csv_directory = CSV_DIRECTORY;
 			}				
 			
 			// second statement to find normal transactions
-			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount, " .
+			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, check_number, description, amount, " .
 						"CONCAT(contacts.first_name, ' ', contacts.last_name) AS 'patron' " .
 						"FROM transaction_log, contacts WHERE paid=1 AND date!='NULL' " .
 						"AND (payment_type='cash' OR payment_type='check') " . 
@@ -234,7 +234,7 @@ $csv_directory = CSV_DIRECTORY;
 			$sql2 = mysql_query($query, $YBDB) or die(mysql_error());
 							
 			// third statement to find anonymous transactions			
-			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount " .
+			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, check_number, description, amount " .
 						"FROM transaction_log WHERE paid=1 AND date!='NULL' " .
 						"AND  (payment_type='cash' OR payment_type='check') " . 
 						"AND  anonymous=1 " .
@@ -248,7 +248,10 @@ $csv_directory = CSV_DIRECTORY;
 				$description = preg_replace('/\n/', ' \r ', $result['description']);
 				$description = preg_replace('/\r/', '\r', $description);
 				$description = preg_replace('/,/', ';', $description);
-				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . 
+				if ($result['check_number'] != "NULL") {
+					$check_number = $result['check_number'];			
+				}
+				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . ' ' . $check_number . 
 											',' . ' [' . $coordinator[$result['transaction_id']] . ' => ' . $result['patron'] . '] ' .  
 											$description . ' (Income:' . $result['transaction_type'] . ') '  . 
 											', ' . $result['amount'] . ', ' . 
@@ -260,7 +263,10 @@ $csv_directory = CSV_DIRECTORY;
 				$description = preg_replace('/\n/', ' \r ', $result['description']);
 				$description = preg_replace('/\r/', '\r', $description);
 				$description = preg_replace('/,/', ';', $description);
-				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . 
+				if ($result['check_number'] != "NULL") {
+					$check_number = $result['check_number'];			
+				}
+				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . ' ' . $check_number .
 											',' . ' [' . $coordinator[$result['transaction_id']] . ' => Anonymous] ' .  
 											$description . ' (Income:' . $result['transaction_type'] . ') '  . 
 											', ' . $result['amount'] . ', ' . 
