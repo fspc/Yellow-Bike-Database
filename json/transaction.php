@@ -196,7 +196,7 @@ $csv_directory = CSV_DIRECTORY;
 	if(isset($_POST['gnucash_account_type'])) {
 	
 
-/*		require_once('../php-console/src/PhpConsole/__autoload.php');
+		/*require_once('../php-console/src/PhpConsole/__autoload.php');
 		$handler = PhpConsole\Handler::getInstance();
 		$handler->start();*/
 	
@@ -216,7 +216,20 @@ $csv_directory = CSV_DIRECTORY;
 						"AND (payment_type='cash' OR payment_type='check') " . 
 						"AND contacts.contact_id = transaction_log.sold_to " .
 						"AND (transaction_id>" . $transaction_range[0] . " AND transaction_id<" . $transaction_range[1]  . ");";		
-			$sql = mysql_query($query, $YBDB) or die(mysql_error());	
+			$sql = mysql_query($query, $YBDB) or die(mysql_error());
+			// second statement to find coordinator for associated transactions	
+			$query = "SELECT transaction_id, " .
+						"CONCAT(contacts.first_name, ' ', contacts.last_name) AS 'coordinator' " .
+						"FROM transaction_log, contacts WHERE paid=1 AND date!='NULL' " .
+						"AND (payment_type='cash' OR payment_type='check') " . 
+						"AND contacts.contact_id = transaction_log.sold_by " .
+						"AND (transaction_id>" . $transaction_range[0] . " AND transaction_id<" . $transaction_range[1]  . ");";		
+			$sql2 = mysql_query($query, $YBDB) or die(mysql_error());
+			$coordinator = [];
+			while ( $result = mysql_fetch_assoc($sql2) ) {
+				$coordinator[$result['transaction_id']] = $result['coordinator']; 
+			}					
+			
 			$gnucash_csv_file = "";
 			while ( $result = mysql_fetch_assoc($sql) ) {
 				$description = preg_replace('/\n/', ' \r ', $result['description']);
@@ -224,7 +237,7 @@ $csv_directory = CSV_DIRECTORY;
 				$description = preg_replace('/,/', ';', $description);
 				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . 
 											', (Income:' . $result['transaction_type'] . ') '  . 
-											$description . ' [' . $result['patron'] . ']' .
+											$description . ' [' . $coordinator[$result['transaction_id']] . ' => ' . $result['patron'] . ']' .
 											', ' . $result['amount'] . ', ' . 
 											$accounts_gnucash['checking'] . "\n";
 			}	
@@ -247,7 +260,20 @@ $csv_directory = CSV_DIRECTORY;
 						"AND  payment_type='credit'  " . 
 						"AND contacts.contact_id = transaction_log.sold_to " .
 						"AND (transaction_id>" . $transaction_range[0] . " AND transaction_id<" . $transaction_range[1]  . ");";		
-			$sql = mysql_query($query, $YBDB) or die(mysql_error());	
+			$sql = mysql_query($query, $YBDB) or die(mysql_error());
+			// second statement to find coordinator for associated transactions	
+			$query = "SELECT transaction_id, " .
+						"CONCAT(contacts.first_name, ' ', contacts.last_name) AS 'coordinator' " .
+						"FROM transaction_log, contacts WHERE paid=1 AND date!='NULL' " .
+						"AND payment_type='credit' " . 
+						"AND contacts.contact_id = transaction_log.sold_by " .
+						"AND (transaction_id>" . $transaction_range[0] . " AND transaction_id<" . $transaction_range[1]  . ");";		
+			$sql2 = mysql_query($query, $YBDB) or die(mysql_error());
+			$coordinator = [];
+			while ( $result = mysql_fetch_assoc($sql2) ) {
+				$coordinator[$result['transaction_id']] = $result['coordinator']; 
+			}					
+				
 			$gnucash_csv_file = "";	
 			while ( $result = mysql_fetch_assoc($sql) ) {
 				$description = preg_replace('/\n/', ' \r ', $result['description']);
@@ -255,7 +281,7 @@ $csv_directory = CSV_DIRECTORY;
 				$description = preg_replace('/,/', ';', $description);
 				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . 
 											', (Income:' . $result['transaction_type'] . ') '  . 
-											$description . ' [' . $result['patron'] . ']' . 
+											$description . ' [' . $coordinator[$result['transaction_id']] . ' => ' . $result['patron'] . ']' . 
 											', ' . $result['amount'] . ', ' . 
 											$accounts_gnucash['credit'] . "\n";							
 			}
