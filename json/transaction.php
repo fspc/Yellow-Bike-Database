@@ -210,14 +210,8 @@ $csv_directory = CSV_DIRECTORY;
 		// checking (check or cash) || credit
 		// transaction has been 1) paid and is 2) cash & check [checking] or credit and 3) deposited
 		if( $account_type === 'checking' ) {
-			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount, " .
-						"CONCAT(contacts.first_name, ' ', contacts.last_name) AS 'patron' " .
-						"FROM transaction_log, contacts WHERE paid=1 AND date!='NULL' " .
-						"AND (payment_type='cash' OR payment_type='check') " . 
-						"AND contacts.contact_id = transaction_log.sold_to " .
-						"AND (transaction_id>" . $transaction_range[0] . " AND transaction_id<" . $transaction_range[1]  . ");";		
-			$sql = mysql_query($query, $YBDB) or die(mysql_error());
-			// second statement to find coordinator for associated transactions	
+
+			// first statement to find coordinator for associated transactions	
 			$query = "SELECT transaction_id, " .
 						"CONCAT(contacts.first_name, ' ', contacts.last_name) AS 'coordinator' " .
 						"FROM transaction_log, contacts WHERE paid=1 AND date!='NULL' " .
@@ -228,19 +222,50 @@ $csv_directory = CSV_DIRECTORY;
 			$coordinator = [];
 			while ( $result = mysql_fetch_assoc($sql2) ) {
 				$coordinator[$result['transaction_id']] = $result['coordinator']; 
-			}					
+			}				
+			
+			// second statement to find normal transactions
+			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount, " .
+						"CONCAT(contacts.first_name, ' ', contacts.last_name) AS 'patron' " .
+						"FROM transaction_log, contacts WHERE paid=1 AND date!='NULL' " .
+						"AND (payment_type='cash' OR payment_type='check') " . 
+						"AND contacts.contact_id = transaction_log.sold_to " .
+						"AND (transaction_id>" . $transaction_range[0] . " AND transaction_id<" . $transaction_range[1]  . ");";		
+			$sql2 = mysql_query($query, $YBDB) or die(mysql_error());
+							
+			// third statement to find anonymous transactions			
+			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount " .
+						"FROM transaction_log WHERE paid=1 AND date!='NULL' " .
+						"AND  (payment_type='cash' OR payment_type='check') " . 
+						"AND  anonymous=1 " .
+						"AND (transaction_id>" . $transaction_range[0] . " AND transaction_id<" . $transaction_range[1]  . ");";				
+			$sql3 = mysql_query($query, $YBDB) or die(mysql_error());	
 			
 			$gnucash_csv_file = "";
-			while ( $result = mysql_fetch_assoc($sql) ) {
+			
+			// normal transaction
+			while ( $result = mysql_fetch_assoc($sql2) ) {
 				$description = preg_replace('/\n/', ' \r ', $result['description']);
 				$description = preg_replace('/\r/', '\r', $description);
 				$description = preg_replace('/,/', ';', $description);
 				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . 
-											', (Income:' . $result['transaction_type'] . ') '  . 
-											$description . ' [' . $coordinator[$result['transaction_id']] . ' => ' . $result['patron'] . ']' .
+											',' . ' [' . $coordinator[$result['transaction_id']] . ' => ' . $result['patron'] . '] ' .  
+											$description . ' (Income:' . $result['transaction_type'] . ') '  . 
 											', ' . $result['amount'] . ', ' . 
 											$accounts_gnucash['checking'] . "\n";
 			}	
+
+			// anonymous transaction
+			while ( $result = mysql_fetch_assoc($sql3) ) {
+				$description = preg_replace('/\n/', ' \r ', $result['description']);
+				$description = preg_replace('/\r/', '\r', $description);
+				$description = preg_replace('/,/', ';', $description);
+				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . 
+											',' . ' [' . $coordinator[$result['transaction_id']] . ' => Anonymous] ' .  
+											$description . ' (Income:' . $result['transaction_type'] . ') '  . 
+											', ' . $result['amount'] . ', ' . 
+											$accounts_gnucash['checking'] . "\n";						
+			}
 			
 			$file_name = preg_replace('/ /', '_', $accounts_gnucash['checking']);
 			$file_name = preg_replace('/:/', '-', $file_name);
@@ -254,36 +279,61 @@ $csv_directory = CSV_DIRECTORY;
 		}
 
 		if ( $account_type === 'credit' ) {
-			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount, " .
-						"CONCAT(contacts.first_name, ' ', contacts.last_name) AS 'patron' " .
-						"FROM transaction_log, contacts WHERE paid=1 AND date!='NULL' " .
-						"AND  payment_type='credit'  " . 
-						"AND contacts.contact_id = transaction_log.sold_to " .
-						"AND (transaction_id>" . $transaction_range[0] . " AND transaction_id<" . $transaction_range[1]  . ");";		
-			$sql = mysql_query($query, $YBDB) or die(mysql_error());
-			// second statement to find coordinator for associated transactions	
+			
+			// first statement to find coordinator for associated transactions	
 			$query = "SELECT transaction_id, " .
 						"CONCAT(contacts.first_name, ' ', contacts.last_name) AS 'coordinator' " .
 						"FROM transaction_log, contacts WHERE paid=1 AND date!='NULL' " .
 						"AND payment_type='credit' " . 
 						"AND contacts.contact_id = transaction_log.sold_by " .
 						"AND (transaction_id>" . $transaction_range[0] . " AND transaction_id<" . $transaction_range[1]  . ");";		
-			$sql2 = mysql_query($query, $YBDB) or die(mysql_error());
+			$sql = mysql_query($query, $YBDB) or die(mysql_error());
 			$coordinator = [];
-			while ( $result = mysql_fetch_assoc($sql2) ) {
-				$coordinator[$result['transaction_id']] = $result['coordinator']; 
-			}					
-				
-			$gnucash_csv_file = "";	
 			while ( $result = mysql_fetch_assoc($sql) ) {
+				$coordinator[$result['transaction_id']] = $result['coordinator']; 
+			}
+
+			// second statement to find normal transactions
+			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount, " .
+						"CONCAT(contacts.first_name, ' ', contacts.last_name) AS 'patron' " .
+						"FROM transaction_log, contacts WHERE paid=1 AND date!='NULL' " .
+						"AND  payment_type='credit'  " . 
+						"AND contacts.contact_id = transaction_log.sold_to " .
+						"AND (transaction_id>" . $transaction_range[0] . " AND transaction_id<" . $transaction_range[1]  . ");";		
+			$sql2 = mysql_query($query, $YBDB) or die(mysql_error());
+			
+			// third statement to find anonymous transactions			
+			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount " .
+						"FROM transaction_log WHERE paid=1 AND date!='NULL' " .
+						"AND  payment_type='credit'  " . 
+						"AND  anonymous=1 " .
+						"AND (transaction_id>" . $transaction_range[0] . " AND transaction_id<" . $transaction_range[1]  . ");";				
+			$sql3 = mysql_query($query, $YBDB) or die(mysql_error());		
+				
+			$gnucash_csv_file = "";
+			
+			// normal transaction	
+			while ( $result = mysql_fetch_assoc($sql2) ) {
 				$description = preg_replace('/\n/', ' \r ', $result['description']);
 				$description = preg_replace('/\r/', '\r', $description);
 				$description = preg_replace('/,/', ';', $description);
 				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . 
-											', (Income:' . $result['transaction_type'] . ') '  . 
-											$description . ' [' . $coordinator[$result['transaction_id']] . ' => ' . $result['patron'] . ']' . 
+											',' . ' [' . $coordinator[$result['transaction_id']] . ' => ' . $result['patron'] . '] ' .  
+											$description . ' (Income:' . $result['transaction_type'] . ') '  . 
 											', ' . $result['amount'] . ', ' . 
-											$accounts_gnucash['credit'] . "\n";							
+											$accounts_gnucash['credit'] . "\n";						
+			}
+			
+			// anonymous transaction
+			while ( $result = mysql_fetch_assoc($sql3) ) {
+				$description = preg_replace('/\n/', ' \r ', $result['description']);
+				$description = preg_replace('/\r/', '\r', $description);
+				$description = preg_replace('/,/', ';', $description);
+				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . 
+											',' . ' [' . $coordinator[$result['transaction_id']] . ' => Anonymous] ' .  
+											$description . ' (Income:' . $result['transaction_type'] . ') '  . 
+											', ' . $result['amount'] . ', ' . 
+											$accounts_gnucash['credit'] . "\n";						
 			}
 				
 			$file_name = preg_replace('/ /', '_', $accounts_gnucash['credit']);
