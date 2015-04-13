@@ -48,7 +48,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 		$row_Recordset2 = mysql_fetch_assoc($Recordset2);
 		$totalRows_Recordset2 = mysql_num_rows($Recordset2);
 		
-		if(($_POST['password'] == $row_Recordset2['pass']) || ($_POST['password'] == '2013')){
+		if( $_POST['password'] === $row_Recordset2['pass'] ) {
 			//fetch contact data
 			$insertGoTo = "{$page_edit_contact}?contact_id=" . $_POST['contact_id'];
 			header(sprintf("Location: %s", $insertGoTo));
