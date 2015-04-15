@@ -78,37 +78,27 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 	$result = mysql_fetch_assoc($sql);	
 	$submitted_contact_id = $result['contact_id'] + 1;	
 
-	/*
-		$handler->debug("submitted_contact_id",$submitted_contact_id - 1);
-		$handler->debug("$_POST",$_POST['contact_id']);
-		exit();
-	*/
-
-	// contact already exists it is less than $submitted_contact_id
-	if($submitted_contact_id > $_POST['contact_id']) {
+	
+	// contact already exists it is less than $submitted_contact_id (max contact_id + 1)
+	if ($submitted_contact_id > $_POST['contact_id']) {
 		$submitted_contact_id = $_POST['contact_id'];
-	}	
+	}
 	
 	// if contact already exists, $submitted_contact_id now equals $_POST['contact_id], and it isn't new_contact
 	if ($submitted_contact_id != $_POST['contact_id'] || $_POST === 'new_contact') {
 		$submitted_contact_id =	$_POST['contact_id'];
-	} else {
-
-		// If full_name is empty we will use this contact_id
-		$sql = "SELECT CONCAT(first_name, ' ', last_name) as full_name FROM contacts WHERE contact_id=" . $submitted_contact_id . ";";
-		$query = mysql_query($sql, $YBDB) or die(mysql_error());
-		$result = mysql_fetch_assoc($query);		
-		$full_name = $result['full_name'];
 	}
 		
-	//adds contact if new_contact is selected .. it's " " not ""
-	if (empty($full_name)) {
-		$contact_id_entry = 'new_contact';	
-	}
-
-	if ( $contact_id_entry === 'new_contact' ) {	
+/*		
+		$handler->debug("submitted_contact_id",$submitted_contact_id);
+		$handler->debug("$_POST",$_POST['contact_id']);
+		exit();
+		*/
 	
-		// Get the actual contact_id because it may have changed on multiple terminals
+
+	if ( $submitted_contact_id === 'new_contact' ) {	
+	
+		// Get the actual contact_id because it may have changed on multiple terminals and is now new_contact
 		$query = 'SELECT MAX(contact_id) as contact_id FROM contacts;';
 		$sql = mysql_query($query, $YBDB) or die(mysql_error());	
 		$result = mysql_fetch_assoc($sql);	
