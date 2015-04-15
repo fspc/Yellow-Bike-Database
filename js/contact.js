@@ -126,6 +126,10 @@ $(function(){
   		if (success === "Success") {
   		
 	  		var email_list = $("#email_list_toggle").val();
+			
+			// send email_list val to $_POST	  		
+	  		$("#email_list").val(email_list);
+
 	  		var waiver = waiver_checkbox.prop("checked");
 	  		if (!email_list) {
 				email_list = 0;  		
@@ -137,6 +141,9 @@ $(function(){
 	  		} else if (waiver === false) {
 	  			waiver = 0;
 	  		}
+
+			$.post("json/contact.php", {most_recent_contact_id: 1});	  		
+	  		
 			// update receive_newsletter and waiver in the database
 	  		$.post("json/contact.php", {contact_id: contact_id, email_list: email_list, waiver: waiver });
 
@@ -253,6 +260,10 @@ $(function(){
 
 	// beginning or stored state	
   	$.post("json/contact.php", {contact_id: contact_id, email_list_value: 1 }, function(data) {
+
+		if (data === "") {
+			data = 1;
+		}	
 	
 		$("#email_list_toggle").noUiSlider({
 			orientation: "horizontal",
