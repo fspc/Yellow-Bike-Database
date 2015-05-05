@@ -68,8 +68,8 @@ $editFormAction = "?contact_id={$contact_id}&shop_id={$shop_id}";
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 
 
-	/* Discover if submitted contact creation attempt is new.
-		There should be at least a first and last name.
+	/* Discover if submitted contact creation attempt a new
+		or existing contact.
 	*/
 	mysql_select_db($database_YBDB, $YBDB);
 	
@@ -220,9 +220,11 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 	 
 	// insert as update?  But it works. 	
 	if ($_POST['comments']) {
+		$comments = $_POST['comments'];
+		$comments_escaped = GetSQLValueString($comments, "text");
 		$sql = "INSERT INTO selections (contact_id, selection, selection_value) 
-				VALUES (" .	$submitted_contact_id . ", 1,'" . $_POST['comments']  . "');";			 
-				$result = mysql_query($sql, $YBDB) or die(mysql_error());	
+				VALUES (" .	$submitted_contact_id . ", 1," . $comments_escaped  . ");";			 
+				$result = mysql_query($sql, $YBDB) or die(mysql_error());			
 	}	 	
 
   if ($_POST['contact_id_entry'] == 'new_contact' || $_POST['contact_id_entry'] == $submitted_contact_id){
