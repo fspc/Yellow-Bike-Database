@@ -158,7 +158,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 <table   border="0" cellpadding="1" cellspacing="0">
   <tr>
     <td align="left" valign="bottom"><?php echo $error_message;?>
-      Shop ID: <span class="yb_standarditalics"><?php echo $individual_shop_id;?></span>; &nbsp;Location: <span class="yb_standarditalics"><?php echo $shop_location;?></span>; &nbsp;Date: <span class="yb_standarditalics"><?php echo $shop_date;?></span>; &nbsp;Shop Type: <span class="yb_standarditalics"><?php echo $shop_type;?></span>		</td>
+	 </td>
     </tr>
   <tr>
     <td>
