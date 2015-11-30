@@ -102,11 +102,12 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 		$query = 'SELECT MAX(contact_id) as contact_id FROM contacts;';
 		$sql = mysql_query($query, $YBDB) or die(mysql_error());	
 		$result = mysql_fetch_assoc($sql);	
-		$submitted_contact_id = $result['contact_id'] + 1;			
+		$submitted_contact_id = $result['contact_id'] + 1;	
+		$current_date_time = GetSQLValueString('current_time', "date");		
 		
 		// Insert new contact information into a new record
 		$updateSQL = 'INSERT INTO contacts (contact_id, first_name, middle_initial, last_name, email,' . 
-													  ' phone, address1, address2, city, state, DOB, receive_newsletter, waiver, pass, zip)' .
+													  ' phone, address1, address2, city, state, DOB, receive_newsletter, waiver, pass, zip, date_created)' .
 												' VALUES (' . 
 												$submitted_contact_id . ', ' .
 												'"' . $_POST['first_name'] . '", ' . 
@@ -122,7 +123,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 												'"' .	$_POST['email_list'] . '", ' .
 												1 . ', ' .
 												'ENCODE("' . $_POST['password'] . '",' . '"yblcatx"), ' .
-												 '"' . $_POST['zip'] . '");';	
+												 '"' . $_POST['zip'] . '", ' . 
+												 $current_date_time . ');';	
 	} else {
 		
 		// Update existing contact record
