@@ -8,6 +8,7 @@ $(function(){
 	var birth_date = $("#birth_date");
 	var waiver_checkbox = $("#waiver_checkbox"), waiver_error = $("#waiver_error");
 	var first_name = $("#first_name"), first_name_error = $("#first_name_error");
+	var middle_initial = $("#middle_initial"), middle_initial_error = $("#middle_name_error");
 	var last_name = $("#last_name"), last_name_error = $("#last_name_error");
 	var phone = $("#phone"), phone_error = $("#phone_error");
 	var email = $("#email"), email_error = $("#email_error");
@@ -58,7 +59,7 @@ $(function(){
 				// check for errors
 				//error_handler(input,error_span,error,error_text,event);
 				
-				var err0 = 0, err1 = 0, err2 = 0, err3 = 0, err4 = 0, err5 = 0;
+				var err0 = 0, err1 = 0, err2 = 0, err3 = 0, err4 = 0, err5 = 0, err6 = 0;
 				
 				// if it is showing
 				$("#email_list_error").hide();
@@ -66,6 +67,17 @@ $(function(){
 				// first name & last name input
 				err0 = error_handler(first_name.val(), first_name_error, "","*Required",e);
 				err1 = error_handler(last_name.val(), last_name_error, "","*Required",e);		
+
+				// test whether patron's name already exists
+				$.post("json/contact.php", {first_name: first_name.val(), middle_initial: middle_initial.val(), 
+													 last_name: last_name.val(), test_name: 1 }, function(data) {							 	
+											
+					if(data === "1") {
+						err6 = error_handler(0, last_name_error, "","*Your name already exists, please choose a different middle initial.",e);			
+					} 
+					
+				} );
+										
 				
 				// email and phone input
 				if (email.val() === "" && phone.val() === "") {
@@ -106,7 +118,7 @@ $(function(){
 				// waiver checkbox
 				err5 = error_handler(waiver_checkbox.prop("checked"),waiver_error,false,"*Required",e);
 			
-				if ((err0 + err1 + err2 + err3 + err4 + err5) > 0 ) {
+				if ((err0 + err1 + err2 + err3 + err4 + err5 + err6) > 0 ) {
 					
 				} else {
 					//e.preventDefault();

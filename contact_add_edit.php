@@ -272,7 +272,8 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
             <td><label class="contacts">Name:</label></td>
 			    <td><input id="first_name" type="text" name="first_name" value="<?php echo $row_Recordset1['first_name']; ?>" size="32">
 			    		<span id="first_name_error"></span>
-			    		<input name="middle_initial" type="text" value="<?php echo $row_Recordset1['middle_initial']; ?>" size="1" maxlength="1">
+			    		<input id="middle_initial" name="middle_initial" type="text" value="<?php echo $row_Recordset1['middle_initial']; ?>" size="1" maxlength="1">
+						<span id="middle_initial_error"></span>			    		
 			    		<input id="last_name" type="text" name="last_name" value="<?php echo $row_Recordset1['last_name']; ?>" size="32">
 						<span id="last_name_error"></span>			    
 			   </td>
