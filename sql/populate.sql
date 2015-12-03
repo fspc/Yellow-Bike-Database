@@ -121,9 +121,8 @@ INSERT INTO contacts (
 --
 --  Sales Tax Report - Hardwired Caveat: The same value used for accounting_group 
 -- 									           needs to be defined in Connections/database_functions.php - ACCOUNTING_GROUP
---                                       Also, accounting_group could be used instead of array mapping in database_functions.php,
---                                       for creating spreadsheets for accounting programs (GnuCash), but, given the choice 
---                                       whether to respect this caveat or use array mapping, array mapping won out.
+--                                       Currently, Sales and Deposits are the two major accounting groups, although
+--                                       Receivables could be added in the future if that functionality is desired.
 --
 --  STORAGE TRANSACTION	
 --  show_startdate - is used by transactions where an item (usually a bicycle) is stored for
@@ -169,7 +168,7 @@ INSERT INTO transaction_types
   ("DIY Repairs", 12, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0),
   ("Accounts Receivable Invoice", 13, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 0, 0, 0), 
   ("Accounts Receivable Payment", 14, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
-  ("Deposit", 15, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Deposit Date", "Deposited By"," ", "", 0, "Description", "Sales", 0, 0, 0),
+  ("Deposit", 15, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Deposit Date", "Deposited By"," ", "", 0, "Description", "Deposits", 0, 0, 0),
   ("Metrics - Completed Mechanic Operation Bike", 16, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0),
   ("Metrics - Completed Mechanic Operation Wheel", 17, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0),
   ("Metrics - New Parts on a Completed Bike", 18, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0),
