@@ -121,6 +121,9 @@ INSERT INTO contacts (
 --
 --  Sales Tax Report - Hardwired Caveat: The same value used for accounting_group 
 -- 									           needs to be defined in Connections/database_functions.php - ACCOUNTING_GROUP
+--                                       Also, accounting_group could be used instead of array mapping in database_functions.php,
+--                                       for creating spreadsheets for accounting programs (GnuCash), but, given the choice 
+--                                       whether to respect this caveat or use array mapping, array mapping won out.
 --
 --  STORAGE TRANSACTION	
 --  show_startdate - is used by transactions where an item (usually a bicycle) is stored for
