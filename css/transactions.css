@@ -85,3 +85,8 @@ input[value=Save]:focus, input[value=Close]:focus {
 #quantity_error, #anonymous_error {
 	color: red; 
 }
+
+/* for shop_log */
+#shop_log td {
+	padding: 0px 10px 0px 10px;
+}
