@@ -180,9 +180,9 @@ $(function() {
 				$.each(obj,function(k,v){
 					var trans = obj[k];
 					var trans_year = trans.date.split(" ",1);
-					trans_year = trans_year[0].split("-",1).toString();		
+					trans_year = trans_year[0].split("-",1).toString();							
 					
-					// find min and max for year
+					// find min and max for year,
 					if (trans.deposited == "yes" && trans_year == year) {
 						range.push(trans.transaction_id);		
 					}
@@ -195,11 +195,22 @@ $(function() {
 			
 		} );
 		
+		// If it is a new year with no new deposits we should only show last years deposits.
+		// range will be undefined so it needs to be recalculated for last year.
+		// list_distinct_shop_years in transaction_log.php shows all years, so show last two deposits for current year		
+		
 		// gnucash deposit range - min, max, and previous to max
-		var min_range = Number(range[0]);
-		var max_range = Number(range[range.length - 1]);
-		var max_range_last_year = Number(range_last_year[range_last_year.length - 1]);
-		var prev_trans = Number(range[range.length - 2]);
+		var min_range, max_range, max_range_last_year, prev_trans;
+		if (range.length) {
+			min_range = Number(range[0]);		
+			max_range = Number(range[range.length - 1]);
+			max_range_last_year = Number(range_last_year[range_last_year.length - 1]);
+			prev_trans = Number(range[range.length - 2]);
+		} else {		
+			max_range = Number(range_last_year[range_last_year.length - 1]);
+			prev_trans = Number(range_last_year[range_last_year.length - 2]);
+			min_range = prev_trans;
+		}	
 
 		// ranges between min and max in percentages with min prepended and max appended as an object
 		var range_obj = {};
@@ -213,7 +224,14 @@ $(function() {
 		percentage_amounts = Number(Math.round(percentage_amounts+'e2')+'e-2');
 		var percentage = percentage_amounts;
 
-		$.each(range,function(k,v) {
+		var year_range = [];
+		if (range.length) {
+			year_range = range;
+		} else {
+			year_range = range_last_year;
+		}
+
+		$.each(year_range,function(k,v) {
 			if (v == min_range) {
 				range_obj["min"] = min_range;
 			} else if (v == max_range) {
@@ -222,11 +240,11 @@ $(function() {
 			 	range_obj[percentage_amounts + '%'] = Number(v);
 			 	percentage_amounts = percentage_amounts + percentage;
 			}
-
-			// watch that percentage doesn't acquire too many decimal points.
-			//console.dir(range_obj);			
-			
 		});
+		
+		// watch that percentage doesn't acquire too many decimal points.
+		//console.dir(range_obj);
+
 
 		//initialize slider 
 		if (!slider) {		
@@ -429,11 +447,11 @@ $(function() {
 				deposit[count] =  this.name;
 			});			
 			
-							
 								
 			$.post("json/transaction.php",{"deposit": deposit}, function(data) {
 				
 				var obj = $.parseJSON(data);
+			
 				$.each(obj,function(k,v){
 					
 					// Cash / Check / Credit					
