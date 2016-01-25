@@ -52,7 +52,7 @@ $totalRows_Recordset4 = mysql_num_rows($Recordset4);
 ?>
 
 
-<?php include("../../include_header.html"); ?>
+<?php include("../../include_header_stats.html"); ?>
         <table>
         <tr valign="top">
           <td><span class="yb_heading3red">New and Total Users by Week</span></td>

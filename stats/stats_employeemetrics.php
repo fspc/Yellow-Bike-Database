@@ -65,7 +65,7 @@ $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 
 ?>
 
-<?php include("../include_header.html"); ?>
+<?php include("../include_header_stats.html"); ?>
 
         <table>
         	<tr><td><?php echo "Employee Stats: 

@@ -36,7 +36,7 @@ function print_table_daysofweek($year, $week, $total_visits, $new_visits){
 
 ?>
 
-<?php include("../include_header.html"); ?>
+<?php include("../include_header_stats.html"); ?>
 <table width="100%">
   <tr valign="top">
     <td><span class="yb_heading3red">New and Total Users by Day/Week</span></td>

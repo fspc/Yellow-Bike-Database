@@ -16,7 +16,9 @@ default:
 }
 
 mysql_select_db($database_YBDB, $YBDB);
-$query_Recordset1 = "SELECT * FROM (SELECT contacts.contact_id, CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name,
+$query_Recordset1 = "SELECT * FROM 
+
+(SELECT contacts.contact_id, CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name,
 COUNT(shop_hours.contact_id) as sort_visits,
 ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS sort_hours
 FROM shop_hours
@@ -25,6 +27,7 @@ LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_us
 WHERE shop_user_roles.volunteer = 1 AND time_in > DATE_SUB(CURDATE(),INTERVAL 12 MONTH)
 GROUP BY contact_id
 ORDER BY sort_hours DESC) AS sort_hours
+
 LEFT JOIN (SELECT contacts.contact_id AS vh_contact_id,
 COUNT(shop_hours.contact_id) as th_visits,
 ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS th_hours
@@ -33,6 +36,7 @@ LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id
 GROUP BY contacts.contact_id
 ORDER BY last_name, first_name) AS total_hours ON sort_hours.contact_id = total_hours.vh_contact_id
+
 LEFT JOIN (SELECT contacts.contact_id AS vh_contact_id,
 COUNT(shop_hours.contact_id) as vh_visits,
 ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS vh_hours
@@ -42,6 +46,7 @@ LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_us
 WHERE shop_user_roles.volunteer = 1
 GROUP BY contacts.contact_id
 ORDER BY last_name, first_name) AS volunteer_hours ON sort_hours.contact_id = volunteer_hours.vh_contact_id
+
 LEFT JOIN (SELECT contacts.contact_id AS th3_contact_id,
 COUNT(shop_hours.contact_id) as th3_visits,
 ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS th3_hours
@@ -51,6 +56,7 @@ LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_us
 WHERE time_in > DATE_SUB(CURDATE(),INTERVAL 12 MONTH)
 GROUP BY contacts.contact_id
 ORDER BY last_name, first_name) AS total_hours3 ON sort_hours.contact_id = total_hours3.th3_contact_id
+
 LEFT JOIN (SELECT contacts.contact_id AS vh3_contact_id,
 COUNT(shop_hours.contact_id) as vh3_visits,
 ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS vh3_hours
@@ -60,13 +66,14 @@ LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_us
 WHERE shop_user_roles.volunteer = 1 AND time_in > DATE_SUB(CURDATE(),INTERVAL 12 MONTH)
 GROUP BY contacts.contact_id
 ORDER BY first_name) AS volunteer_hours3 ON sort_hours.contact_id = volunteer_hours3.vh3_contact_id";
+
 $Recordset1 = mysql_query($query_Recordset1, $YBDB) or die(mysql_error());
 //$row_Recordset1 = mysql_fetch_assoc($Recordset1);   //Wait to fetch until do loop
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
 ?>
 
-<?php include("../include_header.html"); ?>
+<?php include("../include_header_stats.html"); ?>
 
         <table>
         <tr valign="top">

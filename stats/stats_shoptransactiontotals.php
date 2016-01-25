@@ -30,7 +30,7 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
 ?>
 
-<?php include("../include_header.html"); ?>
+<?php include("../include_header_stats.html"); ?>
 
         <table>
         <tr valign="top">
