@@ -32,17 +32,18 @@ INSERT INTO shop_types (shop_type_id, list_order) VALUES
 -- default select value for shop user may be set in Connections/database_functions.php,
 -- a shop_type_id with the same name needs to exist in order for this to work.
 
+ALTER TABLE shop_user_roles ADD other_volunteer tinyint(1) NOT NULL DEFAULT '0';
 DELETE FROM shop_user_roles;
 INSERT INTO shop_user_roles (
-  shop_user_role_id, hours_rank, volunteer, sales, paid
+  shop_user_role_id, hours_rank, volunteer, sales, paid, other_volunteer
 ) VALUES 
-  ("Coordinator",0,1,1,0), 
-  ("Personal",0,0,0,0), 
-  ("Volunteer",0,1,0,0), 
-  ("Greeter",0,1,1,0),
-  ("Staff",0,0,1,1),
-  ("Student Volunteer/Community Service Hours",0,0,0,0),
-  ("Shopping",0,0,0,0);
+  ("Coordinator",0,1,1,0,0), 
+  ("Personal",0,0,0,0,0), 
+  ("Volunteer",0,1,0,0,0), 
+  ("Greeter",0,1,1,0,0),
+  ("Staff",0,0,1,1,0),
+  ("Student Volunteer/Community Service Hours",0,0,0,0,1),
+  ("Shopping",0,0,0,0,0);
 
 -- Add some projects to projects
 
