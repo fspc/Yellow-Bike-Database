@@ -28,6 +28,7 @@ INSERT INTO shop_types (shop_type_id, list_order) VALUES
 -- sales == 1 if you want a role to be able to do sales
 -- volunteer == 1 if you want to keep track of volunteer hours
 -- paid == 1 if you want to track staff/employee and stats
+-- other_volunteer == 1 if you want to keep track of other hours like community service and student service.
 --
 -- default select value for shop user may be set in Connections/database_functions.php,
 -- a shop_type_id with the same name needs to exist in order for this to work.
