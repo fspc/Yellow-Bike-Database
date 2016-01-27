@@ -99,7 +99,7 @@ $total_sql = mysql_query($query, $YBDB) or die(mysql_error());
 
 <?php include("../include_header_stats.html"); ?>
 
-        <table class="shop_log">
+        <table class="stats">
         <tr valign="top">
 	  	  </tr>
         <tr>
@@ -128,7 +128,7 @@ $total_sql = mysql_query($query, $YBDB) or die(mysql_error());
 	  		</tr>
      		</table>
      		
-        <table class="shop_log">
+        <table class="stats">
         <tr valign="top">
 	  	  </tr>
         <tr>
@@ -155,7 +155,7 @@ $total_sql = mysql_query($query, $YBDB) or die(mysql_error());
 	  		</tr>
      		</table>	
 		<br \><br \>	
-		 <table class="shop_log">
+		 <table class="stats">
         <tr valign="top">
 	  	  </tr>
         <tr>
@@ -184,7 +184,7 @@ $total_sql = mysql_query($query, $YBDB) or die(mysql_error());
 	  		</tr>
      		</table>
      		
-        <table class="shop_log">
+        <table class="stats">
         <tr valign="top">
 	  	  </tr>
         <tr>
@@ -213,7 +213,7 @@ $total_sql = mysql_query($query, $YBDB) or die(mysql_error());
 
 			<br \><br \>	
 
-        <table class="shop_log">
+        <table class="stats">
         <tr valign="top">
 	  	  </tr>
         <tr>
@@ -247,7 +247,7 @@ $total_sql = mysql_query($query, $YBDB) or die(mysql_error());
      		
      		<br \>
 			<form method="post" name="range_query">
-				<input id="submit_contact" type="submit" value="Submit" tabindex="14">
+				<input id="status_totals" type="submit" value="Submit" tabindex="14">
 			</form>
      		
 		<?php include("../include_footer.html"); ?>
