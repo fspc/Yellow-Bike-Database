@@ -9,19 +9,48 @@ mysql_select_db($database_YBDB, $YBDB);
 
 //  SELECT shop_user_role_id FROM shop_user_roles WHERE volunteer=1 AND other_volunteer!=1;;
 
+// Defaults
 
-$query = "SELECT shop_user_role, COUNT(DISTINCT shop_hours.contact_id) as unique_volunteers, 
-			COUNT(shop_hours.contact_id) as volunteer_visits, 
-			ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), 
-			TIME(time_in)))/60)) AS volunteer_hours 
+
+$today = date("Y/m/d");
+$year_ago = date("Y/m/d", strtotime("$today -1 year"));
+
+$today_date = new DateTime('now');
+$past = new DateTime($year_ago);
+$interval = $today_date->diff($past);
+
+$chosen_date = $today;
+$days_range1 = $interval->days;
+$days_range2 = 0;
+
+// Do some ajax stuff
+if (isset($_POST['range1'])) {
+	$range1 = $_POST['range1'];
+	$range2 = $_POST['range2'];
+	
+	$choice1 = new DateTime($range1);
+	$interval = $today_date->diff($choice1);
+	$days_range1 = $interval->days;
+
+	$choice2 = new DateTime($range2);
+	$interval = $today_date->diff($choice2);
+	$days_range2 = $interval->days;
+
+	$year_ago = $range1;
+	$today = $range2;
+}	
+
+$query = "SELECT shop_user_role,
+			COUNT(DISTINCT shop_hours.contact_id) as unique_volunteers,  
+			COUNT(shop_hours.contact_id) as volunteer_visits,   
+			ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS volunteer_hours   
 			FROM shop_hours 
-			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id 
-			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id 
-			WHERE shop_user_roles.volunteer = 1 
-			OR shop_user_roles.other_volunteer = 1 
-			AND time_in > DATE_SUB(CURDATE(),INTERVAL 12 MONTH) GROUP BY shop_user_role 
-			ORDER BY volunteer_hours DESC;";
-$volunteers_sql = mysql_query($query, $YBDB) or die(mysql_error());
+			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id   
+			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id   
+			WHERE (time_in > DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND time_in <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY)) 
+			AND (shop_user_roles.volunteer = 1 OR shop_user_roles.other_volunteer = 1)  
+			GROUP BY shop_user_role ORDER BY volunteer_hours DESC;";
+			$volunteers_sql = mysql_query($query, $YBDB) or die(mysql_error());
 
 $query = "SELECT COUNT(DISTINCT shop_hours.contact_id) as unique_volunteers,
 			COUNT(shop_hours.contact_id) as volunteer_visits,
@@ -29,9 +58,8 @@ $query = "SELECT COUNT(DISTINCT shop_hours.contact_id) as unique_volunteers,
 			FROM shop_hours 
 			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id   
-			WHERE shop_user_roles.volunteer = 1 
-			OR shop_user_roles.other_volunteer = 1
-			AND time_in > DATE_SUB(CURDATE(),INTERVAL 12 MONTH);";
+			WHERE (time_in > DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND time_in <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY))
+			AND (shop_user_roles.volunteer = 1 OR shop_user_roles.other_volunteer = 1);"; 
 $total_volunteers_sql = mysql_query($query, $YBDB) or die(mysql_error());
 
 $query = "SELECT shop_user_role, COUNT(DISTINCT shop_hours.contact_id) as unique_visitors, 
@@ -41,9 +69,9 @@ $query = "SELECT shop_user_role, COUNT(DISTINCT shop_hours.contact_id) as unique
 			FROM shop_hours 
 			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id 
 			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id 
-			WHERE shop_user_roles.volunteer = 0 
-			AND shop_user_roles.other_volunteer = 0 
-			AND time_in > DATE_SUB(CURDATE(),INTERVAL 12 MONTH) GROUP BY shop_user_role 
+			WHERE (time_in > DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND time_in <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY))
+			AND (shop_user_roles.volunteer = 0 AND shop_user_roles.other_volunteer = 0)
+			GROUP BY shop_user_role 
 			ORDER BY hours DESC;";
 $visitors_sql = mysql_query($query, $YBDB) or die(mysql_error());
 
@@ -53,9 +81,8 @@ $query = "SELECT COUNT(DISTINCT shop_hours.contact_id) as unique_visitors,
 			FROM shop_hours 
 			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id   
-			WHERE shop_user_roles.volunteer = 0 
-			AND shop_user_roles.other_volunteer = 0
-			AND time_in > DATE_SUB(CURDATE(),INTERVAL 12 MONTH);";
+			WHERE (time_in > DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND time_in <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY))
+			AND (shop_user_roles.volunteer = 0 AND shop_user_roles.other_volunteer = 0);";
 $total_visitors_sql = mysql_query($query, $YBDB) or die(mysql_error());
 
 $query = "SELECT COUNT(DISTINCT shop_hours.contact_id) as unique_vv,
@@ -64,9 +91,8 @@ $query = "SELECT COUNT(DISTINCT shop_hours.contact_id) as unique_vv,
 			FROM shop_hours 
 			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id   
-			WHERE shop_user_roles.volunteer >= 0 
-			OR shop_user_roles.other_volunteer >= 0
-			AND time_in > DATE_SUB(CURDATE(),INTERVAL 12 MONTH);";
+			WHERE (time_in > DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND time_in <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY)) 
+			AND (shop_user_roles.volunteer >= 0 OR shop_user_roles.other_volunteer >= 0);";
 $total_sql = mysql_query($query, $YBDB) or die(mysql_error());
 
 ?>
@@ -213,11 +239,22 @@ $total_sql = mysql_query($query, $YBDB) or die(mysql_error());
           </table>	  </td>
 	  		</tr>
      		</table>	
-		
+
+			<br \><br \>     		
+     		
+     		<div id="range_input">Date Range: <?php echo "$year_ago - $today"; ?></div>
+     		<div id="range"></div>
+     		
+     		<br \>
+			<form method="post" name="range_query">
+				<input id="submit_contact" type="submit" value="Submit" tabindex="14">
+			</form>
+     		
 		<?php include("../include_footer.html"); ?>
 <?php
 mysql_free_result($volunteers_sql);
 mysql_free_result($total_volunteers_sql);
 mysql_free_result($visitors_sql);
 mysql_free_result($total_visitors_sql);
+mysql_free_result($total_sql);
 ?>
