@@ -63,7 +63,7 @@ $query = "SELECT contacts.contact_id, CONCAT(last_name, ', ', first_name, ' ',mi
 		FROM shop_hours
 		LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 		LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id
-		WHERE  (time_in > DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND time_in <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY))
+		WHERE  (SUBSTRING_INDEX(time_in, ' ', 1) >= DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND SUBSTRING_INDEX(time_in, ' ', 1) <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY))
 		AND shop_user_roles.other_volunteer = 1
 		GROUP BY contact_id
 		ORDER BY cs_volunteer_hours DESC;";

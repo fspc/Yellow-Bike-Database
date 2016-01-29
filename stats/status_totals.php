@@ -47,7 +47,7 @@ $query = "SELECT shop_user_role,
 			FROM shop_hours 
 			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id   
 			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id   
-			WHERE (time_in > DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND time_in <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY)) 
+			WHERE (SUBSTRING_INDEX(time_in, ' ', 1) >= DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND SUBSTRING_INDEX(time_in, ' ', 1) <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY)) 
 			AND (shop_user_roles.volunteer = 1 OR shop_user_roles.other_volunteer = 1)  
 			GROUP BY shop_user_role ORDER BY volunteer_hours DESC;";
 			$volunteers_sql = mysql_query($query, $YBDB) or die(mysql_error());
@@ -58,7 +58,7 @@ $query = "SELECT COUNT(DISTINCT shop_hours.contact_id) as unique_volunteers,
 			FROM shop_hours 
 			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id   
-			WHERE (time_in > DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND time_in <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY))
+			WHERE (SUBSTRING_INDEX(time_in, ' ', 1) >= DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND SUBSTRING_INDEX(time_in, ' ', 1) <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY))
 			AND (shop_user_roles.volunteer = 1 OR shop_user_roles.other_volunteer = 1);"; 
 $total_volunteers_sql = mysql_query($query, $YBDB) or die(mysql_error());
 
@@ -69,7 +69,7 @@ $query = "SELECT shop_user_role, COUNT(DISTINCT shop_hours.contact_id) as unique
 			FROM shop_hours 
 			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id 
 			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id 
-			WHERE (time_in > DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND time_in <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY))
+			WHERE (time_in >= DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND time_in <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY))
 			AND (shop_user_roles.volunteer = 0 AND shop_user_roles.other_volunteer = 0)
 			GROUP BY shop_user_role 
 			ORDER BY hours DESC;";
@@ -81,7 +81,7 @@ $query = "SELECT COUNT(DISTINCT shop_hours.contact_id) as unique_visitors,
 			FROM shop_hours 
 			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id   
-			WHERE (time_in > DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND time_in <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY))
+			WHERE (SUBSTRING_INDEX(time_in, ' ', 1) >= DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND SUBSTRING_INDEX(time_in, ' ', 1) <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY))
 			AND (shop_user_roles.volunteer = 0 AND shop_user_roles.other_volunteer = 0);";
 $total_visitors_sql = mysql_query($query, $YBDB) or die(mysql_error());
 
@@ -91,7 +91,7 @@ $query = "SELECT COUNT(DISTINCT shop_hours.contact_id) as unique_vv,
 			FROM shop_hours 
 			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id   
-			WHERE (time_in > DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND time_in <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY)) 
+			WHERE (SUBSTRING_INDEX(time_in, ' ', 1) >= DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND SUBSTRING_INDEX(time_in, ' ', 1) <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY)) 
 			AND (shop_user_roles.volunteer >= 0 OR shop_user_roles.other_volunteer >= 0);";
 $total_sql = mysql_query($query, $YBDB) or die(mysql_error());
 
