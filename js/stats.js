@@ -41,4 +41,13 @@ $(function(){
 		e.preventDefault();
 	});
 
+	$("#shops").on("click keypress", function(e){
+		var range_display = range.pickmeup('get_date', true); 
+		$.post("shops.php", {range1: range_display[0], range2: range_display[1]}, function (data) {
+			$("body").html(data);
+			//range.pickmeup.date($range_display[0]);	
+		});
+		e.preventDefault();
+	});
+
 });
