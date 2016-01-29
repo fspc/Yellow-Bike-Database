@@ -113,9 +113,5 @@ $cs_volunteers_sql = mysql_query($query, $YBDB) or die(mysql_error());
      		
 		<?php include("../include_footer.html"); ?>
 <?php
-mysql_free_result($volunteers_sql);
-mysql_free_result($total_volunteers_sql);
-mysql_free_result($visitors_sql);
-mysql_free_result($total_visitors_sql);
-mysql_free_result($total_sql);
+mysql_free_result($cs_volunteers_sql);
 ?>
