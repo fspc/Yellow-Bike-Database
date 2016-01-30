@@ -139,6 +139,10 @@ INSERT INTO contacts (
 -- Deposit (transaction_type_id) is a special transaction type that behaves differently in the log
 -- for a good reason.
 --
+-- MEMBERSHIPS
+-- Memberships (transaction_type_id) is a special transaction type in that the software keeps track of paid
+-- memberships and statistics.
+--
 -- DONATIONS are best complimented with anonymous, see below.
 --
 -- "show_payment" shows cash, credit, and check payment types if selected.
