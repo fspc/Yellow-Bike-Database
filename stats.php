@@ -9,7 +9,7 @@
 
 		<p class="yb_heading3red">Membership</p>
 	    <ul>
-	    	<li><a href="stats/members.php" >Members (Running 12 Month Period)</a></li>
+	    	<li><a href="stats/members.php" >Members (Running 12 Month Period and Range)</a></li>
 	    </ul>
 	    
 	    <p class="yb_heading3red">Volunteer Shops</p>
