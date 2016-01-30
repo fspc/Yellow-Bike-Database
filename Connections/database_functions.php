@@ -29,6 +29,8 @@ define("MEMBERSHIP_HOURS",8);
 // Needs to volunteer at least this number of days before being considered a member
 define("MEMBERSHIP_DAYS",2);
 
+// Define how long a patron remains a member if they purchase a membership.
+define("PURCHASED_MEMBERSHIP_DAYS",365);
 
 /*******
 CONTACTS
