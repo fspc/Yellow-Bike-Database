@@ -69,7 +69,7 @@ $query = "SELECT shop_user_role, COUNT(DISTINCT shop_hours.contact_id) as unique
 			FROM shop_hours 
 			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id 
 			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id 
-			WHERE (time_in >= DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND time_in <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY))
+			WHERE (SUBSTRING_INDEX(time_in, ' ', 1) >= DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND SUBSTRING_INDEX(time_in, ' ', 1) <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY)) 
 			AND (shop_user_roles.volunteer = 0 AND shop_user_roles.other_volunteer = 0)
 			GROUP BY shop_user_role 
 			ORDER BY hours DESC;";
