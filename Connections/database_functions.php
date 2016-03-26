@@ -198,7 +198,8 @@ define("PAGE_SALE_LOG", "/transaction_log.php");
 define("PAGE_EDIT_LOCATION", "/location_add_edit.php");
 define("PAGE_SELECT_LOCATION", "/location_add_edit_select.php");
 
-
+// This defines how long a name can be.  Not sure why this was historically necessary, but keeping it for now.
+$max_name_length = 30;
 
 //This is a general function to generate the contents of a list box based on a MySQL query.  All necessary parameters for the query are passed 
 function generate_list($querySQL,$list_value,$list_text, $form_name, $default_value)
@@ -236,7 +237,7 @@ function generate_list($querySQL,$list_value,$list_text, $form_name, $default_va
 }
 
 
-function list_CurrentShopUsers($form_name = "none", $default_value = "", $max_name_length = 20){
+function list_CurrentShopUsers($form_name = "none", $default_value = "", $max_name_length ){
 	$current_shop = current_shop_by_ip();
 	$querySQL = "SELECT DISTINCT full_name, shop_hours.contact_id ,hidden FROM shop_hours
 					LEFT JOIN (SELECT LEFT(CONCAT(last_name, ', ', first_name, ' ',middle_initial),$max_name_length)
@@ -252,7 +253,7 @@ function list_CurrentShopUsers($form_name = "none", $default_value = "", $max_na
 // Drop down list queries - functions below could be made into one function if query, $list_value and $list_text parameters were passed
 
 // Function provides specific MySQL parameters to the function that generates the list box code
-function list_contacts($form_name = "none", $default_value = "", $max_name_length = 20){
+function list_contacts($form_name = "none", $default_value = "", $max_name_length ){
 	$querySQL = "SELECT LEFT(CONCAT(last_name, ', ', first_name, ' ',middle_initial),$max_name_length) AS full_name, contact_id, hidden FROM contacts WHERE (first_name <> '' OR last_name <> '') AND hidden <> 1 ORDER BY last_name, first_name, middle_initial";
 	$list_value = "contact_id";
 	$list_text = "full_name";
@@ -260,7 +261,7 @@ function list_contacts($form_name = "none", $default_value = "", $max_name_lengt
 }
 
 
-function list_coordinators($form_name = "none", $default_value = "", $max_name_length = 20){
+function list_coordinators($form_name = "none", $default_value = "", $max_name_length ){
 	$querySQL = "SELECT LEFT(CONCAT(last_name, ', ', first_name, ' ',middle_initial),40) AS full_name, contacts.contact_id, hidden, shop_user_role FROM contacts
 LEFT JOIN (SELECT contact_id, shop_user_role, sales FROM shop_hours
 LEFT JOIN shop_user_roles ON shop_user_roles.shop_user_role_id = shop_hours.shop_user_role
@@ -273,7 +274,7 @@ ORDER BY last_name, first_name, middle_initial;";
 	generate_list($querySQL,$list_value,$list_text,$form_name, $default_value);
 }
 
-function list_current_coordinators($form_name = "none", $default_value = "", $max_name_length = 20){
+function list_current_coordinators($form_name = "none", $default_value = "", $max_name_length ){
 	$current_shop = current_shop_by_ip();
 	$querySQL = "SELECT LEFT(CONCAT(last_name, ', ', first_name, ' ',middle_initial),40) AS full_name, contacts.contact_id, hidden, shop_user_role FROM contacts
 LEFT JOIN (SELECT contact_id, shop_user_role, sales FROM shop_hours LEFT JOIN shop_user_roles ON shop_user_roles.shop_user_role_id = shop_hours.shop_user_role WHERE shop_user_roles.sales = 1 AND shop_id = $current_shop GROUP BY contact_id) as shop_hours ON shop_hours.contact_id=contacts.contact_id
@@ -340,7 +341,7 @@ function list_donation_types($form_name = "none", $default_value = ""){
 	generate_list($querySQL,$list_value,$list_text,$form_name, $default_value);
 }
 
-function list_donation_locations($form_name = "none", $default_value = "", $max_name_length = 20){
+function list_donation_locations($form_name = "none", $default_value = "", $max_name_length ){
 	$querySQL = "SELECT LEFT(CONCAT(last_name, ', ', first_name, ' ',middle_initial),$max_name_length) AS full_name, 
 					location_name, contact_id FROM contacts WHERE location_type IS NULL ORDER BY location_name";
 	$list_value = "contact_id";
