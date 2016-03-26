@@ -10,6 +10,7 @@ $handler->start();*/
 
 
 $waiver = WAIVER;
+$waiver_label = WAIVER_LABEL;
 $email_list = EMAIL_LIST;
 $volunteer_interest_form = VOLUNTEER_INTEREST_FORM;
 $volunteer_interest_form_name = VOLUNTEER_INTEREST_FORM_NAME;
@@ -332,14 +333,14 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 			 </tr>
 			<?php if($waiver) { ?>
 			<tr>
-				<td><label class="contacts">Waiver of Liability:</label></td>
+				<td><label class="contacts"><?php echo $waiver_label; ?></label></td>
 			   <td>			  	<div id="waiver">
 				  <p>
 				  <?php include("Connections/waiver.txt"); ?>
 				  <br />
 				  </p>
 				  </div><input id="waiver_checkbox" name="waiver_checkbox" type="checkbox"> I agree <span id="waiver_error"></span>
-			  	<input type="submit" id="waiver_button" value="Show Waiver" \>
+			  	<input type="submit" id="waiver_button" value="Show Complete Text" \>
 
 				</td>
 			 </tr>
