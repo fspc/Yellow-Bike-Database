@@ -40,6 +40,8 @@ CONTACTS
 // Waiver text may be modified in Connections/waiver.txt
 define("WAIVER", 1);
 
+define("WAIVER_LABEL","Waiver of Liability and Safer Spaces Agreement:");
+
 // Allow email_list option in Add/Edit Contacts; 1 = yes, 0 = no 
 define("EMAIL_LIST", 1);
 

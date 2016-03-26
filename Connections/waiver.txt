@@ -1,7 +1,9 @@
-I, and my heirs, in consideration of my participation with Positive Spin 
+<h2>Waiver of Liability</h2>
+<p>I, and my heirs, in consideration of my participation with Positive Spin 
 Incorporated hereby release Positive Spin Incorporated, its officers, directors 
 and agents, and any other people officially connected with this organization, 
-from any and all liability for damage to or loss of personal property, sickness, or injury from whatever source, legal entanglements, imprisonment, death, or 
+from any and all liability for damage to or loss of personal property, sickness,
+or injury from whatever source, legal entanglements, imprisonment, death, or 
 loss of money, which might occur while participating in said 
 event/activity/class.  Specifically, I release Positive Spin Incorporated from 
 any liability or responsibility for my personal well-being, condition of tools 
@@ -15,3 +17,17 @@ participation in this program is strictly voluntary and I freely chose to
 participate. I understand Positive Spin Incorporated  does not provide medical 
 coverage for me.  I verify that I will be responsible for any medical costs I 
 incur as a result of my participation.
+</p>
+
+<h2>Positive Spin's Safer Space Agreement</h2>
+<p>As visitors or volunteers at Positive Spin, we agree to maintain a safer space.
+A safer space is an inclusive environment in which everyone can feel welcome, 
+where no one is shown favoritism, and everyone can feel safe from oppressive, 
+discriminatory and hateful behavior and language.  This includes, but is not limited to, 
+physical and verbal abuse, sexual harassment, or discrimination based on race, culture, 
+age, sex, gender identity, sexual orientation, religion, political beliefs, physical characteristics, disabilities, social or economic background.
+</p>
+<p>If you feel anyone is not abiding by this agreement, please tell a volunteer or 
+constructively confront the individual yourself.  If behavior that violates this agreement persists, 
+it can potentially lead to being banned from Positive Spin.
+</p>
