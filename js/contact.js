@@ -70,7 +70,7 @@ $(function(){
 
 				// test whether patron's name already exists
 				$.post("json/contact.php", {first_name: first_name.val(), middle_initial: middle_initial.val(), 
-													 last_name: last_name.val(), test_name: 1 }, function(data) {							 	
+													 last_name: last_name.val(), contact_id: contact_id, test_name: 1 }, function(data) {							 	
 											
 					if(data === "1") {
 						err6 = error_handler(0, last_name_error, "","*Your name already exists, please choose a different middle initial.",e);			

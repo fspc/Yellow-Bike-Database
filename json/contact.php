@@ -11,15 +11,17 @@ $ssl_certificate = SSL_CERTIFICATE;
 	// test whether patron's name already exists
 	if (isset($_POST['test_name'])) {
 		
-			$query = 'SELECT first_name, middle_initial, last_name FROM contacts WHERE ' .
-						'first_name="' . $_POST['first_name'] . '" AND middle_initial="' . $_POST['middle_initial'] .  
-						'" AND last_name="' . $_POST['last_name'] . '";';
-			$sql = mysql_query($query, $YBDB) or die(mysql_error());
-			$result = mysql_fetch_assoc($sql);
-			if ( is_array($result) ) {
-				echo 1;			
-			} else {
-				echo 0;			
+			if( $_POST['contact_id'] === "new_contact" && $_POST['first_name'] && $_POST['last_name'] ) {
+				$query = 'SELECT first_name, middle_initial, last_name FROM contacts WHERE ' .
+							'first_name="' . $_POST['first_name'] . '" AND middle_initial="' . $_POST['middle_initial'] .  
+							'" AND last_name="' . $_POST['last_name'] . '";';
+				$sql = mysql_query($query, $YBDB) or die(mysql_error());
+				$result = mysql_fetch_assoc($sql);
+				if ( is_array($result) ) {
+					echo 1;			
+				} else {
+					echo 0;			
+				}
 			}
 					
 	}
