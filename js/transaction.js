@@ -487,9 +487,10 @@ $(function() {
 
 
 	// error handler for edited transactions		
-	function error_handler(input,error_span,error,error_text,event) {		
+	function error_handler(input,error_span,error,error_text,event) {	
+		
 		var trans_error = 0;
-		if ( input == error ) {
+		if ( (error === "no_selection" && !input) || input == error ) {
 			if ( !error_span.is(":visible") ) {
 				error_span.show();		
 			}									
@@ -557,7 +558,7 @@ $(function() {
 				}
 				
 				// description error		
-				if ( $("#transaction_type").val() != "Deposit" ) {	// Deposit description is implicit
+				if ( $("#transaction_type").val() != "Deposit" && $("#transaction_type").val() != "Soft Drinks" ) {	// Deposit description is implicit
 					err5 = error_handler(description.val(), description_error, "","*Required: a detailed description",e);
 				}
 				
