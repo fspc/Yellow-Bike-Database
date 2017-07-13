@@ -109,7 +109,7 @@ CONCAT('$',FORMAT(amount,2)) as format_amount,
 CONCAT(contacts.last_name, ', ', contacts.first_name, ' ',contacts.middle_initial) AS full_name,
 LEFT(IF(show_startdate, CONCAT(' [',
 		DATE_FORMAT(DATE_ADD(date_startstorage,INTERVAL $storage_period DAY),'%W, %M %D'), '] ', transaction_log.description),
-		IF(community_bike,CONCAT('Quantity(', quantity, ')  ', transaction_log.description), description)),100) 
+		IF(community_bike,CONCAT('Quantity(', quantity, ')  ', transaction_log.description), description)),2000) 
 		as description_with_locations
 FROM transaction_log
 LEFT JOIN contacts ON transaction_log.sold_to=contacts.contact_id
