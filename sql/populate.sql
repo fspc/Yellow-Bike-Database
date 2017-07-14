@@ -225,3 +225,11 @@ CREATE TABLE IF NOT EXISTS selections (
 
 -- create the comment row first
 INSERT INTO options (option_name) VALUES("comments");
+
+-- add a deposit to initialize the POS
+INSERT INTO transaction_log (
+	transaction_id, date, transaction_type, 
+	amount, description, sold_by, quantity, 
+	shop_id, paid, change_fund) 
+	VALUES(1,NOW(),"Deposit",0,"Initialize POS",1,0,0,0,20);
+	
