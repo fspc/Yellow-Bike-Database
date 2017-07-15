@@ -95,8 +95,7 @@ contacts.email AS email, contacts.phone AS phone,
 transaction_log.date as sort_hours 
 FROM transaction_log 
 LEFT JOIN contacts ON transaction_log.sold_to = contacts.contact_id 
-WHERE (SUBSTRING_INDEX(date, ' ', 1) >= DATE_SUB(CURDATE(),INTERVAL $purchased_membership_days DAY) 
-AND SUBSTRING_INDEX(date, ' ', 1) <= DATE_SUB(CURDATE(), INTERVAL 1 DAY)) 
+WHERE SUBSTRING_INDEX(date, ' ', 1) <= DATE_ADD(date, INTERVAL 365 DAY) 
 AND (transaction_type='Memberships' AND paid=1);";
 $purchased_membership = mysql_query($purchase_query, $YBDB) or die(mysql_error());
 
