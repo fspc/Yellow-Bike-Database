@@ -116,8 +116,8 @@ $purchased_membership = mysql_query($purchase_query, $YBDB) or die(mysql_error()
               <tr valign="top" bgcolor="#99CC33" class="yb_standardCENTER">
 			    <td width="relative">Paid<br /></td>
 			    <td width="relative">Expiration<br /></td>
-			    <td width="relative">Visits<br /></td>
-			    <td width="relative">Hours<br /></td>
+			    <td width="relative">Visits [running 12 months]<br /></td>
+			    <td width="relative">Hours [running 12 months]<br /></td>
 		      </tr>
                 <?php 
                 $purchased = mysql_fetch_assoc($purchased_membership);
