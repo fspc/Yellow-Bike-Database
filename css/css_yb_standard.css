@@ -79,3 +79,19 @@
 	color: #FF0000;
 	background-color: #FFFFFF;
 }
+
+.footer {
+	text-align: center;
+	margin: 20px 0 5px;
+	font-size: 85%;
+	color: #999;
+}
+
+.footer-line a {
+	text-decoration: none;
+	color: #cc3334;
+}
+
+.footer-line a:hover {
+	text-decoration: underline;
+}
