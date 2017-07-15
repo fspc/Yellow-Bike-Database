@@ -92,7 +92,7 @@ $purchase_query = "SELECT contacts.contact_id,
 CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name, 
 CONCAT(first_name, ' ', last_name) AS normal_full_name,
 contacts.email AS email, contacts.phone AS phone, 
-transaction_log.date as sort_hours 
+transaction_log.date AS sort_hours, SUBSTRING_INDEX(DATE_ADD(date, INTERVAL 365 DAY), ' ', 1) AS expiration_date
 FROM transaction_log 
 LEFT JOIN contacts ON transaction_log.sold_to = contacts.contact_id 
 WHERE SUBSTRING_INDEX(date, ' ', 1) <= DATE_ADD(date, INTERVAL 365 DAY) 
@@ -125,7 +125,7 @@ $purchased_membership = mysql_query($purchase_query, $YBDB) or die(mysql_error()
 			  		 ?> 
             <tr>
             	<?php if($purchased['contact_id'] === $result['contact_id']) { ?>            
-             <td class="yb_standardRIGHTred"><a href="<?php echo "{$page_individual_history_log}?contact_id=" . $result['contact_id']; ?>"><?php echo $result['full_name']; ?></a>&nbsp;(paid)</td>
+             <td class="yb_standardRIGHTred"><a href="<?php echo "{$page_individual_history_log}?contact_id=" . $result['contact_id']; ?>"><?php echo $result['full_name']; ?></a><br \>(paid until <?php echo $purchased['expiration_date']; ?>)</td>
 					<?php } else { ?>
              <td class="yb_standardRIGHTred"><a href="<?php echo "{$page_individual_history_log}?contact_id=" . $result['contact_id']; ?>"><?php echo $result['full_name']; ?></a></td>					
 					<?php } ?>		    
