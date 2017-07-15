@@ -3,7 +3,7 @@
 }
 
 
-#status_totals, #community_service_hours, #shops, #members{
+#status_totals, #community_service_hours, #shops, #members, #dhhr_hours{
 	height: 36px;
 	width: 98px;
 	font-size: x-large;
