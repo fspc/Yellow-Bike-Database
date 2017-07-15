@@ -1,0 +1,15 @@
+*~
+*swp
+csv/*
+js/chosen
+js/nouislider
+CBDB/
+php-console/
+examples/cert.pem
+Connections/local_configurations.php
+js/PickMeUp-2.8.0/
+json/shop.php
+sql/populate-private.sql
+stats/dhhr.php
+temp/
+test.php
