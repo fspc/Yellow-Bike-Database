@@ -5,3 +5,7 @@
 The basic objective here since Yellow Bike Project does not host their own version control repository, at least until recently (on December 29, 2014 a repository was [setup](https://github.com/nwilkes2/CommunityBikeShopDB)), is to keep Main pristine, and do development work here, on the assumption that they may want to commit new changes.  This branch is being used by [YBDB](https://github.com/fspc/ybdb), the BikeBike Docker image.
 
 There is a demo at [http://ybdb.wvcompletestreets.org](http://ybdb.wvcompletestreets.org).  Try it out!
+
+Docker Development is at [https://github.com/fspc/ybdb](https://github.com/fspc/ybdb).
+
+Check out the [https://github.com/fspc/Yellow-Bike-Database/wiki](Wiki)!
