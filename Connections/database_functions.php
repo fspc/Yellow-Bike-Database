@@ -1,6 +1,7 @@
 <?php
 require_once('YBDB.php');
 
+// DO NOT EDIT - USE Connections/local_configurations instead
 
 /*    
 	Choose your timezone from http://php.net/manual/en/timezones.php 
@@ -185,6 +186,13 @@ $gnucash_accounts = array(	"Assets:Current Assets:Checking Account" => "checking
 //
 // Normally, you will want this set at 0.
 define('SHOW_SHOP_ID',0);
+
+// END OF USER DEFINED CONFIGURATIONS
+
+
+if(file_exists( realpath($_SERVER["DOCUMENT_ROOT"]) . "/Connections/local_configurations.php")) {
+	require_once('local_configurations.php');
+}
 
 // other constants
 define("PAGE_START_SHOP", "/start_shop.php");
@@ -480,7 +488,7 @@ function list_time($time_list_start, $time, $form_name = "none", $start_offset_m
 
 function sign_out($time_out, $first_name){
 	if($time_out == "0000-00-00 00:00:00"){
-		echo '<input type="submit" name="submit" value="Sign Out: ' . $first_name . '" />';
+		echo '<input type="submit" name="submit" class="sign_out" value="Sign Out: ' . $first_name . '" />';
 	}
 }
 
