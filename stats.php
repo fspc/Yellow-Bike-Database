@@ -17,6 +17,7 @@
 	    	<li><a href="stats/status_totals.php" >Status Totals by Date Range</a></li>
           <li><a href="stats/stats_userhours.php">Hours by User</a></li>
           <li><a href="stats/community_service_hours.php">Community Service Hours by Date Range</a></li>
+          <li><a href="stats/dhhr.php">DHHR Hours</a></li>
 	      <li>Volunteer Hours - <a href="stats/stats_userhours_year.php">Year Summary</a> | <a href="stats/stats_userhours_season.php">3 Month Summary</a> </li>
 	      <li><a href="stats/stats_usersbyweek.php">New and Total Users by Week</a> </li>
 	      <li><a href="stats/stats_usersbydayweek.php">New and Total Users by Day/Week</a></li>
