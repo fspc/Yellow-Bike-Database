@@ -8,4 +8,4 @@ There is a demo at [http://ybdb.wvcompletestreets.org](http://ybdb.wvcompletestr
 
 Docker Development is at [https://github.com/fspc/ybdb](https://github.com/fspc/ybdb).
 
-Check out the [https://github.com/fspc/Yellow-Bike-Database/wiki](Wiki)!
+Check out the [Wiki](https://github.com/fspc/Yellow-Bike-Database/wiki)!
