@@ -111,7 +111,7 @@ $purchased_membership = mysql_query($purchase_query, $YBDB) or die(mysql_error()
           <td>
             <table  border="1" cellpadding="1" cellspacing="0">
               <tr bgcolor="#99CC33" class="yb_standardCENTERbold">
-                <td colspan="4" height="25">Membership</td>
+                <td colspan="4" height="25">Membership [<?php echo ">= $membership_days days and >= $membership_hours hours" ?>]</td>
 	          </tr>
               <tr valign="top" bgcolor="#99CC33" class="yb_standardCENTER">
 			    <td width="relative"><?php echo $num_member_rows; ?>  Members<br /></td>
