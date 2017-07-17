@@ -78,10 +78,10 @@ $num_member_rows = mysql_num_rows($purchased_membership);
           <td>
             <table  border="1" cellpadding="1" cellspacing="0">
               <tr bgcolor="#99CC33" class="yb_standardCENTERbold">
-                <td colspan="4" height="25">Membership</td>
+                <td colspan="4" height="25">Paid Membership</td>
 	          </tr>
               <tr valign="top" bgcolor="#99CC33" class="yb_standardCENTER">
-			    <td width="relative">Paid<br /></td>
+			    <td width="relative">Name<br /></td>
 			    <td width="relative">Expiration<br /></td>
 			    <td width="relative">Visits [Lifetime]<br /></td>
 			    <td width="relative">Hours [Lifetime]<br /></td>
