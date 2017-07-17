@@ -94,10 +94,19 @@ input[value=Save]:focus, input[value=Close]:focus {
 /* for memberships */
 #expired_membership {
 	color: orchid;
+	margin-left: 10px;
 }
 
 #paid_member {
 	color: blue;
+	margin-left: 10px;
 }
+
+/* for volunteers */
+#volunteer_hours {
+	color: blueviolet;
+	margin-left: 10px;
+}
+
 
 

@@ -662,16 +662,13 @@ $(function() {
 			if (this.value !== "no_selection") {
 				
 				// Is this a paid member?	
-				$.post("json/transaction.php", { membership_and_volunteer_benefits: 1, contact_id: this.value }, function (data) { 
+				$.post("json/transaction.php", { membership_benefits: 1, contact_id: this.value }, function (data) { 
 												
 					var obj = $.parseJSON(data);
 					var title = obj.normal_full_name + "\r\n" +
 											obj.email + "\r\n" +
 											obj.phone + "\r\n" +
 											"expiration: " + obj.expiration_date;
-											
-					
-					//"normal_full_name":"Carol Barnes","email":"msbarnes@rocketmail.com","phone":"(304) 864-4403","membership_start":"2017-07-16 21:45:51","expiration_date":"2018-07-16"}					
 					
 					if (typeof obj.expiration_date && obj.expiration_date !== undefined) {
 						var exp = obj.expiration_date;
@@ -696,7 +693,33 @@ $(function() {
 								$("#expired_membership").empty();
 							}			
 					}
-				}); // post
+				}); // membership post
+				
+				// How many hours does this volunteer have?
+				$.post("json/transaction.php", { volunteer_benefits: 1, contact_id: this.value }, function (data) { 
+												
+					var obj = $.parseJSON(data);
+					var title = obj.normal_full_name + "\r\n" +
+											obj.email + "\r\n" +
+											obj.phone + "\r\n" +
+											"volunteer hours for last 365 day: " + obj.volunteer_hours + "\r\n" +
+											"volunteer hours redeemed " + "\r\n" +
+											"volunteer hours remaining";
+					
+					$("#volunteer_hours").prop("title","").empty();					
+					
+					if (obj) {
+						var volunteer_hours = obj.volunteer_hours;	
+						if (volunteer_hours.length) {
+							$("#volunteer_hours").prop("title","").empty();
+							$("#volunteer_hours").prop("title",title).html("Volunteer Hours");
+						} else { 
+							$("#volunteer_hours").prop("title","").empty();
+									
+						}
+					}													
+											
+				}); // volunteers post
 			
 			} // if not no_selection
 		
