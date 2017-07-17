@@ -4,16 +4,8 @@ require_once('../Connections/YBDB.php');
 require_once('../Connections/database_functions.php');
 $page_individual_history_log = INDIVIDUAL_HISTORY_LOG;
 // Needs to volunteer at least this amount of defined hours before being considered a member
-$membership_hours = MEMBERSHIP_HOURS;
-$membership_days = MEMBERSHIP_DAYS;
-$purchased_membership_days = PURCHASED_MEMBERSHIP_DAYS;
-
-require_once(realpath($_SERVER["DOCUMENT_ROOT"]) . '/php-console/src/PhpConsole/__autoload.php');
-$handler = PhpConsole\Handler::getInstance();
-$handler->start();
 
 mysql_select_db($database_YBDB, $YBDB);
-
 
 $today = date("Y/m/d");
 $year_ago = date("Y/m/d", strtotime("$today -1 year"));
@@ -98,7 +90,6 @@ $num_member_rows = mysql_num_rows($purchased_membership);
                 //$purchased = mysql_fetch_assoc($purchased_membership);
                 while ($result = mysql_fetch_assoc($purchased_membership)) {                 
                 //do { 
-                $handler->debug($purchased_membership_dictionary[$result['contact_id']]);
 			  		 ?> 
             <tr>           
              <td class="yb_standardRIGHTred"><a href="<?php echo "{$page_individual_history_log}?contact_id=" . $result['contact_id']; ?>"><?php echo $result['full_name']; ?></a></td>
