@@ -46,7 +46,7 @@ FROM shop_hours
 LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id 
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id 
 GROUP BY contact_id) AS members  
-GROUP by contact_id ORDER by <div style="text-align: center;">sort_hours</div> DESC, sort_visits DESC;";
+GROUP by contact_id ORDER by sort_hours DESC, sort_visits DESC;";
 $patrons = mysql_query($query, $YBDB) or die(mysql_error());
 
 while ($result = mysql_fetch_assoc($patrons)) {
