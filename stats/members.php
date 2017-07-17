@@ -8,6 +8,11 @@ $membership_hours = MEMBERSHIP_HOURS;
 $membership_days = MEMBERSHIP_DAYS;
 $purchased_membership_days = PURCHASED_MEMBERSHIP_DAYS;
 
+require_once(realpath($_SERVER["DOCUMENT_ROOT"]) . '/php-console/src/PhpConsole/__autoload.php');
+$handler = PhpConsole\Handler::getInstance();
+$handler->start();
+
+
 mysql_select_db($database_YBDB, $YBDB);
 
 
@@ -87,6 +92,7 @@ GROUP by contact_id ORDER by sort_hours DESC, sort_visits DESC;";
 $members = mysql_query($query, $YBDB) or die(mysql_error());
 $num_member_rows = mysql_num_rows($members);
 
+
 // Purchased Membership
 $purchase_query = "SELECT contacts.contact_id, 
 CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name, 
@@ -98,6 +104,10 @@ LEFT JOIN contacts ON transaction_log.sold_to = contacts.contact_id
 WHERE SUBSTRING_INDEX(date, ' ', 1) <= DATE_ADD(date, INTERVAL 365 DAY) 
 AND (transaction_type='Memberships' AND paid=1);";
 $purchased_membership = mysql_query($purchase_query, $YBDB) or die(mysql_error());
+
+while ($result = mysql_fetch_assoc($purchased_membership)) {
+	$purchased_membership_dictionary[$result['contact_id']] = $result;
+}
 
 ?>
 
@@ -124,8 +134,8 @@ $purchased_membership = mysql_query($purchase_query, $YBDB) or die(mysql_error()
                 //do { 
 			  		 ?> 
             <tr>
-            	<?php if($purchased['contact_id'] === $result['contact_id']) { ?>            
-             <td class="yb_standardRIGHTred"><a href="<?php echo "{$page_individual_history_log}?contact_id=" . $result['contact_id']; ?>"><?php echo $result['full_name']; ?></a><br \>(paid until <?php echo $purchased['expiration_date']; ?>)</td>
+            	<?php if( isset($purchased_membership_dictionary[$result['contact_id']]) ) { ?>           
+             <td class="yb_standardRIGHTred"><a href="<?php echo "{$page_individual_history_log}?contact_id=" . $result['contact_id']; ?>"><?php echo $result['full_name']; ?></a><br \>(paid until <?php echo $purchased_membership_dictionary[$result['contact_id']]['expiration_date']; ?>)</td>
 					<?php } else { ?>
              <td class="yb_standardRIGHTred"><a href="<?php echo "{$page_individual_history_log}?contact_id=" . $result['contact_id']; ?>"><?php echo $result['full_name']; ?></a></td>					
 					<?php } ?>		    
