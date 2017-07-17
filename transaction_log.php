@@ -546,7 +546,10 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 					} else {				
 						echo "<span id='anon' style='display:none;'><label for='anonymous' id='anonymous_label'>Anonymous:</label></span>";
 					}
-					echo "<span id='anonymous_error'></span></td>"; 
+					echo "<span id='anonymous_error'></span>";
+					echo "<span id='paid_member'></span>";
+					echo "<span id='volunteer_hours'></span>";
+					echo "</td>";
 
 				} elseif($row_Recordset3['show_soldto_not_signed_in']) {
 					echo "<td>";
@@ -566,7 +569,10 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 					} else {				
 						echo "<span id='anon' style='display:none;'><label for='anonymous' id='anonymous_label'>Anonymous:</label></span>";
 					}
-					echo "<span id='anonymous_error'></span></td>";				
+					echo "<span id='anonymous_error'></span>";
+					echo "<span id='paid_member'></span>";
+					echo "<span id='volunteer_hours'></span>";
+					echo "</td>";				
 				} 
 				?>
 			
