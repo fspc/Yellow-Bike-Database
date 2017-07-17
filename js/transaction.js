@@ -704,14 +704,13 @@ $(function() {
 											obj.phone + "\r\n" +
 											"volunteer hours for last 365 day: " + obj.volunteer_hours + "\r\n" +
 											"volunteer hours redeemed " + "\r\n" +
-											"volunteer hours remaining";
-					
+											"volunteer hours remaining";			
+
 					$("#volunteer_hours").prop("title","").empty();					
 					
 					if (obj) {
 						var volunteer_hours = obj.volunteer_hours;	
 						if (volunteer_hours.length) {
-							$("#volunteer_hours").prop("title","").empty();
 							$("#volunteer_hours").prop("title",title).html("Volunteer Hours");
 						} else { 
 							$("#volunteer_hours").prop("title","").empty();
