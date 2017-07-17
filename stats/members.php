@@ -8,11 +8,6 @@ $membership_hours = MEMBERSHIP_HOURS;
 $membership_days = MEMBERSHIP_DAYS;
 $purchased_membership_days = PURCHASED_MEMBERSHIP_DAYS;
 
-require_once(realpath($_SERVER["DOCUMENT_ROOT"]) . '/php-console/src/PhpConsole/__autoload.php');
-$handler = PhpConsole\Handler::getInstance();
-$handler->start();
-
-
 mysql_select_db($database_YBDB, $YBDB);
 
 
@@ -110,7 +105,6 @@ while ($result = mysql_fetch_assoc($purchased_membership)) {
 }
 
 ?>
-
 
 <?php include("../include_header_stats.html"); ?>
 
