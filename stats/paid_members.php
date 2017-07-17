@@ -46,7 +46,7 @@ FROM shop_hours
 LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id 
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id 
 GROUP BY contact_id) AS members  
-GROUP by contact_id ORDER by sort_hours DESC, sort_visits DESC;";
+GROUP by contact_id ORDER by <div style="text-align: center;">sort_hours</div> DESC, sort_visits DESC;";
 $patrons = mysql_query($query, $YBDB) or die(mysql_error());
 
 while ($result = mysql_fetch_assoc($patrons)) {
@@ -58,7 +58,7 @@ $purchase_query = "SELECT contacts.contact_id,
 CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name, 
 CONCAT(first_name, ' ', last_name) AS normal_full_name,
 contacts.email AS email, contacts.phone AS phone, 
-MAX(transaction_log.date) AS sort_hours, SUBSTRING_INDEX(DATE_ADD(date, INTERVAL 365 DAY), ' ', 1) AS expiration_date
+MAX(transaction_log.date) AS sort_hours, MAX(SUBSTRING_INDEX(DATE_ADD(date, INTERVAL 365 DAY), ' ', 1)) AS expiration_date
 FROM transaction_log 
 LEFT JOIN contacts ON transaction_log.sold_to = contacts.contact_id 
 WHERE SUBSTRING_INDEX(date, ' ', 1) <= DATE_ADD(date, INTERVAL 365 DAY) 
