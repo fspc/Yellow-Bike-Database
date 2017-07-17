@@ -8,6 +8,10 @@ $membership_hours = MEMBERSHIP_HOURS;
 $membership_days = MEMBERSHIP_DAYS;
 $purchased_membership_days = PURCHASED_MEMBERSHIP_DAYS;
 
+require_once(realpath($_SERVER["DOCUMENT_ROOT"]) . '/php-console/src/PhpConsole/__autoload.php');
+$handler = PhpConsole\Handler::getInstance();
+$handler->start();
+
 mysql_select_db($database_YBDB, $YBDB);
 
 
@@ -39,36 +43,6 @@ if (isset($_POST['range1'])) {
 	$today = $range2;
 }	
 
-/*
-
-SELECT contact_id, full_name, email, phone, sort_visits, sort_hours FROM 
-(SELECT contacts.contact_id, CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name,
-contacts.email AS email, contacts.phone AS phone, 
-COUNT(shop_hours.contact_id) as sort_visits, 
-ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS sort_hours 
-FROM shop_hours 
-LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id 
-LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id 
-WHERE (time_in > DATE_SUB(CURDATE(),INTERVAL 12 MONTH)) 
-AND shop_user_roles.volunteer = 1 GROUP BY contact_id) AS members 
-WHERE sort_hours >= 8 AND sort_visits >= 2 
-GROUP by contact_id ORDER by sort_hours  DESC, sort_visits DESC;
-
-
-SELECT contacts.contact_id, 
-CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name, 
-CONCAT(first_name, ' ', last_name) AS normal_full_name,
-contacts.email AS email, contacts.phone AS phone, 
-transaction_log.date as sort_hours 
-FROM transaction_log 
-LEFT JOIN contacts ON transaction_log.sold_to = contacts.contact_id 
-WHERE (SUBSTRING_INDEX(date, ' ', 1) >= DATE_SUB(CURDATE(),INTERVAL 365 DAY) 
-AND SUBSTRING_INDEX(date, ' ', 1) <= DATE_SUB(CURDATE(), INTERVAL 0 DAY)) 
-AND (transaction_type="Memberships" AND paid=1);
-
-
-*/
-
 // Membership via volunteering
 $query = "SELECT contact_id, full_name, normal_full_name, email, phone, sort_visits, sort_hours FROM 
 (SELECT contacts.contact_id, CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name,
@@ -79,13 +53,13 @@ ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(t
 FROM shop_hours 
 LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id 
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id 
-WHERE  (SUBSTRING_INDEX(time_in, ' ', 1) >= DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  
-AND SUBSTRING_INDEX(time_in, ' ', 1) <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY))
-AND shop_user_roles.volunteer = 1 GROUP BY contact_id) AS members 
-WHERE sort_hours >= $membership_hours AND sort_visits >= $membership_days 
+GROUP BY contact_id) AS members  
 GROUP by contact_id ORDER by sort_hours DESC, sort_visits DESC;";
-$members = mysql_query($query, $YBDB) or die(mysql_error());
-$num_member_rows = mysql_num_rows($members);
+$patrons = mysql_query($query, $YBDB) or die(mysql_error());
+
+while ($result = mysql_fetch_assoc($patrons)) {
+	$purchased_membership_dictionary[$result['contact_id']] = $result;
+}
 
 // Purchased Membership
 $purchase_query = "SELECT contacts.contact_id, 
@@ -98,6 +72,7 @@ LEFT JOIN contacts ON transaction_log.sold_to = contacts.contact_id
 WHERE SUBSTRING_INDEX(date, ' ', 1) <= DATE_ADD(date, INTERVAL 365 DAY) 
 AND (transaction_type='Memberships' AND paid=1);";
 $purchased_membership = mysql_query($purchase_query, $YBDB) or die(mysql_error());
+$num_member_rows = mysql_num_rows($purchased_membership);
 
 ?>
 
@@ -116,21 +91,20 @@ $purchased_membership = mysql_query($purchase_query, $YBDB) or die(mysql_error()
               <tr valign="top" bgcolor="#99CC33" class="yb_standardCENTER">
 			    <td width="relative">Paid<br /></td>
 			    <td width="relative">Expiration<br /></td>
-			    <td width="relative">Visits [running 12 months]<br /></td>
-			    <td width="relative">Hours [running 12 months]<br /></td>
+			    <td width="relative">Visits [Lifetime]<br /></td>
+			    <td width="relative">Hours [Lifetime]<br /></td>
 		      </tr>
                 <?php 
-                $purchased = mysql_fetch_assoc($purchased_membership);
-                while ($result = mysql_fetch_assoc($members)) {                 
+                //$purchased = mysql_fetch_assoc($purchased_membership);
+                while ($result = mysql_fetch_assoc($purchased_membership)) {                 
                 //do { 
+                $handler->debug($purchased_membership_dictionary[$result['contact_id']]);
 			  		 ?> 
-            <tr>
-            	<?php if($purchased['contact_id'] === $result['contact_id']) { ?>            
+            <tr>           
              <td class="yb_standardRIGHTred"><a href="<?php echo "{$page_individual_history_log}?contact_id=" . $result['contact_id']; ?>"><?php echo $result['full_name']; ?></a></td>
-			    <td class="yb_standardRIGHTred"><?php echo $purchased['expiration_date']; ?></td>
-			    <td class="yb_standardRIGHT"><?php echo number_format($result['sort_visits'],0); ?></td>
-			    <td class="yb_standardRIGHT"><?php echo number_format($result['sort_hours'],0); ?></td>					
-					<?php } ?>	    
+			    <td class="yb_standardRIGHTred"><?php echo $result['expiration_date']; ?></td>
+			    <td class="yb_standardRIGHT"><?php echo number_format($purchased_membership_dictionary[$result['contact_id']]['sort_visits'],0); ?></td>
+			    <td class="yb_standardRIGHT"><?php echo number_format($purchased_membership_dictionary[$result['contact_id']]['sort_hours'],0); ?></td>						    
 		      </tr>
               <?php
 		  } // end WHILE count of recordset ?>
@@ -142,7 +116,7 @@ $purchased_membership = mysql_query($purchase_query, $YBDB) or die(mysql_error()
      		<h3>Contact Information</h3>
 			<b>Email Address:</b>&nbsp;
 			<?php 
-			mysql_free_result($members); 
+			//mysql_free_result($members); 
 			$members = mysql_query($purchase_query, $YBDB) or die(mysql_error()); 
 			$c = 1;			
 			while ($result = mysql_fetch_assoc($members)) {
