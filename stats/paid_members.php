@@ -58,11 +58,11 @@ $purchase_query = "SELECT contacts.contact_id,
 CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name, 
 CONCAT(first_name, ' ', last_name) AS normal_full_name,
 contacts.email AS email, contacts.phone AS phone, 
-transaction_log.date AS sort_hours, SUBSTRING_INDEX(DATE_ADD(date, INTERVAL 365 DAY), ' ', 1) AS expiration_date
+MAX(transaction_log.date) AS sort_hours, SUBSTRING_INDEX(DATE_ADD(date, INTERVAL 365 DAY), ' ', 1) AS expiration_date
 FROM transaction_log 
 LEFT JOIN contacts ON transaction_log.sold_to = contacts.contact_id 
 WHERE SUBSTRING_INDEX(date, ' ', 1) <= DATE_ADD(date, INTERVAL 365 DAY) 
-AND (transaction_type='Memberships' AND paid=1);";
+AND (transaction_type='Memberships' AND paid=1) GROUP BY full_name;";
 $purchased_membership = mysql_query($purchase_query, $YBDB) or die(mysql_error());
 $num_member_rows = mysql_num_rows($purchased_membership);
 
