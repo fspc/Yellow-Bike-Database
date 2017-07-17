@@ -23,6 +23,13 @@ define("TIMEZONE", "America/New_York");
 MEMBERSHIP
 **********/
 // Define when a volunteer becomes a member based hours and days for the calendar year vs a paid membership
+// This can also be used as a metric.
+/*
+At Positive Spin
+Actual memberships begin on the day they are purchased
+Memberships - $60/year
+Memberships include unlimited access to an available work stand during open shop hours and a 10% discount on parts.
+*/
 
 // Needs to volunteer at least this amount of defined hours before being considered a member
 define("MEMBERSHIP_HOURS",8);
@@ -32,6 +39,32 @@ define("MEMBERSHIP_DAYS",2);
 
 // Define how long a patron remains a member if they purchase a membership.
 define("PURCHASED_MEMBERSHIP_DAYS",365);
+
+/********************************
+SWEAT EQUITY / VOLUNTEER BENEFITS
+*********************************/
+// This is specific to Positive Spin Policies  
+// Calendar Year = January 1 .. December 31 (366 for leap years)
+/* 
+These hours can only be used to purchase used parts, bicycles and stand time. 
+
+Volunteers may only purchase one bike with volunteer hours per calendar year.
+
+If you would like to spend more than $100 in volunteer hours during a calendar year, 
+75% of every dollar spent over $100 must be paid for with cash/credit card/check/etc 
+for volunteers who have volunteered fewer than 100 hours.  For volunteers who have 
+donated more than 100 hours of their time in the past 365 days, this match can be reduced to 50%.
+
+May add capability to adjust limits based on status, but that can get complex if same person has more than 1 status.
+
+(Sweat Equity / Volunteer Benefits can't be combined with Membership Benefits.)
+
+*/
+define("SWEAT_EQUITY_LIMIT",100);
+define("VOLUNTEER_HOUR_VALUE",8);
+define("VOLUNTEER_DISCOUNT",25);
+define("SPECIAL_VOLUNTEER_HOURS_QUALIFICATION",100);
+define("SPECIAL_VOLUNTEER_DISCOUNT",50);
 
 /*******
 CONTACTS
