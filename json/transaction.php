@@ -14,8 +14,8 @@ $csv_directory = CSV_DIRECTORY;
 		} else {
 			echo "no_shop";
 		}
-	}
-
+	}	
+	
 	// update whether paid or not
 	if(isset($_POST['paid'])) {
 			if ($_POST['paid'] == 1) {			
@@ -76,6 +76,22 @@ $csv_directory = CSV_DIRECTORY;
 		 echo json_encode($result);		
 	}
 
+	// Membership and Volunteer Benefits
+	if (isset($_POST['membership_and_volunteer_benefits'])) {
+		
+		$query = "SELECT contacts.contact_id,  CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name,
+					CONCAT(first_name, ' ', last_name) AS normal_full_name, contacts.email AS email, contacts.phone AS phone,  
+					transaction_log.date AS membership_start, SUBSTRING_INDEX(DATE_ADD(date, INTERVAL 365 DAY), ' ', 1) AS expiration_date 
+					FROM transaction_log  LEFT JOIN contacts ON transaction_log.sold_to = contacts.contact_id  
+					WHERE SUBSTRING_INDEX(date, ' ', 1) <= DATE_ADD(date, INTERVAL 365 DAY)  
+					AND (transaction_type='Memberships' AND paid=1) AND contact_id=" .
+					$_POST['contact_id'] . ";";		
+		
+		 $sql = mysql_query($query, $YBDB) or die(mysql_error());
+		 $result = mysql_fetch_assoc($sql);
+		 echo json_encode($result);		
+	}
+
 	// Anonymous transaction - save and communicate back settings
 	if(isset($_POST['anonymous'])) {
 		
@@ -103,7 +119,7 @@ $csv_directory = CSV_DIRECTORY;
 			echo $history_result;		
 		}
 	}
-
+	
 	// Transaction history - update transaction history
 	// Note:  This could easily be turned into its own table with a foreign key
 	// referencing transaction_log.transaction_id, but most transactions

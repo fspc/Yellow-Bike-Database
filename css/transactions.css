@@ -91,4 +91,13 @@ input[value=Save]:focus, input[value=Close]:focus {
 	padding: 0px 10px 0px 10px;
 }
 
+/* for memberships */
+#expired_membership {
+	color: orchid;
+}
+
+#paid_member {
+	color: blue;
+}
+
 

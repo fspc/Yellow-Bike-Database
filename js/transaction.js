@@ -652,6 +652,48 @@ $(function() {
 		var check_number_error = $("#check_number_error");
 		//var check_number = $("#check_number").on("input");
 
+		// Things to do before pressing the save / close button
+		
+		//  Membership and Volunteer Benefits
+		var d = new Date();	
+		
+		sold_to.change(function() { 
+			
+			if (this.value !== "no_selection") {
+				
+				// Is this a paid member?	
+				$.post("json/transaction.php", { membership_and_volunteer_benefits: 1, contact_id: this.value }, function (data) { 
+												
+					var obj = $.parseJSON(data);
+					if (typeof obj.expiration_date && obj.expiration_date !== undefined) {
+						var exp = obj.expiration_date;
+						var expiration_date = new Date(exp.split("-").toString());	
+						if (d >= expiration_date) {
+							if ($("#expired_membership").length === 1) {
+								$("#expired_membership").html("Expired Membership");
+							} else {
+								$("#paid_member").prop("id","expired_membership").html("Expired Membership");				
+							}
+						} else if (d < expiration_date) {
+							if ($("#paid_member").length === 1) {
+								$("#paid_member").html("Paid Member");
+							} else {
+								$("#expired_membership").prop("id","paid_member").html("Paid Member");				
+							}
+						}							
+					} else { 
+							if ($("#paid_member").length === 1) {
+								$("#paid_member").empty();
+							} else {
+								$("#expired_membership").empty();
+							}			
+					}
+				}); // post
+			
+			} // if not no_selection
+		
+		}); // sold_to.change
+
 		// note: it is possible to close with all error conditions being satisfied,
 		//       however, it is no biggy.		
 		save_or_close($("#close_transaction"), "Close"); 
