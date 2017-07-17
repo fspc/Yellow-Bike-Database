@@ -665,20 +665,28 @@ $(function() {
 				$.post("json/transaction.php", { membership_and_volunteer_benefits: 1, contact_id: this.value }, function (data) { 
 												
 					var obj = $.parseJSON(data);
+					var title = obj.normal_full_name + "\r\n" +
+											obj.email + "\r\n" +
+											obj.phone + "\r\n" +
+											"expiration: " + obj.expiration_date;
+											
+					
+					//"normal_full_name":"Carol Barnes","email":"msbarnes@rocketmail.com","phone":"(304) 864-4403","membership_start":"2017-07-16 21:45:51","expiration_date":"2018-07-16"}					
+					
 					if (typeof obj.expiration_date && obj.expiration_date !== undefined) {
 						var exp = obj.expiration_date;
 						var expiration_date = new Date(exp.split("-").toString());	
 						if (d >= expiration_date) {
 							if ($("#expired_membership").length === 1) {
-								$("#expired_membership").html("Expired Membership");
+								$("#expired_membership").prop("title",title).html("Expired Membership");
 							} else {
-								$("#paid_member").prop("id","expired_membership").html("Expired Membership");				
+								$("#paid_member").prop("id","expired_membership").prop("title",title).html("Expired Membership");				
 							}
 						} else if (d < expiration_date) {
 							if ($("#paid_member").length === 1) {
-								$("#paid_member").html("Paid Member");
+								$("#paid_member").prop("title",title).html("Paid Member");
 							} else {
-								$("#expired_membership").prop("id","paid_member").html("Paid Member");				
+								$("#expired_membership").prop("id","paid_member").prop("title",title).html("Paid Member");				
 							}
 						}							
 					} else { 
