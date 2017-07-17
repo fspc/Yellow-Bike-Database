@@ -85,7 +85,8 @@ $csv_directory = CSV_DIRECTORY;
 					FROM transaction_log  LEFT JOIN contacts ON transaction_log.sold_to = contacts.contact_id  
 					WHERE SUBSTRING_INDEX(date, ' ', 1) <= DATE_ADD(date, INTERVAL 365 DAY)  
 					AND (transaction_type='Memberships' AND paid=1) AND contact_id=" .
-					$_POST['contact_id'] . ";";		
+					$_POST['contact_id'] . 
+					" ORDER by membership_start DESC;";		
 		
 		 $sql = mysql_query($query, $YBDB) or die(mysql_error());
 		 $result = mysql_fetch_assoc($sql);
