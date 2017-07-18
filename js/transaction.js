@@ -702,10 +702,10 @@ $(function() {
 					var title = obj.normal_full_name + "\r\n" +
 											obj.email + "\r\n" +
 											obj.phone + "\r\n" +
-											"volunteer hours for last 365 day: " + obj.volunteer_hours + "\r\n" +
-											"volunteer hours for " + d.getFullYear() + ":\r\n" +
-											"volunteer hours redeemed: " + "\r\n" +
-											"volunteer hours remaining:";			
+											"Volunteer Hours for last 365 days: " + obj.volunteer_hours + "\r\n" +
+											"Volunteer Hours \(" + d.getFullYear() + "\): " + obj.current_year_volunteer_hours + "\r\n" +
+											"Volunteer Hours Redeemed: " + "\r\n" +
+											"Volunteer Hours Remaining:";			
 
 					$("#volunteer_hours").prop("title","").empty();					
 					

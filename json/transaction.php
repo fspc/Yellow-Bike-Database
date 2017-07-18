@@ -136,9 +136,12 @@ $csv_directory = CSV_DIRECTORY;
 					 $_POST['contact_id'] .
 					 ") AS members;";
 
-		//$sql = mysql_query($query, $YBDB) or die(mysql_error());
-		//$result .= mysql_fetch_assoc($sql);
+		$sql = mysql_query($query, $YBDB) or die(mysql_error());
+		$result2 = mysql_fetch_assoc($sql);
+		
+		$result = (object)array_merge((array)$result, (array)$result2);
 
+		
 		echo json_encode($result);		
 
 	}	// Volunteer Benefits
