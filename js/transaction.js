@@ -703,8 +703,9 @@ $(function() {
 											obj.email + "\r\n" +
 											obj.phone + "\r\n" +
 											"volunteer hours for last 365 day: " + obj.volunteer_hours + "\r\n" +
-											"volunteer hours redeemed " + "\r\n" +
-											"volunteer hours remaining";			
+											"volunteer hours for " + d.getFullYear() + ":\r\n" +
+											"volunteer hours redeemed: " + "\r\n" +
+											"volunteer hours remaining:";			
 
 					$("#volunteer_hours").prop("title","").empty();					
 					
