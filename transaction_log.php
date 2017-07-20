@@ -4,6 +4,12 @@ error_reporting(E_STRICT);
 require_once('Connections/YBDB.php');
 require_once('Connections/database_functions.php'); 
 
+/*
+require_once(realpath($_SERVER["DOCUMENT_ROOT"]) . '/php-console/src/PhpConsole/__autoload.php');
+$handler = PhpConsole\Handler::getInstance();
+$handler->start();
+*/
+
 $page_edit_contact = PAGE_EDIT_CONTACT; 
 $page_individual_history_log = INDIVIDUAL_HISTORY_LOG;
 $storage_period = STORAGE_PERIOD;
@@ -373,6 +379,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 	  $Recordset3 = mysql_query($query_Recordset3, $YBDB) or die(mysql_error());
 	  $row_Recordset3 = mysql_fetch_assoc($Recordset3);
 	  $totalRows_Recordset3 = mysql_num_rows($Recordset3);
+	  
+	  //$handler->debug($row_Recordset3);
 	   
 	  ?>
         
@@ -486,6 +494,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  	  <td><textarea id="description" name="description" cols="45" rows="3"><?php echo $row_Recordset2['description']; ?></textarea>
 		  	  <span id="description_error"></span></td>
 		  	  </tr>
+				<?php } // end show_description ?>		  	  
 		  	  
 			 <?php if($row_Recordset3['show_amount']){ ?>
            <tr id="price"><td>&nbsp;</td>
@@ -497,7 +506,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 			  	<td><input name="amount" type="text" id="amount" value="<?php echo $row_Recordset2['format_amount']; ?>" size="6" />
 			  	<span id="payment_error"></span></td>
 			  </tr>
-			  <?php } ?>		  	  
+			  <?php } // end show_amount ?>		  	  
 		  	  
 		  	  <?php if($row_Recordset3['show_payment']) { ?>
 		  	  <tr id="payment_type">
@@ -522,8 +531,9 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 						?>	
 					<span id="check_number_error"></span></td>		  	  
 		  	  </tr>
-		  	  <?php } ?>
-                <?php } // end if show_payment 
+		  	  <?php } // end if show_payment ?>
+                
+                <?php   
 			
 				// Patron
 			if($row_Recordset3['show_soldto_signed_in'] ||$row_Recordset3['show_soldto_not_signed_in'] ){ // if location show row?>                <tr><td>&nbsp;</td>
