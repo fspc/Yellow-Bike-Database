@@ -40,6 +40,12 @@ define("MEMBERSHIP_DAYS",2);
 // Define how long a patron remains a member if they purchase a membership.
 define("PURCHASED_MEMBERSHIP_DAYS",365);
 
+/*********
+STAND TIME
+**********/
+// Determines the behaviour of Stand Time (transaction_type_id)
+define("STAND_TIME_HOURLY_RATE",10);
+
 /********************************
 SWEAT EQUITY / VOLUNTEER BENEFITS
 *********************************/
@@ -65,6 +71,8 @@ define("VOLUNTEER_HOUR_VALUE",8);
 define("VOLUNTEER_DISCOUNT",25);
 define("SPECIAL_VOLUNTEER_HOURS_QUALIFICATION",100);
 define("SPECIAL_VOLUNTEER_DISCOUNT",50);
+
+// Determines the behaviour of Bicycles (transaction_type_id) for volunteer to earn-a-bike purchases
 define("EARN_A_BIKE_LIMIT",1);
 
 // Map transaction_type_id for transaction to the type of benefits desired
@@ -172,7 +180,7 @@ define("ACCOUNTING_GROUP", "Sales");
 define("DEFAULT_TRANSACTION_TYPE", "Sale - Used Parts");
 
 // shop_user_role
-define("DEFAULT_SHOP_USER", "Personal");
+define("DEFAULT_SHOP_USER", "Stand Time");
 
 /* Change Fund - A specific amount of money for the purpose of making change. 
    The amount on hand should remain the same at all times; 

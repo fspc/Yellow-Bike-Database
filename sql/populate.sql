@@ -32,6 +32,9 @@ INSERT INTO shop_types (shop_type_id, list_order) VALUES
 --
 -- default select value for shop user may be set in Connections/database_functions.php,
 -- a shop_type_id with the same name needs to exist in order for this to work.
+--
+-- Stand Time is a special type of user_role_id (assuming all 0's) where hours are figured out automatically in the
+-- special Stand Time transaction_type_id. 
 
 ALTER TABLE shop_user_roles ADD other_volunteer tinyint(1) NOT NULL DEFAULT '0';
 DELETE FROM shop_user_roles;
@@ -39,7 +42,7 @@ INSERT INTO shop_user_roles (
   shop_user_role_id, hours_rank, volunteer, sales, paid, other_volunteer
 ) VALUES 
   ("Coordinator",0,1,1,0,0), 
-  ("Personal",0,0,0,0,0), 
+  ("Stand Time",0,0,0,0,0), 
   ("Volunteer",0,1,0,0,0), 
   ("Greeter",0,1,1,0,0),
   ("Staff",0,0,1,1,0),
@@ -160,6 +163,10 @@ INSERT INTO contacts (
 -- BICYCLES
 -- Bicycles (transaction_type_id) is a special transaction type that can have limits applied to how many bicycles can be
 -- earned with volunteer hour benefits (transforming volunteer hours into cash).
+--
+-- STAND TIME
+-- Stand Time (transaction_type_id) is a special transaction type to automatically figures out the amount that needs to be paid based
+-- on the configured hourly rate.
 --
 -- DONATIONS are best complimented with anonymous, see below.
 --
