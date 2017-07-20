@@ -65,6 +65,19 @@ define("VOLUNTEER_HOUR_VALUE",8);
 define("VOLUNTEER_DISCOUNT",25);
 define("SPECIAL_VOLUNTEER_HOURS_QUALIFICATION",100);
 define("SPECIAL_VOLUNTEER_DISCOUNT",50);
+define("EARN_A_BIKE_LIMIT",1);
+
+// Map transaction_type_id for transaction to the type of benefits desired
+/*
+$gnucash_accounts = array(	"Bicycles" => "",
+									"Used Parts" => "",
+									"New Parts" => "",
+									"Stand Time" => "",
+									"Inventory Parts" => "",
+									"Inventory Parts" => "",
+									
+								);
+								*/
 
 /*******
 CONTACTS
@@ -194,7 +207,7 @@ define("CSV_DIRECTORY","csv");
 
 
 // Define array mapping for Accounts.  Usually Asset Accounts since Income is generally the main type of transaction.
-// Currently four types of accounts are supported:  checking, credit, account_receivable, donation 
+// Currently there are four types of accounts with checking and credit being supported (working):  checking, credit, account_receivable, donation 
 // 	checking/credit = transaction has been 1) paid and is 2) cash & check [checking] or a credit card [credit] and 3) deposited
 //				note: checking type may include $0 transactions, e.g. earn-a-bike
 //	   account_receivable =  there is an 1). account receivable invoice and it has been 2) paid and 3) deposited
@@ -366,7 +379,7 @@ function list_shop_locations($form_name = "none", $default_value = ""){
 
 // Function provides specific MySQL parameters to the function that generates the list box code
 function list_transaction_types($form_name = "none", $default_value = ""){
-	$querySQL = "SELECT transaction_type_id FROM transaction_types ORDER BY rank + 0;";
+	$querySQL = "SELECT transaction_type_id FROM transaction_types WHERE active = 1 ORDER BY rank + 0;";
 	$list_value = "transaction_type_id";
 	$list_text = "transaction_type_id";
 	generate_list($querySQL,$list_value,$list_text,$form_name, $default_value);
