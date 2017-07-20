@@ -90,8 +90,24 @@ INSERT INTO contacts (
 -- message_transaction_id:  text field after transaction_id, a way to add instructions, etc.
 -- fieldname_description: text field for description text area, e.g. "Description"
 -- fieldname_soldto: text field for person being sold to, e.g. "Sold To"
--- show_soldto_signed_in or show_soldto_not_signed_in: while not a presentation, without it, previous field,
+-- show_soldto_signed_in or show_soldto_not_signed_in: while not a presentation, without one or the other, previous field,
 -- 	"fieldname_soldto" is useless. (Also, see discussion about location) 
+--
+-- PRESENTATION
+--
+-- active: turns off/on the ability to select a transaction
+-- community_bike: shows quantity field if set (usually ignored by volunteers in a real life shop setting)
+-- show_soldto_signedshow / soldto_not_signed_in: Pull-down list for patrons - one needs to be 0, and the other 1 
+-- 	or vice versa, in order to work properly.
+--
+-- show_transaction_id (currently not working), 
+-- show_type (currently not working) 
+-- show_startdate (discussion in storage transaction), 
+-- show_amount (working) 
+-- show_description (working)
+-- USELESS or RESERVED FIELDS
+-- show_soldto and show_soldby currently do not do anything, 
+-- and not what you think they would do either :) 
 --
 -- (Developers) DISCUSSION ABOUT LOCATIONS - In transaction_log.php 
 -- "show_soldto_location" was being used to show patrons. The probable history of this name was 
@@ -104,11 +120,9 @@ INSERT INTO contacts (
 -- being used for everything, rather than list_CurrentShopUsers_select when appropriate.  However, associating
 -- certain types transactions with different behavior makes good sense.  In this revision, show_soldto_location has
 -- been renamed to show_soldto_signed_in and a new column show_soldto_not_signed_in has been added.  This gives fine
--- grain control over transaction behavior.
+-- grain control over transaction behavior.  One needs to be 0, and the other 1 or vice versa, in order to work properly,
+-- currently there are some css issues when not_signed_in is used for some transactions.
 --
--- USELESS or RESERVED FIELDS
--- show_soldto and show_soldby currently do not do anything, 
--- and not what you think they would do either :) 
 --
 -- METRICS - Transaction Types (built-in names) to add to make Metrics work properly:
 --				 MySQL Views have these built-in.
@@ -143,6 +157,10 @@ INSERT INTO contacts (
 -- Memberships (transaction_type_id) is a special transaction type in that the software keeps track of paid
 -- memberships and statistics.
 --
+-- BICYCLES
+-- Bicycles (transaction_type_id) is a special transaction type that can have limits applied to how many bicycles can be
+-- earned with volunteer hour benefits (transforming volunteer hours into cash).
+--
 -- DONATIONS are best complimented with anonymous, see below.
 --
 -- "show_payment" shows cash, credit, and check payment types if selected.
@@ -156,22 +174,22 @@ INSERT INTO transaction_types
   (transaction_type_id, rank, 
    active, community_bike, show_transaction_id, show_type, show_startdate, 
    show_amount, show_description, show_soldto, show_soldby, 
-   fieldname_date, fieldname_soldby, message_transaction_id, 
+   fieldname_date, fieldname_soldby, message_transaction_id,
    fieldname_soldto, show_soldto_signed_in, fieldname_description, 
    accounting_group, show_payment, anonymous, show_soldto_not_signed_in
 ) VALUES 
-  ("Build Your Own Bike", 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
+  ("Build Your Own Bike", 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
   ("Bicycles", 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
-  ("Non-inventory Parts", 3, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
+  ("Used Parts", 3, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
   ("Trade-ups/Ins", 4, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
   ("Helmets", 5, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
   ("Donations", 6, 1, 0, 1, 1, 0, 0, 1, 1, 1, "Sale Date", "Received by"," ", "Donated by", 1, "Description", "Donations", 0, 1, 0),
   ("Monetary Donations", 7, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Received by"," ", "Donated by", 1, "Description", "Sales", 1, 1, 0),     
   ("Memberships", 8, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
-  ("Inventory Parts", 9, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
+  ("New Parts", 9, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
   ("Cargo Related", 10, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
   ("Car Racks", 11, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
-  ("DIY Repairs", 12, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0),
+  ("Stand Time", 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0),
   ("Accounts Receivable Invoice", 13, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 0, 0, 0), 
   ("Accounts Receivable Payment", 14, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
   ("Deposit", 15, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Deposit Date", "Deposited By"," ", "", 0, "Description", "Deposits", 0, 0, 0),
