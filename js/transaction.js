@@ -711,7 +711,7 @@ $(function() {
 					
 					if (obj) {
 						var volunteer_hours = obj.volunteer_hours;	
-						if (volunteer_hours.length) {
+						if (volunteer_hours && volunteer_hours.length) {
 							$("#volunteer_hours").prop("title",title).html("Volunteer Hours");
 						} else { 
 							$("#volunteer_hours").prop("title","").empty();
