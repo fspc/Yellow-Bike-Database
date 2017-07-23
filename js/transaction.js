@@ -725,7 +725,7 @@ $(function() {
 				// Stand Time	
 				if ( $("#trans_type_info").text() === "Stand Time" ) {
 					$.post("json/transaction.php", { stand_time: 1, contact_id: this.value, shop_id: shop_id }, function (data) { 
-			
+						amount.val(data + ".00");
 				
 					}); // stand time pos		
 				}			

@@ -7,6 +7,8 @@ mysql_select_db($database_YBDB, $YBDB);
 $change_fund = CHANGE_FUND;
 $csv_directory = CSV_DIRECTORY;
 $stand_time_hourly_rate = STAND_TIME_HOURLY_RATE;
+$stand_time_grace_period = STAND_TIME_GRACE_PERIOD;
+$timezone = TIMEZONE;
 
 	// Is there a current shop?
 	if(isset($_POST['shop_exist'])) {
@@ -160,8 +162,32 @@ $stand_time_hourly_rate = STAND_TIME_HOURLY_RATE;
 		 if($result) {
 		 	
 			// Give 15 minutes grace time, and round off to the next hour afterwards
-			// multiply by stand_time_hourly_rate			 	
-		 	echo $result['time_in'] . " " . current_datetime();
+			// multiply by stand_time_hourly_rate	and take into account stand_time_grace_period
+			
+			$sign_in = new DateTime($result['time_in'], new DateTimeZone($timezone));
+			$sign_out = new DateTime("", new DateTimeZone($timezone));
+			$difference = $sign_out->diff($sign_in);
+			$total_minutes = ($difference->h * 60) + $difference->i;
+			$stand_time_remainder = $total_minutes % 60;
+
+			
+			if($total_minutes != $stand_time_remainder && $stand_time_remainder <= $stand_time_grace_period) { // still within grace period
+				$answer = "within grace period $difference->h $difference->i";	
+				$stand_time = $difference->h;				
+			} elseif($total_minutes != $stand_time_remainder && $stand_time_remainder > $stand_time_grace_period) { // outside grace period
+				$answer = "outside grace period $difference->h $difference->i";
+				$stand_time = $difference->h + 1;	
+			} elseif($total_minutes == $stand_time_remainder && $difference->i > $stand_time_grace_period) {  // 1hr or less outside grace period
+				$answer = "1hr or less $difference->h $difference->i";
+				$stand_time = 1;
+			} elseif($total_minutes <= $stand_time_grace_period) { // first hour still within grace period
+				$answer = "less than 1hr and within grace period $difference->h $difference->i";
+			} else {
+				echo "$total_minutes  $stand_time_remainder $difference->i: " . $result['time_in'] . " " . current_datetime() . " | " . $sign_in->format('Y-m-d H:i:s') . "  " . $sign_out->format('Y-m-d H:i:s');
+			}	
+				
+			$total = $stand_time * $stand_time_hourly_rate;	
+			echo "$total";	 	
 		
 		 }
 		 //echo json_encode($result);	
