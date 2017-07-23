@@ -632,6 +632,7 @@ $(function() {
 		var description = $("#description");
 		var quantity = $("#quantity");
 		var date = $("#date");
+		var shop_id = $("#shop_id").val();
 
 		// require that values be filled in a particular fashion
 		amount.mask("#0.00", {reverse: true, placeholder: "000.00"});		
@@ -721,9 +722,18 @@ $(function() {
 											
 				}); // volunteers post
 			
-			} // if not no_selection
+				// Stand Time	
+				if ( $("#trans_type_info").text() === "Stand Time" ) {
+					$.post("json/transaction.php", { stand_time: 1, contact_id: this.value, shop_id: shop_id }, function (data) { 
+			
+				
+					}); // stand time pos		
+				}			
+			
+			} // if not no_selection		
 		
 		}); // sold_to.change
+		
 
 		// note: it is possible to close with all error conditions being satisfied,
 		//       however, it is no biggy.		

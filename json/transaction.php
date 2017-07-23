@@ -6,6 +6,7 @@ mysql_select_db($database_YBDB, $YBDB);
 
 $change_fund = CHANGE_FUND;
 $csv_directory = CSV_DIRECTORY;
+$stand_time_hourly_rate = STAND_TIME_HOURLY_RATE;
 
 	// Is there a current shop?
 	if(isset($_POST['shop_exist'])) {
@@ -90,10 +91,7 @@ $csv_directory = CSV_DIRECTORY;
 		
 		 $sql = mysql_query($query, $YBDB) or die(mysql_error());
 		 $result = mysql_fetch_assoc($sql);
-		 echo json_encode($result);		
-
-		// SELECT contact_id, full_name, normal_full_name, email, phone, visits, volunteer_hours FROM  (SELECT contacts.contact_id, CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name, CONCAT(first_name, ' ', last_name) AS normal_full_name, contacts.email AS email, contacts.phone AS phone,  COUNT(shop_hours.contact_id) as visits,  ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS volunteer_hours  FROM shop_hours  LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id  LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id  WHERE  (SUBSTRING_INDEX(time_in, ' ', 1) >= DATE_SUB(CURDATE(),INTERVAL 365 DAY)   AND SUBSTRING_INDEX(time_in, ' ', 1) <= DATE_SUB(CURDATE(), INTERVAL 0 DAY)) AND shop_user_roles.volunteer = 1 GROUP BY contact_id) AS members;
-
+		 echo json_encode($result);	
 
 	} // Membership Benefits
 	
@@ -146,6 +144,30 @@ $csv_directory = CSV_DIRECTORY;
 
 	}	// Volunteer Benefits
 
+	// Stand Time
+	if (isset($_POST['stand_time'])) {
+		
+		// use the most recent login status; can do calculations here
+		// ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60))
+		// SUBSTRING_INDEX(time_in, ' ', 1)
+		$query = "SELECT time_in, time_out FROM shop_hours WHERE shop_id=" . $_POST['shop_id'] . 
+					" AND shop_user_role='Stand Time' 
+					AND contact_id=" . $_POST['contact_id'] . ";";		
+		
+		 $sql = mysql_query($query, $YBDB) or die(mysql_error());
+		 $result = mysql_fetch_assoc($sql);
+		 
+		 if($result) {
+		 	
+			// Give 15 minutes grace time, and round off to the next hour afterwards
+			// multiply by stand_time_hourly_rate			 	
+		 	echo $result['time_in'] . " " . current_datetime();
+		
+		 }
+		 //echo json_encode($result);	
+
+	} // Stand Time
+	
 	// Anonymous transaction - save and communicate back settings
 	if(isset($_POST['anonymous'])) {
 		
