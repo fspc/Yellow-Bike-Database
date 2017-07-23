@@ -46,6 +46,9 @@ STAND TIME
 // Determines the behaviour of Stand Time (transaction_type_id)
 define("STAND_TIME_HOURLY_RATE",10);
 
+// Define how much time over 1hr is allowed before charging for the next hour.
+define("STAND_TIME_GRACE_PERIOD",15)
+
 /********************************
 SWEAT EQUITY / VOLUNTEER BENEFITS
 *********************************/
