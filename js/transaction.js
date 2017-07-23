@@ -652,6 +652,11 @@ $(function() {
 		var quantity_error =	$("#quantity_error");
 		var check_number_error = $("#check_number_error");
 		//var check_number = $("#check_number").on("input");
+		
+		// hardwire label for Stand Time
+		if ( $("#trans_type_info").text() === "Stand Time" ) {
+			$("#paid_label").text("Amount Owed:");
+		}
 
 		// Things to do before pressing the save / close button
 		
@@ -724,9 +729,15 @@ $(function() {
 			
 				// Stand Time	
 				if ( $("#trans_type_info").text() === "Stand Time" ) {
-					$.post("json/transaction.php", { stand_time: 1, contact_id: this.value, shop_id: shop_id }, function (data) { 
-						amount.val(data + ".00");
-				
+					$.post("json/transaction.php", { stand_time: 1, contact_id: this.value, shop_id: shop_id }, function (data) {
+						if (data) {
+							var obj = $.parseJSON(data);					
+							amount.val(obj.total + ".00");
+							$("#stand_time_total").text(obj.hours + " hours " + obj.minutes + " minutes");
+						} else {
+							amount.val(data);	
+							$("#stand_time_total").empty();	
+						}
 					}); // stand time pos		
 				}			
 			

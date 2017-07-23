@@ -501,10 +501,12 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 				<?php if($row_Recordset3['transaction_type_id'] == "Deposit"){?>           
 			  		<td><label>Deposited:</label></td>	
 				<?php } else { ?>
-					<td><label>Paid:</label></td>
+					<td><label id="paid_label">Paid:</label></td>
 				<?php } ?>
 			  	<td><input name="amount" type="text" id="amount" value="<?php echo $row_Recordset2['format_amount']; ?>" size="6" />
-			  	<span id="payment_error"></span></td>
+			  	<span id="payment_error"></span>
+			  	<span id="stand_time_total"></span>
+			  	</td>
 			  </tr>
 			  <?php } // end show_amount ?>		  	  
 		  	  

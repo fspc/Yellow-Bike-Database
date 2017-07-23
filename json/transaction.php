@@ -159,6 +159,8 @@ $timezone = TIMEZONE;
 		 $sql = mysql_query($query, $YBDB) or die(mysql_error());
 		 $result = mysql_fetch_assoc($sql);
 		 
+		 // need to factor more than one login in same shop
+		 
 		 if($result) {
 		 	
 			// Give 15 minutes grace time, and round off to the next hour afterwards
@@ -187,10 +189,10 @@ $timezone = TIMEZONE;
 			}	
 				
 			$total = $stand_time * $stand_time_hourly_rate;	
-			echo "$total";	 	
+			$stand_time_array = array("total" => $total, "hours" => $difference->h, "minutes" => $difference->i);
+			echo json_encode($stand_time_array);	 	
 		
-		 }
-		 //echo json_encode($result);	
+		}
 
 	} // Stand Time
 	
