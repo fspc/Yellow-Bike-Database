@@ -165,8 +165,8 @@ INSERT INTO contacts (
 -- earned with volunteer hour benefits (transforming volunteer hours into cash).
 --
 -- STAND TIME
--- Stand Time (transaction_type_id) is a special transaction type to automatically figures out the amount that needs to be paid based
--- on the configured hourly rate.
+-- Stand Time (transaction_type_id) is a special transaction type that automatically figures out the amount that needs to be paid based
+-- on the configured hourly rate (15 minute grace period) and login status.
 --
 -- DONATIONS are best complimented with anonymous, see below.
 --
