@@ -727,12 +727,14 @@ $(function() {
 											
 				}); // volunteers post
 			
-				// Stand Time	
+				// Stand Time	- if a paid member, nothing is owed
 				if ( $("#trans_type_info").text() === "Stand Time" ) {
 					$.post("json/transaction.php", { stand_time: 1, contact_id: this.value, shop_id: shop_id }, function (data) {
 						if (data) {
-							var obj = $.parseJSON(data);					
-							amount.val(obj.total + ".00");
+							var obj = $.parseJSON(data);
+							if(!obj.membership) {					
+								amount.val(obj.total + ".00");
+							}
 							$("#stand_time_total").text(obj.hours + " hours " + obj.minutes + " minutes");
 						} else {
 							amount.val(data);	
