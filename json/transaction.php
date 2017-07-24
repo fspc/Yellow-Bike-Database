@@ -4,6 +4,12 @@ require_once('../Connections/database_functions.php');
 require_once('../Connections/YBDB.php');
 mysql_select_db($database_YBDB, $YBDB);
 
+/*
+require_once('../php-console/src/PhpConsole/__autoload.php');
+$handler = PhpConsole\Handler::getInstance();
+$handler->start();
+*/
+
 $change_fund = CHANGE_FUND;
 $csv_directory = CSV_DIRECTORY;
 $stand_time_hourly_rate = STAND_TIME_HOURLY_RATE;
@@ -156,43 +162,64 @@ $timezone = TIMEZONE;
 					" AND shop_user_role='Stand Time' 
 					AND contact_id=" . $_POST['contact_id'] . ";";		
 		
-		 $sql = mysql_query($query, $YBDB) or die(mysql_error());
-		 $result = mysql_fetch_assoc($sql);
+		$sql = mysql_query($query, $YBDB) or die(mysql_error());
+		$result = mysql_fetch_assoc($sql);
 		 
-		 // need to factor more than one login in same shop
-		 
-		 if($result) {
-		 	
-			// Give 15 minutes grace time, and round off to the next hour afterwards
-			// multiply by stand_time_hourly_rate	and take into account stand_time_grace_period
+		// need to factor in for more than one login in same shop to add up all minutes
+		// and check for sign_out and calculate that if it exists.
+		
+		$time_ins = [];
+		$sql = mysql_query($query, $YBDB) or die(mysql_error());
+		while ( $results = mysql_fetch_assoc($sql) ) {
 			
-			$sign_in = new DateTime($result['time_in'], new DateTimeZone($timezone));
+			$sign_in = new DateTime($results['time_in'], new DateTimeZone($timezone));
 			$sign_out = new DateTime("", new DateTimeZone($timezone));
-			$difference = $sign_out->diff($sign_in);
-			$total_minutes = ($difference->h * 60) + $difference->i;
-			$stand_time_remainder = $total_minutes % 60;
 
+			// signed-out
+			if($results['time_out'] != '0000-00-00 00:00:00') {
+				$sign_out = new DateTime($results['time_out'], new DateTimeZone($timezone));
+				$time_ins[] = $sign_out->diff($sign_in);	
 			
+			// signed-in	
+			} else {		
+		 		$time_ins[] = $sign_out->diff($sign_in);
+		 	}		
+		} 
+
+		if ($time_ins) {
+			
+			foreach ( $time_ins as $key => $value ) {			
+				$total_minutes += ($value->h * 60) + $value->i;
+				$stand_time_remainder += $total_minutes % 60;
+				$hour += $value->h;
+				$minute += $value->i;
+			}
+			
+			$time = ($hour * 60) + $minute;
+			$hours = floor($time / 60);
+		   $minutes = ($time % 60);
+	 
+			//$handler->debug("$total_minutes $stand_time_remainder $hours $minutes $hours $minutes");
+			 				
 			if($total_minutes != $stand_time_remainder && $stand_time_remainder <= $stand_time_grace_period) { // still within grace period
-				$answer = "within grace period $difference->h $difference->i";	
-				$stand_time = $difference->h;				
+				$answer = "within grace period $hours $minutes";	
+				$stand_time = $hours;				
 			} elseif($total_minutes != $stand_time_remainder && $stand_time_remainder > $stand_time_grace_period) { // outside grace period
-				$answer = "outside grace period $difference->h $difference->i";
-				$stand_time = $difference->h + 1;	
+				$answer = "outside grace period $hours $minutes";
+				$stand_time = $hours + 1;	
 			} elseif($total_minutes == $stand_time_remainder && $difference->i > $stand_time_grace_period) {  // 1hr or less outside grace period
-				$answer = "1hr or less $difference->h $difference->i";
+				$answer = "1hr or less $hours $minutes";
 				$stand_time = 1;
 			} elseif($total_minutes <= $stand_time_grace_period) { // first hour still within grace period
 				$answer = "less than 1hr and within grace period $difference->h $difference->i";
-			} else {
-				echo "$total_minutes  $stand_time_remainder $difference->i: " . $result['time_in'] . " " . current_datetime() . " | " . $sign_in->format('Y-m-d H:i:s') . "  " . $sign_out->format('Y-m-d H:i:s');
-			}	
-				
+				$stand_time = $hours;
+			} 			
+	
 			$total = $stand_time * $stand_time_hourly_rate;	
-			$stand_time_array = array("total" => $total, "hours" => $difference->h, "minutes" => $difference->i);
-			echo json_encode($stand_time_array);	 	
-		
-		}
+			$stand_time_array = array("total" => $total, "hours" => $hours, "minutes" => $minutes, "answer" => $answer);
+			echo json_encode($stand_time_array);		 
+		 
+		} // end if time_ins
 
 	} // Stand Time
 	
@@ -208,6 +235,7 @@ $timezone = TIMEZONE;
 						$_POST['transaction_id'] . '";';
 			$result = mysql_query($query, $YBDB) or die(mysql_error());		
 		}
+	
 	} 
 
 	// Transaction history - fetch history
@@ -313,12 +341,7 @@ $timezone = TIMEZONE;
 	}
 	
 	// Create csv file(s) for GnuCash
-	if(isset($_POST['gnucash_account_type'])) {
-	
-
-		/*require_once('../php-console/src/PhpConsole/__autoload.php');
-		$handler = PhpConsole\Handler::getInstance();
-		$handler->start();*/
+	if(isset($_POST['gnucash_account_type'])) {	
 	
 		$transaction_range = $_POST['transaction_range'];	
 		$account_type = $_POST['gnucash_account_type'];	
