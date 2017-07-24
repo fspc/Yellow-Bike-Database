@@ -146,7 +146,6 @@ $timezone = TIMEZONE;
 		$result2 = mysql_fetch_assoc($sql);
 		
 		$result = (object)array_merge((array)$result, (array)$result2);
-
 		
 		echo json_encode($result);		
 
@@ -154,6 +153,7 @@ $timezone = TIMEZONE;
 
 	// Stand Time
 	if (isset($_POST['stand_time'])) {
+		
 		
 		// use the most recent login status; can do calculations here
 		// ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60))
@@ -171,6 +171,8 @@ $timezone = TIMEZONE;
 		$time_ins = [];
 		$sql = mysql_query($query, $YBDB) or die(mysql_error());
 		while ( $results = mysql_fetch_assoc($sql) ) {
+
+					
 			
 			$sign_in = new DateTime($results['time_in'], new DateTimeZone($timezone));
 			$sign_out = new DateTime("", new DateTimeZone($timezone));
@@ -187,14 +189,14 @@ $timezone = TIMEZONE;
 		} 
 
 		if ($time_ins) {
-			
+					 
 			foreach ( $time_ins as $key => $value ) {			
 				$total_minutes += ($value->h * 60) + $value->i;
 				$stand_time_remainder += $total_minutes % 60;
 				$hour += $value->h;
 				$minute += $value->i;
 			}
-			
+	
 			$time = ($hour * 60) + $minute;
 			$hours = floor($time / 60);
 		   $minutes = ($time % 60);
@@ -207,11 +209,11 @@ $timezone = TIMEZONE;
 			} elseif($total_minutes != $stand_time_remainder && $stand_time_remainder > $stand_time_grace_period) { // outside grace period
 				$answer = "outside grace period $hours $minutes";
 				$stand_time = $hours + 1;	
-			} elseif($total_minutes == $stand_time_remainder && $difference->i > $stand_time_grace_period) {  // 1hr or less outside grace period
+			} elseif($total_minutes == $stand_time_remainder && $minutes > $stand_time_grace_period) {  // 1hr or less outside grace period
 				$answer = "1hr or less $hours $minutes";
 				$stand_time = 1;
 			} elseif($total_minutes <= $stand_time_grace_period) { // first hour still within grace period
-				$answer = "less than 1hr and within grace period $difference->h $difference->i";
+				$answer = "less than 1hr and within grace period $hours $minutes";
 				$stand_time = $hours;
 			} 			
 	
@@ -576,5 +578,25 @@ $timezone = TIMEZONE;
 		} // end  else for invisibles
 
 	} // End Deposit Calculator
+	
+	function membership_benefits($contact_id) {
+		
+	global $database_YBDB, $YBDB;
+	mysql_select_db($database_YBDB, $YBDB);
+	
+	$query = "SELECT contacts.contact_id,  CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name,
+				CONCAT(first_name, ' ', last_name) AS normal_full_name, contacts.email AS email, contacts.phone AS phone,  
+				transaction_log.date AS membership_start, SUBSTRING_INDEX(DATE_ADD(date, INTERVAL 365 DAY), ' ', 1) AS expiration_date 
+				FROM transaction_log  LEFT JOIN contacts ON transaction_log.sold_to = contacts.contact_id  
+				WHERE SUBSTRING_INDEX(date, ' ', 1) <= DATE_ADD(date, INTERVAL 365 DAY)  
+				AND (transaction_type='Memberships' AND paid=1) AND contact_id=" .
+				$contact_id . 
+				" ORDER by membership_start DESC;";		
+		
+	 $sql = mysql_query($query, $YBDB) or die(mysql_error());
+	 $result = mysql_fetch_assoc($sql);
+	 return $result;
+	
+	} // end membership_benefits
 
 ?>
