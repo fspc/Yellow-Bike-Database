@@ -732,6 +732,7 @@ $(function() {
 					$.post("json/transaction.php", { stand_time: 1, contact_id: this.value, shop_id: shop_id }, function (data) {
 						if (data) {
 							var obj = $.parseJSON(data);
+							amount.val("");
 							if(!obj.membership) {					
 								amount.val(obj.total + ".00");
 							}
