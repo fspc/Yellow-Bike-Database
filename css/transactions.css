@@ -108,5 +108,10 @@ input[value=Save]:focus, input[value=Close]:focus {
 	margin-left: 10px;
 }
 
+/* for stand time */
+#stand_time_total {
+	color: green;
+	margin-left: 10px;
+}
 
 
