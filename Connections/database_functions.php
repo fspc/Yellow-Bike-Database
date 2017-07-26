@@ -70,6 +70,7 @@ May add capability to adjust limits based on status, but that can get complex if
 
 */
 define("SWEAT_EQUITY_LIMIT",100);
+define("MAX_BIKE_EARNED",1);
 define("VOLUNTEER_HOUR_VALUE",8);
 define("VOLUNTEER_DISCOUNT",25);
 define("SPECIAL_VOLUNTEER_HOURS_QUALIFICATION",100);
@@ -85,7 +86,7 @@ $gnucash_accounts = array(	"Bicycles" => "",
 									"New Parts" => "",
 									"Stand Time" => "",
 									"Inventory Parts" => "",
-									"Inventory Parts" => "",
+									"Inventory Parts" => ""
 									
 								);
 								*/
