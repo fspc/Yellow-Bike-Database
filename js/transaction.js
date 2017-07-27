@@ -722,7 +722,8 @@ $(function() {
 							$("#volunteer_hours").prop("title",title).html("Volunteer Hours");
 
 							$(".ui-spinner").show();
-
+							
+							/*
 							$( "#redeemable_hours" ).spinner({
       						step: 0.10,
       						numberFormat: "n",
@@ -737,9 +738,31 @@ $(function() {
 								}
     						}).show();
     						
-    										
-    													
-							//$("#redeemable_hours").html(obj.redeemable_hours);
+    						*/
+    						
+							$("#redeemable_hours").spinner({
+								step: 0.10,
+								numberFormat: "n",
+							   max: obj.current_year_volunteer_hours,
+							   min: 0
+							}).on('input', function () {
+							 	if ($(this).data('onInputPrevented')) return;
+							    	var val = this.value,
+							     	$this = $(this),
+							     	max = $this.spinner('option', 'max'),
+							     	min = $this.spinner('option', 'min');
+							    // We want only number, no alpha. 
+							    // We set it to previous default value.         
+							    if (!val.match(/^[+-]?[\d]{0,}$/)) val = $(this).data('defaultValue');
+							    	this.value = val > max ? max : val < min ? min : val;
+							}).on('keydown', function (e) {
+							    // we set default value for spinner.
+							    if (!$(this).data('defaultValue')) $(this).data('defaultValue', this.value);
+							    // To handle backspace
+							    	$(this).data('onInputPrevented', e.which === 8 ? true : false);
+							}).show();	
+    						
+    						
 						} else { 
 							$("#volunteer_hours").prop("title","").empty();
 							$("#redeemable_hours").hide();
