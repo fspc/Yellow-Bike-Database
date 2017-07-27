@@ -114,4 +114,8 @@ input[value=Save]:focus, input[value=Close]:focus {
 	margin-left: 10px;
 }
 
+#redeemable_hours {
+	display: none;
+	margin-left: 10px;
+}
 
