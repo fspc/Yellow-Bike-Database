@@ -713,15 +713,24 @@ $(function() {
 											"Volunteer Hours Redeemed: " + "\r\n" +
 											"Volunteer Hours Remaining:";			
 
-					$("#volunteer_hours").prop("title","").empty();					
+					$("#volunteer_hours").prop("title","").empty();	
+					$("#redeemable_hours").hide();				
 					
 					if (obj) {
 						var volunteer_hours = obj.volunteer_hours;	
 						if (volunteer_hours && volunteer_hours.length) {
 							$("#volunteer_hours").prop("title",title).html("Volunteer Hours");
+
+
+							$( "#redeemable_hours" ).spinner({
+      						step: 0.10,
+      						numberFormat: "n"
+    						}).show();							
+    													
+							//$("#redeemable_hours").html(obj.redeemable_hours);
 						} else { 
 							$("#volunteer_hours").prop("title","").empty();
-									
+							$("#redeemable_hours").hide();								
 						}
 					}													
 											
