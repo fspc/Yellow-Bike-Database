@@ -561,6 +561,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 					echo "<span id='anonymous_error'></span>";
 					echo "<span id='paid_member'></span>";
 					echo "<span id='volunteer_hours'></span>";
+					echo "<input id='redeemable_hours'>";
 					echo "</td>";
 
 				} elseif($row_Recordset3['show_soldto_not_signed_in']) {

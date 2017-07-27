@@ -721,16 +721,29 @@ $(function() {
 						if (volunteer_hours && volunteer_hours.length) {
 							$("#volunteer_hours").prop("title",title).html("Volunteer Hours");
 
+							$(".ui-spinner").show();
 
 							$( "#redeemable_hours" ).spinner({
       						step: 0.10,
-      						numberFormat: "n"
-    						}).show();							
+      						numberFormat: "n",
+      						spin: function( event, ui ) {
+									if ( ui.value > obj.current_year_volunteer_hours ) {
+										$( this ).spinner( "value", obj.current_year_volunteer_hours );
+										return false;
+									} else if (ui.value < 0) {
+										$( this ).spinner( "value", 0 );
+										return false;	
+									}
+								}
+    						}).show();
+    						
+    										
     													
 							//$("#redeemable_hours").html(obj.redeemable_hours);
 						} else { 
 							$("#volunteer_hours").prop("title","").empty();
-							$("#redeemable_hours").hide();								
+							$("#redeemable_hours").hide();
+							$(".ui-spinner").hide();								
 						}
 					}													
 											
@@ -748,7 +761,8 @@ $(function() {
 							$("#stand_time_total").text(obj.hours + " hours " + obj.minutes + " minutes");
 						} else {
 							amount.val(data);	
-							$("#stand_time_total").empty();	
+							$("#stand_time_total").empty();
+							$(".ui-spinner").hide();	
 						}
 					}); // stand time pos		
 				}			

@@ -114,8 +114,23 @@ input[value=Save]:focus, input[value=Close]:focus {
 	margin-left: 10px;
 }
 
+/* spinner for volunteer hour redemption */
 #redeemable_hours {
 	display: none;
 	margin-left: 10px;
+	font-size: .9em;
+	width: 82px;
+	height: 23px;
 }
 
+.ui-spinner {
+	display: none;
+	margin-left: 10px;
+	width: 85px;
+	height: 26px;
+}
+}
+
+.ui-widget input {
+	font-size: .9em;
+}
