@@ -741,7 +741,7 @@ $(function() {
     						*/
     						
 							$("#redeemable_hours").spinner({
-								step: 0.10,
+								step: 0.01,
 								numberFormat: "n",
 							   max: obj.current_year_volunteer_hours,
 							   min: 0
@@ -752,8 +752,9 @@ $(function() {
 							     	max = $this.spinner('option', 'max'),
 							     	min = $this.spinner('option', 'min');
 							    // We want only number, no alpha. 
-							    // We set it to previous default value.         
-							    if (!val.match(/^[+-]?[\d]{0,}$/)) val = $(this).data('defaultValue');
+							    // We set it to previous default value.
+							    //[+-]?[\d]{0,} [+-]?([0-9]*[.])?[0-9]+ [+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)
+							    if (!val.match(/^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/)) val = $(this).data('defaultValue');
 							    	this.value = val > max ? max : val < min ? min : val;
 							}).on('keydown', function (e) {
 							    // we set default value for spinner.
