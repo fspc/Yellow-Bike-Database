@@ -721,48 +721,34 @@ $(function() {
 						if (volunteer_hours && volunteer_hours.length) {
 							$("#volunteer_hours").prop("title",title).html("Volunteer Hours");
 
-							$(".ui-spinner").show();
-							
-							/*
-							$( "#redeemable_hours" ).spinner({
-      						step: 0.10,
-      						numberFormat: "n",
-      						spin: function( event, ui ) {
-									if ( ui.value > obj.current_year_volunteer_hours ) {
-										$( this ).spinner( "value", obj.current_year_volunteer_hours );
-										return false;
-									} else if (ui.value < 0) {
-										$( this ).spinner( "value", 0 );
-										return false;	
-									}
-								}
-    						}).show();
+							$(".ui-spinner").show(); 			
     						
-    						*/
+							var redeemable_value = obj.current_year_volunteer_hours * obj.volunteer_hour_value;    						
     						
 							$("#redeemable_hours").spinner({
 								step: 0.01,
 								numberFormat: "n",
 							   max: obj.current_year_volunteer_hours,
-							   min: 0
-							}).on('input', function () {
+							   min: 0,
+							   spin: function( event, ui ) { console.log(ui.value); }
+							}).on('input', function (e) {
+								var price = amount.val();
 							 	if ($(this).data('onInputPrevented')) return;
-							    	var val = this.value,
-							     	$this = $(this),
-							     	max = $this.spinner('option', 'max'),
-							     	min = $this.spinner('option', 'min');
-							    // We want only number, no alpha. 
-							    // We set it to previous default value.
-							    //[+-]?[\d]{0,} [+-]?([0-9]*[.])?[0-9]+ [+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)
-							    if (!val.match(/^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/)) val = $(this).data('defaultValue');
-							    	this.value = val > max ? max : val < min ? min : val;
-							}).on('keydown', function (e) {
-							    // we set default value for spinner.
-							    if (!$(this).data('defaultValue')) $(this).data('defaultValue', this.value);
-							    // To handle backspace
+							 	// test if value is greater than current_year_volunteer_hours
+							 	// console.log($(this).spinner("value"));
+							   var val = this.value,
+							   $this = $(this),
+							   max = $this.spinner('option', 'max'),
+							   min = $this.spinner('option', 'min'); 
+							   // We set it to previous default value.
+							   //[+-]?[\d]{0,} [+-]?([0-9]*[.])?[0-9]+ [+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)
+								if (!val.match(/^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/)) val = $(this).data('defaultValue');
+							   	this.value = val > max ? max : val < min ? min : val;
+							   // set default value for spinner
+							   if (!$(this).data('defaultValue')) $(this).data('defaultValue', "");
+							   // To handle backspace
 							    	$(this).data('onInputPrevented', e.which === 8 ? true : false);
 							}).show();	
-    						
     						
 						} else { 
 							$("#volunteer_hours").prop("title","").empty();
