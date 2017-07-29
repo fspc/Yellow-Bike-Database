@@ -18,6 +18,8 @@ $timezone = TIMEZONE;
 $sweat_equity_limit = SWEAT_EQUITY_LIMIT;
 $max_bike_earned = MAX_BIKE_EARNED;
 $volunteer_hour_value = VOLUNTEER_HOUR_VALUE;
+$special_volunteer_hours_qualification = SPECIAL_VOLUNTEER_HOURS_QUALIFICATION;
+$special_volunteer_discount = SPECIAL_VOLUNTEER_DISCOUNT;
 
 	// Is there a current shop?
 	if(isset($_POST['shop_exist'])) {
@@ -98,16 +100,14 @@ $volunteer_hour_value = VOLUNTEER_HOUR_VALUE;
 	// Volunteer Benefits
 	if (isset($_POST['volunteer_benefits'])) {
 		
-		$query = "SELECT contact_id, full_name, normal_full_name, email, phone, visits, volunteer_hours, sweat_equity_redeemed, max_bike_earned, year 
+		$query = "SELECT contact_id, full_name, normal_full_name, email, phone, visits, volunteer_hours, volunteer
 					FROM (SELECT contacts.contact_id, 
 					CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name, 
 					CONCAT(first_name, ' ', last_name) AS normal_full_name, 
 					contacts.email AS email, 
 					contacts.phone AS phone,  
 					COUNT(shop_hours.contact_id) AS visits, 
-					contacts.sweat_equity_redeemed AS sweat_equity_redeemed,
-					contacts.max_bike_earned AS max_bike_earned,
-					contacts.year AS year, 
+					contacts.volunteer AS volunteer,
 					ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS volunteer_hours  
 					FROM shop_hours  
 					LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id  
@@ -144,23 +144,12 @@ $volunteer_hour_value = VOLUNTEER_HOUR_VALUE;
 		
 		// update volunteer_benefits  either on sold_to.change (initialize) or redeem.change in separate callback
 	   // zero out if new year
-
-		//$handler->debug($result["sweat_equity_redeemed"]);
-		
-		if($result["sweat_equity_redeemed"] == 0) {
-			$redeemable_hours_amount = $result2["current_year_volunteer_hours"] * $volunteer_hour_value;
-			$remaining_redeemable_hours_amount_available = $sweat_equity_limit - $redeemable_hours_amount;
-		} else {
-			$remaining_redeemable_hours_amount_available = $sweat_equity_limit - $result["sweat_equity_redeemed"];
-		}
 				
 		$result3["max_bike_earned"] = $max_bike_earned;
-		if($remaining_redeemable_hours_amount_available >= 0) {
-			//$handler->debug("$redeemable_hours_amount $remaining_redeemable_hours_amount_available");
-			$result3["redeemable_hours"] = $redeemable_hours_amount;
-		} else {
-			$result3["redeemable_hours"] = $sweat_equity_limit;
-		}
+		$result3["volunteer_hour_value"] = $volunteer_hour_value;
+		$result3["sweat_equity_limit"] = $sweat_equity_limit;
+		$result3["special_volunteer_hours_qualification"] = $special_volunteer_hours_qualification;
+		$result3["special_volunteer_discount"] = $special_volunteer_discount;
 
 		$result = (object)array_merge((array)$result, (array)$result2, (array)$result3);
 		echo json_encode($result);
