@@ -700,16 +700,20 @@ $(function() {
 							}			
 					}
 				}); // membership post
-				
+
+								
 				// How many hours does this volunteer have?
 				$.post("json/transaction.php", { volunteer_benefits: 1, contact_id: this.value }, function (data) { 
-												
+														
+					var year = d.getFullYear();
+					var bikes_earned = 0;
+					var volunteer_hours_redeemed = 0;								
 					var obj = $.parseJSON(data);
 					var title = obj.normal_full_name + "\r\n" +
 											obj.email + "\r\n" +
 											obj.phone + "\r\n" +
 											"Volunteer Hours for last 365 days: " + obj.volunteer_hours + "\r\n" +
-											"Volunteer Hours \(" + d.getFullYear() + "\): " + obj.current_year_volunteer_hours + "\r\n" +
+											"Volunteer Hours \(" + year + "\): " + obj.current_year_volunteer_hours + "\r\n" +
 											"Volunteer Hours Redeemed: " + "\r\n" +
 											"Volunteer Hours Remaining:";			
 
@@ -722,20 +726,49 @@ $(function() {
 							$("#volunteer_hours").prop("title",title).html("Volunteer Hours");
 
 							$(".ui-spinner").show(); 			
-    						
 							var redeemable_value = obj.current_year_volunteer_hours * obj.volunteer_hour_value;    						
     						
 							$("#redeemable_hours").spinner({
-								step: 0.01,
+								step: 0.25,
 								numberFormat: "n",
 							   max: obj.current_year_volunteer_hours,
 							   min: 0,
-							   spin: function( event, ui ) { console.log(ui.value); }
+							   spin: function( event, ui ) {
+							   	console.log(ui.value);
+
+									var volunteer_hours_redeemed = 0;
+									var bikes_earned = 0;
+							   	
+							   	if (obj.volunteer !== "") {
+							   		// still need to test
+										var volunteer_benefits = obj.volunteer.split(" ",1);							   		
+										volunteer_hours_redeemed = volunteer_benefits[0];
+										bikes_earned = volunteer_benefits[1];	
+							   	}
+		
+									var sweat_equity_hours = obj.sweat_equity_limit / (obj.volunteer_hours_redeemed * obj.volunteer_hour_value);					
+									
+									if (isNaN(sweat_equity_hours) || volunteer_hours_redeemed < sweat_equity_hours) {
+										console.log(sweat_equity_hours);
+										// only 1 bike per year earned with sweat_equity_hours
+										
+										// if running volunteer_hours >= special_volunteer_hours_qualification the special_discount kicks in
+										// other wise it is 25%
+																				
+									} else if (sweat_equity_hours >= 1) {
+										// only 1 bike per year earned with sweat_equity_hours
+										
+										// if running volunteer_hours >= special_volunteer_hours_qualification the special_discount kicks in
+										// other wise it is 25%
+										
+									}
+							   	
+							   }
 							}).on('input', function (e) {
 								var price = amount.val();
 							 	if ($(this).data('onInputPrevented')) return;
 							 	// test if value is greater than current_year_volunteer_hours
-							 	// console.log($(this).spinner("value"));
+							 	console.log($(this).spinner("value"));
 							   var val = this.value,
 							   $this = $(this),
 							   max = $this.spinner('option', 'max'),
@@ -743,11 +776,11 @@ $(function() {
 							   // We set it to previous default value.
 							   //[+-]?[\d]{0,} [+-]?([0-9]*[.])?[0-9]+ [+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)
 								if (!val.match(/^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/)) val = $(this).data('defaultValue');
-							   	this.value = val > max ? max : val < min ? min : val;
+							   this.value = val > max ? max : val < min ? min : val;
 							   // set default value for spinner
 							   if (!$(this).data('defaultValue')) $(this).data('defaultValue', "");
 							   // To handle backspace
-							    	$(this).data('onInputPrevented', e.which === 8 ? true : false);
+							   $(this).data('onInputPrevented', e.which === 8 ? true : false);
 							}).show();	
     						
 						} else { 
