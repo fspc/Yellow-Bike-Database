@@ -106,7 +106,7 @@ $(function() {
 	    	$('[href*="trans_id=' + this.name + '"]').show(); 
 	    	$.post("json/transaction.php",{ paid: 0, transaction_id: this.name } );
 	  	} 
-
+	  	
 			// Deposit Calculator for clicks
   			deposit_calculator();  	
 	  	
@@ -449,37 +449,39 @@ $(function() {
 			
 								
 			$.post("json/transaction.php",{"deposit": deposit}, function(data) {
-				
-				var obj = $.parseJSON(data);
 			
-				$.each(obj,function(k,v){
-					
-					// Cash / Check / Credit					
-					$("#" + k + "_cash span").text("$" + payment_result(v.cash));
-					$("#" + k + "_check span").text("$" + payment_result(v.check));
-					$("#" + k + "_credit span").text("$" + payment_result(v.credit));
-
-					// Sum
-					var sum = Number(v.check) + Number(v.cash);				
-					$("#" + k + "_sum span").text("$" + sum.toFixed(2));				
-					
-					// Difference (regexp - good up to 6 places and 2 digits)					
-					var deposit_amount = $('input[name="' + k + '"]').parent().prev().prev().text().replace(/\$(\d*(?:,\d{3})*\.\d*)\s+/, "$1" );
-					deposit_amount = deposit_amount.replace(/,/, "");										
-					if (deposit_amount != 0) {					
-						var diff = deposit_amount - sum;
-						$("#" + k + "_difference span").text("$"+ diff.toFixed(2));
-						if ( diff == 0 ) {
-							$("#" + k + "_difference").css("color","green");
+				if (data) {	
+					var obj = $.parseJSON(data);
+				
+					$.each(obj,function(k,v){
+						
+						// Cash / Check / Credit					
+						$("#" + k + "_cash span").text("$" + payment_result(v.cash));
+						$("#" + k + "_check span").text("$" + payment_result(v.check));
+						$("#" + k + "_credit span").text("$" + payment_result(v.credit));
+	
+						// Sum
+						var sum = Number(v.check) + Number(v.cash);				
+						$("#" + k + "_sum span").text("$" + sum.toFixed(2));				
+						
+						// Difference (regexp - good up to 6 places and 2 digits)					
+						var deposit_amount = $('input[name="' + k + '"]').parent().prev().prev().text().replace(/\$(\d*(?:,\d{3})*\.\d*)\s+/, "$1" );
+						deposit_amount = deposit_amount.replace(/,/, "");										
+						if (deposit_amount != 0) {					
+							var diff = deposit_amount - sum;
+							$("#" + k + "_difference span").text("$"+ diff.toFixed(2));
+							if ( diff == 0 ) {
+								$("#" + k + "_difference").css("color","green");
+							} else {
+								$("#" + k + "_difference").css("color","red");
+							}					
 						} else {
-							$("#" + k + "_difference").css("color","red");
-						}					
-					} else {
-						$("#" + k + "_difference span").text("n/a");
-					}
+							$("#" + k + "_difference span").text("n/a");
+						}
 					
-				});		
-								
+							
+					}); // each					
+				} // if data
 				
 			}); // end function		
 	
