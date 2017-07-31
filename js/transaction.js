@@ -606,6 +606,7 @@ $(function() {
 		return dfd.promise();			
 			
 	} // end function save_or_close
+	
 
 	// editing a transaction
 	if ( $("input[name='shop_id']").length ) {
@@ -663,9 +664,22 @@ $(function() {
 		// Things to do before pressing the save / close button
 		
 		//  Membership and Volunteer Benefits
-		var d = new Date();	
+		var d = new Date();
+	
+		var price;
+		amount.on("input",function () { 
 		
-		sold_to.change(function() { 
+			if ( $(this).cleanVal() >= 100 ) {
+				price = ($(this).cleanVal() / 100).toFixed(2);
+			} else {
+				price = $(this).cleanVal();
+			}
+			console.log("original " + price);
+			$("#redeemable_hours").val(0);
+	
+		});	
+		
+		sold_to.change(function() { 			
 			
 			if (this.value !== "no_selection") {
 				
@@ -704,7 +718,8 @@ $(function() {
 				}); // membership post
 
 								
-				// How many hours does this volunteer have?
+				// How many hours does this volunteer have?			
+											
 				$.post("json/transaction.php", { volunteer_benefits: 1, contact_id: this.value }, function (data) { 
 														
 					var year = d.getFullYear();
@@ -749,11 +764,19 @@ $(function() {
 							   	}
 		
 									var sweat_equity_hours = obj.sweat_equity_limit / (obj.volunteer_hours_redeemed * obj.volunteer_hour_value);					
+									var redeemable_value = obj.volunteer_hour_value * ui.value;
+
+									// check box to use 25% or 50% ?  Also, check for 50% when no sweat_equity.
 									
+									// no volunteer_hours_redeemed or still less than the allowable sweat_equity_hours
 									if (isNaN(sweat_equity_hours) || volunteer_hours_redeemed < sweat_equity_hours) {
 										console.log(sweat_equity_hours);
 										// only 1 bike per year earned with sweat_equity_hours
-										
+										if (price >= redeemable_value) {
+											amount.val(price - redeemable_value);
+										} else if (redeemable_value > price) {
+											event.preventDefault();
+										}
 										// if running volunteer_hours >= special_volunteer_hours_qualification the special_discount kicks in
 										// other wise it is 25%
 																				
@@ -767,10 +790,12 @@ $(function() {
 							   	
 							   }
 							}).on('input', function (e) {
-								var price = amount.val();
+								//var price = amount.val();
 							 	if ($(this).data('onInputPrevented')) return;
 							 	// test if value is greater than current_year_volunteer_hours
 							 	console.log($(this).spinner("value"));
+															 	
+							 	
 							   var val = this.value,
 							   $this = $(this),
 							   max = $this.spinner('option', 'max'),
