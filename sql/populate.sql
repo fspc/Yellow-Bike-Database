@@ -70,8 +70,8 @@ INSERT INTO projects (project_id, date_established, active, public) VALUES
 --  Added waiver
 --
 -- Added a volunteer column to keep track of volunteer hours redeemed, max bike earned, and
--- the current year the hours apply to, when a new year begins everything is zeroed out.
-
+-- the current year the hours apply to, when a new year begins a new record is added
+-- {["volunteer_hours_redeemed":0, "max_bike_earned":0, "year":2017], [.."year":2018]}
 
 DELETE FROM shop_hours;
 DELETE FROM contacts;
