@@ -679,7 +679,7 @@ $(function() {
 	
 		});	
 		
-		sold_to.change(function() { 			
+		sold_to.change(function() { 		
 			
 			if (this.value !== "no_selection") {
 				
@@ -717,10 +717,27 @@ $(function() {
 					}
 				}); // membership post
 
+				// Stand Time	- if a paid member, nothing is owed
+				if ( $("#trans_type_info").text() === "Stand Time" ) {
+					$.post("json/transaction.php", { stand_time: 1, contact_id: this.value, shop_id: shop_id }, function (data) {
+						if (data) {
+							var obj = $.parseJSON(data);
+							amount.val("");
+							if(!obj.membership) {					
+								amount.val(obj.total + ".00");
+								price = obj.total;
+							}
+							$("#stand_time_total").text(obj.hours + " hours " + obj.minutes + " minutes");
+						} else {
+							amount.val(data);	
+							$("#stand_time_total").empty();
+							$(".ui-spinner").hide();	
+						}
+					}); // stand time pos		
+				}				
 								
-				// How many hours does this volunteer have?			
-											
-				$.post("json/transaction.php", { volunteer_benefits: 1, contact_id: this.value }, function (data) { 
+				// How many hours does this volunteer have?													
+				$.post("json/transaction.php", { volunteer_benefits: 1, contact_id: this.value }, function (data) { 								
 														
 					var year = d.getFullYear();
 					var bikes_earned = 0;
@@ -843,24 +860,7 @@ $(function() {
 					}													
 											
 				}); // volunteers post
-			
-				// Stand Time	- if a paid member, nothing is owed
-				if ( $("#trans_type_info").text() === "Stand Time" ) {
-					$.post("json/transaction.php", { stand_time: 1, contact_id: this.value, shop_id: shop_id }, function (data) {
-						if (data) {
-							var obj = $.parseJSON(data);
-							amount.val("");
-							if(!obj.membership) {					
-								amount.val(obj.total + ".00");
-							}
-							$("#stand_time_total").text(obj.hours + " hours " + obj.minutes + " minutes");
-						} else {
-							amount.val(data);	
-							$("#stand_time_total").empty();
-							$(".ui-spinner").hide();	
-						}
-					}); // stand time pos		
-				}			
+				
 			
 			} // if not no_selection		
 		
