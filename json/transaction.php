@@ -20,6 +20,7 @@ $max_bike_earned = MAX_BIKE_EARNED;
 $volunteer_hour_value = VOLUNTEER_HOUR_VALUE;
 $special_volunteer_hours_qualification = SPECIAL_VOLUNTEER_HOURS_QUALIFICATION;
 $special_volunteer_discount = SPECIAL_VOLUNTEER_DISCOUNT;
+$stand_time_value = STAND_TIME_VALUE;
 
 	// Is there a current shop?
 	if(isset($_POST['shop_exist'])) {
@@ -150,6 +151,7 @@ $special_volunteer_discount = SPECIAL_VOLUNTEER_DISCOUNT;
 		$result3["sweat_equity_limit"] = $sweat_equity_limit;
 		$result3["special_volunteer_hours_qualification"] = $special_volunteer_hours_qualification;
 		$result3["special_volunteer_discount"] = $special_volunteer_discount;
+		$result3["stand_time_value"] = $stand_time_value;
 
 		$result = (object)array_merge((array)$result, (array)$result2, (array)$result3);
 		echo json_encode($result);

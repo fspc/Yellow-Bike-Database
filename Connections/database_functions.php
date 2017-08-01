@@ -75,6 +75,7 @@ define("VOLUNTEER_HOUR_VALUE",8);
 define("VOLUNTEER_DISCOUNT",25);
 define("SPECIAL_VOLUNTEER_HOURS_QUALIFICATION",100);
 define("SPECIAL_VOLUNTEER_DISCOUNT",50);
+define("STAND_TIME_VALUE",10);
 
 // Determines the behaviour of Bicycles (transaction_type_id) for volunteer to earn-a-bike purchases
 define("EARN_A_BIKE_LIMIT",1);
