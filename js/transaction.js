@@ -724,7 +724,7 @@ $(function() {
 							var obj = $.parseJSON(data);
 							amount.val("");
 							if(!obj.membership) {					
-								amount.val(obj.total + ".00");
+								amount.val(obj.total + ".00"); // should improve this for amount values with digits
 								price = obj.total;
 							}
 							$("#stand_time_total").text(obj.hours + " hours " + obj.minutes + " minutes");
@@ -759,8 +759,7 @@ $(function() {
 						if (volunteer_hours && volunteer_hours.length) {
 							$("#volunteer_hours").prop("title",title).html("Volunteer Hours");
 
-							$(".ui-spinner").show(); 			
-							var redeemable_value = obj.current_year_volunteer_hours * obj.volunteer_hour_value;    						
+							$(".ui-spinner").show(); 			  						
     						
 							$("#redeemable_hours").spinner({
 								step: 0.01,
@@ -775,14 +774,19 @@ $(function() {
 									var bikes_earned = 0;
 							   	
 							   	if (obj.volunteer !== "") {
-							   		// still need to test
+							   		// still need to test .. this will be made an
 										var volunteer_benefits = obj.volunteer.split(" ",1);							   		
 										volunteer_hours_redeemed = volunteer_benefits[0];
 										bikes_earned = volunteer_benefits[1];	
 							   	}
 		
 									var sweat_equity_hours = obj.sweat_equity_limit / (obj.volunteer_hours_redeemed * obj.volunteer_hour_value);					
-									var redeemable_value = obj.volunteer_hour_value * ui.value;
+									var redeemable_value;									
+									if ($("#transaction_type").val() !== "Stand Time") {									
+										redeemable_value = obj.volunteer_hour_value * ui.value;
+									} else {
+										redeemable_value = obj.stand_time_value * ui.value;
+									}
 
 									// check box to use 25% or 50% ?  Also, check for 50% when no sweat_equity.
 									
@@ -814,7 +818,12 @@ $(function() {
 							 	console.log($(this).spinner("value"));
 							 	
 							 	var sweat_equity_hours = obj.sweat_equity_limit / (obj.volunteer_hours_redeemed * obj.volunteer_hour_value);					
-								var redeemable_value = obj.volunteer_hour_value * $(this).spinner("value");
+								var redeemable_value;									
+								if ($("#transaction_type").val() !== "Stand Time") {									
+									redeemable_value = obj.volunteer_hour_value * $(this).spinner("value");
+								} else {
+									redeemable_value = obj.stand_time_value * $(this).spinner("value");
+								}
 
 								// check box to use 25% or 50% ?  Also, check for 50% when no sweat_equity.
 							 	
