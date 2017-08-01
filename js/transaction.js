@@ -768,7 +768,8 @@ $(function() {
 							   max: obj.current_year_volunteer_hours,
 							   min: 0,
 							   spin: function( event, ui ) {
-							   	console.log(ui.value);
+
+							   	//console.log(ui.value);
 
 									var volunteer_hours_redeemed = 0;
 									var bikes_earned = 0;
@@ -815,14 +816,19 @@ $(function() {
 								//var price = amount.val();
 							 	if ($(this).data('onInputPrevented')) return;
 							 	// test if value is greater than current_year_volunteer_hours
-							 	console.log($(this).spinner("value"));
-							 	
+							 	var spinner_value;
+							 	if ($(this).spinner("value") > obj.current_year_volunteer_hours) {
+									spinner_value = obj.current_year_volunteer_hours;		 	
+							 	} else {
+							 		spinner_value = $(this).spinner("value"); 
+							 	}
+							 	console.log("spinner value " + spinner_value);
 							 	var sweat_equity_hours = obj.sweat_equity_limit / (obj.volunteer_hours_redeemed * obj.volunteer_hour_value);					
 								var redeemable_value;									
 								if ($("#transaction_type").val() !== "Stand Time") {									
-									redeemable_value = obj.volunteer_hour_value * $(this).spinner("value");
+									redeemable_value = obj.volunteer_hour_value * spinner_value;
 								} else {
-									redeemable_value = obj.stand_time_value * $(this).spinner("value");
+									redeemable_value = obj.stand_time_value * spinner_value;
 								}
 
 								// check box to use 25% or 50% ?  Also, check for 50% when no sweat_equity.
