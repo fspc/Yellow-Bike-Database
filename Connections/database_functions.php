@@ -80,18 +80,18 @@ define("STAND_TIME_VALUE",10);
 // Determines the behaviour of Bicycles (transaction_type_id) for volunteer to earn-a-bike purchases
 define("EARN_A_BIKE_LIMIT",1);
 
-// Map transaction_type_id for transaction to the type of benefits desired
-/*
-$gnucash_accounts = array(	"Bicycles" => "",
-									"Used Parts" => "",
-									"New Parts" => "",
-									"Stand Time" => "",
-									"Inventory Parts" => "",
-									"Inventory Parts" => ""
-									
-								);
-								*/
+// Map transaction_type_id for transaction to benefits; 
+// Bicycles and Stand Time are special transaction types for volunteers, but they should still be mapped if benefits are desired.
+$transactions_with_volunteer_benefits = array( 	"Bicycles",
+																"Stand  Time",
+																"Used Parts"
+															);
 
+// Volunteer benefits take priority over membership benefits if patron qualifies for both															
+$transactions_with_membership_benefits = array( "Used Parts",
+																"New Parts"
+															 );
+					
 /*******
 CONTACTS
 ********/
