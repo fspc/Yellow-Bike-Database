@@ -920,9 +920,9 @@ $(function() {
 						}
 					}		
 					
-					if ($("#stand_time_total").is(":empty")) {
+					if ($("#trans_type_info").text() === "Stand Time" && $("#stand_time_total").is(":empty")) {
 						$("#redeemable_hours").spinner("disable");
-					} else {
+					} else if ($("#trans_type_info").text() === "Stand Time") {
 						$("#redeemable_hours").spinner("enable");				
 					}		  												
 											
