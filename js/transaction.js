@@ -789,6 +789,7 @@ $(function() {
 		sold_to.change(function() { 		
 			
 			if (this.value !== "no_selection") {
+				var expiration_date;				
 				
 				// Is this a paid member?	
 				$.post("json/transaction.php", { membership_benefits: 1, contact_id: this.value }, function (data) { 
@@ -801,7 +802,7 @@ $(function() {
 					
 					if (typeof obj.expiration_date && obj.expiration_date !== undefined) {
 						var exp = obj.expiration_date;
-						var expiration_date = new Date(exp.split("-").toString());	
+						expiration_date = new Date(exp.split("-").toString());	
 						if (d >= expiration_date) {
 							if ($("#expired_membership").length === 1) {
 								$("#expired_membership").prop("title",title).html("Expired Membership");
@@ -830,7 +831,7 @@ $(function() {
 						if (data) {
 							var obj = $.parseJSON(data);
 							amount.val("");
-							if(!obj.membership) {					
+							if(!obj.membership || expiration_date) {					
 								amount.val(obj.total + ".00"); // should improve this for amount values with digits
 								price = obj.total;
 							}
