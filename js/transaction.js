@@ -650,7 +650,12 @@ $(function() {
 				
 				// if running volunteer_hours >= special_volunteer_hours_qualification the special_discount kicks in
 				// other wise it is 25%				
-				var sweat_equity_limit = obj.volunteer_hour_value * spinner_value;
+				var sweat_equity_limit;
+				if ($("#transaction_type").val() !== "Stand Time") {									
+					sweat_equity_limit = obj.volunteer_hour_value * spinner_value;
+				} else {
+					sweat_equity_limit = obj.stand_time_value * spinner_value;
+				}			
 			
 				// discount is now applied
 				if (sweat_equity_limit > obj.sweat_equity_limit) {
@@ -659,7 +664,12 @@ $(function() {
 
 					// bug final value is fine , but 12 is being deducted or added per hour
 					// are maxable redeemable hours less than price
-					var max_discount_price = obj.current_year_volunteer_hours * obj.volunteer_hour_value;
+					var max_discount_price;
+					if ($("#transaction_type").val() !== "Stand Time") {									
+						max_discount_price = obj.current_year_volunteer_hours * obj.volunteer_hour_value;
+					} else {
+						max_discount_price = obj.stand_time_value * obj.volunteer_hour_value;
+					}	
 					var max_discount_price_difference;
 					
 					if (price > max_discount_price) {
@@ -828,7 +838,7 @@ $(function() {
 						} else {
 							amount.val(data);	
 							$("#stand_time_total").empty();
-							$(".ui-spinner").hide();	
+							$(".ui-spinner").hide();
 						}
 					}); // stand time pos		
 				}				
@@ -853,10 +863,10 @@ $(function() {
 					
 					if (obj) {
 						var volunteer_hours = obj.volunteer_hours;	
-						if (volunteer_hours && volunteer_hours.length) {
+						if ((volunteer_hours && volunteer_hours.length)) {
 							$("#volunteer_hours").prop("title",title).html("Volunteer Hours");
 
-							$(".ui-spinner").show(); 			  						
+							$(".ui-spinner").show(); 						
     						
 							$("#redeemable_hours").spinner({
 								step: 0.001,
@@ -907,7 +917,13 @@ $(function() {
 							$("#redeemable_hours").hide();
 							$(".ui-spinner").hide();								
 						}
-					}													
+					}		
+					
+					if ($("#stand_time_total").is(":empty")) {
+						$("#redeemable_hours").spinner("disable");
+					} else {
+						$("#redeemable_hours").spinner("enable");				
+					}		  												
 											
 				}); // volunteers post
 				
