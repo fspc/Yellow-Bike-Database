@@ -674,6 +674,7 @@ $(function() {
 												 (hours_applied_with_value * (discount / 100).toFixed(2));											
 					}	else { 
 						difference = price - obj.sweat_equity_limit;
+						value_to_apply_discount = price - sweat_equity_limit;
 						hours_applied_with_value = difference - value_to_apply_discount;
 						
 						console.log(value_to_apply_discount + " + " + " ( " + difference + " - (" + hours_applied_with_value + " * ." + discount + ") )");
