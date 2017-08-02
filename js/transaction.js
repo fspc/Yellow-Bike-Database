@@ -607,6 +607,40 @@ $(function() {
 			
 	} // end function save_or_close
 	
+	// volunteer hours magic
+	function redeemable(obj, spinner_value, event) {
+		
+		var sweat_equity_hours = obj.sweat_equity_limit / (obj.volunteer_hours_redeemed * obj.volunteer_hour_value);					
+		var redeemable_value;									
+		if ($("#transaction_type").val() !== "Stand Time") {									
+			redeemable_value = obj.volunteer_hour_value * spinner_value;
+		} else {
+			redeemable_value = obj.stand_time_value * spinner_value
+		}
+	
+		// check box to use 25% or 50% ?  Also, check for 50% when no sweat_equity.
+		
+		// no volunteer_hours_redeemed or still less than the allowable sweat_equity_hours
+		if (isNaN(sweat_equity_hours) || volunteer_hours_redeemed < sweat_equity_hours) {
+			console.log(sweat_equity_hours);
+			// only 1 bike per year earned with sweat_equity_hours
+			if (price >= redeemable_value) {
+				amount.val(price - redeemable_value);
+			} else if (redeemable_value > price) {
+				event.preventDefault();
+			}
+			// if running volunteer_hours >= special_volunteer_hours_qualification the special_discount kicks in
+			// other wise it is 25%
+													
+		} else if (sweat_equity_hours >= 1) {
+			// only 1 bike per year earned with sweat_equity_hours
+			
+			// if running volunteer_hours >= special_volunteer_hours_qualification the special_discount kicks in
+			// other wise it is 25%
+			
+		}		
+		
+	} // end function redeemable 
 
 	// editing a transaction
 	if ( $("input[name='shop_id']").length ) {
@@ -762,7 +796,7 @@ $(function() {
 							$(".ui-spinner").show(); 			  						
     						
 							$("#redeemable_hours").spinner({
-								step: 0.01,
+								step: 0.001,
 								incremental: true,
 								numberFormat: "n",
 							   max: obj.current_year_volunteer_hours,
@@ -780,42 +814,16 @@ $(function() {
 										volunteer_hours_redeemed = volunteer_benefits[0];
 										bikes_earned = volunteer_benefits[1];	
 							   	}
-		
-									var sweat_equity_hours = obj.sweat_equity_limit / (obj.volunteer_hours_redeemed * obj.volunteer_hour_value);					
-									var redeemable_value;									
-									if ($("#transaction_type").val() !== "Stand Time") {									
-										redeemable_value = obj.volunteer_hour_value * ui.value;
-									} else {
-										redeemable_value = obj.stand_time_value * ui.value;
-									}
-
-									// check box to use 25% or 50% ?  Also, check for 50% when no sweat_equity.
 									
-									// no volunteer_hours_redeemed or still less than the allowable sweat_equity_hours
-									if (isNaN(sweat_equity_hours) || volunteer_hours_redeemed < sweat_equity_hours) {
-										console.log(sweat_equity_hours);
-										// only 1 bike per year earned with sweat_equity_hours
-										if (price >= redeemable_value) {
-											amount.val(price - redeemable_value);
-										} else if (redeemable_value > price) {
-											event.preventDefault();
-										}
-										// if running volunteer_hours >= special_volunteer_hours_qualification the special_discount kicks in
-										// other wise it is 25%
-																				
-									} else if (sweat_equity_hours >= 1) {
-										// only 1 bike per year earned with sweat_equity_hours
-										
-										// if running volunteer_hours >= special_volunteer_hours_qualification the special_discount kicks in
-										// other wise it is 25%
-										
-									}
-							   	
+									// function redeemable(obj, spinner_value)
+									redeemable(obj, ui.value, event);
+									
 							   }
 							}).on('input', function (e) {
 								//var price = amount.val();
 							 	if ($(this).data('onInputPrevented')) return;
 							 	// test if value is greater than current_year_volunteer_hours
+							 	
 							 	var spinner_value;
 							 	if ($(this).spinner("value") > obj.current_year_volunteer_hours) {
 									spinner_value = obj.current_year_volunteer_hours;		 	
@@ -823,36 +831,10 @@ $(function() {
 							 		spinner_value = $(this).spinner("value"); 
 							 	}
 							 	console.log("spinner value " + spinner_value);
-							 	var sweat_equity_hours = obj.sweat_equity_limit / (obj.volunteer_hours_redeemed * obj.volunteer_hour_value);					
-								var redeemable_value;									
-								if ($("#transaction_type").val() !== "Stand Time") {									
-									redeemable_value = obj.volunteer_hour_value * spinner_value;
-								} else {
-									redeemable_value = obj.stand_time_value * spinner_value;
-								}
-
-								// check box to use 25% or 50% ?  Also, check for 50% when no sweat_equity.
-							 	
-							 	// no volunteer_hours_redeemed or still less than the allowable sweat_equity_hours
-								if (isNaN(sweat_equity_hours) || volunteer_hours_redeemed < sweat_equity_hours) {
-									console.log(sweat_equity_hours);
-									// only 1 bike per year earned with sweat_equity_hours
-									if (price >= redeemable_value) {
-										amount.val(price - redeemable_value);
-									} else if (redeemable_value > price) {
-										event.preventDefault();
-									}
-									// if running volunteer_hours >= special_volunteer_hours_qualification the special_discount kicks in
-									// other wise it is 25%
-																			
-								} else if (sweat_equity_hours >= 1) {
-									// only 1 bike per year earned with sweat_equity_hours
-									
-									// if running volunteer_hours >= special_volunteer_hours_qualification the special_discount kicks in
-									// other wise it is 25%
-									
-								}															 	
-							 	
+						
+								// function redeemable(obj, spinner_value)
+								redeemable(obj, spinner_value, event);
+														
 							   var val = this.value,
 							   $this = $(this),
 							   max = $this.spinner('option', 'max'),
