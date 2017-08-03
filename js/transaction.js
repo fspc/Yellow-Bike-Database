@@ -1018,8 +1018,36 @@ $(function() {
 					sold_to = $("[name='sold_to']").val();				
 				}	
 				
+				// data structure for volunteer benefits history
+				var volunteer_benefits_history = [];
+				var redeemed = {
+				
+				
+											};				
+				
 				// Volunteer History query
 				$.post("json/transaction.php",{ volunteer_history_select: 1, contact_id: sold_to }, function(data) {
+					if (data === "First Volunteer History") {
+						volunteer_benefits_history.push(redeemed);
+						
+						/*
+						$.post("json/transaction.php",{ history_update: 1, 
+																	transaction_id: transaction_id, 
+																	history: transaction_history });
+						*/					
+					
+					} else { // update redeemed hours
+						
+						/*
+						transaction_history = $.parseJSON(data);
+						transaction_history.push(current_transaction);
+						$.post("json/transaction.php",{ history_update: 1, 
+																		transaction_id: transaction_id, 
+																		history: transaction_history,
+																		more_than_one: 1 });
+						*/						
+						
+					} // update redeemed hours
 					
 				});
 	
@@ -1055,7 +1083,7 @@ $(function() {
 										transaction_type: $("#transaction_type").val(),
 										original_price: $("#original_price").text(),
 										amount: $("#amount").val(),
-										redeemed_hours: $("#redeemable_hours").val(),
+										redeemed_hours: $("#redeemable_hours").val() || $("#volunteer_hours").text(),
 										description: $("#description").val(), 
 										sold_to: sold_to,
 										sold_by: $("[name='sold_by']").val(),
