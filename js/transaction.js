@@ -7,7 +7,7 @@ $(function() {
 	"use strict";
     
 	$.ajaxSetup({async:false}); // best to do this in $.ajax, 
-										 // but all ajax needs to be synchronous in this program because of the use of mysql
+										 // but all ajax needs to be synchronous in this program because of the use of an "ancient" mysql
 
 	$("[name='transaction_type']").attr("tabindex",1);
 	$("[name='transaction_type']").focus();
@@ -621,13 +621,11 @@ $(function() {
 			bikes_earned = volunteer_benefits[1];	
    	}
 		*/
-		
+				
 		var sweat_equity_hours = obj.sweat_equity_limit / (obj.volunteer_hours_redeemed * obj.volunteer_hour_value);					
 		var redeemable_value;									
 		if ($("#transaction_type").val() !== "Stand Time") {									
 			redeemable_value = obj.volunteer_hour_value * spinner_value;
-			console.log("HHU " + obj.volunteer_hour_value);
-			console.log("HHU2 " + spinner_value);
 		} else {
 			redeemable_value = obj.stand_time_value * spinner_value
 		}
@@ -679,7 +677,7 @@ $(function() {
 						difference = (price - max_discount_price_difference) - obj.sweat_equity_limit;
 						hours_applied_with_value = difference - value_to_apply_discount;
 						
-						console.log(max_discount_price_difference + " + ( " + value_to_apply_discount + " + " + " ( " + difference + " - (" + hours_applied_with_value + " * ." + discount + ") )");
+						//console.log(max_discount_price_difference + " + ( " + value_to_apply_discount + " + " + " ( " + difference + " - (" + hours_applied_with_value + " * ." + discount + ") )");
 						redeemable_value = (max_discount_price_difference + difference) - 
 												 (hours_applied_with_value * (discount / 100).toFixed(2));											
 					}	else { 
@@ -687,24 +685,23 @@ $(function() {
 						value_to_apply_discount = price - sweat_equity_limit;
 						hours_applied_with_value = difference - value_to_apply_discount;
 						
-						console.log(value_to_apply_discount + " + " + " ( " + difference + " - (" + hours_applied_with_value + " * ." + discount + ") )");
+						//console.log(value_to_apply_discount + " + " + " ( " + difference + " - (" + hours_applied_with_value + " * ." + discount + ") )");
 						redeemable_value = difference - (hours_applied_with_value * (discount / 100).toFixed(2));				
 					}
-				
-					console.log("HERE1");				
+							
 					amount.val(redeemable_value);
 
 			
 				// volunteer hours redeemed
 				} else {
-					console.log("HERE2 " + redeemable_value);
 					amount.val(price - redeemable_value);				
 				}
 
 			} else if (redeemable_value > price) {
 				event.preventDefault();
 			}
-													
+		
+		// some  volunteer_hours_redeemed 										
 		} else if (sweat_equity_hours >= 1) {
 			// only 1 bike per year earned with sweat_equity_hours			
 			
@@ -768,6 +765,8 @@ $(function() {
 			$("#paid_label").text("Amount Owed:");
 		}
 
+		// show original amount for transaction using volunteer / membership benefits
+
 		// Things to do before pressing the save / close button
 		
 		//  Membership and Volunteer Benefits
@@ -782,6 +781,7 @@ $(function() {
 				price = $(this).cleanVal();
 			}
 			console.log("original " + price);
+			$("#original_price").text(price);
 			$("#redeemable_hours").val(0);
 	
 		});	
@@ -864,7 +864,8 @@ $(function() {
 					
 					if (obj) {
 						var volunteer_hours = obj.volunteer_hours;	
-						if ((volunteer_hours && volunteer_hours.length)) {
+						if ((volunteer_hours && volunteer_hours.length)) {						
+							
 							$("#volunteer_hours").prop("title",title).html("Volunteer Hours");
 
 							$(".ui-spinner").show(); 						
@@ -1010,7 +1011,8 @@ $(function() {
 					anonymous = undefined;				
 				}
 	
-				// store the transaction's history
+				// store the transaction's history				
+				
 				var transaction_history = [];
 				var current_transaction =
 								{   			
@@ -1018,7 +1020,9 @@ $(function() {
 										date_startstorage: $("#date_startstorage").val(),
 										date: date,
 										transaction_type: $("#transaction_type").val(),
+										original_price: $("#original_price").text(),
 										amount: $("#amount").val(),
+										redeemed_hours: $("#redeemable_hours").val(),
 										description: $("#description").val(), 
 										sold_to: sold_to,
 										sold_by: $("[name='sold_by']").val(),
