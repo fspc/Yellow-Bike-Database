@@ -918,13 +918,35 @@ $(function() {
 							$("#redeemable_hours").hide();
 							$(".ui-spinner").hide();								
 						}
-					}		
+					}	
 					
+					// Determine membership benefits of current transaction
+					$.post("json/transaction.php", { transaction_benefits: 1 }, function (data) {
+						var obj = $.parseJSON(data);
+						
+						// Volunteer benefits
+						if ( obj.transactions_with_volunteer_benefits[$("#trans_type_info").text()] === true ) {
+							if ($("#redeemable_hours").data("ui-spinner")) 
+								$("#redeemable_hours").spinner("enable");
+						} else {
+							if ($("#redeemable_hours").data("ui-spinner")) 
+								$("#redeemable_hours").spinner("disable");							
+						}
+					
+						// Membership benefits
+						for (var n in obj.transactions_with_membership_benefits) {
+							//console.log(obj.transactions_with_volunteer_benefits[n]);
+						}						
+						
+					});					
+					
+					// control spinner behavior of  transaction_type "Stand Time"						
 					if ($("#trans_type_info").text() === "Stand Time" && $("#stand_time_total").is(":empty")) {
 						$("#redeemable_hours").spinner("disable");
 					} else if ($("#trans_type_info").text() === "Stand Time") {
-						$("#redeemable_hours").spinner("enable");				
-					}		  												
+						if ($("#redeemable_hours").data("ui-spinner")) 
+							$("#redeemable_hours").spinner("enable");
+					}										
 											
 				}); // volunteers post
 				

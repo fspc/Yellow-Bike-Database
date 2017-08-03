@@ -158,7 +158,18 @@ $stand_time_value = STAND_TIME_VALUE;
 		$result = (object)array_merge((array)$result, (array)$result2, (array)$result3);
 		echo json_encode($result);
 
-	}	// Volunteer Benefits
+	}	// end Volunteer Benefits
+
+	// Volunteer Benefits
+	if (isset($_POST['transaction_benefits'])) {
+		
+		$result = ["transactions_with_volunteer_benefits" => $transactions_with_volunteer_benefits,
+						"transactions_with_membership_benefits" => $transactions_with_membership_benefits
+						];
+		echo json_encode($result);
+		
+		
+	} // end transaction_benefits
 
 	// Stand Time
 	if (isset($_POST['stand_time'])) {

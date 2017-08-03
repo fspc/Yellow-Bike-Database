@@ -72,24 +72,24 @@ May add capability to adjust limits based on status, but that can get complex if
 define("SWEAT_EQUITY_LIMIT",100);
 define("MAX_BIKE_EARNED",1);
 define("VOLUNTEER_HOUR_VALUE",8);
+define("STAND_TIME_VALUE",10);
 define("VOLUNTEER_DISCOUNT",25);
 define("SPECIAL_VOLUNTEER_HOURS_QUALIFICATION",100);
 define("SPECIAL_VOLUNTEER_DISCOUNT",50);
-define("STAND_TIME_VALUE",10);
 
 // Determines the behaviour of Bicycles (transaction_type_id) for volunteer to earn-a-bike purchases
 define("EARN_A_BIKE_LIMIT",1);
 
 // Map transaction_type_id for transaction to benefits; 
 // Bicycles and Stand Time are special transaction types for volunteers, but they should still be mapped if benefits are desired.
-$transactions_with_volunteer_benefits = array( 	"Bicycles",
-																"Stand  Time",
-																"Used Parts"
+$transactions_with_volunteer_benefits = array( 	"Bicycles" => true,
+																"Stand Time" => true,
+																"Used Parts" => true
 															);
 
 // Volunteer benefits take priority over membership benefits if patron qualifies for both															
-$transactions_with_membership_benefits = array( "Used Parts",
-																"New Parts"
+$transactions_with_membership_benefits = array( "Used Parts" => true,
+																"New Parts" => true
 															 );
 					
 /*******
