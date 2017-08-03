@@ -506,6 +506,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 			  	<td><input name="amount" type="text" id="amount" value="<?php echo $row_Recordset2['format_amount']; ?>" size="6" />
 			  	<span id="payment_error"></span>
 			  	<span id="stand_time_total"></span>
+			  	<span id="original_price"></span>
 			  	</td>
 			  </tr>
 			  <?php } // end show_amount ?>		  	  
