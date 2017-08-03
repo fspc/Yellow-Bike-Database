@@ -1016,7 +1016,12 @@ $(function() {
 					sold_to = $("#sold_to").val();
 				}	else {
 					sold_to = $("[name='sold_to']").val();				
-				}
+				}	
+				
+				// Volunteer History query
+				$.post("json/transaction.php",{ volunteer_history_select: 1, contact_id: sold_to }, function(data) {
+					
+				});
 	
 				var payment_type_group = $("input[name='payment_type']"), payment_type, check_number; 
 				if (payment_type_group.length) {

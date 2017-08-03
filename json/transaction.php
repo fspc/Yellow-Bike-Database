@@ -268,7 +268,7 @@ $stand_time_value = STAND_TIME_VALUE;
 		$query = 'SELECT volunteer FROM contacts WHERE contact_id="' . $_POST['contact_id'] . '";';
 		$sql = mysql_query($query, $YBDB) or die(mysql_error());	
 		$result = mysql_fetch_assoc($sql);			
-		if ($result['history'] == "") {
+		if ($result['volunteer'] == "") {
 			echo "First Volunteer History";		
 		} else {
 			// Description may have newlines			
