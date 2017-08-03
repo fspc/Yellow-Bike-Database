@@ -765,6 +765,14 @@ $(function() {
 			$("#paid_label").text("Amount Owed:");
 		}
 
+
+		// do not allow a prior saved transaction to be deleted
+		$.post("json/transaction.php",{ history_select: 1, transaction_id: transaction_id }, function(data) {	
+			if (data !== "First Transaction") {				
+				$("#delete_transaction").hide(); 
+			}
+		});
+
 		// show original price for transaction using volunteer / membership benefits
 		$.post("json/transaction.php", { transaction_benefits: 1 }, function (data) {
 			
@@ -982,8 +990,10 @@ $(function() {
 		// Using deferred.promise .. pretty cool
 		save_or_close($("#save_transaction"), "Save").done(function(success) { 
 
-			// Save history 				
+			// Save history and update volunteer benefits			
 			if (success === "Success") {
+				
+				
 
 				transaction_id = $("input[name='transaction_id']").val();
 
@@ -1066,8 +1076,7 @@ $(function() {
 																	history: transaction_history });
 					
 					} else { // more than 1 transaction in the history
-					
-
+						
 						transaction_history = $.parseJSON(data);
 						transaction_history.push(current_transaction);
 						$.post("json/transaction.php",{ history_update: 1, 
