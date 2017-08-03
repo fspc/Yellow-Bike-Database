@@ -263,6 +263,20 @@ $stand_time_value = STAND_TIME_VALUE;
 	
 	} 
 
+	// Volunteer history - fetch history
+	if(isset($_POST['volunteer_history_select'])) {
+		$query = 'SELECT volunteer FROM contacts WHERE contact_id="' . $_POST['contact_id'] . '";';
+		$sql = mysql_query($query, $YBDB) or die(mysql_error());	
+		$result = mysql_fetch_assoc($sql);			
+		if ($result['history'] == "") {
+			echo "First Volunteer History";		
+		} else {
+			// Description may have newlines			
+			$volunteer_history_result = str_replace("\n", "\\n",$result['history']);
+			echo $volunteer_history_result;		
+		}
+	} // end Volunteer history - fetch history
+
 	// Transaction history - fetch history
 	if(isset($_POST['history_select'])) {
 		$query = 'SELECT history FROM transaction_log WHERE transaction_id="' . $_POST['transaction_id'] . '";';
