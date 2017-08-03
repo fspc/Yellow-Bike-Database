@@ -77,7 +77,7 @@ DELETE FROM shop_hours;
 DELETE FROM contacts;
 ALTER TABLE contacts AUTO_INCREMENT = 1;
 ALTER TABLE contacts ADD waiver tinyint(1) NOT NULL DEFAULT '0';
-ALTER TABLE contacts ADD volunteer varchar(15) NOT NULL DEFAULT '';
+ALTER TABLE contacts ADD volunteer longblob NOT NULL;
 INSERT INTO contacts (
   contact_id, first_name, middle_initial, last_name, email, phone, address1, 
   address2, city, state, country, receive_newsletter, date_created, 
