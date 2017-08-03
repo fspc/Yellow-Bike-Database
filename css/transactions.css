@@ -137,4 +137,5 @@ input[value=Save]:focus, input[value=Close]:focus {
 
 #original_price {
 	display: none;
+	color: blueviolet;
 }
