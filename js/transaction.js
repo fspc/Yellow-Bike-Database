@@ -767,18 +767,22 @@ $(function() {
 
 		// show original price for transaction using volunteer / membership benefits
 		$.post("json/transaction.php", { transaction_benefits: 1 }, function (data) {
-			var obj = $.parseJSON(data);
 			
+			var obj = $.parseJSON(data);
+					
 			// Volunteer benefits
 			if ( obj.transactions_with_volunteer_benefits[$("#trans_type_info").text()] === true ) {
-				$.post("json/transaction.php",{ history_select: 1, transaction_id: transaction_id }, function(data) {
-					var obj = $.parseJSON(data);
-					var history = obj[obj.length - 1];
-					$("#original_price").text(history.original_price).show();
-					$("#volunteer_hours").text(history.redeemed_hours).show();
-					
+				$.post("json/transaction.php",{ history_select: 1, transaction_id: transaction_id }, function(data) {	
+					if (data !== "First Transaction") {				
+						var obj = $.parseJSON(data);
+						var history = obj[obj.length - 1];
+						$("#original_price").text(history.original_price).show();
+						$("#volunteer_hours").text(history.redeemed_hours).show();
+					}
 				});
-				
+			} 
+			
+			
 		}); // show original price
 
 		// Things to do before pressing the save / close button
