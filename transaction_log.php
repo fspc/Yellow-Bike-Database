@@ -396,7 +396,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                    <td>
                     <input id="save_transaction" type="submit" name="EditSubmit" value="Save" align="right">
                     <input id="close_transaction" type="submit" name="EditSubmit" value="Close">
-                    <input type="submit" name="EditSubmit" value="Delete">
+                    <input id="delete_transaction" type="submit" name="EditSubmit" value="Delete">
                     <span id="transaction_start_error"></span>
                     <!-- Save before using paypal ->> -->
                     </td>
