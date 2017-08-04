@@ -1019,33 +1019,36 @@ $(function() {
 				}	
 				
 				// data structure for volunteer benefits history
-				var volunteer_benefits_history = [];
-				var redeemed = {
-				
-				
-											};				
+				var year = d.getFullYear();
+				var volunteer_benefits_history = {
+																[year] :
+																{ 
+																	volunteer_hours_redeemed: parseFloat($("#redeemable_hours").val()), 
+																	max_bike_earned: 0 
+																}
+															};				
 				
 				// Volunteer History query
 				$.post("json/transaction.php",{ volunteer_history_select: 1, contact_id: sold_to }, function(data) {
-					if (data === "First Volunteer History") {
-						volunteer_benefits_history.push(redeemed);
-						
-						/*
-						$.post("json/transaction.php",{ history_update: 1, 
-																	transaction_id: transaction_id, 
-																	history: transaction_history });
-						*/					
+					
+					if (data === "First Volunteer History") {  //initialize volunteer history
+
+						$.post("json/transaction.php",{ volunteer_history_update: 1, 
+																 	contact_id: sold_to, 
+																	volunteer_history: volunteer_benefits_history });					
 					
 					} else { // update redeemed hours
 						
-						/*
-						transaction_history = $.parseJSON(data);
-						transaction_history.push(current_transaction);
-						$.post("json/transaction.php",{ history_update: 1, 
-																		transaction_id: transaction_id, 
-																		history: transaction_history,
-																		more_than_one: 1 });
-						*/						
+						volunteer_benefits_history = $.parseJSON(data);
+						if ($("#redeemable_hours").val().length) {
+							volunteer_benefits_history[year].volunteer_hours_redeemed = parseFloat(volunteer_benefits_history[year].volunteer_hours_redeemed) + 
+																											parseFloat($("#redeemable_hours").val());
+						}
+						
+						$.post("json/transaction.php",{ volunteer_history_update: 1, 
+																 	contact_id: sold_to, 
+																	volunteer_history: volunteer_benefits_history,
+																	more_than_one: 1 });
 						
 					} // update redeemed hours
 					
@@ -1083,7 +1086,7 @@ $(function() {
 										transaction_type: $("#transaction_type").val(),
 										original_price: $("#original_price").text(),
 										amount: $("#amount").val(),
-										redeemed_hours: $("#redeemable_hours").val() || $("#volunteer_hours").text(),
+										redeemed_hours: parseFloat($("#redeemable_hours").val()) || parseFloat($("#volunteer_hours").text()),
 										description: $("#description").val(), 
 										sold_to: sold_to,
 										sold_by: $("[name='sold_by']").val(),
