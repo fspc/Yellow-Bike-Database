@@ -4,6 +4,7 @@ require_once('../Connections/database_functions.php');
 require_once('../Connections/YBDB.php');
 mysql_select_db($database_YBDB, $YBDB);
 
+
 /*
 require_once('../php-console/src/PhpConsole/__autoload.php');
 $handler = PhpConsole\Handler::getInstance();
@@ -272,10 +273,24 @@ $stand_time_value = STAND_TIME_VALUE;
 			echo "First Volunteer History";		
 		} else {
 			// Description may have newlines			
-			$volunteer_history_result = str_replace("\n", "\\n",$result['history']);
+			$volunteer_history_result = str_replace("\n", "\\n",$result['volunteer']);
 			echo $volunteer_history_result;		
 		}
 	} // end Volunteer history - fetch history
+	
+	// Volunteer history update
+	if(isset($_POST['volunteer_history_update'])) {
+		$json = json_encode($_POST['volunteer_history']);
+		$query = "UPDATE contacts SET volunteer='$json'" .  
+					' WHERE contact_id="' . $_POST['contact_id'] . '";';
+		$result = mysql_query($query, $YBDB) or die(mysql_error());	
+
+		// show volunteer history
+		if(isset($_POST['more_than_one'])) {
+			list_history($_POST['volunteer_history']);
+		}
+	}
+	// Volunteer history update
 
 	// Transaction history - fetch history
 	if(isset($_POST['history_select'])) {
