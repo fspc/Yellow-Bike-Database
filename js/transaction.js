@@ -610,18 +610,6 @@ $(function() {
 	// volunteer hours magic
 	function redeemable(obj, spinner_value, event) {
 		
-		/*
-		var volunteer_hours_redeemed = 0;
-		var bikes_earned = 0;
-   	
-   	if (obj.volunteer !== "") {
-   		// still need to test .. this will be made an
-			var volunteer_benefits = obj.volunteer.split(" ",1);							   		
-			volunteer_hours_redeemed = volunteer_benefits[0];
-			bikes_earned = volunteer_benefits[1];	
-   	}
-		*/
-				
 		var sweat_equity_hours = obj.sweat_equity_limit / (obj.volunteer_hours_redeemed * obj.volunteer_hour_value);					
 		var redeemable_value;									
 		if ($("#transaction_type").val() !== "Stand Time") {									
@@ -880,18 +868,26 @@ $(function() {
 					var bikes_earned = 0;
 					var volunteer_hours_redeemed = 0;								
 					var obj = $.parseJSON(data);
+					var volunteer = "", remaining = "", vhr = "";
+					if (obj.volunteer) {
+						volunteer = $.parseJSON(obj.volunteer);
+						remaining = obj.current_year_volunteer_hours - volunteer[year].volunteer_hours_redeemed;
+						vhr = volunteer[year].volunteer_hours_redeemed;
+						console.log(volunteer[year].volunteer_hours_redeemed);
+					}			
+					
 					var title = obj.normal_full_name + "\r\n" +
 											obj.email + "\r\n" +
 											obj.phone + "\r\n" +
 											"Volunteer Hours for last 365 days: " + obj.volunteer_hours + "\r\n" +
 											"Volunteer Hours \(" + year + "\): " + obj.current_year_volunteer_hours + "\r\n" +
-											"Volunteer Hours Redeemed: " + "\r\n" +
-											"Volunteer Hours Remaining:";			
+											"Volunteer Hours Redeemed: " +  vhr + "\r\n" +
+											"Volunteer Hours Remaining: " + remaining;			
 
 					$("#volunteer_hours").prop("title","").empty();	
 					$("#redeemable_hours").hide();				
 					
-					if (obj) {
+					if (obj) { // redundant test
 						var volunteer_hours = obj.volunteer_hours;	
 						if ((volunteer_hours && volunteer_hours.length)) {						
 							
