@@ -785,15 +785,14 @@ $(function() {
 						var obj = $.parseJSON(data);
 						var history = obj[obj.length - 1];
 						
-						// bug: need to check if qualifies to be a volunteer
+						// Check if individual has redeemed hours
 						if (history.redeemed_hours !== "0.00") {
 							$("#original_price").text(history.original_price).show();
 							$("#volunteer_hours").text(history.redeemed_hours).show();
 						}
 					}
 				});
-			} 
-			
+			} 		
 			
 		}); // show original price
 
@@ -1028,21 +1027,13 @@ $(function() {
 				var vhr;				
 				if ($("#redeemable_hours").val() === "") {
 					vhr = "0.00";
+				} else {
+					vhr = parseFloat($("#redeemable_hours").val());
 				}
 				volunteer_benefits_history[year] = 	{ 
 																	volunteer_hours_redeemed: vhr, 
 																	max_bike_earned: 0 
 																};			
-				
-				/*
-				var volunteer_benefits_history = {
-																[year] :
-																{ 
-																	volunteer_hours_redeemed: parseFloat($("#redeemable_hours").val()), 
-																	max_bike_earned: 0 
-																}
-															};				
-				*/				
 				
 				// Volunteer History query
 				$.post("json/transaction.php",{ volunteer_history_select: 1, contact_id: sold_to }, function(data) {
@@ -1056,15 +1047,29 @@ $(function() {
 					} else { // update redeemed hours
 						
 						volunteer_benefits_history = $.parseJSON(data);
-						if ($("#redeemable_hours").val().length) {
-							volunteer_benefits_history[year].volunteer_hours_redeemed = parseFloat(volunteer_benefits_history[year].volunteer_hours_redeemed) + 
-																											parseFloat($("#redeemable_hours").val());
-						}
 						
-						$.post("json/transaction.php",{ volunteer_history_update: 1, 
-																 	contact_id: sold_to, 
-																	volunteer_history: volunteer_benefits_history,
-																	more_than_one: 1 });
+						// check if new year - will have to test
+						if (volunteer_benefits_history[year] === undefined) {
+							
+							volunteer_benefits_history[year] = 	{ 
+																	volunteer_hours_redeemed: vhr, 
+																	max_bike_earned: 0 
+																};		
+							$.post("json/transaction.php",{ volunteer_history_update: 1, 
+																	 	contact_id: sold_to, 
+																		volunteer_history: volunteer_benefits_history });										
+						} else {
+										
+							if ($("#redeemable_hours").val().length) {
+								volunteer_benefits_history[year].volunteer_hours_redeemed = parseFloat(volunteer_benefits_history[year].volunteer_hours_redeemed) + 
+																												parseFloat($("#redeemable_hours").val());
+							}
+							
+							$.post("json/transaction.php",{ volunteer_history_update: 1, 
+																	 	contact_id: sold_to, 
+																		volunteer_history: volunteer_benefits_history,
+																		more_than_one: 1 });
+						} // else same year
 						
 					} // update redeemed hours
 					
@@ -1093,7 +1098,12 @@ $(function() {
 	
 				// store the transaction's history				
 				
-				var transaction_history = [];
+				var transaction_history = [], rh;
+				if ($("#redeemable_hours").val() === "0" || $("#redeemable_hours").val() === "") {
+					rh = "0.00";
+				} else {
+					rh = parseFloat($("#redeemable_hours").val());
+				}
 				var current_transaction =
 								{   			
 										transaction_id: transaction_id,
@@ -1102,7 +1112,7 @@ $(function() {
 										transaction_type: $("#transaction_type").val(),
 										original_price: $("#original_price").text(),
 										amount: $("#amount").val(),
-										redeemed_hours: parseFloat($("#redeemable_hours").val()) || parseFloat($("#volunteer_hours").text()),
+										redeemed_hours: rh || parseFloat($("#volunteer_hours").text()),
 										description: $("#description").val(), 
 										sold_to: sold_to,
 										sold_by: $("[name='sold_by']").val(),
