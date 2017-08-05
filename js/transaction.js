@@ -629,88 +629,67 @@ $(function() {
 			discount = obj.volunteer_discount;
 		} 
 
-		var year = d.getFullYear();
-
-		/*		
-		var vhr = obj.volunteer_hour_value * volunteer[year].volunteer_hours_redeemed;
-		var remaining = obj.current_year_volunteer_hours - volunteer[year].volunteer_hours_redeemed;
-		var exceeded_sweat_equity_limit = false;		
-		if (vhr > obj.sweat_equity_limit) {
-			exceeded_sweat_equity_limit = true;
-		}		
-		*/		
+		// figure out remaining hours that can be redeemed if volunteer hours have been redeemed.
+		var remaining, year = d.getFullYear(), exceeded_sweat_equity_limit = false;
+		if (volunteer) {
+			var vhr = obj.volunteer_hour_value * volunteer[year].volunteer_hours_redeemed;
+			remaining = obj.current_year_volunteer_hours - volunteer[year].volunteer_hours_redeemed;		
+			if (vhr > obj.sweat_equity_limit) {
+				exceeded_sweat_equity_limit = true;
+			}
+		}
 		
 		// no volunteer_hours_redeemed or still less than the allowable sweat_equity_hours
-		/* if (isNaN(sweat_equity_hours) || volunteer_hours_redeemed < sweat_equity_hours) { */
-			
-			// only 1 bike per year earned with sweat_equity_hours
-			if (price >= redeemable_value) {
-				
-				// if running volunteer_hours >= special_volunteer_hours_qualification the special_discount kicks in
-				// other wise it is 25%				
-				var sweat_equity_limit;
-				if ($("#transaction_type").val() !== "Stand Time") {									
-					sweat_equity_limit = obj.volunteer_hour_value * spinner_value;
-				} else {
-					sweat_equity_limit = obj.stand_time_value * spinner_value;
-				}			
-			
-				// discount is now applied if transaction is over special_volunteer_hours_qualification
-				if (redeemable_value > obj.sweat_equity_limit) {
-					
-					
-					var value_to_apply_discount, difference, hours_applied_with_value;
-
-					// bug final value is fine , but 12 is being deducted or added per hour
-					// are maxable redeemable hours less than price
-					var max_discount_price;
-					if ($("#transaction_type").val() !== "Stand Time") {	
-						max_discount_price = obj.current_year_volunteer_hours * obj.volunteer_hour_value;
-					} else {
-						max_discount_price = obj.stand_time_value * obj.volunteer_hour_value;
-					}						
-					
-					var max_discount_price_difference;
-					
-					if (price > max_discount_price) {
-						max_discount_price_difference = price - max_discount_price;
-						console.log("we have to do things differently " + max_discount_price_difference);
-						value_to_apply_discount = (price - max_discount_price_difference) - redeemable_value;
-						difference = (price - max_discount_price_difference) - obj.sweat_equity_limit;
-						hours_applied_with_value = difference - value_to_apply_discount;
-						
-						console.log("(" + max_discount_price_difference + " +  " + difference + ") - (" + hours_applied_with_value + " * ." + discount + ")");
-						redeemable_value = (max_discount_price_difference + difference) - 
-												 (hours_applied_with_value * (discount / 100).toFixed(2));											
-					}	else { 
-						difference = price - obj.sweat_equity_limit;
-						value_to_apply_discount = price - redeemable_value;
-						hours_applied_with_value = difference - value_to_apply_discount;
-						
-						console.log(difference + " - (" + hours_applied_with_value + " * ." + discount + ")");
-						redeemable_value = difference - (hours_applied_with_value * (discount / 100).toFixed(2));				
-					}
-							
-					amount.val(redeemable_value);
-
-			
-				// volunteer hours redeemed before discount for special_volunteer_hours_qualification kicks in
-				} else {
-					amount.val(price - redeemable_value);				
-				}
-
-			} else if (redeemable_value > price) {
-				event.preventDefault();
-			}
 		
-		// some  volunteer_hours_redeemed 										
-		/*} /* else if (sweat_equity_hours >= 1) {
-			// only 1 bike per year earned with sweat_equity_hours			
+		// if running volunteer_hours >= special_volunteer_hours_qualification the special_discount kicks in
+		// other wise it is 25%	
+		
+		// only 1 bike per year earned with sweat_equity_hours
 			
-			// if running volunteer_hours >= special_volunteer_hours_qualification the special_discount kicks in
-			// other wise it is 25%
+		if (price >= redeemable_value) {
 			
-		}	*/	
+			// discount is now applied if transaction is over special_volunteer_hours_qualification
+			if (redeemable_value > obj.sweat_equity_limit) {	
+				
+				var value_to_apply_discount, difference, hours_applied_with_value;
+
+
+				var max_discount_price_difference;
+				
+				if (price > max_discount_price) {
+					max_discount_price_difference = price - max_discount_price;
+					console.log("we have to do things differently " + max_discount_price_difference);
+					value_to_apply_discount = (price - max_discount_price_difference) - redeemable_value;
+					difference = (price - max_discount_price_difference) - obj.sweat_equity_limit;
+					hours_applied_with_value = difference - value_to_apply_discount;
+					
+					console.log("(" + max_discount_price_difference + " +  " + difference + ") - (" + hours_applied_with_value + " * ." + discount + ")");
+					redeemable_value = (max_discount_price_difference + difference) - 
+											 (hours_applied_with_value * (discount / 100).toFixed(2));											
+				}	else { 
+					difference = price - obj.sweat_equity_limit;
+					value_to_apply_discount = price - redeemable_value;
+					hours_applied_with_value = difference - value_to_apply_discount;
+					
+					console.log(difference + " - (" + hours_applied_with_value + " * ." + discount + ")");
+					redeemable_value = difference - (hours_applied_with_value * (discount / 100).toFixed(2));				
+				}
+						
+				amount.val(price - redeemable_value);
+		
+			// volunteer hours redeemed before discount for special_volunteer_hours_qualification kicks in
+			} else {
+				if (exceeded_sweat_equity_limit === true) {
+					amount.val(price - (redeemable_value * (discount / 100).toFixed(2)));
+				} else {
+					amount.val(price - redeemable_value);
+				}	
+			}
+
+		} else if (redeemable_value > price) {
+			event.preventDefault();
+		}
+		
 		
 	} // end function redeemable 
 
@@ -728,9 +707,10 @@ $(function() {
 		$("input[name='payment_type']").attr("tabindex",8);
 		$("#check_number").attr("tabindex",9);
 		$("select[name='sold_to']").attr("tabindex",10);
-		$("select[name='sold_by']").attr("tabindex",11);
-		$("input[value='Save']").attr("tabindex",12);
-		$("input[value='Close']").attr("tabindex",13);		
+		$("#redeemable_hours").attr("tabindex",11);
+		$("select[name='sold_by']").attr("tabindex",12);
+		$("input[value='Save']").attr("tabindex",13);
+		$("input[value='Close']").attr("tabindex",14);		
 		
 		// common ids
 		var transaction_id = $("input[name='transaction_id']").val();
