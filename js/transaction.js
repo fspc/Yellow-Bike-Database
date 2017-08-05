@@ -861,7 +861,8 @@ $(function() {
 					}); // stand time pos		
 				}				
 								
-				// How many hours does this volunteer have?													
+				// How many hours does this volunteer have?
+				$("#redeemable_hours").val("");													
 				$.post("json/transaction.php", { volunteer_benefits: 1, contact_id: this.value }, function (data) { 								
 														
 					var year = d.getFullYear();
@@ -1057,13 +1058,18 @@ $(function() {
 				}				
 					
 				// Don't require paid to be selected, only amount >= 0	
-				var max_bike_earned = 0;
+				var max_bike_earned = 0, maximum_allowable_earned_bikes;
 				if ($("#trans_type_info").text() === "Bicycles") {
 					// hours were redeemed and this is a Bicycle transaction
 					if (vhr !== "0.00") {
 						max_bike_earned = 1;
 					}
 				}
+				
+				$.post("json/transaction.php",{ max_bike_earned: 1 }, function(data) {
+					var obj = $.parseJSON(data);
+					maximum_allowable_earned_bikes = obj.max_bike_earned;
+				});				
 							
 				volunteer_benefits_history[year] = 	{ 
 																	volunteer_hours_redeemed: vhr, 
@@ -1098,9 +1104,11 @@ $(function() {
 							if ($("#redeemable_hours").val().length) {
 								volunteer_benefits_history[year].volunteer_hours_redeemed = parseFloat(volunteer_benefits_history[year].volunteer_hours_redeemed) + 
 																												parseFloat($("#redeemable_hours").val());
-																												
-								volunteer_benefits_history[year].max_bike_earned = parseFloat(volunteer_benefits_history[year].max_bike_earned) + 
-																									max_bike_earned;	
+
+								if (parseFloat(volunteer_benefits_history[year].max_bike_earned) <  maximum_allowable_earned_bikes) {																				
+									volunteer_benefits_history[year].max_bike_earned = parseFloat(volunteer_benefits_history[year].max_bike_earned) + 
+																										max_bike_earned;	
+								}
 							}
 							
 							
