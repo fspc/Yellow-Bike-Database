@@ -869,11 +869,12 @@ $(function() {
 					var volunteer_hours_redeemed = 0;								
 					var obj = $.parseJSON(data);
 
-					var volunteer = "", remaining = 0, vhr = "";
+					var volunteer = "", remaining = 0, vhr = "", max_bikes_earned = 0;
 					if (obj.volunteer) {
 						volunteer = $.parseJSON(obj.volunteer);
 						remaining = obj.current_year_volunteer_hours - volunteer[year].volunteer_hours_redeemed;
 						vhr = volunteer[year].volunteer_hours_redeemed;
+						max_bikes_earned = volunteer[year].max_bike_earned;
 					} else {
 						vhr = 0;
 					}			
@@ -884,7 +885,8 @@ $(function() {
 											"Volunteer Hours for last 365 days: " + obj.volunteer_hours + "\r\n" +
 											"Volunteer Hours \(" + year + "\): " + obj.current_year_volunteer_hours + "\r\n" +
 											"Volunteer Hours Redeemed: " +  vhr + "\r\n" +
-											"Volunteer Hours Remaining: " + remaining;			
+											"Volunteer Hours Remaining: " + remaining + "\r\n" +
+											"Max Bikes Earned: " + max_bikes_earned;			
 
 					$("#volunteer_hours").prop("title","").empty();	
 					$("#redeemable_hours").hide();				
@@ -899,9 +901,7 @@ $(function() {
 								max = remaining;
 							} else {
 								max = obj.current_year_volunteer_hours;
-							}							
-
-							console.log("MAX " + max);							
+							}														
 							
 							$("#volunteer_hours").prop("title",title).html("Volunteer Hours");
 
@@ -978,7 +978,7 @@ $(function() {
 							if ($("#redeemable_hours").data("ui-spinner")) 
 								$("#redeemable_hours").spinner("disable");							
 						}
-					
+						
 						// Membership benefits
 						for (var n in obj.transactions_with_membership_benefits) {
 							//console.log(obj.transactions_with_volunteer_benefits[n]);
@@ -992,8 +992,17 @@ $(function() {
 					} else if ($("#trans_type_info").text() === "Stand Time") {
 						if ($("#redeemable_hours").data("ui-spinner")) 
 							$("#redeemable_hours").spinner("enable");
-					}										
-											
+					}		
+					
+					// more than max_bike_limit turn off spinner	
+					if ($("#trans_type_info").text() === "Bicycles") { 
+						if (volunteer && obj.max_bike_earned) {						
+							if (volunteer[year].max_bike_earned >= obj.max_bike_earned) {
+								$("#redeemable_hours").spinner("disable");
+							}
+						}								
+					}						
+									
 				}); // volunteers post
 				
 			
@@ -1045,10 +1054,20 @@ $(function() {
 					vhr = "0.00";
 				} else {
 					vhr = parseFloat($("#redeemable_hours").val());
+				}				
+					
+				// Don't require paid to be selected, only amount >= 0	
+				var max_bike_earned = 0;
+				if ($("#trans_type_info").text() === "Bicycles") {
+					// hours were redeemed and this is a Bicycle transaction
+					if (vhr !== "0.00") {
+						max_bike_earned = 1;
+					}
 				}
+							
 				volunteer_benefits_history[year] = 	{ 
 																	volunteer_hours_redeemed: vhr, 
-																	max_bike_earned: 0 
+																	max_bike_earned: max_bike_earned
 																};			
 				
 				// Volunteer History query
@@ -1079,7 +1098,11 @@ $(function() {
 							if ($("#redeemable_hours").val().length) {
 								volunteer_benefits_history[year].volunteer_hours_redeemed = parseFloat(volunteer_benefits_history[year].volunteer_hours_redeemed) + 
 																												parseFloat($("#redeemable_hours").val());
+																												
+								volunteer_benefits_history[year].max_bike_earned = parseFloat(volunteer_benefits_history[year].max_bike_earned) + 
+																									max_bike_earned;	
 							}
+							
 							
 							$.post("json/transaction.php",{ volunteer_history_update: 1, 
 																	 	contact_id: sold_to, 
