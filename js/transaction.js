@@ -786,8 +786,10 @@ $(function() {
 						var history = obj[obj.length - 1];
 						
 						// bug: need to check if qualifies to be a volunteer
-						$("#original_price").text(history.original_price).show();
-						$("#volunteer_hours").text(history.redeemed_hours).show();
+						if (history.redeemed_hours !== "0.00") {
+							$("#original_price").text(history.original_price).show();
+							$("#volunteer_hours").text(history.redeemed_hours).show();
+						}
 					}
 				});
 			} 
@@ -1023,8 +1025,12 @@ $(function() {
 				// data structure for volunteer benefits history
 				var year = d.getFullYear();
 				var volunteer_benefits_history = {};
+				var vhr;				
+				if ($("#redeemable_hours").val() === "") {
+					vhr = "0.00";
+				}
 				volunteer_benefits_history[year] = 	{ 
-																	volunteer_hours_redeemed: parseFloat($("#redeemable_hours").val()), 
+																	volunteer_hours_redeemed: vhr, 
 																	max_bike_earned: 0 
 																};			
 				
