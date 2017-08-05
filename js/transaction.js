@@ -784,6 +784,8 @@ $(function() {
 					if (data !== "First Transaction") {				
 						var obj = $.parseJSON(data);
 						var history = obj[obj.length - 1];
+						
+						// bug: need to check if qualifies to be a volunteer
 						$("#original_price").text(history.original_price).show();
 						$("#volunteer_hours").text(history.redeemed_hours).show();
 					}
@@ -1020,6 +1022,13 @@ $(function() {
 				
 				// data structure for volunteer benefits history
 				var year = d.getFullYear();
+				var volunteer_benefits_history = {};
+				volunteer_benefits_history[year] = 	{ 
+																	volunteer_hours_redeemed: parseFloat($("#redeemable_hours").val()), 
+																	max_bike_earned: 0 
+																};			
+				
+				/*
 				var volunteer_benefits_history = {
 																[year] :
 																{ 
@@ -1027,6 +1036,7 @@ $(function() {
 																	max_bike_earned: 0 
 																}
 															};				
+				*/				
 				
 				// Volunteer History query
 				$.post("json/transaction.php",{ volunteer_history_select: 1, contact_id: sold_to }, function(data) {
