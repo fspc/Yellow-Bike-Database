@@ -681,7 +681,7 @@ $(function() {
 					amount.val(redeemable_value);
 
 			
-				// volunteer hours redeemed
+				// volunteer hours redeemed before discount for special_volunteer_hours_qualification kicks in
 				} else {
 					amount.val(price - redeemable_value);				
 				}
@@ -889,8 +889,18 @@ $(function() {
 					$("#redeemable_hours").hide();				
 					
 					if (obj) { 
-						var volunteer_hours = obj.volunteer_hours;	
+						var volunteer_hours = obj.volunteer_hours;						
+							
 						if ((volunteer_hours && volunteer_hours.length)) {						
+							
+							var max;
+							if (remaining || remaining === 0) {
+								max = remaining;
+							} else {
+								max = obj.current_year_volunteer_hours;
+							}							
+
+							console.log("MAX " + max);							
 							
 							$("#volunteer_hours").prop("title",title).html("Volunteer Hours");
 
@@ -900,12 +910,16 @@ $(function() {
 								step: 0.001,
 								incremental: true,
 								numberFormat: "n",
-							   max: obj.current_year_volunteer_hours,
+							   max: max,
 							   min: 0,
 							   spin: function( event, ui ) {
 							   					
 									// function redeemable(obj, spinner_value)
-									redeemable(obj, ui.value, event, volunteer);
+									if (max > 0) {
+										redeemable(obj, ui.value, event, volunteer);
+									} else {
+										$(this).spinner("disable");
+									}
 									
 							   }
 							}).on('input', function (e) {
@@ -924,7 +938,11 @@ $(function() {
 							 	console.log("spinner value " + spinner_value);				
 						
 								// function redeemable(obj, spinner_value)
-								redeemable(obj, spinner_value, event, volunteer);
+								if (max > 0 || max === undefined) {
+									redeemable(obj, spinner_value, event, volunteer);
+								} else {
+									$(this).spinner("disable");
+								}
 														
 							   var val = this.value,
 							   $this = $(this),
