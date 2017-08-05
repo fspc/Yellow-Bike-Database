@@ -608,9 +608,10 @@ $(function() {
 	} // end function save_or_close
 	
 	// volunteer hours magic
-	function redeemable(obj, spinner_value, event) {
+	function redeemable(obj, spinner_value, event, volunteer) {
 		
-		var sweat_equity_hours = obj.sweat_equity_limit / (obj.volunteer_hours_redeemed * obj.volunteer_hour_value);					
+		//var sweat_equity_hours = obj.sweat_equity_limit / (obj.volunteer_hours_redeemed * obj.volunteer_hour_value);					
+		
 		var redeemable_value;									
 		if ($("#transaction_type").val() !== "Stand Time") {									
 			redeemable_value = obj.volunteer_hour_value * spinner_value;
@@ -629,7 +630,7 @@ $(function() {
 		} 
 		
 		// no volunteer_hours_redeemed or still less than the allowable sweat_equity_hours
-		if (isNaN(sweat_equity_hours) || volunteer_hours_redeemed < sweat_equity_hours) {
+		/*if (isNaN(sweat_equity_hours) || volunteer_hours_redeemed < sweat_equity_hours) { */
 			
 			// only 1 bike per year earned with sweat_equity_hours
 			if (price >= redeemable_value) {
@@ -690,13 +691,13 @@ $(function() {
 			}
 		
 		// some  volunteer_hours_redeemed 										
-		} else if (sweat_equity_hours >= 1) {
+		/*} /* else if (sweat_equity_hours >= 1) {
 			// only 1 bike per year earned with sweat_equity_hours			
 			
 			// if running volunteer_hours >= special_volunteer_hours_qualification the special_discount kicks in
 			// other wise it is 25%
 			
-		}		
+		}	*/	
 		
 	} // end function redeemable 
 
@@ -868,12 +869,12 @@ $(function() {
 					var bikes_earned = 0;
 					var volunteer_hours_redeemed = 0;								
 					var obj = $.parseJSON(data);
+
 					var volunteer = "", remaining = "", vhr = "";
 					if (obj.volunteer) {
 						volunteer = $.parseJSON(obj.volunteer);
 						remaining = obj.current_year_volunteer_hours - volunteer[year].volunteer_hours_redeemed;
 						vhr = volunteer[year].volunteer_hours_redeemed;
-						console.log(volunteer[year].volunteer_hours_redeemed);
 					}			
 					
 					var title = obj.normal_full_name + "\r\n" +
@@ -887,7 +888,7 @@ $(function() {
 					$("#volunteer_hours").prop("title","").empty();	
 					$("#redeemable_hours").hide();				
 					
-					if (obj) { // redundant test
+					if (obj) { 
 						var volunteer_hours = obj.volunteer_hours;	
 						if ((volunteer_hours && volunteer_hours.length)) {						
 							
@@ -904,7 +905,7 @@ $(function() {
 							   spin: function( event, ui ) {
 							   					
 									// function redeemable(obj, spinner_value)
-									redeemable(obj, ui.value, event);
+									redeemable(obj, ui.value, event, volunteer);
 									
 							   }
 							}).on('input', function (e) {
@@ -923,7 +924,7 @@ $(function() {
 							 	console.log("spinner value " + spinner_value);				
 						
 								// function redeemable(obj, spinner_value)
-								redeemable(obj, spinner_value, event);
+								redeemable(obj, spinner_value, event, volunteer);
 														
 							   var val = this.value,
 							   $this = $(this),
