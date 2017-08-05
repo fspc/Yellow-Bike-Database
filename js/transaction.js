@@ -653,6 +653,12 @@ $(function() {
 				
 				var value_to_apply_discount, difference, hours_applied_with_value;
 
+				var max_discount_price;
+ 				if ($("#transaction_type").val() !== "Stand Time") {	
+					max_discount_price = obj.current_year_volunteer_hours * obj.volunteer_hour_value;
+				} else {
+					max_discount_price = obj.stand_time_value * obj.volunteer_hour_value;
+				}						
 
 				var max_discount_price_difference;
 				
@@ -675,9 +681,9 @@ $(function() {
 					redeemable_value = difference - (hours_applied_with_value * (discount / 100).toFixed(2));				
 				}
 						
-				amount.val(price - redeemable_value);
+				amount.val(redeemable_value);
 		
-			// volunteer hours redeemed before discount for special_volunteer_hours_qualification kicks in
+			// volunteer hours redeemed if the redeemable_value <= obj.sweat_equity_limit
 			} else {
 				if (exceeded_sweat_equity_limit === true) {
 					amount.val(price - (redeemable_value * (discount / 100).toFixed(2)));
