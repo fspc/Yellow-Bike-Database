@@ -788,10 +788,9 @@ $(function() {
 		
 		//  Membership and Volunteer Benefits
 		var d = new Date();
-	
+		
 		var price;
 		amount.on("input",function () { 
-		
 			if ( $(this).cleanVal() >= 100 ) {
 				price = ($(this).cleanVal() / 100).toFixed(2);
 			} else {
@@ -799,9 +798,9 @@ $(function() {
 			}
 			console.log("original " + price);
 			$("#original_price").text(price);
-			$("#redeemable_hours").val(0);
-	
+			$("#redeemable_hours").val(0);		
 		});	
+
 		
 		sold_to.change(function() { 		
 			
@@ -860,6 +859,15 @@ $(function() {
 						}
 					}); // stand time pos		
 				}				
+
+				// prexisting price without input, e.g. pre-filled Stand Time, needs to be taken into account				
+				if ( amount.cleanVal() >= 100 ) {
+					price = (amount.cleanVal() / 100).toFixed(2);
+				} else {
+					price = amount.cleanVal();
+				}
+				console.log("original " + price);
+				$("#original_price").text(price);	
 								
 				// How many hours does this volunteer have?
 				$("#redeemable_hours").val("");													
@@ -1022,7 +1030,7 @@ $(function() {
 								}
 								amount.val("");
 								if (!$("#paid_member").text()) {	
-									$("#stand_time_total").text("Free Stand Time is good to " + end.toDateString());
+									$("#stand_time_total").text("Free Stand Time is good until " + end.toDateString());
 								}				
 							} else if ( now.getTime() > end.getTime() ) {
 								console.log("Free Stand Time is now over");
