@@ -1002,9 +1002,7 @@ $(function() {
 								$("#redeemable_hours").spinner("disable");
 							}
 						}								
-					}	
-					
-										
+					}										
 									
 				}); // volunteers post
 				
@@ -1022,13 +1020,15 @@ $(function() {
 								if ($("#redeemable_hours").data("ui-spinner")) { 
 									$("#redeemable_hours").spinner("disable");
 								}
-								amount.val("");	
-								$("#stand_time_total").empty();				
+								amount.val("");
+								if (!$("#paid_member").text()) {	
+									$("#stand_time_total").text("Free Stand Time is good to " + end.toDateString());
+								}				
 							} else if ( now.getTime() > end.getTime() ) {
 								console.log("Free Stand Time is now over");
 								
 							}
-						}
+						} // end Free stand time
 					});
 				}
 			
