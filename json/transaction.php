@@ -262,11 +262,12 @@ $special_volunteer_discount = SPECIAL_VOLUNTEER_DISCOUNT;
 	// Free Stand Time use 
 	if(isset($_POST['free_stand_time_use'])) {
 
- 		$query = "SELECT date FROM transaction_log WHERE sold_to=" . $_POST['contact_id'] . 
+ 		$query = "SELECT date, DATE_ADD(date, INTERVAL " . $free_stand_time_period . " DAY) AS free_stand_time_period " .
+ 					"FROM transaction_log WHERE sold_to=" . $_POST['contact_id'] . 
 					" AND transaction_type='Bicycles';"; 				
-		$sql = mysql_query($query, $YBDB) or die(mysql_error());			
-
-		$results['free_stand_time_period'] = $free_stand_time_period;	
+		$sql = mysql_query($query, $YBDB) or die(mysql_error());	
+	
+		// return all bicycle transactions
 		while ( $result = mysql_fetch_assoc($sql) ) {	
 			$results[] = $result;				
 		}	

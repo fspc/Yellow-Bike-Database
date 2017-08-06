@@ -749,7 +749,7 @@ $(function() {
 		//var check_number = $("#check_number").on("input");
 		
 		// hardwire label for Stand Time
-		if ( $("#trans_type_info").text() === "Stand Time" ) {
+		if ( $("#transaction_type").val() === "Stand Time" ) {
 			$("#paid_label").text("Amount Owed:");
 		}
 
@@ -767,7 +767,7 @@ $(function() {
 			var obj = $.parseJSON(data);
 					
 			// Volunteer benefits
-			if ( obj.transactions_with_volunteer_benefits[$("#trans_type_info").text()] === true ) {
+			if ( obj.transactions_with_volunteer_benefits[$("#transaction_type").val()] === true ) {
 				$.post("json/transaction.php",{ history_select: 1, transaction_id: transaction_id }, function(data) {	
 					if (data !== "First Transaction") {				
 						var obj = $.parseJSON(data);
@@ -843,7 +843,7 @@ $(function() {
 				}); // membership post
 
 				// Stand Time	- if a paid member, nothing is owed
-				if ( $("#trans_type_info").text() === "Stand Time" ) {
+				if ( $("#transaction_type").val() === "Stand Time" ) {
 					$.post("json/transaction.php", { stand_time: 1, contact_id: this.value, shop_id: shop_id }, function (data) {
 						if (data) {
 							var obj = $.parseJSON(data);
@@ -972,7 +972,7 @@ $(function() {
 						var obj = $.parseJSON(data);
 						
 						// Volunteer benefits
-						if ( obj.transactions_with_volunteer_benefits[$("#trans_type_info").text()] === true ) {
+						if ( obj.transactions_with_volunteer_benefits[$("#transaction_type").val()] === true ) {
 							if ($("#redeemable_hours").data("ui-spinner")) 
 								$("#redeemable_hours").spinner("enable");
 						} else {
@@ -988,15 +988,15 @@ $(function() {
 					});					
 					
 					// control spinner behavior of  transaction_type "Stand Time"						
-					if ($("#trans_type_info").text() === "Stand Time" && $("#stand_time_total").is(":empty")) {
+					if ($("#transaction_type").val() === "Stand Time" && $("#stand_time_total").is(":empty")) {
 						$("#redeemable_hours").spinner("disable");
-					} else if ($("#trans_type_info").text() === "Stand Time") {
+					} else if ($("#transaction_type").val() === "Stand Time") {
 						if ($("#redeemable_hours").data("ui-spinner")) 
 							$("#redeemable_hours").spinner("enable");
 					}		
 					
 					// more than max_bike_limit turn off spinner	
-					if ($("#trans_type_info").text() === "Bicycles") { 
+					if ($("#transaction_type").val() === "Bicycles") { 
 						if (volunteer && obj.max_bike_earned) {						
 							if (volunteer[year].max_bike_earned >= obj.max_bike_earned) {
 								$("#redeemable_hours").spinner("disable");
@@ -1009,10 +1009,28 @@ $(function() {
 				}); // volunteers post
 				
 				// Free stand time use for 30 days if purchased bike recently
-				$.post("json/transaction.php",{ free_stand_time_use: 1, contact_id: this.value }, function(data) {
-					
-				});
-					
+				if ($("#transaction_type").val() === "Stand Time") {
+					$.post("json/transaction.php",{ free_stand_time_use: 1, contact_id: this.value }, function(data) {
+						var obj = $.parseJSON(data);
+						if (obj) {
+							var most_recent_bike_purchase = obj[obj.length -1];
+							console.log(most_recent_bike_purchase);
+							var now = new Date();
+							var end = new Date(most_recent_bike_purchase.free_stand_time_period);
+							if ( now.getTime() <= end.getTime() ) {
+								console.log("Free Stand Time is still good");
+								if ($("#redeemable_hours").data("ui-spinner")) { 
+									$("#redeemable_hours").spinner("disable");
+								}
+								amount.val("");	
+								$("#stand_time_total").empty();				
+							} else if ( now.getTime() > end.getTime() ) {
+								console.log("Free Stand Time is now over");
+								
+							}
+						}
+					});
+				}
 			
 			} // if not no_selection		
 		
@@ -1066,7 +1084,7 @@ $(function() {
 					
 				// Don't require paid to be selected, only amount >= 0	
 				var max_bike_earned = 0, maximum_allowable_earned_bikes;
-				if ($("#trans_type_info").text() === "Bicycles") {
+				if ($("#transaction_type").val() === "Bicycles") {
 					// hours were redeemed and this is a Bicycle transaction
 					if (vhr !== "0.00") {
 						max_bike_earned = 1;
