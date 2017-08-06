@@ -649,7 +649,7 @@ $(function() {
 		if (price >= redeemable_value) {
 			
 			// discount is now applied if transaction is over special_volunteer_hours_qualification
-			if (redeemable_value > obj.sweat_equity_limit) {	
+			if (redeemable_value > obj.sweat_equity_limit && $("#transaction_type").val() !== "Stand Time") {	
 				
 				var value_to_apply_discount, difference, hours_applied_with_value;
 
@@ -779,7 +779,8 @@ $(function() {
 							$("#volunteer_hours").text(history.redeemed_hours).show();
 						}
 					}
-				});
+				});			
+				
 			} 		
 			
 		}); // show original price
