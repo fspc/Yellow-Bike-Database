@@ -44,10 +44,16 @@ define("PURCHASED_MEMBERSHIP_DAYS",365);
 STAND TIME
 **********/
 // Determines the behaviour of Stand Time (transaction_type_id)
-define("STAND_TIME_HOURLY_RATE",10);
+define("STAND_TIME_HOURLY_RATE",10);  // IN DOLLARS
 
 // Define how much time over 1hr is allowed before charging for the next hour.
-define("STAND_TIME_GRACE_PERIOD",15);
+define("STAND_TIME_GRACE_PERIOD",15); // IN MINUTES 1 - 59
+
+// Define hourly cost for stand time
+define("STAND_TIME_VALUE",10);        // IN DOLLARS
+
+// Define how many free days of stand time are allotted after purchase of a bike
+define("FREE_STAND_TIME_PERIOD",30);  // IN DAYS
 
 /********************************
 SWEAT EQUITY / VOLUNTEER BENEFITS
@@ -69,13 +75,12 @@ May add capability to adjust limits based on status, but that can get complex if
 (Sweat Equity / Volunteer Benefits can't be combined with Membership Benefits.)
 
 */
-define("SWEAT_EQUITY_LIMIT",100);
-define("MAX_BIKE_EARNED",1);
-define("VOLUNTEER_HOUR_VALUE",8);
-define("STAND_TIME_VALUE",10);
-define("VOLUNTEER_DISCOUNT",25);
-define("SPECIAL_VOLUNTEER_HOURS_QUALIFICATION",100);
-define("SPECIAL_VOLUNTEER_DISCOUNT",50);
+define("SWEAT_EQUITY_LIMIT",100);     // IN DOLLARS
+define("MAX_BIKE_EARNED",1);          // AMOUNT OF BIKES
+define("VOLUNTEER_HOUR_VALUE",8);	  // IN DOLLARS
+define("VOLUNTEER_DISCOUNT",25);      // PERCENTAGE
+define("SPECIAL_VOLUNTEER_HOURS_QUALIFICATION",100);  // IN HOURS
+define("SPECIAL_VOLUNTEER_DISCOUNT",50);              // PERCENTAGE
 
 // Determines the behaviour of Bicycles (transaction_type_id) for volunteer to earn-a-bike purchases
 define("EARN_A_BIKE_LIMIT",1);
