@@ -1002,10 +1002,17 @@ $(function() {
 								$("#redeemable_hours").spinner("disable");
 							}
 						}								
-					}						
+					}	
+					
+										
 									
 				}); // volunteers post
 				
+				// Free stand time use for 30 days if purchased bike recently
+				$.post("json/transaction.php",{ free_stand_time_use: 1, contact_id: this.value }, function(data) {
+					
+				});
+					
 			
 			} // if not no_selection		
 		

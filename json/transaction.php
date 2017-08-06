@@ -4,7 +4,6 @@ require_once('../Connections/database_functions.php');
 require_once('../Connections/YBDB.php');
 mysql_select_db($database_YBDB, $YBDB);
 
-
 /*
 require_once('../php-console/src/PhpConsole/__autoload.php');
 $handler = PhpConsole\Handler::getInstance();
@@ -15,6 +14,8 @@ $change_fund = CHANGE_FUND;
 $csv_directory = CSV_DIRECTORY;
 $stand_time_hourly_rate = STAND_TIME_HOURLY_RATE;
 $stand_time_grace_period = STAND_TIME_GRACE_PERIOD;
+$stand_time_value = STAND_TIME_VALUE;
+$free_stand_time_period = FREE_STAND_TIME_PERIOD;
 $timezone = TIMEZONE;
 $sweat_equity_limit = SWEAT_EQUITY_LIMIT;
 $max_bike_earned = MAX_BIKE_EARNED;
@@ -22,7 +23,7 @@ $volunteer_hour_value = VOLUNTEER_HOUR_VALUE;
 $volunteer_discount = VOLUNTEER_DISCOUNT;
 $special_volunteer_hours_qualification = SPECIAL_VOLUNTEER_HOURS_QUALIFICATION;
 $special_volunteer_discount = SPECIAL_VOLUNTEER_DISCOUNT;
-$stand_time_value = STAND_TIME_VALUE;
+
 
 	// Is there a current shop?
 	if(isset($_POST['shop_exist'])) {
@@ -93,7 +94,7 @@ $stand_time_value = STAND_TIME_VALUE;
 		 echo json_encode($result);		
 	}
 
-	// Membership Benefits
+	// Membership Benefits - send contact_id
 	if (isset($_POST['membership_benefits'])) {
 		
 		echo json_encode(membership_benefits($_POST['contact_id']));
@@ -172,6 +173,15 @@ $stand_time_value = STAND_TIME_VALUE;
 		
 	} // end transaction_benefits
 
+
+	// Maximum Bikes that can be earned
+	if (isset($_POST['max_bike_earned'])) {
+		
+		$result = ["max_bike_earned" => $max_bike_earned];
+		echo json_encode($result);
+		
+	} // end Maximum Bikes that can be earned	
+
 	// Stand Time
 	if (isset($_POST['stand_time'])) {
 		
@@ -249,6 +259,22 @@ $stand_time_value = STAND_TIME_VALUE;
 
 	} // Stand Time
 	
+	// Free Stand Time use 
+	if(isset($_POST['free_stand_time_use'])) {
+
+ 		$query = "SELECT date FROM transaction_log WHERE sold_to=" . $_POST['contact_id'] . 
+					" AND transaction_type='Bicycles';"; 				
+		$sql = mysql_query($query, $YBDB) or die(mysql_error());			
+
+		$results['free_stand_time_period'] = $free_stand_time_period;	
+		while ( $result = mysql_fetch_assoc($sql) ) {	
+			$results[] = $result;				
+		}	
+			
+		echo json_encode($results);
+
+	} // end free stand time use
+	
 	// Anonymous transaction - save and communicate back settings
 	if(isset($_POST['anonymous'])) {
 		
@@ -264,7 +290,7 @@ $stand_time_value = STAND_TIME_VALUE;
 	
 	} 
 
-	// Volunteer history - fetch history
+	// Volunteer history - fetch history .. 
 	if(isset($_POST['volunteer_history_select'])) {
 		$query = 'SELECT volunteer FROM contacts WHERE contact_id="' . $_POST['contact_id'] . '";';
 		$sql = mysql_query($query, $YBDB) or die(mysql_error());	
