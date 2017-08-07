@@ -23,6 +23,7 @@ $volunteer_hour_value = VOLUNTEER_HOUR_VALUE;
 $volunteer_discount = VOLUNTEER_DISCOUNT;
 $special_volunteer_hours_qualification = SPECIAL_VOLUNTEER_HOURS_QUALIFICATION;
 $special_volunteer_discount = SPECIAL_VOLUNTEER_DISCOUNT;
+$membership_discount = MEMBERSHIP_DISCOUNT;
 
 
 	// Is there a current shop?
@@ -97,7 +98,7 @@ $special_volunteer_discount = SPECIAL_VOLUNTEER_DISCOUNT;
 	// Membership Benefits - send contact_id
 	if (isset($_POST['membership_benefits'])) {
 		
-		echo json_encode(membership_benefits($_POST['contact_id']));
+		echo json_encode(membership_benefits($_POST['contact_id'], $membership_discount));
 
 	} // Membership Benefits
 	
@@ -658,7 +659,7 @@ $special_volunteer_discount = SPECIAL_VOLUNTEER_DISCOUNT;
 
 	} // End Deposit Calculator
 	
-	function membership_benefits($contact_id) {
+	function membership_benefits($contact_id, $membership_discount) {
 		
 	global $database_YBDB, $YBDB;
 	mysql_select_db($database_YBDB, $YBDB);
@@ -674,6 +675,7 @@ $special_volunteer_discount = SPECIAL_VOLUNTEER_DISCOUNT;
 		
 	 $sql = mysql_query($query, $YBDB) or die(mysql_error());
 	 $result = mysql_fetch_assoc($sql);
+	 $result['membership_discount'] = $membership_discount;
 	 return $result;
 	
 	} // end membership_benefits
