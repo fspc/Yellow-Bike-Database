@@ -699,6 +699,8 @@ $(function() {
 		
 	} // end function redeemable 
 
+	
+
 	// editing a transaction
 	if ( $("input[name='shop_id']").length ) {
 	
@@ -805,11 +807,10 @@ $(function() {
 			$("#redeemable_hours").val(0);		
 		});	
 
-		
-		sold_to.change(function() { 		
+		sold_to.change(function() { 					
 			
 			if (this.value !== "no_selection") {
-				var expiration_date;				
+				var expiration_date;										
 				
 				// Is this a paid member?	
 				$.post("json/transaction.php", { membership_benefits: 1, contact_id: this.value }, function (data) { 
@@ -819,39 +820,56 @@ $(function() {
 											obj.email + "\r\n" +
 											obj.phone + "\r\n" +
 											"expiration: " + obj.expiration_date;
+											
+					$("#membership_discount").empty();
+					amount.val("");
 					
 					if (typeof obj.expiration_date && obj.expiration_date !== undefined) {
+
 						var exp = obj.expiration_date;
 						expiration_date = new Date(exp.split("-").toString());	
-						if (d >= expiration_date) {
+						if (d >= expiration_date) {								
+							amount.on("input", function () {					
+								$("#membership_discount").empty();							
+							});					
 							if ($("#expired_membership").length === 1) {
 								$("#expired_membership").prop("title",title).html("Expired Membership");
 							} else {
 								$("#paid_member").prop("id","expired_membership").prop("title",title).html("Expired Membership");				
 							}
-						
+					
 						// paid membership
 						} else if (d < expiration_date) {
+
 							if ($("#paid_member").length === 1) {
+															
 								$("#paid_member").prop("title",title).html("Paid Member");
-								amount.on("input", function (event) {
-						
+								amount.on("input", function () {				
 									var discount = (price * (obj.membership_discount / 100).toFixed(2)).toFixed(2);
 									var discount_price = (price - discount).toFixed(2);
-									//console.log("original " + price + " discount " + discount + " discounted " + discount_price);			
-									$("#original_price").text("Member pays $" + discount_price).show();
-	
-								});
+									console.log("original " + price + " discount " + discount + " discounted " + discount_price);			
+									$("#membership_discount").text("Member pays $" + discount_price).show();								
+								});					
+								
 							} else {
-								$("#expired_membership").prop("id","paid_member").prop("title",title).html("Paid Member");				
+								$("#expired_membership").prop("id","paid_member").prop("title",title).html("Paid Member");
+								amount.on("input", function () {				
+									var discount = (price * (obj.membership_discount / 100).toFixed(2)).toFixed(2);
+									var discount_price = (price - discount).toFixed(2);
+									console.log("original " + price + " discount " + discount + " discounted " + discount_price);			
+									$("#membership_discount").text("Member pays $" + discount_price).show();								
+								});												
 							}
 						}							
-					} else { 
-							if ($("#paid_member").length === 1) {
-								$("#paid_member").empty();
-							} else {
-								$("#expired_membership").empty();
-							}			
+					} else {
+						amount.on("input", function () {					
+							$("#membership_discount").empty();							
+						});
+						if ($("#paid_member").length === 1) {
+							$("#paid_member").empty();
+						} else {
+							$("#expired_membership").empty();
+						}			
 					}
 				}); // end Is this a paid member
 
