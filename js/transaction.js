@@ -807,7 +807,7 @@ $(function() {
 			$("#redeemable_hours").val(0);		
 		});	
 
-		
+
 		// membership transaction?
 		var membership_transaction = false, membership_transaction_obj;
 		$.post("json/transaction.php", { transaction_benefits: 1 }, function (data) {
@@ -840,7 +840,7 @@ $(function() {
 						var exp = obj.expiration_date;
 						expiration_date = new Date(exp.split("-").toString());	
 						if (d >= expiration_date) {								
-							amount.one("input", function () {					
+							amount.on("input", function () {					
 								$("#membership_discount").empty();							
 							});					
 							if ($("#expired_membership").length === 1) {
@@ -858,7 +858,7 @@ $(function() {
 								amount.on("input", function () {				
 									var discount = (price * (obj.membership_discount / 100).toFixed(2)).toFixed(2);
 									var discount_price = (price - discount).toFixed(2);
-									console.log("original " + price + " discount " + discount + " discounted " + discount_price);			
+									//console.log("original " + price + " discount " + discount + " discounted " + discount_price);			
 									$("#membership_discount").text("Member pays $" + discount_price).show();								
 								});					
 								
@@ -867,13 +867,13 @@ $(function() {
 								amount.on("input", function () {				
 									var discount = (price * (obj.membership_discount / 100).toFixed(2)).toFixed(2);
 									var discount_price = (price - discount).toFixed(2);
-									console.log("original " + price + " discount " + discount + " discounted " + discount_price);			
+									//console.log("original " + price + " discount " + discount + " discounted " + discount_price);			
 									$("#membership_discount").text("Member pays $" + discount_price).show();								
 								});												
 							}
 						}							
 					} else {
-						amount.one("input", function () {					
+						amount.on("input", function () {					
 							$("#membership_discount").empty();							
 						});
 						if ($("#paid_member").length === 1) {
@@ -909,7 +909,7 @@ $(function() {
 				} else {
 					price = amount.cleanVal();
 				}
-				console.log("original " + price);
+				//console.log("original " + price);
 				$("#original_price").text(price);	
 								
 				// How many hours does this volunteer have?
@@ -986,9 +986,9 @@ $(function() {
 							 	} else {
 							 		// in some cases this is 1 if value is greater than price like 16 * 8 = 128 > 120
 							 		spinner_value = $(this).spinner("value"); 
-							 		console.log("weird " + spinner_value);
+							 		//console.log("weird " + spinner_value);
 							 	}
-							 	console.log("spinner value " + spinner_value);				
+							 	//console.log("spinner value " + spinner_value);				
 						
 								// function redeemable(obj, spinner_value)
 								if (max > 0 || max === undefined) {
