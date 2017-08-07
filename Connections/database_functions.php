@@ -40,6 +40,9 @@ define("MEMBERSHIP_DAYS",2);
 // Define how long a patron remains a member if they purchase a membership.
 define("PURCHASED_MEMBERSHIP_DAYS",365);
 
+// Define discount for paid members (applies when volunteer benefits do not)
+define("MEMBERSHIP_DISCOUNT",10);      // PERCENTAGE
+
 /*********
 STAND TIME
 **********/
