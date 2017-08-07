@@ -829,7 +829,7 @@ $(function() {
 						var exp = obj.expiration_date;
 						expiration_date = new Date(exp.split("-").toString());	
 						if (d >= expiration_date) {								
-							amount.on("input", function () {					
+							amount.one("input", function () {					
 								$("#membership_discount").empty();							
 							});					
 							if ($("#expired_membership").length === 1) {
@@ -862,7 +862,7 @@ $(function() {
 							}
 						}							
 					} else {
-						amount.on("input", function () {					
+						amount.one("input", function () {					
 							$("#membership_discount").empty();							
 						});
 						if ($("#paid_member").length === 1) {
