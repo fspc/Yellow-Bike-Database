@@ -507,6 +507,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 			  	<span id="payment_error"></span>
 			  	<span id="stand_time_total"></span>
 			  	<span id="original_price"></span>
+			  	<span id="membership_discount"></span>
 			  	</td>
 			  </tr>
 			  <?php } // end show_amount ?>		  	  
