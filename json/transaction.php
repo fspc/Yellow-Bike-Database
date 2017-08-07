@@ -251,9 +251,7 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 	
 			$total = $stand_time * $stand_time_hourly_rate;	
 			$stand_time_array = array("total" => $total, "hours" => $hours, "minutes" => $minutes, "answer" => $answer);
-			if(membership_benefits($_POST['contact_id'])) {
-				$stand_time_array["membership"] = true;
-			}
+
 			echo json_encode($stand_time_array);		 
 		 
 		} // end if time_ins
@@ -661,22 +659,22 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 	
 	function membership_benefits($contact_id, $membership_discount) {
 		
-	global $database_YBDB, $YBDB;
-	mysql_select_db($database_YBDB, $YBDB);
-	
-	$query = "SELECT contacts.contact_id,  CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name,
-				CONCAT(first_name, ' ', last_name) AS normal_full_name, contacts.email AS email, contacts.phone AS phone,  
-				transaction_log.date AS membership_start, SUBSTRING_INDEX(DATE_ADD(date, INTERVAL 365 DAY), ' ', 1) AS expiration_date 
-				FROM transaction_log  LEFT JOIN contacts ON transaction_log.sold_to = contacts.contact_id  
-				WHERE SUBSTRING_INDEX(date, ' ', 1) <= DATE_ADD(date, INTERVAL 365 DAY)  
-				AND (transaction_type='Memberships' AND paid=1) AND contact_id=" .
-				$contact_id . 
-				" ORDER by membership_start DESC;";		
+		global $database_YBDB, $YBDB;
+		mysql_select_db($database_YBDB, $YBDB);
 		
-	 $sql = mysql_query($query, $YBDB) or die(mysql_error());
-	 $result = mysql_fetch_assoc($sql);
-	 $result['membership_discount'] = $membership_discount;
-	 return $result;
+		$query = "SELECT contacts.contact_id,  CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name,
+					CONCAT(first_name, ' ', last_name) AS normal_full_name, contacts.email AS email, contacts.phone AS phone,  
+					transaction_log.date AS membership_start, SUBSTRING_INDEX(DATE_ADD(date, INTERVAL 365 DAY), ' ', 1) AS expiration_date 
+					FROM transaction_log  LEFT JOIN contacts ON transaction_log.sold_to = contacts.contact_id  
+					WHERE SUBSTRING_INDEX(date, ' ', 1) <= DATE_ADD(date, INTERVAL 365 DAY)  
+					AND (transaction_type='Memberships' AND paid=1) AND contact_id=" .
+					$contact_id . 
+					" ORDER by membership_start DESC;";		
+			
+		 $sql = mysql_query($query, $YBDB) or die(mysql_error());
+		 $result = mysql_fetch_assoc($sql);
+		 $result['membership_discount'] = $membership_discount;
+		 return $result;
 	
 	} // end membership_benefits
 
