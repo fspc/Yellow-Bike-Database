@@ -783,7 +783,7 @@ $(function() {
 					}
 				});			
 				
-			} 		
+			} // end Volunteer benefits		
 			
 		}); // show original price
 
@@ -807,12 +807,23 @@ $(function() {
 			$("#redeemable_hours").val(0);		
 		});	
 
+		
+		// membership transaction?
+		var membership_transaction = false, membership_transaction_obj;
+		$.post("json/transaction.php", { transaction_benefits: 1 }, function (data) {
+	   	membership_transaction_obj = $.parseJSON(data);
+	   	if ( membership_transaction_obj.transactions_with_membership_benefits[$("#transaction_type").val()] === true ) {
+				membership_transaction = true;
+			}
+		}); // membership transaction?
+
 		sold_to.change(function() { 					
 			
 			if (this.value !== "no_selection") {
 				var expiration_date;										
 				
 				// Is this a paid member?	
+				// Determine membership benefits of current transaction
 				$.post("json/transaction.php", { membership_benefits: 1, contact_id: this.value }, function (data) { 
 												
 					var obj = $.parseJSON(data);
@@ -1021,9 +1032,15 @@ $(function() {
 						}
 						
 						// Membership benefits
-						for (var n in obj.transactions_with_membership_benefits) {
-							//console.log(obj.transactions_with_volunteer_benefits[n]);
-						}						
+						/*						
+						if ( obj.transactions_with_membership_benefits[$("#transaction_type").val()] === true ) {
+							if ($("#redeemable_hours").data("ui-spinner")) 
+								
+						} else {
+							if ($("#redeemable_hours").data("ui-spinner")) 
+															
+						}
+						*/
 						
 					});					
 					
