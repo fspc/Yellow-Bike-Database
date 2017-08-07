@@ -96,7 +96,8 @@ $transactions_with_volunteer_benefits = array( 	"Bicycles" => true,
 															);
 
 // Volunteer benefits take priority over membership benefits if patron qualifies for both															
-$transactions_with_membership_benefits = array( "Used Parts" => true,
+$transactions_with_membership_benefits = array( "Stand Time" => true,
+																"Used Parts" => true,
 																"New Parts" => true,
 																"Helmets" => true,
 																"Cargo Related" => true,
