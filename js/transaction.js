@@ -819,6 +819,7 @@ $(function() {
 
 		sold_to.change(function() { 					
 			
+			var membership_obj; //reuse this object
 			if (this.value !== "no_selection") {
 				var expiration_date;										
 				
@@ -826,79 +827,109 @@ $(function() {
 				// Determine membership benefits of current transaction
 				$.post("json/transaction.php", { membership_benefits: 1, contact_id: this.value }, function (data) { 
 												
-					var obj = $.parseJSON(data);
-					var title = obj.normal_full_name + "\r\n" +
-											obj.email + "\r\n" +
-											obj.phone + "\r\n" +
-											"expiration: " + obj.expiration_date;
+					membership_obj = $.parseJSON(data);
+					var title = membership_obj.normal_full_name + "\r\n" +
+											membership_obj.email + "\r\n" +
+											membership_obj.phone + "\r\n" +
+											"expiration: " + membership_obj.expiration_date;
 											
 					$("#membership_discount").empty();
 					amount.val("");
 					
-					if (typeof obj.expiration_date && obj.expiration_date !== undefined) {
-
-						var exp = obj.expiration_date;
-						expiration_date = new Date(exp.split("-").toString());	
-						if (d >= expiration_date) {								
+					if (membership_transaction === true) { // if membership transaction
+						if (typeof membership_obj.expiration_date && membership_obj.expiration_date !== undefined) {
+	
+							var exp = membership_obj.expiration_date;
+							expiration_date = new Date(exp.split("-").toString());	
+							if (d >= expiration_date) {								
+								amount.on("input", function () {					
+									$("#membership_discount").empty();							
+								});					
+								if ($("#expired_membership").length === 1) {
+									$("#expired_membership").prop("title",title).html("Expired Membership");
+								} else {
+									$("#paid_member").prop("id","expired_membership").prop("title",title).html("Expired Membership");				
+								}
+						
+							// paid membership
+							} else if (d < expiration_date) {
+	
+								if ($("#paid_member").length === 1) {							
+									$("#paid_member").prop("title",title).html("Paid Member");
+									amount.on("input", function () {				
+										var discount = (price * (membership_obj.membership_discount / 100).toFixed(2)).toFixed(2);
+										var discount_price = (price - discount).toFixed(2);
+										//console.log("original " + price + " discount " + discount + " discounted " + discount_price);		
+										if ( $("#transaction_type").val() !== "Stand Time" ) {
+											$("#membership_discount").text("Member pays $" + discount_price).show();
+										} else {
+											$("#membership_discount").empty();
+										}					
+									});					
+								} else {
+									$("#expired_membership").prop("id","paid_member").prop("title",title).html("Paid Member");
+									amount.on("input", function () {				
+										var discount = (price * (membership_obj.membership_discount / 100).toFixed(2)).toFixed(2);
+										var discount_price = (price - discount).toFixed(2);
+										//console.log("original " + price + " discount " + discount + " discounted " + discount_price);			
+										if ( $("#transaction_type").val() !== "Stand Time" ) {
+											$("#membership_discount").text("Member pays $" + discount_price).show();
+										} else {
+											$("#membership_discount").empty();
+										}								
+									});												
+								}
+							}							
+						} else {
 							amount.on("input", function () {					
 								$("#membership_discount").empty();							
-							});					
-							if ($("#expired_membership").length === 1) {
-								$("#expired_membership").prop("title",title).html("Expired Membership");
-							} else {
-								$("#paid_member").prop("id","expired_membership").prop("title",title).html("Expired Membership");				
-							}
-					
-						// paid membership
-						} else if (d < expiration_date) {
-
+							});
 							if ($("#paid_member").length === 1) {
-															
-								$("#paid_member").prop("title",title).html("Paid Member");
-								amount.on("input", function () {				
-									var discount = (price * (obj.membership_discount / 100).toFixed(2)).toFixed(2);
-									var discount_price = (price - discount).toFixed(2);
-									//console.log("original " + price + " discount " + discount + " discounted " + discount_price);			
-									$("#membership_discount").text("Member pays $" + discount_price).show();								
-								});					
-								
+								$("#paid_member").empty();
 							} else {
-								$("#expired_membership").prop("id","paid_member").prop("title",title).html("Paid Member");
-								amount.on("input", function () {				
-									var discount = (price * (obj.membership_discount / 100).toFixed(2)).toFixed(2);
-									var discount_price = (price - discount).toFixed(2);
-									//console.log("original " + price + " discount " + discount + " discounted " + discount_price);			
-									$("#membership_discount").text("Member pays $" + discount_price).show();								
-								});												
-							}
-						}							
-					} else {
-						amount.on("input", function () {					
-							$("#membership_discount").empty();							
-						});
-						if ($("#paid_member").length === 1) {
-							$("#paid_member").empty();
-						} else {
-							$("#expired_membership").empty();
-						}			
-					}
+								$("#expired_membership").empty();
+							}			
+						}
+					} // if membership transaction
 				}); // end Is this a paid member
 
 				// Stand Time	- if a paid member, nothing is owed
 				if ( $("#transaction_type").val() === "Stand Time" ) {
-					$.post("json/transaction.php", { stand_time: 1, contact_id: this.value, shop_id: shop_id }, function (data) {
+					$.post("json/transaction.php", { stand_time: 1, contact_id: this.value, shop_id: shop_id }, function (data) {		
+						$("#stand_time_total").empty();
 						if (data) {
 							var obj = $.parseJSON(data);
+							var current_membership, expiration_date;
 							amount.val("");
-							if(!obj.membership || expiration_date) {					
-								amount.val(obj.total + ".00"); // should improve this for amount values with digits
-								price = obj.total;
+							if (membership_obj.expiration_date) {
+								var exp = membership_obj.expiration_date;
+								var expiration_date = new Date(exp.split("-").toString());
+								if (d >= expiration_date) {							
+									current_membership = false;
+								} else if (d < expiration_date) {
+									current_membership = true;
+								}
+							} else {
+								current_membership = false;
+							}	
+				
+							// transaction has membership benefits
+							if (membership_transaction) {
+								amount.val("");	
+								$("#stand_time_total").empty();
+								$(".ui-spinner").hide();
+							
+								// not a member or an expired membership						
+								if(current_membership === false) {	
+									amount.val(obj.total + ".00"); // should improve this for amount values with digits
+									price = obj.total;
+									$("#stand_time_total").text(obj.hours + " hours " + obj.minutes + " minutes");
+								}						
+							} else {
+								amount.val(data);	
+								$("#stand_time_total").empty();
+								$(".ui-spinner").hide();
 							}
-							$("#stand_time_total").text(obj.hours + " hours " + obj.minutes + " minutes");
-						} else {
-							amount.val(data);	
-							$("#stand_time_total").empty();
-							$(".ui-spinner").hide();
 						}
 					}); // stand time pos		
 				}				
@@ -1031,22 +1062,12 @@ $(function() {
 								$("#redeemable_hours").spinner("disable");							
 						}
 						
-						// Membership benefits
-						/*						
-						if ( obj.transactions_with_membership_benefits[$("#transaction_type").val()] === true ) {
-							if ($("#redeemable_hours").data("ui-spinner")) 
-								
-						} else {
-							if ($("#redeemable_hours").data("ui-spinner")) 
-															
-						}
-						*/
-						
 					});					
 					
 					// control spinner behavior of  transaction_type "Stand Time"						
 					if ($("#transaction_type").val() === "Stand Time" && $("#stand_time_total").is(":empty")) {
-						$("#redeemable_hours").spinner("disable");
+						if ($("#redeemable_hours").data("ui-spinner")) 						
+							$("#redeemable_hours").spinner("disable");
 					} else if ($("#transaction_type").val() === "Stand Time") {
 						if ($("#redeemable_hours").data("ui-spinner")) 
 							$("#redeemable_hours").spinner("enable");
@@ -1069,11 +1090,11 @@ $(function() {
 						var obj = $.parseJSON(data);
 						if (obj) {
 							var most_recent_bike_purchase = obj[obj.length -1];
-							console.log(most_recent_bike_purchase);
+							//console.log(most_recent_bike_purchase);
 							var now = new Date();
 							var end = new Date(most_recent_bike_purchase.free_stand_time_period);
 							if ( now.getTime() <= end.getTime() ) {
-								console.log("Free Stand Time is still good");
+								//console.log("Free Stand Time is still good");
 								if ($("#redeemable_hours").data("ui-spinner")) { 
 									$("#redeemable_hours").spinner("disable");
 								}
@@ -1082,7 +1103,7 @@ $(function() {
 									$("#stand_time_total").text("Free Stand Time is good until " + end.toDateString());
 								}				
 							} else if ( now.getTime() > end.getTime() ) {
-								console.log("Free Stand Time is now over");
+								//console.log("Free Stand Time is now over");
 								
 							}
 						} // end Free stand time
