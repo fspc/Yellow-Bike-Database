@@ -350,6 +350,13 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 		}
 	}
 
+	// Update transaction_log transaction amount when membership discount used
+	if(isset($_POST['discount_update'])) { 
+		$query = "UPDATE transaction_log SET amount=" . $_POST['price'] .  
+					' WHERE transaction_id="' . $_POST['transaction_id'] . '";';
+		$result = mysql_query($query, $YBDB) or die(mysql_error());		
+	}
+
 	// Check for most recent transaction_id if transaction_id has changed
 	if(isset($_POST['most_recent_transaction_id'])) {
 		$query = 'SELECT MAX(transaction_id) as transaction_id FROM transaction_log;';

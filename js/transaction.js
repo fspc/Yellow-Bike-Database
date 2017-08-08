@@ -834,6 +834,7 @@ $(function() {
 											"expiration: " + membership_obj.expiration_date;
 											
 					$("#membership_discount").empty();
+					$("#membership_discount_price").empty();
 					amount.val("");
 					
 					if (membership_transaction === true) { // if membership transaction
@@ -843,7 +844,8 @@ $(function() {
 							expiration_date = new Date(exp.split("-").toString());	
 							if (d >= expiration_date) {								
 								amount.on("input", function () {					
-									$("#membership_discount").empty();							
+									$("#membership_discount").empty();
+									$("#membership_discount_price").empty();							
 								});					
 								if ($("#expired_membership").length === 1) {
 									$("#expired_membership").prop("title",title).html("Expired Membership");
@@ -862,8 +864,10 @@ $(function() {
 										//console.log("original " + price + " discount " + discount + " discounted " + discount_price);		
 										if ( $("#transaction_type").val() !== "Stand Time" ) {
 											$("#membership_discount").text("Member pays $" + discount_price).show();
+											$("#membership_discount_price").text(discount_price);
 										} else {
 											$("#membership_discount").empty();
+											$("#membership_discount_price").empty();
 										}					
 									});					
 								} else {
@@ -874,15 +878,18 @@ $(function() {
 										//console.log("original " + price + " discount " + discount + " discounted " + discount_price);			
 										if ( $("#transaction_type").val() !== "Stand Time" ) {
 											$("#membership_discount").text("Member pays $" + discount_price).show();
+											$("#membership_discount_price").text(discount_price);
 										} else {
 											$("#membership_discount").empty();
+											$("#membership_discount_price").empty();
 										}								
 									});												
 								}
 							}							
 						} else {
 							amount.on("input", function () {					
-								$("#membership_discount").empty();							
+								$("#membership_discount").empty();
+								$("#membership_discount_price").empty();							
 							});
 							if ($("#paid_member").length === 1) {
 								$("#paid_member").empty();
@@ -985,14 +992,17 @@ $(function() {
 										//console.log("original " + price + " discount " + discount + " discounted " + discount_price);		
 										if ( $("#transaction_type").val() !== "Stand Time" ) {
 											$("#membership_discount").text("Member pays $" + discount_price).show();
+											$("#membership_discount_price").text(discount_price);
 										} else {
 											$("#membership_discount").empty();
+											$("#membership_discount_price").empty();
 										}					
 								});						
 						// turn off membership discount
 						} else {	
 							amount.on("input", function () {					
-								$("#membership_discount").empty();							
+								$("#membership_discount").empty();
+								$("#membership_discount_price").empty();							
 							});						
 						}		
 												
@@ -1278,14 +1288,28 @@ $(function() {
 				} else {
 					rh = parseFloat($("#redeemable_hours").val());
 				}
+
+				// handle history for membership discount price
+				var price, original_price;				
+				if ($("#membership_discount_price").text()) {
+					price = $("#membership_discount_price").text();
+					original_price = $("#amount").val();
+					$("#amount").val(price);
+					// update database to reflect change .. hopefully
+					$.post("json/transaction.php",{discount_update: 1, transaction_id: transaction_id, price: price });
+				} else {
+					price = $("#amount").val();
+					original_price = $("#original_price").text();
+				}
+				
 				var current_transaction =
 								{   			
 										transaction_id: transaction_id,
 										date_startstorage: $("#date_startstorage").val(),
 										date: date,
 										transaction_type: $("#transaction_type").val(),
-										original_price: $("#original_price").text(),
-										amount: $("#amount").val(),
+										original_price: original_price,
+										amount: price,
 										redeemed_hours: rh || parseFloat($("#volunteer_hours").text()),
 										description: $("#description").val(), 
 										sold_to: sold_to,
