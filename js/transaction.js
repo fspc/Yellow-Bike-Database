@@ -767,6 +767,7 @@ $(function() {
 		$.post("json/transaction.php", { transaction_benefits: 1 }, function (data) {
 			
 			var obj = $.parseJSON(data);
+			$("#original_price").empty();
 					
 			// Volunteer benefits
 			if ( obj.transactions_with_volunteer_benefits[$("#transaction_type").val()] === true ) {
@@ -783,7 +784,25 @@ $(function() {
 					}
 				});			
 				
-			} // end Volunteer benefits		
+			} // end Volunteer benefits
+			
+			// Membership benefits
+			if ( obj.transactions_with_membership_benefits[$("#transaction_type").val()] === true ) {
+				$.post("json/transaction.php",{ history_select: 1, transaction_id: transaction_id }, function(data) {	
+					if (data !== "First Transaction") {	
+						var obj = $.parseJSON(data);
+						var history = obj[obj.length - 1];
+						
+						console.log("I am Here" + history.original_price);	
+						
+						// Check if individual has redeemed hours
+						if (history.redeemed_hours === "0.00") { 
+							$("#original_price").text(history.original_price).show();
+						 } 
+					}
+				});			
+				
+			} // end Membership benefits					
 			
 		}); // show original price
 
