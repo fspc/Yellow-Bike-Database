@@ -664,12 +664,12 @@ $(function() {
 				
 				if (price > max_discount_price) {
 					max_discount_price_difference = price - max_discount_price;
-					console.log("we have to do things differently " + max_discount_price_difference);
+					//console.log("we have to do things differently " + max_discount_price_difference);
 					value_to_apply_discount = (price - max_discount_price_difference) - redeemable_value;
 					difference = (price - max_discount_price_difference) - obj.sweat_equity_limit;
 					hours_applied_with_value = difference - value_to_apply_discount;
 					
-					console.log("(" + max_discount_price_difference + " +  " + difference + ") - (" + hours_applied_with_value + " * ." + discount + ")");
+					//console.log("(" + max_discount_price_difference + " +  " + difference + ") - (" + hours_applied_with_value + " * ." + discount + ")");
 					redeemable_value = (max_discount_price_difference + difference) - 
 											 (hours_applied_with_value * (discount / 100).toFixed(2));											
 				}	else { 
@@ -677,7 +677,7 @@ $(function() {
 					value_to_apply_discount = price - redeemable_value;
 					hours_applied_with_value = difference - value_to_apply_discount;
 					
-					console.log(difference + " - (" + hours_applied_with_value + " * ." + discount + ")");
+					//console.log(difference + " - (" + hours_applied_with_value + " * ." + discount + ")");
 					redeemable_value = difference - (hours_applied_with_value * (discount / 100).toFixed(2));				
 				}
 						
@@ -793,7 +793,7 @@ $(function() {
 						var obj = $.parseJSON(data);
 						var history = obj[obj.length - 1];
 						
-						console.log("I am Here" + history.original_price);	
+						//console.log("I am Here" + history.original_price);	
 						
 						// Check if individual has redeemed hours
 						if (history.redeemed_hours === "0.00") { 
