@@ -896,7 +896,8 @@ $(function() {
 				// Stand Time	- if a paid member, nothing is owed
 				if ( $("#transaction_type").val() === "Stand Time" ) {
 					$.post("json/transaction.php", { stand_time: 1, contact_id: this.value, shop_id: shop_id }, function (data) {		
-						$("#stand_time_total").empty();
+						$("#stand_time_total").empty();			
+			
 						if (data) {
 							var obj = $.parseJSON(data);
 							var current_membership, expiration_date;
@@ -973,6 +974,29 @@ $(function() {
 
 					$("#volunteer_hours").prop("title","").empty();	
 					$("#redeemable_hours").hide();				
+				
+					// if volunteer is a paid member
+					if (obj.volunteer) {
+						// switch to membership discount when there are no remaining volunteer hours to redeem					
+						if (remaining === 0) {
+									amount.on("input", function () {				
+										var discount = (price * (membership_obj.membership_discount / 100).toFixed(2)).toFixed(2);
+										var discount_price = (price - discount).toFixed(2);
+										//console.log("original " + price + " discount " + discount + " discounted " + discount_price);		
+										if ( $("#transaction_type").val() !== "Stand Time" ) {
+											$("#membership_discount").text("Member pays $" + discount_price).show();
+										} else {
+											$("#membership_discount").empty();
+										}					
+								});						
+						// turn off membership discount
+						} else {	
+							amount.on("input", function () {					
+								$("#membership_discount").empty();							
+							});						
+						}		
+												
+					}				
 					
 					if (obj) { 
 						var volunteer_hours = obj.volunteer_hours;						
