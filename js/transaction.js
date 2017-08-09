@@ -640,7 +640,7 @@ $(function() {
 				exceeded_sweat_equity_limit = true; 
 				price_after_redeeming =  price - (obj.volunteer_hour_value * ((obj.sweat_equity_limit / obj.volunteer_hour_value) - volunteer[year].volunteer_hours_redeemed));
 				spinner_difference = (obj.sweat_equity_limit / obj.volunteer_hour_value) - volunteer[year].volunteer_hours_redeemed;
-				//console.log(spinner_difference);
+				//console.log(spinner_difference + " " + price_after_redeeming);
 			}
 		}	
 
@@ -692,7 +692,7 @@ $(function() {
 			// volunteer hours redeemed if the redeemable_value <= obj.sweat_equity_limit
 			} else {
 				if (exceeded_sweat_equity_limit === true) {
-					if (price_after_redeeming) {
+					if (price_after_redeeming && price_after_redeeming && spinner_difference > 0) {
 						amount.val(price_after_redeeming - (((spinner_value - spinner_difference) * obj.volunteer_hour_value)  * (discount / 100).toFixed(2)));
 					} else {						
 						amount.val(price - (redeemable_value * (discount / 100).toFixed(2)));
