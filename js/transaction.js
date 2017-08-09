@@ -633,14 +633,14 @@ $(function() {
 		var remaining, year = d.getFullYear(), exceeded_sweat_equity_limit = false, price_after_redeeming, spinner_difference;
 		if (volunteer) {
 			var vhr = obj.volunteer_hour_value * volunteer[year].volunteer_hours_redeemed + (spinner_value * obj.volunteer_hour_value);
-			console.log(obj.volunteer_hour_value + " * " +  volunteer[year].volunteer_hours_redeemed + " = " + vhr );
+			//console.log(obj.volunteer_hour_value + " * " +  volunteer[year].volunteer_hours_redeemed + " = " + vhr );
 			remaining = obj.current_year_volunteer_hours - volunteer[year].volunteer_hours_redeemed;	
 			//console.log(obj.current_year_volunteer_hours + " - " +  volunteer[year].volunteer_hours_redeemed + " = " + remaining );	
 			if (vhr > obj.sweat_equity_limit) {
 				exceeded_sweat_equity_limit = true; 
 				price_after_redeeming =  price - (obj.volunteer_hour_value * ((obj.sweat_equity_limit / obj.volunteer_hour_value) - volunteer[year].volunteer_hours_redeemed));
 				spinner_difference = (obj.sweat_equity_limit / obj.volunteer_hour_value) - volunteer[year].volunteer_hours_redeemed;
-				console.log(spinner_difference);
+				//console.log(spinner_difference);
 			}
 		}	
 
@@ -670,12 +670,12 @@ $(function() {
 				
 				if (price > max_discount_price) {
 					max_discount_price_difference = price - max_discount_price;
-					console.log("we have to do things differently " + max_discount_price_difference);
+					//console.log("we have to do things differently " + max_discount_price_difference);
 					value_to_apply_discount = (price - max_discount_price_difference) - redeemable_value;
 					difference = (price - max_discount_price_difference) - obj.sweat_equity_limit;
 					hours_applied_with_value = difference - value_to_apply_discount;
 					
-					console.log("(" + max_discount_price_difference + " +  " + difference + ") - (" + hours_applied_with_value + " * ." + discount + ")");
+					//console.log("(" + max_discount_price_difference + " +  " + difference + ") - (" + hours_applied_with_value + " * ." + discount + ")");
 					redeemable_value = (max_discount_price_difference + difference) - 
 											 (hours_applied_with_value * (discount / 100).toFixed(2));											
 				}	else { 
@@ -683,7 +683,7 @@ $(function() {
 					value_to_apply_discount = price - redeemable_value;
 					hours_applied_with_value = difference - value_to_apply_discount;
 					
-					console.log(difference + " - (" + hours_applied_with_value + " * ." + discount + ")");
+					//console.log(difference + " - (" + hours_applied_with_value + " * ." + discount + ")");
 					redeemable_value = difference - (hours_applied_with_value * (discount / 100).toFixed(2));				
 				}
 						
@@ -692,13 +692,12 @@ $(function() {
 			// volunteer hours redeemed if the redeemable_value <= obj.sweat_equity_limit
 			} else {
 				if (exceeded_sweat_equity_limit === true) {
-					console.log(exceeded_sweat_equity_limit);
 					if (price_after_redeeming) {
 						amount.val(price_after_redeeming - (((spinner_value - spinner_difference) * obj.volunteer_hour_value)  * (discount / 100).toFixed(2)));
 					} else {						
 						amount.val(price - (redeemable_value * (discount / 100).toFixed(2)));
 					}
-					console.log(price_after_redeeming + " - " + redeemable_value + " * ." + discount);
+					//console.log(price_after_redeeming + " - " + redeemable_value + " * ." + discount);
 				} else {
 					amount.val(price - redeemable_value);
 				}	
