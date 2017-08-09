@@ -629,7 +629,7 @@ $(function() {
 			discount = obj.volunteer_discount;
 		} 
 
-		// figure out remaining hours that can be redeemed if volunteer hours have been redeemed.
+		// figure out remaining hours that can be redeemed if some, but not all, volunteer hours have been redeemed.
 		var remaining, year = d.getFullYear(), exceeded_sweat_equity_limit = false, price_after_redeeming, spinner_difference;
 		if (volunteer) {
 			var vhr = obj.volunteer_hour_value * volunteer[year].volunteer_hours_redeemed + (spinner_value * obj.volunteer_hour_value);
@@ -637,9 +637,9 @@ $(function() {
 			remaining = obj.current_year_volunteer_hours - volunteer[year].volunteer_hours_redeemed;	
 			//console.log(obj.current_year_volunteer_hours + " - " +  volunteer[year].volunteer_hours_redeemed + " = " + remaining );	
 			if (vhr > obj.sweat_equity_limit) {
-				exceeded_sweat_equity_limit = true; 
-				price_after_redeeming =  price - (obj.volunteer_hour_value * ((obj.sweat_equity_limit / obj.volunteer_hour_value) - volunteer[year].volunteer_hours_redeemed));
+				exceeded_sweat_equity_limit = true;
 				spinner_difference = (obj.sweat_equity_limit / obj.volunteer_hour_value) - volunteer[year].volunteer_hours_redeemed;
+				price_after_redeeming =  price - (obj.volunteer_hour_value * spinner_difference);
 				//console.log(spinner_difference + " " + price_after_redeeming);
 			}
 		}	
