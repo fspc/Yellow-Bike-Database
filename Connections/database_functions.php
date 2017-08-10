@@ -1,7 +1,7 @@
 <?php
 require_once('YBDB.php');
 
-// DO NOT EDIT - USE Connections/local_configurations instead
+// DO NOT EDIT - USE Connections/local_configurations.php instead with definitions between <?php ?>
 
 /*    
 	Choose your timezone from http://php.net/manual/en/timezones.php 
