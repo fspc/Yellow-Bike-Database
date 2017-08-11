@@ -866,6 +866,16 @@ $(function() {
 					$("#membership_discount").empty();
 					$("#membership_discount_price").empty();
 					amount.val("");
+
+					//make an exception for an actual member
+					if (membership_obj.expiration_date) {
+						var exp = membership_obj.expiration_date;
+						expiration_date = new Date(exp.split("-").toString());
+						if (d < expiration_date) {	
+							membership_transaction = true;
+						}
+					}
+										
 					
 					if (membership_transaction === true) { // if membership transaction
 						if (typeof membership_obj.expiration_date && membership_obj.expiration_date !== undefined) {
@@ -885,7 +895,6 @@ $(function() {
 						
 							// paid membership
 							} else if (d < expiration_date) {
-	
 								if ($("#paid_member").length === 1) {							
 									$("#paid_member").prop("title",title).html("Paid Member");
 									amount.on("input", function () {				
