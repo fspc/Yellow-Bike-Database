@@ -867,12 +867,14 @@ $(function() {
 					$("#membership_discount_price").empty();
 					amount.val("");
 
-					//make an exception for an actual member
-					amount.removeAttr("readonly");
+					//make an exception for an actual member for a Membership transaction
+					if ($("#transaction_type").val() === "Memberships") {
+						amount.removeAttr("readonly");
+					}
 					if (membership_obj.expiration_date) {
 						var exp = membership_obj.expiration_date;
 						expiration_date = new Date(exp.split("-").toString());
-						if (d < expiration_date) {	
+						if (d < expiration_date && $("#transaction_type").val() === "Memberships") {	
 							membership_transaction = true;
 							amount.attr("readonly", "readonly");
 						}
