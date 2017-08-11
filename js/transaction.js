@@ -868,11 +868,13 @@ $(function() {
 					amount.val("");
 
 					//make an exception for an actual member
+					amount.removeAttr("readonly");
 					if (membership_obj.expiration_date) {
 						var exp = membership_obj.expiration_date;
 						expiration_date = new Date(exp.split("-").toString());
 						if (d < expiration_date) {	
 							membership_transaction = true;
+							amount.attr("readonly", "readonly");
 						}
 					}
 										
