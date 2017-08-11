@@ -197,7 +197,7 @@ INSERT INTO transaction_types
   ("Helmets", 5, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
   ("Donations", 6, 1, 0, 1, 1, 0, 0, 1, 1, 1, "Sale Date", "Received by"," ", "Donated by", 1, "Description", "Donations", 0, 1, 0),
   ("Monetary Donations", 7, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Received by"," ", "Donated by", 1, "Description", "Sales", 1, 1, 0),     
-  ("Memberships", 8, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
+  ("Memberships", 8, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
   ("New Parts", 9, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
   ("Cargo Related", 10, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
   ("Car Racks", 11, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
