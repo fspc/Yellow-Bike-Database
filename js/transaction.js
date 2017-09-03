@@ -1023,10 +1023,23 @@ $(function() {
 											"Max Bikes Earned: " + max_bikes_earned;			
 
 					$("#volunteer_hours").prop("title","").empty();	
-					$("#redeemable_hours").hide();				
+					$("#redeemable_hours").hide();			
+					
+					var current_membership;
+					if (membership_obj.expiration_date) {
+						var exp = membership_obj.expiration_date;
+						var expiration_date = new Date(exp.split("-").toString());
+						if (d >= expiration_date) {							
+							current_membership = false;
+						} else if (d < expiration_date) {
+							current_membership = true;
+						}
+					} else {
+						current_membership = false;
+					}		
 				
 					// if volunteer is a paid member
-					if (obj.volunteer) {
+					if (obj.volunteer && current_membership === true) {
 						// switch to membership discount when there are no remaining volunteer hours to redeem					
 						if (remaining === 0) {
 									amount.on("input", function () {				
