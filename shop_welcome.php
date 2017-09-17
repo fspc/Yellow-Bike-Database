@@ -42,7 +42,30 @@ require_once('Connections/database_functions.php');
 					<li>Free stand time!</li> 
 					<li>10% discount on new and used parts, helmets, used cargo related and car rack purchases.</li>     			
    			</ul>
-   		</ul>      	   
+   		</ul>
+   		<ul>
+   			<li><strong>Kids Bikes</strong></li>
+   				<ul>
+   				<li>Mass retailer children's bikes are $20 ($10 with a trade in)
+   				for kids that are 10 years old or younger</li>
+   				</ul>
+   		</ul>  
+			<ul>
+   			<li><strong>No Storage in the Shop for Personal Projects!</strong></li>
+   				<ul>
+						<li>All bike purchases most go home with you.</li>
+						<ul>
+							<li>We will not be responsible for any personal property left in the shop, and will restock any bikes left
+							in violation of this policy.</li>							
+						</ul>
+						<li>We will not provide special exemptions under any condition, 
+						nor provide reimbursements for stolen personal property.</li>
+				   			
+   				</ul>   		    	   
+			</ul> 
+			<ul>
+				<li><strong>No Trade-ins, with the exception of bikes for kids' 10 years old or younger.</strong></li>
+			</ul>     
       </ul>
       <ul>
         <li><span class="yb_heading3red">We expect that you volunteer time back to the project</span> 
