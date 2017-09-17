@@ -10,13 +10,14 @@ require_once('Connections/database_functions.php');
       <ul>
         <li><span class="yb_heading3red">This is Your Community Bike Shop; it is open to the public</span>, 
         providing a space for people to work on bikes, and to learn bike mechanics skills. Keep your workspace clean, and put
-        back all tools and parts.  Ask a Coordinator if you need help.  Always, sign-in/sign-out regardless of your purpose 
+        back all tools and parts.  Ask a Coordinator if you need help.  
+        <span class="yb_standardCENTERred">Always, <a href="https://fsbomorgantown.com:667/shop_log.php">sign-in/sign-out</a> regardless of your purpose</span> 
         for being in the shop.  Understand our Repairs Policy and Safer Space Agreement (see below).</li>
       </ul>
       <ul>
         <li>Positive Spin is an all-volunteer non-profit organization  
         <span class="yb_heading3red">entirely supported by volunteer time, bike, part and tool donations, 
-        										the purchase of reused bikes and parts, stand time ($10/hr), memberships (individual $60.00/yr)
+        										the sale of reused bikes and parts, stand time ($10/hr), memberships (individual $60.00/yr)
         									   and financial donations</span>. </li>
       	<ul>
       		<li><strong>Stand Time</strong></li>
