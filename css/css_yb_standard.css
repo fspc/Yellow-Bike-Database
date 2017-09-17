@@ -41,7 +41,8 @@
 	font-weight: bold;
 }
 .yb_heading3red {
-	color: #FF0000;
+	//color: #FF0000;
+	color: blue;
 	background-color: #FFFFFF;
 	font-weight: bold;
 }
