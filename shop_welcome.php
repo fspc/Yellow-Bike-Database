@@ -8,22 +8,43 @@ require_once('Connections/database_functions.php');
       <p><span class="yb_heading2">Welcome to the Positive Spin Bike Project</span></p>
       <p>Here are a few things to know about using the shop:</p>
       <ul>
-        <li><span class="yb_heading3red">This is Your Community Bike Shop; it is free of charge and open to the public</span>, 
-        providing a space for people to work on bikes, and learn bike mechanics skills.</li>
+        <li><span class="yb_heading3red">This is Your Community Bike Shop; it is open to the public</span>, 
+        providing a space for people to work on bikes, and to learn bike mechanics skills. Keep your workspace clean, and put
+        back all tools and parts.  Ask a Coordinator if you need help.</li>
       </ul>
       <ul>
         <li>Positive Spin is an all-volunteer non-profit organization  
         <span class="yb_heading3red">entirely supported by volunteer time, bike, part and tool donations, 
-        										the purchase of reused bikes and parts, trade-ups, memberships
+        										the purchase of reused bikes and parts, stand time ($10/hr), memberships (individual $60.00/yr)
         									   and financial donations</span>. </li>
+      	<ul>
+      		<li><strong>Stand Time</strong></li>
+      		<ul>
+					<li>Unlimited stand time is free with a paid membership.</li>
+					<li>Stand time is free within 30 days of a purchase of a bicycle.</li>      			
+      			<li>Volunteer hours may be used to redeem stand time on a one-to-one hour basis.</li>
+      		</ul>
+      		<li><strong>Volunteer hours may be used in place of cash to earn one used bike and used parts per season (Jan. 1 - Dec. 31).</strong></li>
+      		<ul>
+					<li>100% exchange for the first $100 per season.</li>
+					<ul>
+						<li>May be used to earn 1 bike.</li>
+					</ul>
+					<li>25% exchange after first $100 per season for volunteers with less than 100 volunteer hours for the last 365 days.</li>
+					<li>50% exchange after first $100 per season for volunteers with at least 100 volunteer hours for the last 365 days.</li>      		
+      		</ul>
+      	</ul>   	   
+   		<ul>
+   			<li><strong>Paid Membership Benefits (365 days)</strong></li>
+   			<ul>
+					<li>Free stand time!</li> 
+					<li>10% discount on new and used parts, helmets, used cargo related and car rack purchases.</li>     			
+   			</ul>
+   		</ul>      	   
       </ul>
       <ul>
-        <li><span class="yb_heading3red">We expect that you volunteer time back  to the project</span> 
-        equal to the time in the shop spent on personal projects to leave the project a better place than you found it. </li>
-      </ul>
-      <ul>
-        <li>If you are unable to contribute time to the project <span class="yb_heading3red">
-        we suggest  a $5 donation for personal use of the shop</span> in addition to any other donations. </li>
+        <li><span class="yb_heading3red">We expect that you volunteer time back to the project</span> 
+        and leave the project a better place than you found it. </li>
       </ul>
       <ul>
         <li><span class="yb_heading3red">Donations go towards</span> 
@@ -68,19 +89,27 @@ require_once('Connections/database_functions.php');
     new skills from others!&nbsp; If you have a physical issue or handicap preventing you from physically
     repairing your bicycle, we still want you to be part of the process in whatever way you are able,
     and we will gladly help facilitate the repair of your bicycle.
+
+	 <p>
+	 <span class="yb_pagetitle">Safer Space Agreement</span><br />
+	As visitors or volunteers at Positive Spin, we agree to maintain a safer space.
+	A safer space is an inclusive environment in which everyone can feel welcome, 
+	where no one is shown favoritism, and everyone can feel safe from oppressive, 
+	discriminatory and hateful behavior and language.  This includes, but is not limited to, 
+	physical and verbal abuse, sexual harassment, or discrimination based on race, culture, 
+	age, sex, gender identity, sexual orientation, religion, political beliefs, physical characteristics, disabilities, social or economic background.
+	</p>
+	<p>If you feel anyone is not abiding by this agreement, please tell a volunteer or 
+	constructively confront the individual yourself.  If behavior that violates this agreement persists, 
+	it can potentially lead to being banned from Positive Spin.
+	</p>   
+	    
     <!-- </blockquote> -->
     <p>
-      <span class="yb_pagetitle">Learn More</span>:<br />
-        <span class="yb_heading3red">PS Info:   </span>
-        <a href="http://positivespin.org" target="_blank">Positive Spin Home Page</a> | 
-        <a href="http://positivespin.org/home2/content/view/34/71/" target="_blank">About PS</a> | 
-        <a href="http://positivespin.org/home2/content/view/94/80/" target="_blank">Shop Schedule </a> | 
-        <a href="http://positivespin.org/home2/content/view/13/14/" target="_blank">Shop Services</a><span class="yb_heading3red"><br />
-        Giving Back:</span> <a href="" target="_blank">Volunteering at PS</a> | 
-        <a href="http://positivespin.org/home2/content/view/94/80/" target="_blank">Volunteer Shops</a> | 
-        <a href="http://positivespin.org/home2/content/view/92/79/" target="_blank">Projects</a> | 
-        <a href="" target="_blank">Earn-A-Bike</a> | 
-        <a href="" target="_blank">Donating Online</a><br />
+     <span class="yb_heading3red">PS Info:   </span>
+     <a href="http://positivespin.org" target="_blank">Positive Spin Home Page</a> |  
+     <a href="http://positivespin.org/content/view/94/80/" target="_blank">Shop Schedule </a> 
+     <span class="yb_heading3red"><br />
     </p>
     
     <?php include("include_footer.html"); ?>
