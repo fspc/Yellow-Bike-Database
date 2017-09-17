@@ -110,13 +110,13 @@ $(function(){
 				
 					if (obj.contact_id) {
 				
-						$("#volunteer_hours_" + obj.contact_id).html("Summary").
+						$(".volunteer_hours_" + obj.contact_id).html("Summary").
 							parent().css({backgroundColor: "#19a0cc", textAlign: "center", cursor: "cell"}).
 							prop("title",title).css({textAlign: "center"});
 										
 					} else {
 
-						$("#volunteer_hours_" + id).parent().css({cursor: "not-allowed"});				
+						$(".volunteer_hours_" + id).parent().css({cursor: "not-allowed"});				
 						
 					}			
 			
@@ -162,12 +162,12 @@ $(function(){
 						
 						// expired membership	
 						if (d >= expiration_date) {												
-							$("#paid_membership_" + membership_obj.contact_id).html("Expired").
+							$(".paid_membership_" + membership_obj.contact_id).html("Expired").
 							parent().css({backgroundColor: "red", textAlign: "center", cursor: "cell"}).prop("title",title);
 					
 						// paid membership
 						} else if (d < expiration_date) {
-							$("#paid_membership_" + membership_obj.contact_id).html("Current").
+							$(".paid_membership_" + membership_obj.contact_id).html("Current").
 							parent().css({backgroundColor: "green", textAlign: "center", cursor: "cell"}).prop("title",title).css({textAlign: "center"});
 						
 						}	// paid membership
@@ -175,7 +175,7 @@ $(function(){
 					// never been a member						
 					} else { 
 					
-						$("#paid_membership_" + id).parent().css({cursor: "not-allowed"});			
+						$(".paid_membership_" + id).parent().css({cursor: "not-allowed"});			
 
 					} // never been a member	
 					

@@ -250,8 +250,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
 		  <td><?php echo list_time($row_Recordset1['time_in'],$row_Recordset1['time_out'],'time_out',0,1,'none', $shop_hours_length, $row_Recordset1['et']); ?></td>
 		  <td><?php sign_out($row_Recordset1['time_out'], $row_Recordset1['first_name']); ?>&nbsp</td>
 		  <td><?php if($shop_CanEdit == 1) {echo "<a href=\"{$_SERVER['PHP_SELF']}?shop_id={$shop_id}&visit_id={$row_Recordset1['shop_visit_id']}\">edit</a>";} else {echo "&nbsp";} ?></td>
-		  <td><span id="volunteer_hours_<?php echo $row_Recordset1['contact_id']; ?>"></span></td>
-		  <td><span id="paid_membership_<?php echo $row_Recordset1['contact_id']; ?>"></span></td>
+		  <td><span class="volunteer_hours_<?php echo $row_Recordset1['contact_id']; ?>"></span></td>
+		  <td><span class="paid_membership_<?php echo $row_Recordset1['contact_id']; ?>"></span></td>
 	    </tr>
           <input type="hidden" name="MM_insert" value="FormUpdate">
           <input type="hidden" name="shop_visit_id" value="<?php echo $row_Recordset1['shop_visit_id']; ?>">
