@@ -26,12 +26,13 @@ require_once('Connections/database_functions.php');
       		</ul>
       		<li><strong>Volunteer hours may be used in place of cash to earn one used bike and used parts per season (Jan. 1 - Dec. 31).</strong></li>
       		<ul>
-					<li>100% exchange for the first $100 per season.</li>
+					<li>100% exchange rate for the first $100 per season.</li>
 					<ul>
 						<li>May be used to earn 1 bike.</li>
 					</ul>
-					<li>25% exchange after first $100 per season for volunteers with less than 100 volunteer hours for the last 365 days.</li>
-					<li>50% exchange after first $100 per season for volunteers with at least 100 volunteer hours for the last 365 days.</li>      		
+					<li>25% exchange rate after first $100 per season for volunteers with less than 100 volunteer hours for the previous 365 days.</li>
+					<li>50% exchange rate after first $100 per season for volunteers with at least 100 volunteer hours for the previous 365 days.</li>
+					<li>Applicable volunteer hours are reset to 0 at the beginning of each new season; exchange rate is $8/hr.</li>      		
       		</ul>
       	</ul>   	   
    		<ul>
