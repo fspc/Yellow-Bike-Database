@@ -11,7 +11,7 @@ require_once('Connections/database_functions.php');
         <li><span class="yb_heading3red">This is Your Community Bike Shop; it is open to the public</span>, 
         providing a space for people to work on bikes, and to learn bike mechanics skills. Keep your workspace clean, and put
         back all tools and parts.  Ask a Coordinator if you need help.  
-        <span class="yb_standardCENTERred">Always, <a href="https://fsbomorgantown.com:667/shop_log.php">sign-in/sign-out</a> regardless of your purpose (status)</span> 
+        <span class="yb_standardCENTERred">Always, <a href="./shop_log.php">sign-in/sign-out</a> regardless of your purpose (status)</span> 
         for being in the shop, and if your status changes, sign-out, and sign-in with the new status.  Understand our Repairs Policy and Safer Space Agreement (see below).</li>
       </ul>
       <ul>
