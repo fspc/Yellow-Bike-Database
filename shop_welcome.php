@@ -23,7 +23,7 @@ require_once('Connections/database_functions.php');
       		<li><strong>Stand Time</strong></li>
       		<ul>
 					<li>Unlimited stand time is free with a paid membership.</li>
-					<li>Stand time is free within 30 days of a purchase of a bicycle.</li>      			
+					<li>Stand time is free during the 30 days after a purchase of a bicycle.</li>      			
       			<li>Volunteer hours may be used to redeem stand time on a one-to-one hour basis.</li>
       		</ul>
       		<li><strong>Volunteer hours may be used in place of cash to earn one used bike and used parts per season (Jan. 1 - Dec. 31).</strong></li>
@@ -47,12 +47,12 @@ require_once('Connections/database_functions.php');
    		<ul>
    			<li><strong>Kids Bikes</strong></li>
    				<ul>
-   				<li>Mass retailer children's bikes are $20 ($10 with a trade in)
+   				<li>Mass retailer children's bikes are $20 ($10 with a trade-in)
    				for kids that are 10 years old or younger.</li>
    				</ul>
    		</ul>  
 			<ul>
-   			<li><strong>No Storage in the Shop for Personal Projects!</strong></li>
+   			<li><strong>No Storage in the Shop for Personal Projects or Property!</strong></li>
    				<ul>
 						<li>All bike purchases most go home with you.</li>
 						<ul>
@@ -71,10 +71,6 @@ require_once('Connections/database_functions.php');
       <ul>
         <li><span class="yb_heading3red">We expect that you volunteer time back to the project</span> 
         and leave the project a better place than you found it. </li>
-      </ul>
-      <ul>
-        <li><span class="yb_heading3red">Donations go towards</span> 
-        shop tools and supplies as well as  helping PS meet our other programming needs.</li>
       </ul>
       <ul>
         <li><span class="yb_heading3red">To get started,</span> 
