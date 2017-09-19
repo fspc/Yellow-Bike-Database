@@ -109,14 +109,45 @@ $(function(){
 											
 				
 					if (obj.contact_id) {
-				
-						$(".volunteer_hours_" + obj.contact_id).html("Summary").
-							parent().css({backgroundColor: "#19a0cc", textAlign: "center", cursor: "cell"}).
-							prop("title",title).css({textAlign: "center"});
+						
+						if (obj.volunteer_hours && obj.volunteer_hours !== '0') {
+															
+							$(".volunteer_hours_" + obj.contact_id).
+								html("Summary | <span><a href='./contact_add_edit_select.php?contact_id=" + 
+								obj.contact_id + 
+								"'>Update Interests</a></span>").
+								parent().css({backgroundColor: "#19a0cc", textAlign: "center", cursor: "cell"}).
+								prop("title",title).css({textAlign: "center"});
+
+						} else {
+							
+							title = obj.normal_full_name + "\r\n" +
+											"Volunteer Hours for last 365 days: None" + "\r\n";
+								
+							$(".volunteer_hours_" + obj.contact_id).
+								html("<a href='./contact_add_edit_select.php?contact_id=" + 
+								obj.contact_id + 
+								"'>Update Interests</a>").
+								parent().css({backgroundColor: "rgb(190, 199, 204)", textAlign: "center", cursor: "cell"}).
+								prop("title",title).css({textAlign: "center"});
+								
+						}
 										
 					} else {
-
-						$(".volunteer_hours_" + id).parent().css({cursor: "not-allowed"});				
+						
+						var name =  $("#" + id + " td a[href*='individual']").text();
+						var name_obj = name.trim().split(", ");
+						name = name_obj[1] + " " + name_obj[0];
+	
+						title = name + "\r\n" +
+										"Volunteer Hours for last 365 days: None" + "\r\n";
+							
+						$(".volunteer_hours_" + id).
+							html("<a href='./contact_add_edit_select.php?contact_id=" + 
+							id + 
+							"'>Update Interests</a>").
+							parent().css({backgroundColor: "rgb(190, 199, 204)", textAlign: "center", cursor: "cell"}).
+							prop("title",title).css({textAlign: "center"});														
 						
 					}			
 			
