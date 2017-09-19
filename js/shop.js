@@ -14,6 +14,7 @@ $(function(){
 	$("[name='project']").attr("tabindex",4);
 	$("[name='comment']").attr("tabindex",5);
 	$("[name='Submit']").attr("tabindex",6);
+	$(".shop_user_role").css({fontSize: ".75em", fontWeight: "bold"})
 
 	// error handler for shops	with a popup dialog (TODO)	
 	function error_handler(input,error_span,error,error_text,event) {		
@@ -90,6 +91,7 @@ $(function(){
 					var volunteer_hours_redeemed = 0;								
 					var obj = $.parseJSON(data);
 		
+		console.log(obj.volunteer);
 					var volunteer = "", remaining = 0, vhr = "", max_bikes_earned = 0;
 					if (obj.volunteer) {
 						volunteer = $.parseJSON(obj.volunteer);
