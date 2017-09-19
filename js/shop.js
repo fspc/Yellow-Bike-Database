@@ -91,7 +91,6 @@ $(function(){
 					var volunteer_hours_redeemed = 0;								
 					var obj = $.parseJSON(data);
 		
-		console.log(obj.volunteer);
 					var volunteer = "", remaining = 0, vhr = "", max_bikes_earned = 0;
 					if (obj.volunteer) {
 						volunteer = $.parseJSON(obj.volunteer);
@@ -108,18 +107,29 @@ $(function(){
 											"Volunteer Hours Redeemed: " +  vhr + "\r\n" +
 											"Volunteer Hours Remaining: " + remaining + "\r\n" +
 											"Max Bikes Earned: " + max_bikes_earned;		
-											
+					
+					var volunteer_with_redeemed_hours_at_zero = obj.current_year_volunteer_hours - vhr;			
 				
 					if (obj.contact_id) {
 						
 						if (obj.volunteer_hours && obj.volunteer_hours !== '0') {
-															
-							$(".volunteer_hours_" + obj.contact_id).
-								html("Summary | <span><a href='./contact_add_edit_select.php?contact_id=" + 
-								obj.contact_id + 
-								"'>Update Interests</a></span>").
-								parent().css({backgroundColor: "#19a0cc", textAlign: "center", cursor: "cell"}).
-								prop("title",title).css({textAlign: "center"});
+							
+							if (volunteer_with_redeemed_hours_at_zero !== 0) {								
+								$(".volunteer_hours_" + obj.contact_id).
+									html("Summary | <span><a href='./contact_add_edit_select.php?contact_id=" + 
+									obj.contact_id + 
+									"'>Update Interests</a></span>").
+									parent().css({backgroundColor: "#19a0cc", textAlign: "center", cursor: "cell"}).
+									prop("title",title).css({textAlign: "center"});
+							} else {
+								$(".volunteer_hours_" + obj.contact_id).
+									html("Summary | <span><a href='./contact_add_edit_select.php?contact_id=" + 
+									obj.contact_id + 
+									"'>Update Interests</a></span>").
+									parent().css({backgroundColor: "rgb(216, 198, 39)", textAlign: "center", cursor: "cell"}).
+									prop("title",title).css({textAlign: "center"});							
+							
+							}
 
 						} else {
 							
