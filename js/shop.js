@@ -116,18 +116,22 @@ $(function(){
 							
 							if (volunteer_with_redeemed_hours_at_zero !== 0) {								
 								$(".volunteer_hours_" + obj.contact_id).
-									html("Summary | <span><a href='./contact_add_edit_select.php?contact_id=" + 
+									html("Summary | <span class='update_interests'><a href='./contact_add_edit_select.php?contact_id=" + 
 									obj.contact_id + 
 									"'>Update Interests</a></span>").
 									parent().css({backgroundColor: "#19a0cc", textAlign: "center", cursor: "cell"}).
 									prop("title",title).css({textAlign: "center"});
+									
+									$('.update_interests a').css({color: "#1b691e", textDecoration: "none", cursor: "crosshair"});
 							} else {
 								$(".volunteer_hours_" + obj.contact_id).
-									html("Summary | <span><a href='./contact_add_edit_select.php?contact_id=" + 
+									html("Summary | <span class='update_interests'><a href='./contact_add_edit_select.php?contact_id=" + 
 									obj.contact_id + 
 									"'>Update Interests</a></span>").
 									parent().css({backgroundColor: "rgb(216, 198, 39)", textAlign: "center", cursor: "cell"}).
-									prop("title",title).css({textAlign: "center"});							
+									prop("title",title).css({textAlign: "center"});
+									
+									$('.update_interests a').css({color: "#1b691e", textDecoration: "none", cursor: "crosshair"});							
 							
 							}
 
@@ -137,11 +141,13 @@ $(function(){
 											"Volunteer Hours for last 365 days: None" + "\r\n";
 								
 							$(".volunteer_hours_" + obj.contact_id).
-								html("<a href='./contact_add_edit_select.php?contact_id=" + 
+								html("<span class='update_interests'><a href='./contact_add_edit_select.php?contact_id=" + 
 								obj.contact_id + 
-								"'>Update Interests</a>").
+								"'>Update Interests</a></span>").
 								parent().css({backgroundColor: "rgb(190, 199, 204)", textAlign: "center", cursor: "cell"}).
 								prop("title",title).css({textAlign: "center"});
+								
+								$('.update_interests a').css({color: "#1b691e", textDecoration: "none", cursor: "crosshair"});
 								
 						}
 										
@@ -155,11 +161,13 @@ $(function(){
 										"Volunteer Hours for last 365 days: None" + "\r\n";
 							
 						$(".volunteer_hours_" + id).
-							html("<a href='./contact_add_edit_select.php?contact_id=" + 
+							html("<span class='update_interests'><a href='./contact_add_edit_select.php?contact_id=" + 
 							id + 
-							"'>Update Interests</a>").
+							"'>Update Interests</a></span>").
 							parent().css({backgroundColor: "rgb(190, 199, 204)", textAlign: "center", cursor: "cell"}).
-							prop("title",title).css({textAlign: "center"});														
+							prop("title",title).css({textAlign: "center"});	
+							
+							$('.update_interests a').css({color: "#1b691e", textDecoration: "none", cursor: "crosshair"});													
 						
 					}			
 			
@@ -206,7 +214,7 @@ $(function(){
 						// expired membership	
 						if (d >= expiration_date) {												
 							$(".paid_membership_" + membership_obj.contact_id).html("Expired").
-							parent().css({backgroundColor: "red", textAlign: "center", cursor: "cell"}).prop("title",title);
+							parent().css({backgroundColor: "red", textAlign: "center", cursor: "cell", textDecoration: "none"}).prop("title",title);
 					
 						// paid membership
 						} else if (d < expiration_date) {
