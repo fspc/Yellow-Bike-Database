@@ -123,6 +123,7 @@ $(function(){
 									prop("title",title).css({textAlign: "center"});
 									
 									$('.update_interests a').css({color: "#1b691e", textDecoration: "none", cursor: "crosshair"});
+									$('.update_interests a').hover( function(e){ $(this).css("color",e.type === "mouseenter"?"blue":"#1b691e");});
 							} else {
 								$(".volunteer_hours_" + obj.contact_id).
 									html("Summary | <span class='update_interests'><a href='./contact_add_edit_select.php?contact_id=" + 
@@ -131,7 +132,8 @@ $(function(){
 									parent().css({backgroundColor: "rgb(216, 198, 39)", textAlign: "center", cursor: "cell"}).
 									prop("title",title).css({textAlign: "center"});
 									
-									$('.update_interests a').css({color: "#1b691e", textDecoration: "none", cursor: "crosshair"});							
+									$('.update_interests a').css({color: "#1b691e", textDecoration: "none", cursor: "crosshair"});
+									$('.update_interests a').hover( function(e){ $(this).css("color",e.type === "mouseenter"?"blue":"#1b691e");});							
 							
 							}
 
@@ -148,6 +150,7 @@ $(function(){
 								prop("title",title).css({textAlign: "center"});
 								
 								$('.update_interests a').css({color: "#1b691e", textDecoration: "none", cursor: "crosshair"});
+								$('.update_interests a').hover( function(e){ $(this).css("color",e.type === "mouseenter"?"blue":"#1b691e");});
 								
 						}
 										
@@ -167,7 +170,8 @@ $(function(){
 							parent().css({backgroundColor: "rgb(190, 199, 204)", textAlign: "center", cursor: "cell"}).
 							prop("title",title).css({textAlign: "center"});	
 							
-							$('.update_interests a').css({color: "#1b691e", textDecoration: "none", cursor: "crosshair"});													
+							$('.update_interests a').css({color: "#1b691e", textDecoration: "none", cursor: "crosshair"});
+							$('.update_interests a').hover( function(e){ $(this).css("color",e.type === "mouseenter"?"blue":"#1b691e");});													
 						
 					}			
 			
