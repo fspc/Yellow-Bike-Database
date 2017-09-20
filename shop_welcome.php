@@ -26,15 +26,15 @@ require_once('Connections/database_functions.php');
 					<li>Stand time is free during the 30 days after a purchase of a bicycle.</li>      			
       			<li>Volunteer hours may be used to redeem stand time on a one-to-one hour basis.</li>
       		</ul>
-      		<li><strong>Volunteer hours may be used in place of cash to earn one used bike and used parts per season (Jan. 1 - Dec. 31).</strong></li>
+      		<li><strong>Volunteer hours may be used in place of cash to earn one used bike and used parts per shop season (Jan. 1 - Dec. 31).</strong></li>
       		<ul>
-					<li>100% exchange rate for the first $100 per season.</li>
+					<li>100% exchange rate for the first $100 per shop season.</li>
 					<ul>
 						<li>May be used to earn 1 bike.</li>
 					</ul>
-					<li>25% exchange rate after first $100 per season for volunteers with less than 100 volunteer hours for the previous 365 days.</li>
-					<li>50% exchange rate after first $100 per season for volunteers with at least 100 volunteer hours for the previous 365 days.</li>
-					<li>Applicable volunteer hours are reset to 0 at the beginning of each new season; exchange rate is $8/hr.</li>      		
+					<li>25% exchange rate after first $100 per shop season for volunteers with less than 100 volunteer hours for the previous 365 days.</li>
+					<li>50% exchange rate after first $100 per shop season for volunteers with at least 100 volunteer hours for the previous 365 days.</li>
+					<li>Applicable volunteer hours are reset to 0 at the beginning of each new shop season; exchange rate is $8/hr.</li>      		
       		</ul>
       	</ul>   	   
    		<ul>
