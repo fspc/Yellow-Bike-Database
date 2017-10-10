@@ -38,7 +38,7 @@ include_header_shop.html is in:
 shop_log.php
 start_shop.php
 
-[because it has different body layout, namely the inclusion of About/Help]
+[Because it has different body layout, namely the inclusion of About/Help]
 
 	<link href="css/transactions.css" rel="stylesheet" type="text/css" />
 	<link href="css/contacts.css" rel="stylesheet" type="text/css" />
