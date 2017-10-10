@@ -1,0 +1,121 @@
+# Just a document to keep track about what all the included header files do, and why there are so many.
+
+include_header.html is in:
+
+contact_add_edit_select.php
+individual_history_log.php
+individual_hours_log.php
+location_add_edit.php
+location_add_edit.php
+location_add_edit_select.php
+shop_welcome.php
+stats.php
+transaction_log.php
+
+[Identical to include_header_shop with the exception of jquery-ui .. no big advantage]
+
+	<link href="css/transactions.css" rel="stylesheet" type="text/css" />
+	<link href="css/contacts.css" rel="stylesheet" type="text/css" />
+	<link href="css/css_yb_standard.css" rel="stylesheet" type="text/css" />
+	<link href="css/jquery.nouislider.css" rel="stylesheet" type="text/css" />
+	<link href="css/chosen.css" rel="stylesheet" type="text/css" />
+	<link href="css/ui/jquery-ui.css" rel="stylesheet" type="text/css" />
+	
+	<script src="js/jquery-2.1.1.js"></script>
+	<script src="js/transaction.js"></script>
+	<script src="js/contact.js"></script>
+	<script src="js/shop.js"></script>
+	<script src="js/jquery.mask.js"></script>
+	<script src="js/jquery.jeditable.js"></script>
+	<script src="js/jquery.nouislider.js"></script>
+	<script src="js/chosen.jquery.js"></script>
+	<script src="js/jquery.liblink.js"></script> 
+	<script src="js/wNumb.js"></script>
+	<script src="js/ui/jquery-ui.js"></script>
+
+include_header_shop.html is in:
+
+shop_log.php
+start_shop.php
+
+[because it has different body layout, namely the inclusion of About/Help]
+
+	<link href="css/transactions.css" rel="stylesheet" type="text/css" />
+	<link href="css/contacts.css" rel="stylesheet" type="text/css" />
+	<link href="css/css_yb_standard.css" rel="stylesheet" type="text/css" />
+	<link href="css/jquery.nouislider.css" rel="stylesheet" type="text/css" />
+	<link href="css/chosen.css" rel="stylesheet" type="text/css" />
+	
+	<script src="js/jquery-2.1.1.js"></script>
+	<script src="js/transaction.js"></script>
+	<script src="js/contact.js"></script>
+	<script src="js/shop.js"></script>
+	<script src="js/jquery.mask.js"></script>
+	<script src="js/jquery.jeditable.js"></script>
+	<script src="js/jquery.nouislider.js"></script>
+	<script src="js/chosen.jquery.js"></script>
+	<script src="js/jquery.liblink.js"></script> 
+	<script src="js/wNumb.js"></script>
+	
+
+include_header_contacts.html is in:
+
+contact_add_edit.php
+
+[Identical to include_header_shop with the exception of transactions.css, transactions.js and shop.js, 
+ if these files are included the slider gets slightly messed up in appearance.]
+
+	<link href="css/contacts.css" rel="stylesheet" type="text/css" />
+	<link href="css/css_yb_standard.css" rel="stylesheet" type="text/css" />
+	<link href="css/jquery.nouislider.contacts.css" rel="stylesheet" type="text/css" />
+	<link href="css/chosen.css" rel="stylesheet" type="text/css" />
+	
+	<script src="js/jquery-2.1.1.js"></script>
+	<script src="js/contact.js"></script>
+	<script src="js/jquery.mask.js"></script>
+	<script src="js/jquery.jeditable.js"></script>
+	<script src="js/jquery.nouislider.js"></script>
+	<script src="js/chosen.jquery.js"></script>
+	<script src="js/jquery.liblink.js"></script> 
+	<script src="js/wNumb.js"></script>	
+
+include_header_stats.html is in:
+	
+stats/*
+
+[important because it defines correct path]
+
+	<link href="../css/css_yb_standard.css" rel="stylesheet" type="text/css" />
+	<link href="../css/pickmeup.css" rel="stylesheet" type="text/css" />
+	<link href="../css/stats.css" rel="stylesheet" type="text/css" />
+	
+	<script src="../js/jquery-2.1.1.js"></script>
+	<script src="../js/jquery.pickmeup.js"></script>
+	<script src="../js/stats.js"></script>
+	
+	
+	
+REMOVED:
+	
+	include_header_start_shop.html is in:
+
+start_shop.php
+
+[identical to include_header_shop.html]
+
+	<link href="css/transactions.css" rel="stylesheet" type="text/css" />
+	<link href="css/contacts.css" rel="stylesheet" type="text/css" />
+	<link href="css/css_yb_standard.css" rel="stylesheet" type="text/css" />
+	<link href="css/jquery.nouislider.css" rel="stylesheet" type="text/css" />
+	<link href="css/chosen.css" rel="stylesheet" type="text/css" />
+	
+	<script src="js/jquery-2.1.1.js"></script>
+	<script src="js/transaction.js"></script>
+	<script src="js/contact.js"></script>
+	<script src="js/shop.js"></script>
+	<script src="js/jquery.mask.js"></script>
+	<script src="js/jquery.jeditable.js"></script>
+	<script src="js/jquery.nouislider.js"></script>
+	<script src="js/chosen.jquery.js"></script>
+	<script src="js/jquery.liblink.js"></script> 
+	<script src="js/wNumb.js"></script>	
