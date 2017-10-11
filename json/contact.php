@@ -47,6 +47,16 @@ $ssl_certificate = SSL_CERTIFICATE;
 					
 	}
 	
+
+	// pass banned contact_id values if they exist
+	if (isset($_POST['banned'])) {
+
+		if ($banned_individuals) {
+			echo json_encode($banned_individuals);		
+		}		
+
+	}	
+	
 	// update email_list
 	if( isset($_POST['email_list']) ) {		
 					

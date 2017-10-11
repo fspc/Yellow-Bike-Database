@@ -15,6 +15,12 @@ $(function(){
 	$("[name='comment']").attr("tabindex",5);
 	$("[name='Submit']").attr("tabindex",6);
 	$(".shop_user_role").css({fontSize: ".75em", fontWeight: "bold"})
+	
+	// return banned list
+	var banned_list;
+	$.post("json/contact.php", {banned: 1}, function (data) { 
+		banned_list = data;
+	});
 
 	// error handler for shops	with a popup dialog (TODO)	
 	function error_handler(input,error_span,error,error_text,event) {		
