@@ -17,10 +17,21 @@ $(function(){
 	$(".shop_user_role").css({fontSize: ".75em", fontWeight: "bold"})
 	
 	// return banned list
-	var banned_list;
+	var banned_list, bl;
 	$.post("json/contact.php", {banned: 1}, function (data) { 
-		banned_list = data;
+		if (data) {
+			bl = $.parseJSON(data);
+			$(bl).each(function(i,v) { 
+				if (i === 0) {		
+					banned_list = "#" + v;
+				} else { 
+					banned_list = banned_list + ",#" + v; 
+				}
+			});
+		}
 	});
+
+	$(banned_list).css({backgroundColor: "red"}).prop("title","BANNED");
 
 	// error handler for shops	with a popup dialog (TODO)	
 	function error_handler(input,error_span,error,error_text,event) {		
