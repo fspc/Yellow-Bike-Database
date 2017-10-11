@@ -31,7 +31,7 @@ $(function(){
 		}
 	});
 
-	$(banned_list).css({backgroundColor: "red"}).prop("title","BANNED");
+	$(banned_list).css({backgroundColor: "red"}).prop("title", "BANNED");
 
 	// error handler for shops	with a popup dialog (TODO)	
 	function error_handler(input,error_span,error,error_text,event) {		
