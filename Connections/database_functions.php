@@ -104,6 +104,13 @@ $transactions_with_membership_benefits = array( "Stand Time" => true,
 																"Cargo Related" => true,
 																"Car Racks" => true
 															 );
+
+/*********
+BANNED IDS
+**********/				
+
+// Ban those pesky individuals who continually refuse to follow policies and safer space agreements by contact_id
+$banned_individuals = array();
 					
 /*******
 CONTACTS
@@ -263,7 +270,7 @@ define('SHOW_SHOP_ID',0);
 
 
 if(file_exists( realpath($_SERVER["DOCUMENT_ROOT"]) . "/Connections/local_configurations.php")) {
-	require_once('local_configurations.php');
+	require('local_configurations.php');
 }
 
 // other constants
