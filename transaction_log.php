@@ -570,7 +570,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 				} elseif($row_Recordset3['show_soldto_not_signed_in']) {
 					echo "<td>";
 					list_donation_locations_withheader('sold_to', $row_Recordset2['sold_to']); //- not required to be signed in.
-					echo "<span id='sold_to_error'></span></td>"; 
+					echo "<span id='sold_to_error'></span>"; 
 					// echo " <a href=\"location_add_edit.php?trans_id={$record_trans_id}&contact_id=new_contact\">Create New Location</a> | 
 					// <a href=\"location_add_edit_select.php?trans_id={$record_trans_id}&contact_id=new_contact\">Edit Existing Location</a>";
 					$record_trans_id = $row_Recordset2['transaction_id'];
