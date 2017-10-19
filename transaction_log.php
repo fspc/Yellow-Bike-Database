@@ -660,12 +660,14 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
         <?php while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)) { //do { ?>
         
         <form method="post" name="FormView_<?php echo $row_Recordset1['transaction_id']; ?>" action="<?php echo $editFormAction; ?>">
-          <tr  bordercolor='#CCCCCC' <?php echo "title='Transaction ID: " . $row_Recordset1['transaction_id'] . "'";
+          <tr bordercolor='#CCCCCC' <?php echo "title='Transaction ID: " . $row_Recordset1['transaction_id'] . "'";
           	echo ((intval($row_Recordset1['transaction_id']) == intval($trans_id)) ? "bgcolor='#CCCC33'" :  "");
           	if ($row_Recordset1['paid'] == 1) { echo "bgcolor='#E6E7E6'"; } 
           	if ($row_Recordset1['transaction_type'] == "Deposit") { echo "class='deposit'"; }
           ?> >
-          <td><?php echo $row_Recordset1['shop_id']; ?></td>
+          <td class="shop_id">
+          <a style="color: rgb(27, 105, 30); text-decoration: none; cursor: crosshair;" href="./shop_log.php?shop_id=<?php echo $row_Recordset1['shop_id']; ?>">
+          <?php echo $row_Recordset1['shop_id']; ?></a></td>
 		  <td><span id="wday" style="font-size:96%;"><?php echo $row_Recordset1['date_wday']; ?></span></td>
 		  <td><?php echo $row_Recordset1['transaction_type']; ?></td>
 		  

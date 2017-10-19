@@ -139,3 +139,10 @@ input[value=Save]:focus, input[value=Close]:focus {
 	display: none;
 	color: blueviolet;
 }
+
+//.css({color: "#1b691e", textDecoration: "none", cursor: "crosshair"});
+.shop_id a {
+	background-color: #1b691e;
+	cursor: crosshair;
+	text-decoration: none;
+}
