@@ -680,7 +680,9 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  			if($result['anonymous']) {
 					  echo  "Anonymous"; 
 		  			} else {
-		  				echo $row_Recordset1['full_name'];
+		  				echo '<a style="color: rgb(27, 105, 30); text-decoration: none; cursor: crosshair;" href="individual_history_log.php?contact_id=' . 
+		  						$row_Recordset1['contact_id'] . '">' . 
+		  						$row_Recordset1['full_name'] . "</a>";
 		  			}
 		  ?>&nbsp;</td>
 
