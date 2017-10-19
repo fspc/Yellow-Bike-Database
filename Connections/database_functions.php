@@ -89,6 +89,10 @@ define("SPECIAL_VOLUNTEER_DISCOUNT",50);              // PERCENTAGE
 // Determines the behaviour of Bicycles (transaction_type_id) for volunteer to earn-a-bike purchases
 define("EARN_A_BIKE_LIMIT",1);
 
+// Determine if stand time behaviour will be based on the SWEAT_EQUITY_LIMIT with discounts applied,
+// or 1 to 1 (1hr of volunteering === 1hr of free stand time) regardless of the SWEAT_EQUITY_LIMIT
+define("REDEEM_ONE_TO_ONE", true);
+
 // Map transaction_type_id for transaction to benefits; 
 // Bicycles and Stand Time are special transaction types for volunteers, but they should still be mapped if benefits are desired.
 $transactions_with_volunteer_benefits = array( 	"Bicycles" => true,

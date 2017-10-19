@@ -18,6 +18,7 @@ $stand_time_value = STAND_TIME_VALUE;
 $free_stand_time_period = FREE_STAND_TIME_PERIOD;
 $timezone = TIMEZONE;
 $sweat_equity_limit = SWEAT_EQUITY_LIMIT;
+$redeem_one_to_one = REDEEM_ONE_TO_ONE;
 $max_bike_earned = MAX_BIKE_EARNED;
 $volunteer_hour_value = VOLUNTEER_HOUR_VALUE;
 $volunteer_discount = VOLUNTEER_DISCOUNT;
@@ -157,6 +158,7 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 		$result3["special_volunteer_hours_qualification"] = $special_volunteer_hours_qualification;
 		$result3["special_volunteer_discount"] = $special_volunteer_discount;
 		$result3["stand_time_value"] = $stand_time_value;
+		$result3["redeem_one_to_one"] = $redeem_one_to_one;
 
 		$result = (object)array_merge((array)$result, (array)$result2, (array)$result3);
 		echo json_encode($result);

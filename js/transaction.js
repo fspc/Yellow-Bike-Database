@@ -629,6 +629,12 @@ $(function() {
 			discount = obj.volunteer_discount;
 		} 
 
+		if ($("#transaction_type").val() === "Stand Time") {
+			if (obj.redeem_one_to_one === true) {
+				discount = 100;
+			}
+		}
+
 		// figure out remaining hours that can be redeemed if some, but not all, volunteer hours have been redeemed.
 		var remaining, year = d.getFullYear(), exceeded_sweat_equity_limit = false, price_after_redeeming, spinner_difference;
 		if (volunteer) {
