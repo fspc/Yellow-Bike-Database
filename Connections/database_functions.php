@@ -311,7 +311,7 @@ function generate_list($querySQL,$list_value,$list_text, $form_name, $default_va
 		if( $default_value == $row_recordset[$list_value]){ 
 			$default_delimiter = 'selected="selected"';
 		} else { $default_delimiter = '';}
-		echo '<option style="color:' . $color . '; "value="' . $row_recordset[$list_value] . '"' . $default_delimiter . ';">' .
+		echo '<option style="color:' . $color . ';" value="' . $row_recordset[$list_value] . '" ' . $default_delimiter . '>' .
 				$row_recordset[$list_text] . '</option>\n';		
 		} while ($row_recordset = mysql_fetch_assoc($recordset));
  	$rows = mysql_num_rows($recordset);
