@@ -290,7 +290,7 @@ define("PAGE_EDIT_LOCATION", "/location_add_edit.php");
 define("PAGE_SELECT_LOCATION", "/location_add_edit_select.php");
 
 //This is a general function to generate the contents of a list box based on a MySQL query.  All necessary parameters for the query are passed 
-function generate_list($querySQL,$list_value,$list_text, $form_name, $default_value)
+function generate_list($querySQL,$list_value,$list_text, $form_name, $default_value, $color)
 {
 	global $database_YBDB, $YBDB;
 	mysql_select_db($database_YBDB, $YBDB);
@@ -311,7 +311,8 @@ function generate_list($querySQL,$list_value,$list_text, $form_name, $default_va
 		if( $default_value == $row_recordset[$list_value]){ 
 			$default_delimiter = 'selected="selected"';
 		} else { $default_delimiter = '';}
-		echo '<option value="' . $row_recordset[$list_value] . '"' . $default_delimiter .'>' . $row_recordset[$list_text] . '</option>\n';		
+		echo '<option style="color:' . $color . '; "value="' . $row_recordset[$list_value] . '"' . $default_delimiter . ';">' .
+				$row_recordset[$list_text] . '</option>\n';		
 		} while ($row_recordset = mysql_fetch_assoc($recordset));
  	$rows = mysql_num_rows($recordset);
  	if($rows > 0) {
@@ -429,7 +430,19 @@ function list_donation_types($form_name = "none", $default_value = ""){
 	generate_list($querySQL,$list_value,$list_text,$form_name, $default_value);
 }
 
+// now combined with list_CurrentShopUsers
 function list_donation_locations($form_name = "none", $default_value = "", $max_name_length = 20 ){
+	$current_shop = current_shop_by_ip();
+	$querySQL = "SELECT DISTINCT full_name, shop_hours.contact_id ,hidden FROM shop_hours
+					LEFT JOIN (SELECT LEFT(CONCAT(last_name, ', ', first_name, ' ',middle_initial),$max_name_length)
+					AS full_name, contact_id, hidden FROM contacts) as contacts ON shop_hours.contact_id=contacts.contact_id
+					WHERE shop_hours.shop_id = $current_shop
+					ORDER BY full_name;";
+	$list_value = "contact_id";
+	$list_text = "full_name";
+	$color = "blue";
+	generate_list($querySQL,$list_value,$list_text,$form_name, $default_value, $color);
+
 	$querySQL = "SELECT LEFT(CONCAT(last_name, ', ', first_name, ' ',middle_initial),$max_name_length) AS full_name, 
 					location_name, contact_id FROM contacts WHERE location_type IS NULL ORDER BY location_name";
 	$list_value = "contact_id";
