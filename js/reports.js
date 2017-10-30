@@ -40,7 +40,7 @@ $(function(){
 	        					return '<a href="./shop_log.php?shop_id=' + shop_id + '">' + shop_id + "</a>";
 	        				},
 	        			},
-						{title:"Time In", field:"time_in", align:"center", width:100,
+						{title:"Time In", field:"time_in", align:"center", width:100, sorter:"time", sorterParams:{format:"hh:mm:ss"},
 							mutator:function(value, data, type, mutatorParams, cell){
 								var time_in = value.split(" ");
 								return time_in[1];
