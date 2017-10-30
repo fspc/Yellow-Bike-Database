@@ -31,9 +31,9 @@ $(function(){
 					responsiveLayout:true, 
 	    			layout:"fitColumns",
 					columns:[
-						{title:"Status", field:"shop_user_role", align:"center", width:125, editor:statusEditor, headerFilter:true},
+						{title:"Status", field:"shop_user_role", align:"center", width:125, editable:off, editor:statusEditor, headerFilter:true},
 						{title:"Date", field:"date", align:"center",width:100, headerFilter:"input"},
-						{title:"Day", field:"dayname", align:"center", width:100, editor:dayEditor, headerFilter:true},
+						{title:"Day", field:"dayname", align:"center", width:100, editable:off, editor:dayEditor, headerFilter:true},
 						{title:"Shop", field:"shop_id", sorter:"number", headerFilter:"number", align:"center", width:85,
 							formatter:function(cell, formatterParams){
 								var shop_id = cell.getValue();
@@ -63,7 +63,7 @@ $(function(){
 	        				}  
 						
 						},
-						{title:"Project", field:"project_id", align:"center", width:125, editor:projectEditor, headerFilter:true},
+						{title:"Project", field:"project_id", align:"center", width:125, editable:off, editor:projectEditor, headerFilter:true},
 						{title:"Comments", field:"comment", formatter:"textarea", headerFilter:"input"}			
 					]			
 				});			
@@ -74,6 +74,9 @@ $(function(){
 		
 	} // if contact_id
 
+	function off(cell){
+		return false;
+	}
 
 	 //cell - the cell component for the editable cell
 	 //onRendered - function to call when the editor has been rendered
@@ -164,7 +167,7 @@ $(function(){
 		$.post("json/reports.php", { roles: 1 }, function (data) {	
 			var obj = $.parseJSON(data);
 			
-			projects = "<select>";
+			projects = "<select><option value=''></option>";
 			$.each(obj, function(k,v) { 
 				projects += "<option value='" + v.shop_user_role_id + "'>" + v.shop_user_role_id + "</option>";
 			});
@@ -180,6 +183,7 @@ $(function(){
 	        "box-sizing":"border-box",
 	    });
 	
+
 	    //Set value of editor to the current value of the cell
 	    editor.val(cell.getValue());
 	
@@ -192,7 +196,7 @@ $(function(){
 	    editor.on("change blur", function(e){
 	        success(editor.val());
 	    });
-	
+	    
 	    //return the editor element
 	    return editor;
 	} // project editor
