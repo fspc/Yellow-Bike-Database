@@ -38,23 +38,21 @@ $(function(){
 							formatter:function(cell, formatterParams){
 								var shop_id = cell.getValue();
 	        					return '<a href="./shop_log.php?shop_id=' + shop_id + '">' + shop_id + "</a>";
-	        				}  
+	        				},
 	        			},
 						{title:"Time In", field:"time_in", align:"center", width:100,
-							formatter:function(cell, formatterParams){
-								var time_in = cell.getValue();
-								time_in = time_in.split(" ");
-	        					return time_in[1];
-	        				}  						
+							mutator:function(value, data, type, mutatorParams, cell){
+								var time_in = value.split(" ");
+								return time_in[1];
+	        				}						
 						},
-						{title:"Time Out", field:"time_out", align:"center", width:100,
-							formatter:function(cell, formatterParams){
-								var time_out = cell.getValue();
-								time_out = time_out.split(" ");
-	        					return time_out[1];
-	        				}  						
+						{title:"Time Out", field:"time_out", align:"center", width:100, sorter:"time", sorterParams:{format:"hh:mm:ss"},
+							mutator:function(value, data, type, mutatorParams, cell){
+								var time_out = value.split(" ");
+								return time_out[1];
+	        				}						
 						},
-						{title:"Total", field:"et", align:"center", width:100,
+						{title:"Total", field:"et", align:"center", width:100, sorter:"time", sorterParams:{format:"h:mm"},
 							formatter:function(cell, formatterParams){
 								var hr_total = cell.getValue();
 								if (hr_total) {	        					
