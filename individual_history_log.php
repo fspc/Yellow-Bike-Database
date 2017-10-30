@@ -15,7 +15,7 @@ if($_GET['contact_id']>0){
 	$contact_id = -1;
 }
 
-include("include_header.html")
+include("include_header.html");
 
 ?>
 
