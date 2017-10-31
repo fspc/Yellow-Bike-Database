@@ -34,7 +34,7 @@ $(function(){
 						{title:"Status", field:"shop_user_role", align:"center", width:125, editable:off, editor:statusEditor, headerFilter:true},
 						{title:"Date", field:"date", align:"center",width:100, headerFilter:"input"},
 						{title:"Day", field:"dayname", align:"center", width:100, editable:off, editor:dayEditor, headerFilter:true},
-						{title:"Shop", field:"shop_id", sorter:"number", headerFilter:"number", align:"center", width:85,
+						{title:"Shop", field:"shop_id", sorter:"number", headerFilter:"number", headerFilterPlaceholder:"ShopId", align:"center", width:85,
 							formatter:function(cell, formatterParams){
 								var shop_id = cell.getValue();
 	        					return '<a href="./shop_log.php?shop_id=' + shop_id + '">' + shop_id + "</a>";
