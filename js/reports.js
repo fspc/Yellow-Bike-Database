@@ -5,10 +5,13 @@ $(function(){
 	$.ajaxSetup({async:false});
 
 	var contact_id = $("#contact_id").text();
-	
+		
 	if (contact_id) {
 
-		$("table").attr("width","")		
+		$("table").attr("width","");
+		var prev = Number(contact_id) - 1, next = Number(contact_id) + 1;
+		$(".stats-left").attr("href","/individual_history_log.php?contact_id=" + prev);
+		$(".stats-right").attr("href","/individual_history_log.php?contact_id=" + next);
 		
 		// name
 		$.post("json/reports.php", { name: 1, contact_id: contact_id }, function (data) {		
