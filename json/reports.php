@@ -14,6 +14,14 @@ $handler = PhpConsole\Handler::getInstance();
 $handler->start();
 */
 
+	// Return total contacts
+	if (isset($_POST['total'])) {	
+		$query = "SELECT COUNT(contact_id) AS total FROM contacts;";
+		$sql = mysql_query($query, $YBDB) or die(mysql_error());
+		$result = mysql_fetch_assoc($sql);
+		echo json_encode($result);
+	}
+
 	// Return name
 	if (isset($_POST['name'])) {
 		$query = "SELECT CONCAT(contacts.first_name, ' ', contacts.middle_initial, ' ',contacts.last_name) AS full_name 
@@ -63,9 +71,11 @@ $handler->start();
 									
 		$sql = mysql_query($query, $YBDB) or die(mysql_error());	
 		
+		
 		while ( $result = mysql_fetch_assoc($sql) ) {	
 			$results[] = $result;				
 		}	
+		
 		echo json_encode($results);
 		
 		

@@ -5,11 +5,33 @@ $(function(){
 	$.ajaxSetup({async:false});
 
 	var contact_id = $("#contact_id").text();
-		
+	
 	if (contact_id) {
 
 		$("table").attr("width","");
+		
+		// handle logic for previous and next buttons
+		//var prev, next;
+
 		var prev = Number(contact_id) - 1, next = Number(contact_id) + 1;
+		if (prev <= 0) {
+			prev = 1;
+		}
+		if (next === 0) {
+			next = 1;
+		}
+		
+		$.post("json/reports.php", { total: 1 }, function (data) {
+			var obj = $.parseJSON(data);
+
+			if (contact_id > obj.total) {
+				prev = obj.total;
+				next = obj.total;
+			} else if (contact_id === obj.total) {
+				next = obj.total;
+			}	
+		});		
+		
 		$(".stats-left").attr("href","/individual_history_log.php?contact_id=" + prev);
 		$(".stats-right").attr("href","/individual_history_log.php?contact_id=" + next);
 		
