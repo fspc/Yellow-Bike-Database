@@ -24,10 +24,10 @@ $(function(){
 		$.post("json/reports.php", { total: 1 }, function (data) {
 			var obj = $.parseJSON(data);
 
-			if (contact_id > obj.total) {
+			if (Number(contact_id) > Number(obj.total)) {
 				prev = obj.total;
 				next = obj.total;
-			} else if (contact_id === obj.total) {
+			} else if (Number(contact_id) === Number(obj.total)) {
 				next = obj.total;
 			}	
 		});		
