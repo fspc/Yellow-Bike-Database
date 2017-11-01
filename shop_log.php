@@ -175,7 +175,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
 		  </tr>
 		  <tr>
 				<td><div align="right">Comments:</div></td>
-			<td><textarea  name="comment" cols="45" rows="3"></textarea>
+			<td><textarea  name="comment" cols="45" rows="3" maxlength="254"></textarea>
 			</td>		  
 		  </tr>
 		  <tr>
@@ -224,7 +224,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
             </tr>
               <tr>
                 <td><div align="right">Comment:</div></td>
-              <td><textarea  name="comment" cols="45" rows="3"><?php echo $row_Recordset1['comment']; ?></textarea>
+              <td><textarea  name="comment" cols="45" rows="3" maxlength="254"><?php echo $row_Recordset1['comment']; ?></textarea>
               </td>
             </tr>
               <?php //if(current_shop_by_ip()>=$shop_id & (current_shop_by_ip()-5)<=$shop_id ) { 
