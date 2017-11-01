@@ -11,7 +11,7 @@ $ssl_certificate = SSL_CERTIFICATE;
 	// test whether patron's name already exists
 	if (isset($_POST['test_name'])) {
 		
-			if( $_POST['contact_id'] === "new_contact" && $_POST['first_name'] && $_POST['last_name'] ) {
+			if( $_POST['first_name'] && $_POST['last_name'] ) {
 				$query = 'SELECT first_name, middle_initial, last_name FROM contacts WHERE ' .
 							'first_name="' . $_POST['first_name'] . '" AND middle_initial="' . $_POST['middle_initial'] .  
 							'" AND last_name="' . $_POST['last_name'] . '";';
