@@ -1,9 +1,6 @@
 <?php
 // new logic
 
-$page_edit_contact = PAGE_EDIT_CONTACT;
-$page_shop_log = PAGE_SHOP_LOG;
-
 if($_GET['visit_id']>0){
 	$visit_id = $_GET['visit_id'];
 } else {
