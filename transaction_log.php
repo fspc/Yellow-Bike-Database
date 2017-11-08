@@ -686,7 +686,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  			}
 		  ?>&nbsp;</td>
 
-		  <td <?php echo "title='Description: " . $row_Recordset1['description_with_locations'] . "'"; ?> ><?php echo $row_Recordset1['description_with_locations']; ?>&nbsp;</td>
+		  <td <?php echo "title='Description: " . htmlspecialchars($row_Recordset1['description_with_locations'], ENT_QUOTES) . "'"; ?> ><?php echo $row_Recordset1['description_with_locations']; ?>&nbsp;</td>
 		  <td><?php echo $row_Recordset1['payment_type']; ?>&nbsp;</td>
 		  <td><?php echo $row_Recordset1['format_amount']; ?>&nbsp;</td>
 		  <td><?php $record_trans_id = $row_Recordset1['transaction_id']; 
