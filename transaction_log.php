@@ -688,7 +688,19 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 
 		  <td <?php echo "title='Description: " . htmlspecialchars($row_Recordset1['description_with_locations'], ENT_QUOTES) . "'"; ?> ><?php echo $row_Recordset1['description_with_locations']; ?>&nbsp;</td>
 		  <td><?php echo $row_Recordset1['payment_type']; ?>&nbsp;</td>
-		  <td><?php echo $row_Recordset1['format_amount']; ?>&nbsp;</td>
+		  <td <?php 
+		  				$history = json_decode($row_Recordset1['history']);
+		  				if ($history) {
+		  					end($history);
+		  					$key = key($history);
+			  				$title = "Original Price: " . $history[$key]->original_price . "\r\n" .
+			  							"Paid: " . $history[$key]->amount . "\r\n" .
+			  							"Redeemed Hours: " . $history[$key]->redeemed_hours;
+			  				echo "title='" . $title . "'";
+		  				}
+				?>
+		  
+		  ><?php echo $row_Recordset1['format_amount']; ?>&nbsp;</td>
 		  <td><?php $record_trans_id = $row_Recordset1['transaction_id']; 
 						foreach ($_GET as $i => $value) {
 							if ($i != "trans_id") {
