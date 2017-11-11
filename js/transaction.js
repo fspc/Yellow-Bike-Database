@@ -910,7 +910,7 @@ $(function() {
 									amount.on("input", function () {				
 										var discount = (price * (membership_obj.membership_discount / 100).toFixed(2)).toFixed(2);
 										var discount_price = (price - discount).toFixed(2);
-										//console.log("original " + price + " discount " + discount + " discounted " + discount_price);		
+										////console.log("original " + price + " discount " + discount + " discounted " + discount_price);		
 										if ( $("#transaction_type").val() !== "Stand Time" ) {
 											$("#membership_discount").text("Member pays $" + discount_price).show();
 											$("#membership_discount_price").text(discount_price);
@@ -1372,7 +1372,7 @@ $(function() {
 										transaction_type: $("#transaction_type").val(),
 										original_price: original_price,
 										amount: price,
-										redeemed_hours: rh || parseFloat($("#volunteer_hours").text()),
+										redeemed_hours: parseFloat($("#volunteer_hours").text()) || rh,
 										description: $("#description").val(), 
 										sold_to: sold_to,
 										sold_by: $("[name='sold_by']").val(),
