@@ -693,10 +693,12 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  				if ($history) {
 		  					end($history);
 		  					$key = key($history);
-			  				$title = "Original Price: " . $history[$key]->original_price . "\r\n" .
-			  							"Paid: " . $history[$key]->amount . "\r\n" .
-			  							"Redeemed Hours: " . $history[$key]->redeemed_hours;
-			  				echo "title='" . $title . "'";
+		  					if ( $history[$key]->original_price ) {
+				  				$title = "Original Price: " . $history[$key]->original_price . "\r\n" .
+				  							"Paid: " . $history[$key]->amount . "\r\n" .
+				  							"Redeemed Hours: " . $history[$key]->redeemed_hours;
+				  				echo "title='" . $title . "'";
+			  				}
 		  				}
 				?>
 		  
