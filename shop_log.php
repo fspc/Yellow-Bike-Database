@@ -42,7 +42,7 @@ $query_Recordset1 = "SELECT shop_hours.shop_visit_id, shop_hours.contact_id,
 									AS full_name, contacts.first_name FROM shop_hours
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role=shop_user_roles.shop_user_role_id
 LEFT JOIN contacts ON shop_hours.contact_id=contacts.contact_id
-WHERE shop_hours.shop_id = $shop_id ORDER BY hours_rank, time_in DESC;";
+WHERE shop_hours.shop_id = $shop_id ORDER BY shop_visit_id DESC;";
 $Recordset1 = mysql_query($query_Recordset1, $YBDB) or die(mysql_error());
 //$row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
@@ -216,11 +216,13 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
 			if ($row_Recordset1['time_out'] <> '0000-00-00 00:00:00'){
 				list_time($row_Recordset1['time_in'],$row_Recordset1['time_out'],'time_out',0,1,$row_Recordset1['time_out']);
 			} ?></td>
-		  <td><input type="submit" name="Submit" value="Update Changes" /></td>
+		  <td></td>
+		  <td></td>
+		  <td></td>
 		  <td></td>
 	    </tr>
           <tr bordercolor="#CCCCCC" bgcolor="#CCCC33">
-            <td colspan="6"><table border="0" cellspacing="0" cellpadding="1">
+            <td colspan="8"><table border="0" cellspacing="0" cellpadding="1">
               <tr>
                 <td width="125"><div align="right">Project:</div></td>
               <td><?php list_projects('project', $row_Recordset1['project_id']); ?></td>
@@ -230,15 +232,27 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
               <td><textarea  name="comment" cols="45" rows="3" maxlength="254"><?php echo $row_Recordset1['comment']; ?></textarea>
               </td>
             </tr>
+            <tr>
+            	<td></td>
+					<td><input type="submit" name="Submit" value="Update Changes" /> 
+						<input type="button" value="Close" 
+							onclick="location.href='<?php echo "/shop_log.php?shop_id={$shop_id}";?>';" /></td> 
+					<td>
+						<input type="button" value="Up"
+						onclick="location.href='<?php 
+					 									$prev = $visit_id + 1;
+					 									echo "/shop_log.php?shop_id={$shop_id}&visit_id={$prev}";?>';"/>					
+						<input type="button" value="Down"
+					 	onclick="location.href='<?php 
+					 									$prev = $visit_id - 1;
+	  				 									echo "/shop_log.php?shop_id={$shop_id}&visit_id={$prev}";?>';" />
+					</td>         
+            </tr>
               <?php //if(current_shop_by_ip()>=$shop_id & (current_shop_by_ip()-5)<=$shop_id ) { 
 						 // Not really necessary since the time can be zeroed out. 
 						 // shop_log_delete_shopvisitid.php has been moved to the attic              
               ?>
-              <!--
-              <tr>
-                <td><div align="right">Delete:</div></td>
-              <td>Click to Delete this Shop User's Visit: <a href="<?php echo PAGE_SHOP_LOG_DELETE_VISIT . "?visit_id={$visit_id}&shop_id={$shop_id}";?>">Delete</a> </td>
-            </tr> --> <?php // } //end if current shop?>
+              <?php // } //end if current shop?>
          </table>	   
 	      </tr>
           <input type="hidden" name="MM_insert" value="FormEdit">
