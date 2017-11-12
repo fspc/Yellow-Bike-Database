@@ -19,7 +19,7 @@ case 'new_error_message':	//this is a sample error message.  insert error case h
    $error_message = '';
    break;
 default:
-   $error_message = 'Start a New Shop OR View and Existing Shop';
+   $error_message = 'Start a New Shop OR View an Existing Shop';
    break;
 }
 
