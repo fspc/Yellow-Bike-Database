@@ -1373,7 +1373,7 @@ $(function() {
 										original_price: original_price,
 										amount: price,
 										redeemed_hours: parseFloat($("#volunteer_hours").text()) || rh,
-										description: $("#description").val(), 
+										description: escape($("#description").val()), 
 										sold_to: sold_to,
 										sold_by: $("[name='sold_by']").val(),
 										quantity: $("#quantity").val(),
