@@ -1,6 +1,9 @@
 -- This is probably the first documentation ever created for this project!
 -- (adjusted while developing, usually at the docker instance - https://github.com/fspc/ybdb )
 
+-- Change shops from date to datetime, see https://github.com/fspc/Yellow-Bike-Database/issues/26
+ALTER TABLE shops MODIFY date datetime DEFAULT NULL;
+
 -- Add shop_locations and shop_types
 
 DELETE FROM shop_locations;
