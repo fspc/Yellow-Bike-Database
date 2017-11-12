@@ -142,8 +142,11 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
 			<td><label>Shop ID:</label></td>
 	      <td><?php echo $shop_id;?>; &nbsp;Location: 
 	      	 <?php echo $shop_location;?>; &nbsp;Date: 
-	      	 <?php echo $shop_date;?>; &nbsp;Shop Type: 
-	      	 <?php echo $shop_type;?>
+	      	 <?php 
+	      	 		$date = date_create($shop_date);
+	      	 		echo date_format($date, 'l') . ", " .$shop_date;
+	      	 ?>; 
+	      	 &nbsp;Shop Type: <?php echo $shop_type;?>
 	      </td>		  
 		  </tr>	        
         <tr>
