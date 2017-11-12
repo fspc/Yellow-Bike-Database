@@ -222,6 +222,9 @@ define("CHANGE_FUND", 20);
 // shop will be current shop for the 24hr day yyyy-mm-dd (currently no check for hrs, only date)
 define("SHOP_HOURS_LENGTH", 10);  
 
+// What minute interval should be displayed for list_time()? Anotherwards, the time_in and time_out pulldown lists.
+// choose an interval that is divisible by 60 minutes, 1, 5, 15, 30 etc.
+define("LIST_MINUTE_INTERVAL", 1);
 
 /* If you elect to keep records for non-shop hours, decide which shop should be used for that purpose.
    The first shop created, 1, makes sense.  A link will show in start_shop.php.
@@ -569,12 +572,47 @@ function list_15min($start_time, $start_offset_min, $form_name, $hours, $display
 	
 }
 
+// replacement for the hardwired list_min15()
+function list_min($start_time, $start_offset_min, $form_name, $hours, $display_elapsed_hours, $default_value, $min=15){
+	list($date, $time) = split('[ ]', $start_time);
+	list($Y, $m, $d) = split('[-]', $date);
+	list($H, $i, $s) = split('[:]', $time);
+	//$min_inc is used to round round to nearest 15min
+	$min_inc = $min - intval($i) % $min;
+	$start_time = mktime($H, $i, 0, $m,$d,$Y) + $min_inc * 60 + $start_offset_min*60 ;
+	//$start_time_am = date("H:i a", mktime($H, $i, $s, 1,1,2000));
+	
+	echo "<select name=\"$form_name\">";
+	if($default_value <> "none"  && $default_value <> "0000-00-00 00:00:00"){
+		//if a default value is requested it is displayed at the top of the list
+		echo '<option value="' . $default_value . '">' . date_to_time($default_value) . '</option>';
+	} 
+	if (current_date() == $date) {
+		// if current date does not match shop date current date will no be an option
+		echo '<option value="current_time">Current Time</option>';
+		echo '<option value="current_time">--------------------</option>';
+	} 
+	for ($j = 0; $j <= $hours* (60 / $min); $j++) {
+		$list_time = $start_time + $j*$min*60;
+		if ($display_elapsed_hours == 1) {
+			$elapsed_hours = " &nbsp;&nbsp;[" . date("G:i",mktime(0, 0, 0, 1,1,2000) + ($j+1)*$min*60). " hrs]";
+		} else { 
+			$elapsed_hours = "";
+		}
+			
+		$list_time_return = date("Y-m-d H:i:s", $list_time); 
+		$list_time_display = date("g:i a", $list_time). $elapsed_hours;
+   		echo "<option value=\"". $list_time_return ."\">" . $list_time_display . "</option>";
+	}
+	echo "</select>";
+	
+}
 
 function list_time($time_list_start, $time, $form_name = "none", $start_offset_min = 0 , $display_elapsed_hours = 0, $default_value = "none", $hours_listed = 8, $et = ""){
 	if($time == "0000-00-00 00:00:00" || $default_value <> "none"){
 		//create drop down
 		//echo list_15min("0000-00-00 01:20:00", 4, "frm_time_out" );
-		echo list_15min($time_list_start,$start_offset_min, $form_name, $hours_listed, $display_elapsed_hours, $default_value );
+		echo list_min($time_list_start,$start_offset_min, $form_name, $hours_listed, $display_elapsed_hours, $default_value, LIST_MINUTE_INTERVAL);
 	} else {
 		//list time out
 		echo date_to_time($time) . "&nbsp;&nbsp;[{$et} hrs]";
