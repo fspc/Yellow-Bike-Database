@@ -67,7 +67,7 @@ $shop_start_time = $row_Recordset3['shop_start'];
 //Action on form update
 //shop_log2.php?shop_id=2&amp;visit_id=4
 $editFormAction = $_SERVER['PHP_SELF'] . "?shop_id=$shop_id&visit_id=$visit_id&welcome=yes";
-$editFormAction_novisit = $_SERVER['PHP_SELF'] . "?shop_id=$shop_id&welcome=yes";
+$editFormAction_novisit = $_SERVER['PHP_SELF'] . "?shop_id=$shop_id&visit_id=$visit_id&welcome=yes";
 
 //if (isset($_SERVER['QUERY_STRING'])) {
 //  $editFormAction .= "?" . htmlentities($_SERVER['QUERY_STRING']);
