@@ -28,7 +28,7 @@ default:
 if($_GET['shop_date']>0){
 	$shop_date = $_GET['shop_date'];
 } else {
-	$shop_date =current_date();}	
+	$shop_date =current_datetime();}	
 	
 //dayname
 if($_GET['shop_dayname']=='alldays'){
@@ -135,7 +135,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                 <form action="<?php echo $editFormAction; ?>" method="post" name="form_new" id="form_new">
                   <tr>
                     <td height="30"><span class="yb_heading3red">Start New Shop:</span></td>
-                    <td><input id="ctrl_date" name="ctrl_date" type="text" class="yb_standard" value="<?php echo current_date();  ?>" /></td>
+                    <td><input id="ctrl_date" name="ctrl_date" type="text" class="yb_standard" value="<?php echo current_datetime();  ?>" /></td>
                     <td><?php list_shop_locations($ctrl_shoplocation,"Treasure City") ?></td>
                     <td><?php list_shop_types($ctrl_shoptype) ?></td>
                     <td>&nbsp;</td>
