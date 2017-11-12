@@ -693,11 +693,19 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  				if ($history) {
 		  					end($history);
 		  					$key = key($history);
+							$query = "SELECT CONCAT(first_name, ' ', middle_initial, ' ', last_name) AS full_name
+										 FROM contacts WHERE contact_id=" . $history[$key]->sold_by . ";";
+		  					$sql = mysql_query($query, $YBDB) or die(mysql_error());
+							$result = mysql_fetch_assoc($sql);
 		  					if ( $history[$key]->original_price ) {
-				  				$title = "Original Price: " . $history[$key]->original_price . "\r\n" .
+				  				$title = "Sold By: " . $result['full_name']. "\r\n" .
+				  							"Original Price: " . $history[$key]->original_price . "\r\n" .
 				  							"Paid: " . $history[$key]->amount . "\r\n" .
 				  							"Redeemed Hours: " . $history[$key]->redeemed_hours;
 				  				echo "title='" . $title . "'";
+			  				} else {
+				  				$title = "Transaction Performed By: " . $result['full_name'];
+				  				echo "title='" . $title . "'";			  				
 			  				}
 		  				}
 				?>
