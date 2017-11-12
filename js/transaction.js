@@ -1362,7 +1362,10 @@ $(function() {
 				} else {
 					price = $("#amount").val();
 					original_price = $("#original_price").text();
-				}
+					if (original_price === "") {
+						original_price = price;					
+					}
+				}	
 				
 				var current_transaction =
 								{   			
