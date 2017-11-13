@@ -222,7 +222,7 @@ define("CHANGE_FUND", 20);
 // shop will be current shop for the 24hr day yyyy-mm-dd (currently no check for hrs, only date)
 define("SHOP_HOURS_LENGTH", 10);  
 
-// What minute interval should be displayed for list_time()? Anotherwards, the time_in and time_out pulldown lists.
+// What minute interval should be displayed for list_time()? In other words, the time_in and time_out pulldown lists.
 // choose an interval that is divisible by 60 minutes, 1, 5, 15, 30 etc.
 define("LIST_MINUTE_INTERVAL", 1);
 
