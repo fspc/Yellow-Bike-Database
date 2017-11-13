@@ -12,12 +12,12 @@ $ssl_certificate = SSL_CERTIFICATE;
 	if (isset($_POST['test_name'])) {
 		
 			if( $_POST['first_name'] && $_POST['last_name'] ) {
-				$query = 'SELECT first_name, middle_initial, last_name FROM contacts WHERE ' .
+				$query = 'SELECT first_name, middle_initial, last_name, contact_id FROM contacts WHERE ' .
 							'first_name="' . $_POST['first_name'] . '" AND middle_initial="' . $_POST['middle_initial'] .  
 							'" AND last_name="' . $_POST['last_name'] . '";';
 				$sql = mysql_query($query, $YBDB) or die(mysql_error());
 				$result = mysql_fetch_assoc($sql);
-				if ( is_array($result) ) {
+				if ( is_array($result) && ($result["contact_id"] !== $_POST['contact_id']) ) {
 					echo 1;			
 				} else {
 					echo 0;			

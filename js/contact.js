@@ -69,6 +69,7 @@ $(function(){
 				err1 = error_handler(last_name.val(), last_name_error, "","*Required",e);		
 
 				// test whether patron's name already exists
+				// and if name matches a different contact_i
 				$.post("json/contact.php", {first_name: first_name.val(), middle_initial: middle_initial.val(), 
 													 last_name: last_name.val(), contact_id: contact_id, test_name: 1 }, function(data) {							 	
 											
