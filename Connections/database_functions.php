@@ -794,7 +794,7 @@ function current_shop_by_ip(){
 	$current_date = current_date();
 	
 	mysql_select_db($database_YBDB, $YBDB);
-	$query_Recordset1 = "SELECT shop_id FROM shops WHERE ip_address = '{$IP}' AND date = '{$current_date}' ORDER BY shop_id DESC;";
+	$query_Recordset1 = "SELECT shop_id FROM shops WHERE ip_address = '{$IP}' AND date REGEXP '^{$current_date} ' ORDER BY shop_id DESC;";
 	$Recordset1 = mysql_query($query_Recordset1, $YBDB) or die(mysql_error());
 	$row_Recordset1 = mysql_fetch_assoc($Recordset1);   
 	$totalRows_Recordset1 = mysql_num_rows($Recordset1);
