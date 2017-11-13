@@ -468,7 +468,7 @@ $(function() {
 						var deposit_amount = $('input[name="' + k + '"]').parent().prev().prev().text().replace(/\$(\d*(?:,\d{3})*\.\d*)\s+/, "$1" );
 						deposit_amount = deposit_amount.replace(/,/, "");										
 						if (deposit_amount != 0) {					
-							var diff = deposit_amount - sum;
+							var diff = deposit_amount - sum.toFixed(2);
 							$("#" + k + "_difference span").text("$"+ diff.toFixed(2));
 							if ( diff == 0 ) {
 								$("#" + k + "_difference").css("color","green");
@@ -991,11 +991,13 @@ $(function() {
 					}); // stand time pos		
 				}				
 
-				// prexisting price without input, e.g. pre-filled Stand Time, needs to be taken into account				
-				if ( amount.cleanVal() >= 100 ) {
-					price = (amount.cleanVal() / 100).toFixed(2);
-				} else {
-					price = amount.cleanVal();
+				// prexisting price without input, e.g. pre-filled Stand Time, needs to be taken into account	
+				if ( typeof amount.val() !== 'undefined') {			
+					if ( amount.cleanVal() >= 100 ) {
+						price = (amount.cleanVal() / 100).toFixed(2);
+					} else {
+						price = amount.cleanVal();
+					}
 				}
 				//console.log("original " + price);
 				$("#original_price").text(price);	
