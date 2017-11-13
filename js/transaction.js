@@ -1050,24 +1050,53 @@ $(function() {
 					if (obj.volunteer && current_membership === true) {
 						// switch to membership discount when there are no remaining volunteer hours to redeem					
 						if (remaining === 0) {
-									amount.on("input", function () {				
-										var discount = (price * (membership_obj.membership_discount / 100).toFixed(2)).toFixed(2);
-										var discount_price = (price - discount).toFixed(2);
-										//console.log("original " + price + " discount " + discount + " discounted " + discount_price);		
-										if ( $("#transaction_type").val() !== "Stand Time" ) {
-											$("#membership_discount").text("Member pays $" + discount_price).show();
-											$("#membership_discount_price").text(discount_price);
-										} else {
-											$("#membership_discount").empty();
-											$("#membership_discount_price").empty();
-										}					
-								});						
-						// turn off membership discount
-						} else {	
-							amount.on("input", function () {					
-								$("#membership_discount").empty();
-								$("#membership_discount_price").empty();							
+							amount.on("input", function () {				
+								var discount = (price * (membership_obj.membership_discount / 100).toFixed(2)).toFixed(2);
+								var discount_price = (price - discount).toFixed(2);
+								//console.log("original " + price + " discount " + discount + " discounted " + discount_price);		
+								if ( $("#transaction_type").val() !== "Stand Time" ) {
+									$("#membership_discount").text("Member pays $" + discount_price).show();
+									$("#membership_discount_price").text(discount_price);
+								} else {
+									$("#membership_discount").empty();
+									$("#membership_discount_price").empty();
+								}					
 							});						
+						// turn off membership discount if volunteer hours can be applied to transaction type
+						} else {
+
+							// find membership benefits that are unique when compared with volunteer benefits
+							var mb = Object.keys(membership_transaction_obj.transactions_with_membership_benefits);
+							var vb = Object.keys(membership_transaction_obj.transactions_with_volunteer_benefits);
+							var diff = $(mb).not(vb).get();
+							var unique = [];
+							$.each( diff, function( key, value ) {
+								unique[value] = true;
+							});							;							
+							
+							// leave on discount
+							if ( unique[$("#transaction_type").val()] ) {
+								amount.on("input", function () {				
+									var discount = (price * (membership_obj.membership_discount / 100).toFixed(2)).toFixed(2);
+									var discount_price = (price - discount).toFixed(2);		
+									if ( $("#transaction_type").val() !== "Stand Time" ) {
+										$("#membership_discount").text("Member pays $" + discount_price).show();
+										$("#membership_discount_price").text(discount_price);
+									} else {
+										$("#membership_discount").empty();
+										$("#membership_discount_price").empty();
+									}					
+								});									
+							
+							// turn off discount	because volunteer hours can be applied						
+							} else {
+															
+								amount.on("input", function () {					
+									$("#membership_discount").empty();
+									$("#membership_discount_price").empty();							
+								});
+
+							}						
 						}		
 												
 					}				
