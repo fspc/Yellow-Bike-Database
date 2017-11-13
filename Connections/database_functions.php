@@ -479,6 +479,17 @@ function currency_format($value, $places = 2){
 	else echo number_format($value,$places);
 }
 
+// function to set time zone in mysql.  
+// Time zones must be setup in mysql for this to work:  mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql
+set_time_zone();
+function set_time_zone() {
+	global $database_YBDB, $YBDB;	
+    
+	mysql_select_db($database_YBDB, $YBDB);
+	$query = "SET time_zone='" . TIMEZONE  . "';";
+	$Recordset1 = mysql_query($query, $YBDB) or die(mysql_error());
+}
+
 //function to convert server time to local time.  To be used by all other current date / time requests. 
 function local_datetime(){
 	date_default_timezone_set(TIMEZONE); 
