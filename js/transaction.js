@@ -1137,7 +1137,7 @@ $(function() {
 							   	if (obj.volunteer && current_membership === true) {
 								   	if (remaining === ui.value && remaining !== 0 && ui.value !== 0) {
 											if ( typeof amount.val() !== 'undefined') {
-												price = amount.cleanVal();			
+												var price = amount.cleanVal();			
 												volunteer_hours_to_membership_discount(price);
 											}
 										}	
@@ -1183,7 +1183,7 @@ $(function() {
 							   if (obj.volunteer && current_membership === true) {
 							   	if (remaining === Number(val) && remaining !== 0 && Number(val) !== 0) {
 										if ( typeof amount.val() !== 'undefined') {	
-											price = amount.cleanVal();
+											var price = amount.cleanVal();
 											volunteer_hours_to_membership_discount(price);
 										}
 									}								   
@@ -1244,7 +1244,7 @@ $(function() {
 						$("#membership_discount").text("Member pays $" + discount_price).show();
 						$("#membership_discount_price").text(discount_price);
 						$("#redeemable_hours").spinner("disable");
-						amount.prop("disabled","disabled");
+						//amount.prop("disabled","disabled");
 					} else {
 						$("#membership_discount").empty();
 						$("#membership_discount_price").empty();
