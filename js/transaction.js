@@ -1132,6 +1132,16 @@ $(function() {
 										$(this).spinner("disable");
 									}
 									
+									// good place for a function to handle bug #4
+							   	if (obj.volunteer && current_membership === true) {
+								   	if (remaining === ui.value && remaining !== 0 && ui.value !== 0) {
+											if ( typeof amount.val() !== 'undefined') {
+												price = amount.cleanVal();			
+												volunteer_hours_to_membership_discount(price);
+											}
+										}	
+									}						   	
+							   	
 							   }
 							}).on('input', function (e) {
 								//var price = amount.val();
@@ -1167,7 +1177,20 @@ $(function() {
 							   if (!$(this).data('defaultValue')) $(this).data('defaultValue', "");
 							   // To handle backspace
 							   $(this).data('onInputPrevented', e.which === 8 ? true : false);
+							   
+							   // good place for a function to handle bug #4
+							   if (obj.volunteer && current_membership === true) {
+							   	if (remaining === Number(val) && remaining !== 0 && Number(val) !== 0) {
+										if ( typeof amount.val() !== 'undefined') {	
+											price = amount.cleanVal();
+											volunteer_hours_to_membership_discount(price);
+										}
+									}								   
+								}						   
+							   
 							}).show();	
+
+						    					
     						
 						} else { 
 							$("#volunteer_hours").prop("title","").empty();
@@ -1210,6 +1233,22 @@ $(function() {
 					}										
 									
 				}); // volunteers post
+
+				// invoke when volunteer hours run out for a member with a qualifying transaction
+				function volunteer_hours_to_membership_discount(price) {
+							
+					var discount = (price * (membership_obj.membership_discount / 100).toFixed(2)).toFixed(2);
+					var discount_price = (price - discount).toFixed(2);		
+					if ( $("#transaction_type").val() !== "Stand Time" ) {
+						$("#membership_discount").text("Member pays $" + discount_price).show();
+						$("#membership_discount_price").text(discount_price);
+						$("#redeemable_hours").spinner("disable");
+					} else {
+						$("#membership_discount").empty();
+						$("#membership_discount_price").empty();
+					}					
+												
+				} // end function volunteer_hours_to_membership_discount
 				
 				// Free stand time use for 30 days if purchased bike recently
 				if ($("#transaction_type").val() === "Stand Time") {
