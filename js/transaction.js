@@ -855,6 +855,7 @@ $(function() {
 
 		sold_to.change(function() { 					
 			
+			amount.prop("disabled","");
 			var membership_obj; //reuse this object
 			if (this.value !== "no_selection") {
 				var expiration_date;										
@@ -1243,6 +1244,7 @@ $(function() {
 						$("#membership_discount").text("Member pays $" + discount_price).show();
 						$("#membership_discount_price").text(discount_price);
 						$("#redeemable_hours").spinner("disable");
+						amount.prop("disabled","disabled");
 					} else {
 						$("#membership_discount").empty();
 						$("#membership_discount_price").empty();
