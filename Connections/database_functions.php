@@ -603,7 +603,7 @@ function list_min($start_time, $start_offset_min, $form_name, $hours, $display_e
 		echo '<option value="current_time">Current Time</option>';
 		echo '<option value="current_time">--------------------</option>';
 	} 
-	for ($j = 0; $j <= $hours* (60 / $min); $j++) {
+	for ($j = -1; $j <= $hours* (60 / $min); $j++) {
 		$list_time = $start_time + $j*$min*60;
 		if ($display_elapsed_hours == 1) {
 			$elapsed_hours = " &nbsp;&nbsp;[" . date("G:i",mktime(0, 0, 0, 1,1,2000) + ($j+1)*$min*60). " hrs]";
