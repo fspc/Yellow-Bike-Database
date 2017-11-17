@@ -484,10 +484,21 @@ function currency_format($value, $places = 2){
 set_time_zone();
 function set_time_zone() {
 	global $database_YBDB, $YBDB;	
-    
+	
 	mysql_select_db($database_YBDB, $YBDB);
-	$query = "SET time_zone='" . TIMEZONE  . "';";
-	$Recordset1 = mysql_query($query, $YBDB) or die(mysql_error());
+	$query = "SET time_zone='" . TIMEZONE . "';";
+	$Recordset1 = mysql_query($query, $YBDB);
+
+	$error =	"<p>YBDB relies heavily on accurate time calculations.</p>" . 
+		"<p>Make sure you have installed time zone support for mysql or mariadb as explained " .
+		'<a href="https://dev.mysql.com/doc/refman/5.7/en/time-zone-support.html">here</a>.<br> ' .
+		"In GNU/Linux you run the mysql_tzinfo_to_sql program from the commandline:</p>" .
+		"<code>mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql.</code>";	
+		
+	if(!$Recordset1) {
+		 echo mysql_error() . "\n" . $error;	
+	}	
+	
 }
 
 //function to convert server time to local time.  To be used by all other current date / time requests. 
@@ -584,6 +595,12 @@ function list_15min($start_time, $start_offset_min, $form_name, $hours, $display
 }
 
 // replacement for the hardwired list_min15()
+// $start_time = time_in
+// $start_offset_min = 0
+// $form_name = time_out
+// $hours = 0
+// $display_elapsed_hours = 1
+// $default_value = $row_Recordset1['time_out']
 function list_min($start_time, $start_offset_min, $form_name, $hours, $display_elapsed_hours, $default_value, $min=15){
 	list($date, $time) = split('[ ]', $start_time);
 	list($Y, $m, $d) = split('[-]', $date);
