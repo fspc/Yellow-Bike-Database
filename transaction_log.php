@@ -701,7 +701,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 				  				$title = "Sold By: " . $result['full_name']. "\r\n" .
 				  							"Original Price: " . $history[$key]->original_price . "\r\n" .
 				  							"Paid: " . $history[$key]->amount . "\r\n" .
-				  							"Redeemed Hours: " . intval($history[$key]->redeemed_hours);
+				  							"Redeemed Hours: " . floatval($history[$key]->redeemed_hours);
 				  				echo "title='" . $title . "'";
 			  				} else {
 				  				$title = "Transaction Performed By: " . $result['full_name'];
