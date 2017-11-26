@@ -135,7 +135,7 @@ input[value=Save]:focus, input[value=Close]:focus {
 	font-size: .9em;
 }
 
-#original_price, #membership_discount, #membership_discount_price {
+#original_price, #membership_discount, #membership_discount_price, #volunteer_hours_to_membership_discount {
 	display: none;
 	color: blueviolet;
 }

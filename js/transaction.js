@@ -1154,7 +1154,8 @@ $(function() {
 							   	if (obj.volunteer && current_membership === true) {
 								   	if (remaining === ui.value && remaining !== 0 && ui.value !== 0) {
 											if ( typeof amount.val() !== 'undefined') {
-												var price = amount.cleanVal();			
+												var price = amount.cleanVal();
+												$("#volunteer_hours_to_membership_discount").text("true");			
 												volunteer_hours_to_membership_discount(price, membership_obj);
 											}
 										}	
@@ -1201,6 +1202,7 @@ $(function() {
 							   	if (remaining === Number(val) && remaining !== 0 && Number(val) !== 0) {
 										if ( typeof amount.val() !== 'undefined') {	
 											var price = amount.cleanVal();
+											$("#volunteer_hours_to_membership_discount").text("true");
 											volunteer_hours_to_membership_discount(price, membership_obj);
 										}
 									}								   
@@ -1427,9 +1429,17 @@ $(function() {
 				// handle history for membership discount price
 				var price, original_price;				
 				if ($("#membership_discount_price").text()) {
-					price = $("#membership_discount_price").text();
-					original_price = $("#amount").val();
-					$("#amount").val(price);
+					
+					if ($("#volunteer_hours_to_membership_discount").text()) {
+						price = $("#membership_discount_price").text();
+						original_price = $("#original_price").text() + " (" + $("#amount").val() + ")";
+						$("#amount").val(price);
+					} else {
+						price = $("#membership_discount_price").text();
+						original_price = $("#amount").val();
+						$("#amount").val(price);										
+					}
+					
 					// update database to reflect change .. hopefully
 					$.post("json/transaction.php",{discount_update: 1, transaction_id: transaction_id, price: price });
 				} else {

@@ -509,6 +509,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 			  	<span id="original_price"></span>
 			  	<span id="membership_discount"></span>
 			  	<span id="membership_discount_price"></span>
+			  	<span id="volunteer_hours_to_membership_discount"></span>
 			  	</td>
 			  </tr>
 			  <?php } // end show_amount ?>		  	  
@@ -689,7 +690,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  <td <?php echo "title='Description: " . htmlspecialchars($row_Recordset1['description_with_locations'], ENT_QUOTES) . "'"; ?> ><?php echo $row_Recordset1['description_with_locations']; ?>&nbsp;</td>
 		  <td><?php echo $row_Recordset1['payment_type']; ?>&nbsp;</td>
 		  <td <?php 
-		  				$history = json_decode($row_Recordset1['history']);
+		  				$history = json_decode($row_Recordset1['history']);		  				
 		  				if ($history) {
 		  					end($history);
 		  					$key = key($history);
