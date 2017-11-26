@@ -608,7 +608,7 @@ $(function() {
 	} // end function save_or_close
 	
 	// invoke when volunteer hours run out for a member with a qualifying transaction
-	function volunteer_hours_to_membership_discount(price) {
+	function volunteer_hours_to_membership_discount(price, membership_obj) {
 				
 		var discount = (price * (membership_obj.membership_discount / 100).toFixed(2)).toFixed(2);
 		var discount_price = (price - discount).toFixed(2);		
@@ -880,7 +880,7 @@ $(function() {
 				// Is this a paid member?	
 				// Determine membership benefits of current transaction
 				$.post("json/transaction.php", { membership_benefits: 1, contact_id: this.value }, function (data) { 
-												
+																
 					membership_obj = $.parseJSON(data);
 					var title = membership_obj.normal_full_name + "\r\n" +
 											membership_obj.email + "\r\n" +
@@ -1148,14 +1148,14 @@ $(function() {
 										redeemable(obj, ui.value, event, volunteer);
 									} else {
 										$(this).spinner("disable");
-									}
+									}									
 									
 									// good place for a function to handle bug #4
 							   	if (obj.volunteer && current_membership === true) {
 								   	if (remaining === ui.value && remaining !== 0 && ui.value !== 0) {
 											if ( typeof amount.val() !== 'undefined') {
 												var price = amount.cleanVal();			
-												volunteer_hours_to_membership_discount(price);
+												volunteer_hours_to_membership_discount(price, membership_obj);
 											}
 										}	
 									}						   	
@@ -1201,7 +1201,7 @@ $(function() {
 							   	if (remaining === Number(val) && remaining !== 0 && Number(val) !== 0) {
 										if ( typeof amount.val() !== 'undefined') {	
 											var price = amount.cleanVal();
-											volunteer_hours_to_membership_discount(price);
+											volunteer_hours_to_membership_discount(price, membership_obj);
 										}
 									}								   
 								}						   
