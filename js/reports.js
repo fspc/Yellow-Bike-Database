@@ -6,6 +6,7 @@ $(function(){
 
 	var contact_id = $("#contact_id").text();
 	
+	// Basic prev and next buttons, and enhanced version would go in order of login per shop
 	if (contact_id) {
 
 		$("table").attr("width","");
@@ -39,7 +40,19 @@ $(function(){
 		$.post("json/reports.php", { name: 1, contact_id: contact_id }, function (data) {		
 			if (data) {
 				var obj = $.parseJSON(data);
-				$("#name").text(obj.full_name)
+				$("#name").text(obj.full_name);
+				var pad_name = "pad_contact_id_" + contact_id;
+				if ( obj.configurations.host ) {
+					$("#individual_history_pad").pad({
+						"padId": pad_name, 
+						"host": obj.configurations.host, 
+						"showControls": true,
+						"height": obj.configurations.height,
+						"userName": obj.configurations.userName,
+						"noColors": obj.configurations.noColors,
+						"plugins" : obj.configurations.plugins
+						});
+				}
 			}
 			
 		}); // name		
@@ -96,6 +109,20 @@ $(function(){
 		}); // tabulator
 		
 	} // if contact_id
+	
+	// stats_userhours
+	if ( document.location.pathname.match(/stats_userhours_new\.php$/) ) {
+		
+		// everyone
+		$.post("/json/reports.php", { everyone: 1 }, function (data) {	
+	
+			if (data) {
+				var obj = $.parseJSON(data);
+			}
+			
+		}); // everyone		
+		
+	} // status_userhours
 
 	function off(cell){
 		return false;

@@ -26,3 +26,5 @@ include("include_header.html");
 </div>
 
 <?php include("include_footer.html"); ?>
+
+<div id="individual_history_pad"></div>

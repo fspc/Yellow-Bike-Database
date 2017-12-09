@@ -273,6 +273,22 @@ $gnucash_accounts = array(	"Assets:Current Assets:Checking Account" => "checking
 // Normally, you will want this set at 0.
 define('SHOW_SHOP_ID',0);
 
+/*************
+ ETHERPAD LITE
+**************/
+// Allow comments/feedback/notes to be added per individual_history_log in reports,
+// and globally in shop_log.  An etherpad host has to be defined for this to work.  
+// See wiki for instructions on how to setup an etherpad docker instance.
+//
+// See https://github.com/ether/etherpad-lite-jquery-plugin for information about configurations.
+$etherpad = array(
+	"host" => "",
+	"userName" => "PositiveSpin",
+	"noColors" => true,
+	"height" => "75%",
+	"plugins" => array()
+);
+
 // END OF USER DEFINED CONFIGURATIONS
 
 
