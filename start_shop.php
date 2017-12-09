@@ -52,9 +52,10 @@ $editFormAction = $_SERVER['PHP_SELF'] . "?shop_date=$shop_date&shop_id=$shop_id
 $editFormAction_no_shopid = $_SERVER['PHP_SELF'] . "?shop_date=$shop_date";
 
 mysql_select_db($database_YBDB, $YBDB);
-$query_Recordset1 = "SELECT shops.shop_id, date, DAYNAME(date) as day ,shop_location, shop_type, ip_address, IF(SUBSTRING(date,1,10) = curdate(),1,0) 
-							AS CanEdit, COUNT(shop_visit_id) AS num_visitors, ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) 
-							+ MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS total_hours 
+$query_Recordset1 = "SELECT shops.shop_id, date, DAYNAME(date) as day ,shop_location, shop_type, ip_address, 
+							IF(SUBSTRING(date,1,10) = curdate(),1,0) AS CanEdit, 
+							COUNT(shop_visit_id) AS num_visitors, 
+							ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS total_hours 
 							FROM shops LEFT JOIN shop_hours ON shops.shop_id = shop_hours.shop_id 
 							WHERE date <= '{$shop_date}' {$shop_dayname} GROUP BY shop_id 
 							ORDER BY date DESC , shop_id DESC LIMIT  0, $record_count;";

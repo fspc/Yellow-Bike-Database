@@ -114,7 +114,7 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 					contacts.phone AS phone,  
 					COUNT(shop_hours.contact_id) AS visits, 
 					contacts.volunteer AS volunteer,
-					ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS volunteer_hours  
+					ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS volunteer_hours  
 					FROM shop_hours  
 					LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id  
 					LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id  
@@ -123,16 +123,17 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 					AND shop_user_roles.volunteer = 1 AND contacts.contact_id=" .
 					$_POST['contact_id'] . 
 					" GROUP BY contact_id) AS members;";	
-					
+								
 		$sql = mysql_query($query, $YBDB) or die(mysql_error());
 		$result = mysql_fetch_assoc($sql);
-				
+		
+		// ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60))		
 		// current year volunteer hours and visits
 		$query =  "SELECT current_year_visits, current_year_volunteer_hours 
 					 FROM (SELECT contacts.contact_id, CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name, 
 					 CONCAT(first_name, ' ', last_name) AS normal_full_name, contacts.email AS email, 
 					 contacts.phone AS phone, COUNT(shop_hours.contact_id) AS current_year_visits, 
-					 ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS current_year_volunteer_hours 
+					 ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS current_year_volunteer_hours 
 					 FROM shop_hours 
 					 LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id 
 					 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id 
