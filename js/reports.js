@@ -41,8 +41,14 @@ $(function(){
 			if (data) {
 				var obj = $.parseJSON(data);
 				$("#name").text(obj.full_name);
-				var pad_name = "pad_contact_id_" + contact_id;
-				if ( obj.configurations.host ) {
+				var pad_name;					
+				if (obj.configurations.prefix) {
+					pad_name = obj.configurations.prefix + "_pad_contact_id_" + contact_id;
+				} else {
+					pad_name = "pad_contact_id_" + contact_id;
+				}				
+				console.log(pad_name);
+				if ( obj.configurations.host && obj.full_name ) {
 					$("#individual_history_pad").pad({
 						"padId": pad_name, 
 						"host": obj.configurations.host, 
