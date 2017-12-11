@@ -115,5 +115,10 @@ $ssl_certificate = SSL_CERTIFICATE;
 		echo $result['contact_id'];	
 	}	
 	
+	if(isset($_POST['global_pad'])) {
+	 $etherpad_conf["configurations"] = $etherpad_global;
+	 echo json_encode($etherpad_conf);
+	}	
+	
 
 ?>
