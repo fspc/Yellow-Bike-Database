@@ -1,14 +1,8 @@
 <?php
+// new logic
 require_once('Connections/YBDB.php');
 require_once('Connections/database_functions.php'); 
 
-$page_edit_contact = PAGE_EDIT_CONTACT; 
-$page_individual_history_log = INDIVIDUAL_HISTORY_LOG;
-$default_shop_user = DEFAULT_SHOP_USER;
-$shop_hours_length = SHOP_HOURS_LENGTH;
-
-mysql_select_db($database_YBDB, $YBDB);
-//?shop_id=2
 if($_GET['shop_id']>0){
 	$shop_id = $_GET['shop_id'];
 } else {
@@ -24,264 +18,105 @@ if($_GET['shop_id']>0){
 if($_GET['visit_id']>0){
 	$visit_id = $_GET['visit_id'];
 } else {
-	$visit_id =-1;}
+	$visit_id =-1;
+}
 	
 if($_GET['new_user_id']>0){
 	$new_user_id = $_GET['new_user_id'];
 } else {
 	$new_user_id = -1;
 }
-	
-	
-$query_Recordset1 = "SELECT shop_hours.shop_visit_id, shop_hours.contact_id, 
-									shop_hours.shop_user_role, shop_hours.project_id, 
-									shop_hours.time_in, shop_hours.time_out, 
-									TIME_FORMAT(TIMEDIFF(time_out, time_in),'%k:%i') 
-									AS et, shop_hours.comment, 
-									CONCAT(contacts.last_name, ', ', contacts.first_name, ' ',contacts.middle_initial) 
-									AS full_name, contacts.first_name FROM shop_hours
-LEFT JOIN shop_user_roles ON shop_hours.shop_user_role=shop_user_roles.shop_user_role_id
-LEFT JOIN contacts ON shop_hours.contact_id=contacts.contact_id
-WHERE shop_hours.shop_id = $shop_id ORDER BY shop_visit_id DESC;";
-$Recordset1 = mysql_query($query_Recordset1, $YBDB) or die(mysql_error());
-//$row_Recordset1 = mysql_fetch_assoc($Recordset1);
-$totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
-mysql_select_db($database_YBDB, $YBDB);
-$query_Recordset2 = "SELECT *, IF(date <> curdate() AND shop_type = 'Mechanic Operation Shop',0,1) as CanEdit FROM shops WHERE shop_id = $shop_id;";
-$Recordset2 = mysql_query($query_Recordset2, $YBDB) or die(mysql_error());
-$row_Recordset2 = mysql_fetch_assoc($Recordset2);
-$totalRows_Recordset2 = mysql_num_rows($Recordset2);
-$shop_date = $row_Recordset2['date'];
-$shop_location = $row_Recordset2['shop_location'];
-$shop_type = $row_Recordset2['shop_type'];
-$shop_CanEdit = $row_Recordset2['CanEdit'];
 
-mysql_select_db($database_YBDB, $YBDB);
-$query_Recordset3 = "SELECT MIN(time_in) as shop_start FROM shop_hours WHERE shop_id = $shop_id;";
-$Recordset3 = mysql_query($query_Recordset3, $YBDB) or die(mysql_error());
-$row_Recordset3 = mysql_fetch_assoc($Recordset3);
-$totalRows_Recordset3 = mysql_num_rows($Recordset3);
-$shop_start_time = $row_Recordset3['shop_start'];
-
-//Action on form update
-//shop_log2.php?shop_id=2&amp;visit_id=4
-$editFormAction = $_SERVER['PHP_SELF'] . "?shop_id=$shop_id&visit_id=$visit_id&welcome=yes";
-$editFormAction_novisit = $_SERVER['PHP_SELF'] . "?shop_id=$shop_id&visit_id=$visit_id&welcome=yes";
-
-//if (isset($_SERVER['QUERY_STRING'])) {
-//  $editFormAction .= "?" . htmlentities($_SERVER['QUERY_STRING']);
-//}
-
-//Form Submit New Shop User
-if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form_new") && ($_POST["contact_id"] == "no_selection")){
-	//if no contact is selected
-	$error_message = '<span class="yb_heading3red">Please Select Yourself</span><br />';
-} elseif ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form_new")) {
-  $insertSQL = sprintf("INSERT INTO shop_hours (contact_id, shop_id, shop_user_role, time_in, comment, project_id) VALUES (%s, %s, %s, %s, %s, %s)",
-                       GetSQLValueString($_POST['contact_id'], "int"),
-                       GetSQLValueString($shop_id, "int"),
-                       GetSQLValueString($_POST['user_role'], "text"),
-                       GetSQLValueString($_POST['time_in'], "date"),
-                       GetSQLValueString($_POST['comment'], "text"),
-					   	  GetSQLValueString($_POST['project'], "text"));
-
-  mysql_select_db($database_YBDB, $YBDB);
-  $Result1 = mysql_query($insertSQL, $YBDB) or die(mysql_error());
-
-  $insertGoTo = "shop_log2.php";
-  if (isset($_SERVER['QUERY_STRING'])) {
-    $insertGoTo .= (strpos($insertGoTo, '?')) ? "&" : "?";
-    $insertGoTo .= $_SERVER['QUERY_STRING'];
-  }
-  header(sprintf("Location: %s", $editFormAction_novisit));
-}
-
-//$_POST["MM_insert"] is in the form: FormUpdate_$VisitID OR FormUpdate_142.  This line seperates the visit id from the 
-//list($is_UpdateForm, $visit_id) = split('[_]', $_POST["MM_insert"]);
-
-//Update Record     isset($_POST["MM_update"])
-if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormUpdate")) {
-  $updateSQL = sprintf("UPDATE shop_hours SET time_out=%s WHERE shop_visit_id=%s",
-                       GetSQLValueString($_POST['time_out'], "date"),
-                       GetSQLValueString($_POST['shop_visit_id'], "int"));
-					   //"2006-10-12 18:15:00"
-
-  mysql_select_db($database_YBDB, $YBDB);
-  $Result1 = mysql_query($updateSQL, $YBDB) or die(mysql_error());
-  
-  $gotopage = "index.html";
-  header(sprintf("Location: %s",$editFormAction ));   //$editFormAction
-}
-
-if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
-  $updateSQL = sprintf("UPDATE shop_hours SET contact_id=%s, shop_user_role=%s, project_id=%s, time_in=%s, time_out=%s, comment=%s WHERE shop_visit_id=%s",
-                       GetSQLValueString($_POST['contact_id'], "int"),
-                       GetSQLValueString($_POST['user_role'], "text"),
-                       GetSQLValueString($_POST['project'], "text"),
-                       GetSQLValueString($_POST['time_in'], "date"),
-					   GetSQLValueString($_POST['time_out'], "date"),
-                       GetSQLValueString($_POST['comment'], "text"),
-					   GetSQLValueString($_POST['shop_visit_id'], "int"));
-					   //"2006-10-12 18:15:00"
-
-  mysql_select_db($database_YBDB, $YBDB);
-  $Result1 = mysql_query($updateSQL, $YBDB) or die(mysql_error());
-  
-  header(sprintf("Location: %s",$editFormAction_novisit ));   //$editFormAction
-}
 ?>
 
+<html>
+	<head>
+		<script src="js/jquery-2.1.1.js"></script>
+		<script src="js/etherpad.js"></script>	
+		<script type="text/javascript" >
 
-<?php include("include_header_shop.html"); ?>
+			$(function() {
+				
+				$.post("json/contact.php", {global_pad: 1}, function(data) {
+					var obj = $.parseJSON(data);
+					var pad_name;					
+					if (obj.configurations.prefix) {
+						pad_name = obj.configurations.prefix + "_global_pad";
+					} else {
+						pad_name = "global_pad";
+					}
+					if ( obj.configurations.host && $("#epframeshop_log_pad").length !== 1 ) {
+						$("#shop_log_pad").pad({
+							"padId": pad_name, 
+							"host": obj.configurations.host, 
+							"showControls": true,
+							"height": obj.configurations.height,
+							"userName": obj.configurations.userName,
+							"noColors": obj.configurations.noColors,
+							"plugins" : obj.configurations.plugins
+						});				
+					}
+				});				
+					
+				// does this work?	
+		    	$("#shop_log_iframe").contents().find("#sign_in_button").on("click keypress", function(e){
 
-	<table width="2200px">
-  
-      <form method="post" name="form_new" action="<?php echo $editFormAction; ?>">
-		  <tr>
-			<td><label>Shop ID:</label></td>
-	      <td><?php echo $shop_id;?>; &nbsp;Location: 
-	      	 <?php echo $shop_location;?>; &nbsp;Date: 
-	      	 <?php 
-	      	 		$date = date_create($shop_date);
-	      	 		echo date_format($date, 'l') . ", " .$shop_date;
-	      	 ?>; 
-	      	 &nbsp;Shop Type: <?php echo $shop_type;?>
-	      </td>		  
-		  </tr>	        
-        <tr>
-          <td><label>Shop User:</label></td>
-          <td>
-              <?php list_contacts_select_user('contact_id', $new_user_id); ?> <?php echo $error_message;?>
-          </td>
-        </tr>
-        <tr>
-		  	<td><label>Status:</label></td>
-		  	<td>
-		    <?php list_shop_user_roles('user_role', $default_shop_user); ?>
-		   </td>
-		  </tr>
-		  <tr>
-		  	<td><label>Time In:</label></td>
-		  	<td><strong>
-		    <?php if($totalRows_Recordset1 <> 0){ 
-						 list_time($shop_start_time,'0000-00-00 00:00:00','time_in',-60,0,'none',16); 						
-						} else {
-						 list_time("{$shop_date} 08:00:00",'0000-00-00 00:00:00','time_in',-15, 0, 'none',16);				
-						}
-									?>
-		   </td>
-		  </tr>
-		  <tr>
-		   <td><label>Project:</label></td>
-			<td><?php list_projects_collective('project'); ?></td>
-		  </tr>
-		  <tr>
-				<td><div align="right">Comments:</div></td>
-			<td><textarea  name="comment" cols="45" rows="3" maxlength="254"></textarea>
-			</td>		  
-		  </tr>
-		  <tr>
-		  	<td></td>
-		  	<td valign="bottom"><input id="sign_in_button" name="Submit" type="submit" value="Sign In" /></td>
-		  </tr>
-	     <input type="hidden" name="MM_insert" value="form_new">
-       </form>     
-       </tbody>
- 	</table>
-          
-   <br /><br />
-          
-   <table  id="shop_log" width="relative" style="margin-left:80px" border="1" cellpadding="10" cellspacing="0" bordercolor="#CCCCCC">
-     <tbody>     
-	  <tr valign="bottom" bordercolor="#CCCCCC">
-	    <td height="25" colspan="1" bgcolor="#99CC33">Existing Shop Users</td>
-	    <td height="25" colspan="1" bgcolor="#99CC33">Status</td>
-	    <td height="25" colspan="1" bgcolor="#99CC33">Time In</td>
-	    <td height="25" colspan="1" bgcolor="#99CC33">Time Out</td>
-	    <td height="25" colspan="1" bgcolor="#99CC33">Update Hours</td>
-	    <td height="25" colspan="1" bgcolor="#99CC33">Edit</td>
-	    <td height="25" colspan="1" bgcolor="#99CC33">Volunteer Hours</td>
-	    <td height="25" colspan="1" bgcolor="#99CC33">Paid Membership</td>
-	   </tr>
-        <?php while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)) { //do { 
-	  if($visit_id == $row_Recordset1['shop_visit_id']) {?>
-        <form method="post" name="FormUpdate_<?php echo $row_Recordset1['shop_visit_id']; ?>" action="<?php echo $editFormAction; ?>">
-          <tr valign="bottom" bordercolor="#CCCCCC" bgcolor="#CCCC33">
-            <td>Edit Record: <br> 
-              <?php list_contacts('contact_id', $row_Recordset1['contact_id']); ?></td>
-		  <td><?php list_shop_user_roles('user_role', $row_Recordset1['shop_user_role']); ?></td>
-		  <td><?php list_time($shop_start_time,'0000-00-00 00:00:00','time_in',-60,0,$row_Recordset1['time_in'],16); ?></td>
-		  <td><?php 
-			if ($row_Recordset1['time_out'] <> '0000-00-00 00:00:00'){
-				list_time($row_Recordset1['time_in'],$row_Recordset1['time_out'],'time_out',0,1,$row_Recordset1['time_out']);
-			} ?></td>
-		  <td></td>
-		  <td></td>
-		  <td></td>
-		  <td></td>
-	    </tr>
-          <tr bordercolor="#CCCCCC" bgcolor="#CCCC33">
-            <td colspan="8"><table border="0" cellspacing="0" cellpadding="1">
-              <tr>
-                <td width="125"><div align="right">Project:</div></td>
-              <td><?php list_projects('project', $row_Recordset1['project_id']); ?></td>
-            </tr>
-              <tr>
-                <td><div align="right">Comment:</div></td>
-              <td><textarea  name="comment" cols="45" rows="3" maxlength="254"><?php echo $row_Recordset1['comment']; ?></textarea>
-              </td>
-            </tr>
-            <tr>
-            	<td></td>
-					<td><input type="submit" name="Submit" value="Update Changes" /> 
-						<input type="button" value="Close" 
-							onclick="location.href='<?php echo "/shop_log.php?shop_id={$shop_id}";?>';" /></td> 
-					<td>
-						<input type="button" value="Up"
-						onclick="location.href='<?php 
-					 									$prev = $visit_id + 1;
-					 									echo "/shop_log.php?shop_id={$shop_id}&visit_id={$prev}";?>';"/>					
-						<input type="button" value="Down"
-					 	onclick="location.href='<?php 
-					 									$prev = $visit_id - 1;
-	  				 									echo "/shop_log.php?shop_id={$shop_id}&visit_id={$prev}";?>';" />
-					</td>         
-            </tr>
-              <?php //if(current_shop_by_ip()>=$shop_id & (current_shop_by_ip()-5)<=$shop_id ) { 
-						 // Not really necessary since the time can be zeroed out. 
-						 // shop_log_delete_shopvisitid.php has been moved to the attic              
-              ?>
-              <?php // } //end if current shop?>
-         </table>	   
-	      </tr>
-          <input type="hidden" name="MM_insert" value="FormEdit">
-          <input type="hidden" name="shop_visit_id" value="<?php echo $row_Recordset1['shop_visit_id']; ?>">
-          </form>
-	  <?php } else { //This section executes if it is not the visit_id selected NOT FOR EDIT ?> 
-        <form method="post" name="FormUpdate_<?php echo $row_Recordset1['shop_visit_id']; ?>" action="<?php echo $editFormAction; ?>">
-          <tr bordercolor="#CCCCCC" id="<?php echo $row_Recordset1['contact_id']; ?>">
-            <td><a href="<?php echo "{$page_individual_history_log}?contact_id=" . $row_Recordset1['contact_id']; ?>"><?php echo $row_Recordset1['full_name']; ?></a></td>
-		  <td class="shop_user_role"><?php echo $row_Recordset1['shop_user_role']; ?></td>
-		  <td><?php echo date_to_time($row_Recordset1['time_in']); ?></td>
-		  <td><?php echo list_time($row_Recordset1['time_in'],$row_Recordset1['time_out'],'time_out',0,1,'none', $shop_hours_length, $row_Recordset1['et']); ?></td>
-		  <td><?php sign_out($row_Recordset1['time_out'], $row_Recordset1['first_name']); ?>&nbsp</td>
-		  <td><?php if($shop_CanEdit == 1) {echo "<a href=\"{$_SERVER['PHP_SELF']}?shop_id={$shop_id}&visit_id={$row_Recordset1['shop_visit_id']}\">edit</a>";} else {echo "&nbsp";} ?></td>
-		  <td><span class="volunteer_hours_<?php echo $row_Recordset1['contact_id']; ?>"></span></td>
-		  <td><span class="paid_membership_<?php echo $row_Recordset1['contact_id']; ?>"></span></td>
-	    </tr>
-          <input type="hidden" name="MM_insert" value="FormUpdate">
-          <input type="hidden" name="shop_visit_id" value="<?php echo $row_Recordset1['shop_visit_id']; ?>">
-          </form>
-	  <?php } // if
-	} //while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)); // while Recordset1 ?>
-        </table>  </tr>
-  <tr>
-    <td height="40" valign="bottom"></td>
-    </tr>
-</table>
-<p>&nbsp;</p>
-<?php include("include_footer.html"); ?>
-<?php
-mysql_free_result($Recordset1);
-?>
+			     	var body_margin = $("#shop_log_iframe").contents().find("body").css("margin");
+			     	body_margin = body_margin.replace("px","");
+			     	body_margin = body_margin * 4;
+					var shop_log_height = $("#shop_log_iframe").contents().find("#shop_height").height() +
+			      $("#shop_log_iframe").contents().find("#header_height").height() + body_margin;	        
+    
+		    		$("#shop_log_iframe").css({"height": shop_log_height}); 
+		    		
+		    	});      	
+		    					 
+ 			}); // end $(function()
+ 
+			$( window ).on( "load", function() {
+	        
+		     	var body_margin = $("#shop_log_iframe").contents().find("body").css("margin");
+		     	body_margin = body_margin.replace("px","");
+		     	body_margin = body_margin * 4;
+				var shop_log_height = $("#shop_log_iframe").contents().find("#shop_height").height() +
+		      $("#shop_log_iframe").contents().find("#header_height").height() + body_margin;	        
+		    
+		    	$("#shop_log_iframe").css({"height": shop_log_height});  
+		    	
+		    	$("#shop_log_iframe").contents().find("#shop_log_link").attr("href","/shop_log_iframe.php"); 
+		    	
+		    	// does this work?
+		    	$("#shop_log_iframe").contents().find("#sign_in_button").on("click keypress", function(e){
+
+			     	var body_margin = $("#shop_log_iframe").contents().find("body").css("margin");
+			     	body_margin = body_margin.replace("px","");
+			     	body_margin = body_margin * 4;
+					var shop_log_height = $("#shop_log_iframe").contents().find("#shop_height").height() +
+			      $("#shop_log_iframe").contents().find("#header_height").height() + body_margin;	        
+    
+		    		$("#shop_log_iframe").css({"height": shop_log_height}); 
+		    		
+		    	});  
+	      
+	    	}); // end $( window ).on
+	       
+	    
+		</script>
+	</head>
+	<body style="width: 100%; height: 100%; margin: 0; padding: 0;">
+		<div>		
+		<div>
+		<iframe style="width: 100%; height: 100%; border: none;" name="shop_log_iframe" id="shop_log_iframe" 
+					src="./shop_log_iframe.php?shop_id=<?php echo $shop_id; ?>&visit_id=<?php echo $visit_id; ?>&new_user_id=<?php echo $new_user_id; ?>">
+		</iframe>
+	 	</div>		
+		<div id="shop_log_pad"></div>
+		</div>			
+		<script>	
+			
+
+								
+		</script>	
+	</body>
+</html>
