@@ -11,7 +11,7 @@ require_once('Connections/database_functions.php');
         <li><span class="yb_heading3red">This is Your Community Bike Shop; it is open to the public</span>, 
         providing a space for people to work on bikes, and to learn bike mechanics skills. Keep your workspace clean, and put
         back all tools and parts.  Ask a Coordinator if you need help.  
-        <span class="yb_standardCENTERred">Always, <a href="./shop_log.php">sign-in/sign-out</a> regardless of your purpose (status)</span> 
+        <span class="yb_standardCENTERred">Always, <a href="./shop_log_iframe.php">sign-in/sign-out</a> regardless of your purpose (status)</span> 
         for being in the shop, and if your status changes, sign-out, and sign-in with the new status.  Understand our Repairs Policy and Safer Space Agreement (see below).</li>
       </ul>
       <ul>
@@ -81,9 +81,9 @@ require_once('Connections/database_functions.php');
       <tr align="center">
         <td width="187"><span class="style8"><a href="<?php echo PAGE_EDIT_CONTACT; ?>?contact_id=new_contact">First Time User</a></span> <br />
         <span class="yb_standardCENTERred">Fill out intial information </span></td>
-        <td width="195"><span class="style8"><a href="shop_log.php">Sign In</a> to Get Started</span><br /> 
+        <td width="195"><span class="style8"><a href="shop_log_iframe.php">Sign In</a> to Get Started</span><br /> 
         <span class="yb_standardCENTERred">Talk to a coordinator</span></td>
-        <td width="203"><span class="style8"><a href="shop_log.php">Sign Out</a> Before Leaving</span><br /> 
+        <td width="203"><span class="style8"><a href="shop_log_iframe.php">Sign Out</a> Before Leaving</span><br /> 
         <span class="yb_standardCENTERred">Workspace cleaned up?</span></td>
       </tr>
     </table>
