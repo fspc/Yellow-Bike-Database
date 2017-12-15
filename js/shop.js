@@ -91,7 +91,32 @@ $(function(){
 	// could have done this in php, but this separates out the view logic
 	var d = new Date();
    volunteer_status();
-	membership_status();
+   
+	var membership_ids;
+	var last_index = $("#shop_log tr").length;
+	if (last_index) {
+		last_index = last_index -1;
+		$.each($("#shop_log tr"), function(index) {  
+			
+				if (this.id) {
+
+					var id = this.id;
+
+					// 2 tr for first created login
+					if (last_index <= 2) {
+						membership_ids = "contact_id=" + id;
+					}
+					else if (!membership_ids) {
+						membership_ids = "(contact_id=" + id + " OR ";
+					} else if ( index === last_index) {
+						membership_ids += "contact_id=" + id + ")";
+					} else {
+						membership_ids += "contact_id=" + id + " OR ";
+					}		
+				}	   
+		});
+	}   
+  	membership_status(membership_ids);
 	
 	// volunteer status
 	function volunteer_status() {
@@ -200,60 +225,63 @@ $(function(){
 	
 									
 	// Is this a paid member?
-	function membership_status() {	
+	function membership_status(contacts) {	
 			
 		var expiration_date;
-		var membership_obj; //reuse this object
+		var all_members_obj; //reuse this object
 		var membership_transaction;
 		
-		$.each($("#shop_log tr"), function() {  
+	
+		//$.each($("#shop_log tr"), function() {  
 		
-			if (this.id) {
-				var id = this.id;
+			if (contacts) {
 				
-				$.post("json/transaction.php", { membership_benefits: 1, contact_id: this.id }, function (data) { 					
+				$.post("json/transaction.php", { membership_benefits: 1, contact_id: contacts }, function (data) { 					
 											
-					membership_obj = $.parseJSON(data);
-							
-					var title = membership_obj.normal_full_name + "\r\n" +
-											"expiration: " + membership_obj.expiration_date;
-											
-			
-					if (membership_obj.expiration_date) {
-						var exp = membership_obj.expiration_date;
-						expiration_date = new Date(exp.split("-").toString());
-						if (d < expiration_date) {	
-							membership_transaction = true;
+					all_members_obj = $.parseJSON(data);
+					
+				  	$.each(all_members_obj, function() {
+					
+						var membership_obj = this;
+						
+						var title = membership_obj.normal_full_name + "\r\n" +
+												"expiration: " + membership_obj.expiration_date;
+												
+				
+						if (membership_obj.expiration_date) {
+							var exp = membership_obj.expiration_date;
+							expiration_date = new Date(exp.split("-").toString());
+							if (d < expiration_date) {	
+								membership_transaction = true;
+							}
 						}
-					}
-										
-					if (typeof membership_obj.expiration_date && membership_obj.expiration_date !== undefined) {
-		
-						var exp = membership_obj.expiration_date;
-						expiration_date = new Date(exp.split("-").toString());					
+											
+						if (typeof membership_obj.expiration_date && membership_obj.expiration_date !== undefined) {
+			
+							var exp = membership_obj.expiration_date;
+							expiration_date = new Date(exp.split("-").toString());					
+							
+							// expired membership	
+							if (d >= expiration_date) {												
+								$(".paid_membership_" + membership_obj.contact_id).html("Expired").
+								parent().css({backgroundColor: "red", textAlign: "center", cursor: "cell", textDecoration: "none"}).prop("title",title);
 						
-						// expired membership	
-						if (d >= expiration_date) {												
-							$(".paid_membership_" + membership_obj.contact_id).html("Expired").
-							parent().css({backgroundColor: "red", textAlign: "center", cursor: "cell", textDecoration: "none"}).prop("title",title);
-					
-						// paid membership
-						} else if (d < expiration_date) {
-							$(".paid_membership_" + membership_obj.contact_id).html("Current").
-							parent().css({backgroundColor: "green", textAlign: "center", cursor: "cell"}).prop("title",title).css({textAlign: "center"});
+							// paid membership
+							} else if (d < expiration_date) {
+								$(".paid_membership_" + membership_obj.contact_id).html("Current").
+								parent().css({backgroundColor: "green", textAlign: "center", cursor: "cell"}).prop("title",title).css({textAlign: "center"});
+							
+							}	// paid membership
+											
+						} 
 						
-						}	// paid membership
-					
-					// never been a member						
-					} else { 
-					
-						$(".paid_membership_" + id).parent().css({cursor: "not-allowed"});			
-
-					} // never been a member	
-					
+					}); // each all_members_obj
 				}); // end if this a paid member
-			} // if this.id
-		}); // each
+				
+				// never been a member				
+				$(".paid_membership:not([title])").parent().css({cursor: "not-allowed"});
+				
+			} // if contacts
 	} // function membership status
 
 });

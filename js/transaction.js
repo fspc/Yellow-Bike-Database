@@ -879,9 +879,11 @@ $(function() {
 				
 				// Is this a paid member?	
 				// Determine membership benefits of current transaction
-				$.post("json/transaction.php", { membership_benefits: 1, contact_id: this.value }, function (data) { 
-																
-					membership_obj = $.parseJSON(data);
+				var contact_id = "contact_id=" + this.value;
+				$.post("json/transaction.php", { membership_benefits: 1, contact_id: contact_id }, function (data) { 
+					
+					var membership_objs = $.parseJSON(data);										
+					membership_obj = membership_objs[0];
 					var title = membership_obj.normal_full_name + "\r\n" +
 											membership_obj.email + "\r\n" +
 											membership_obj.phone + "\r\n" +

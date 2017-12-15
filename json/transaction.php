@@ -667,7 +667,7 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 
 	} // End Deposit Calculator
 	
-	function membership_benefits($contact_id, $membership_discount) {
+	function membership_benefits($contact_id, $membership_discount) {		
 		
 		global $database_YBDB, $YBDB;
 		mysql_select_db($database_YBDB, $YBDB);
@@ -677,14 +677,19 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 					transaction_log.date AS membership_start, SUBSTRING_INDEX(DATE_ADD(date, INTERVAL 365 DAY), ' ', 1) AS expiration_date 
 					FROM transaction_log  LEFT JOIN contacts ON transaction_log.sold_to = contacts.contact_id  
 					WHERE SUBSTRING_INDEX(date, ' ', 1) <= DATE_ADD(date, INTERVAL 365 DAY)  
-					AND (transaction_type='Memberships' AND paid=1) AND contact_id=" .
+					AND (transaction_type='Memberships' AND paid=1) AND " .
 					$contact_id . 
 					" ORDER by membership_start DESC;";		
 			
 		 $sql = mysql_query($query, $YBDB) or die(mysql_error());
-		 $result = mysql_fetch_assoc($sql);
-		 $result['membership_discount'] = $membership_discount;
-		 return $result;
+
+		$members = [];		 
+		while ( $result = mysql_fetch_assoc($sql) ) {
+			$result['membership_discount'] = $membership_discount;
+			$members[] = $result;					
+		}		 	 
+		 
+		 return $members;
 	
 	} // end membership_benefits
 
