@@ -279,7 +279,7 @@ $(function(){
 				}); // end if this a paid member
 				
 				// never been a member				
-				$(".paid_membership:not([title])").parent().css({cursor: "not-allowed"});
+				$(".paid_membership:not([title])").css({cursor: "not-allowed"});
 				
 			} // if contacts
 	} // function membership status
