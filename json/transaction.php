@@ -105,8 +105,10 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 	
 	// Volunteer Benefits
 	if (isset($_POST['volunteer_benefits'])) {
-		
-		$query = "SELECT contact_id, full_name, normal_full_name, email, phone, visits, volunteer_hours, volunteer
+
+		$query = "SELECT firstset.contact_id, firstset.full_name, firstset.normal_full_name, 
+					firstset.email, firstset.phone, firstset.visits, firstset.volunteer_hours, firstset.volunteer,
+					secondset.current_year_visits, secondset.current_year_volunteer_hours
 					FROM (SELECT contacts.contact_id, 
 					CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name, 
 					CONCAT(first_name, ' ', last_name) AS normal_full_name, 
@@ -122,17 +124,10 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 					AND SUBSTRING_INDEX(time_in, ' ', 1) <= DATE_SUB(CURDATE(), INTERVAL 0 DAY)) 
 					AND shop_user_roles.volunteer = 1 AND contacts.contact_id=" .
 					$_POST['contact_id'] . 
-					" GROUP BY contact_id) AS members;";	
-								
-		$sql = mysql_query($query, $YBDB) or die(mysql_error());
-		$result = mysql_fetch_assoc($sql);
-		
-		// ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60))		
-		// current year volunteer hours and visits
-		$query =  "SELECT current_year_visits, current_year_volunteer_hours 
-					 FROM (SELECT contacts.contact_id, CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name, 
-					 CONCAT(first_name, ' ', last_name) AS normal_full_name, contacts.email AS email, 
-					 contacts.phone AS phone, COUNT(shop_hours.contact_id) AS current_year_visits, 
+					" GROUP BY contact_id) AS firstset
+					INNER JOIN
+					(SELECT contacts.contact_id,   
+					 COUNT(shop_hours.contact_id) AS current_year_visits, 
 					 ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS current_year_volunteer_hours 
 					 FROM shop_hours 
 					 LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id 
@@ -142,12 +137,11 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 					 AND shop_user_roles.volunteer = 1 
 					 AND contacts.contact_id=" . 
 					 $_POST['contact_id'] .
-					 ") AS members;";
-
+					 ") AS secondset;";				
+								
 		$sql = mysql_query($query, $YBDB) or die(mysql_error());
-		$result2 = mysql_fetch_assoc($sql);
-		
-		
+		$result = mysql_fetch_assoc($sql);
+				
 		
 		// update volunteer_benefits  either on sold_to.change (initialize) or redeem.change in separate callback
 	   // zero out if new year
@@ -161,7 +155,7 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 		$result3["stand_time_value"] = $stand_time_value;
 		$result3["redeem_one_to_one"] = $redeem_one_to_one;
 
-		$result = (object)array_merge((array)$result, (array)$result2, (array)$result3);
+		$result = (object)array_merge((array)$result,(array)$result3);
 		echo json_encode($result);
 
 	}	// end Volunteer Benefits
