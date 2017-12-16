@@ -874,6 +874,7 @@ $(function() {
 			
 			amount.prop("disabled","");
 			var membership_obj; //reuse this object
+			
 			if (this.value !== "no_selection") {
 				var expiration_date;										
 				
@@ -882,12 +883,19 @@ $(function() {
 				var contact_id = "contact_id=" + this.value;
 				$.post("json/transaction.php", { membership_benefits: 1, contact_id: contact_id }, function (data) { 
 					
-					var membership_objs = $.parseJSON(data);										
-					membership_obj = membership_objs[0];
+					var membership_objs = $.parseJSON(data);
+					
+					/*
+				 	Weird hack, before improving performance #46, there was always a property for membership_obj,
+					membership_discount:10, which just allowed the code to work, now it is empty when a patron 
+					actually is not a paid member, so this creates that obj & property if that is the case.
+					*/
+					membership_obj = membership_objs[0] || { membership_discount: 10 };				
+
 					var title = membership_obj.normal_full_name + "\r\n" +
-											membership_obj.email + "\r\n" +
-											membership_obj.phone + "\r\n" +
-											"expiration: " + membership_obj.expiration_date;
+									membership_obj.email + "\r\n" +
+									membership_obj.phone + "\r\n" +
+									"expiration: " + membership_obj.expiration_date;						
 											
 					$("#membership_discount").empty();
 					$("#membership_discount_price").empty();
@@ -1023,13 +1031,16 @@ $(function() {
 				$("#original_price").text(price);	
 								
 				// How many hours does this volunteer have?
-				$("#redeemable_hours").val("");													
-				$.post("json/transaction.php", { volunteer_benefits: 1, contact_id: this.value }, function (data) { 								
+				$("#redeemable_hours").val("");
+				var contact_id = "contacts.contact_id=" + this.value;													
+				$.post("json/transaction.php", { volunteer_benefits: 1, contact_id: contact_id }, function (data) { 								
 														
 					var year = d.getFullYear();
 					var bikes_earned = 0;
-					var volunteer_hours_redeemed = 0;								
-					var obj = $.parseJSON(data);
+					var volunteer_hours_redeemed = 0;
+					
+					var volunteer_objs = $.parseJSON(data);										
+					var obj = volunteer_objs[0];												
 
 					var volunteer = "", remaining = 0, vhr = "", max_bikes_earned = 0;
 					if (obj.volunteer) {

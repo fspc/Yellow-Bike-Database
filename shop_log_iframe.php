@@ -262,13 +262,13 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
 	  <?php } else { //This section executes if it is not the visit_id selected NOT FOR EDIT ?> 
         <form method="post" name="FormUpdate_<?php echo $row_Recordset1['shop_visit_id']; ?>" action="<?php echo $editFormAction; ?>">
           <tr bordercolor="#CCCCCC" id="<?php echo $row_Recordset1['contact_id']; ?>">
-            <td><a href="<?php echo "{$page_individual_history_log}?contact_id=" . $row_Recordset1['contact_id']; ?>" target="_parent"><?php echo $row_Recordset1['full_name']; ?></a></td>
+            <td class="existing_shop_user"><a href="<?php echo "{$page_individual_history_log}?contact_id=" . $row_Recordset1['contact_id']; ?>" target="_parent"><?php echo $row_Recordset1['full_name']; ?></a></td>
 		  <td class="shop_user_role"><?php echo $row_Recordset1['shop_user_role']; ?></td>
 		  <td><?php echo date_to_time($row_Recordset1['time_in']); ?></td>
 		  <td><?php echo list_time($row_Recordset1['time_in'],$row_Recordset1['time_out'],'time_out',0,1,'none', $shop_hours_length, $row_Recordset1['et']); ?></td>
 		  <td><?php sign_out($row_Recordset1['time_out'], $row_Recordset1['first_name']); ?>&nbsp</td>
 		  <td><?php if($shop_CanEdit == 1) {echo "<a href=\"{$_SERVER['PHP_SELF']}?shop_id={$shop_id}&visit_id={$row_Recordset1['shop_visit_id']}\">edit</a>";} else {echo "&nbsp";} ?></td>
-		  <td><span class="volunteer_hours_<?php echo $row_Recordset1['contact_id']; ?>"></span></td>
+		  <td class="volunteer_hours"><span class="volunteer_hours_<?php echo $row_Recordset1['contact_id']; ?>"></span></td>
 		  <td class="paid_membership"><span class="paid_membership_<?php echo $row_Recordset1['contact_id']; ?>"></span></td>
 	    </tr>
           <input type="hidden" name="MM_insert" value="FormUpdate">

@@ -57,8 +57,9 @@ if($_GET['new_user_id']>0){
 							"plugins" : obj.configurations.plugins
 						});				
 					}
-				});				
-					
+				});	
+										
+										
 				// does this work?	
 		    	$("#shop_log_iframe").contents().find("#sign_in_button").on("click keypress", function(e){
 
@@ -78,7 +79,6 @@ if($_GET['new_user_id']>0){
 	        
 	        	if ( $("#epframeshop_log_pad").length ) {
 	        		
-	        	
 			     	var body_margin = $("#shop_log_iframe").contents().find("body").css("margin");
 			     	body_margin = body_margin.replace("px","");
 			     	body_margin = body_margin * 4;
@@ -87,11 +87,11 @@ if($_GET['new_user_id']>0){
 			    
 			    	$("#shop_log_iframe").css({"height": shop_log_height});  
 			    	
-			    	$("#shop_log_iframe").contents().find("#shop_log_link").attr("href","/shop_log_iframe.php"); 
+			    	$("#shop_log_iframe").contents().find("#shop_log_link").attr("href","/shop_log_iframe.php"); 			    	
 			    	
-			    	// does this work?
+			    	// does this work? - the first time it is completely loaded
 			    	$("#shop_log_iframe").contents().find("#sign_in_button").on("click keypress", function(e){
-	
+						
 				     	var body_margin = $("#shop_log_iframe").contents().find("body").css("margin");
 				     	body_margin = body_margin.replace("px","");
 				     	body_margin = body_margin * 4;
