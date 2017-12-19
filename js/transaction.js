@@ -1039,8 +1039,14 @@ $(function() {
 					var bikes_earned = 0;
 					var volunteer_hours_redeemed = 0;
 					
-					var volunteer_objs = $.parseJSON(data);										
-					var obj = volunteer_objs[0];												
+					var volunteer_objs = $.parseJSON(data);
+					
+					/*
+  				 	Weird hack, before improving performance #46, there was always a property for obj,
+ 					?, which just allowed the code to work, now it is empty when a patron 
+ 					has never been a volunteer, so this creates that obj & property if that is the case.
+ 					*/										
+					var obj = volunteer_objs[0] || { volunteer: "" };												
 
 					var volunteer = "", remaining = 0, vhr = "", max_bikes_earned = 0;
 					if (obj.volunteer) {
