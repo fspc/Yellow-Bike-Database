@@ -126,21 +126,20 @@ $(function(){
 	function volunteer_status(contacts) {
 
 		var all_members_obj; //reuse this object
+		var year = d.getFullYear();
 			
 		if (contacts) {  
-		
+
 			$.post("json/transaction.php", { volunteer_benefits: 1, contact_id: contacts }, function (data) { 								
 
 				all_members_obj = $.parseJSON(data);
 				
 			  	$.each(all_members_obj, function() {
-			  															
-					var year = d.getFullYear();
+			  																				
 					var bikes_earned = 0;
 					var volunteer_hours_redeemed = 0;								
 					var obj = this;
-
-		
+				
 					var volunteer = "", remaining = 0, vhr = "", max_bikes_earned = 0;
 					if (obj.volunteer) {
 						volunteer = $.parseJSON(obj.volunteer);
@@ -158,7 +157,7 @@ $(function(){
 											"Volunteer Hours Remaining: " + remaining + "\r\n" +
 											"Max Bikes Earned: " + max_bikes_earned;		
 					
-					var volunteer_with_redeemed_hours_at_zero = obj.current_year_volunteer_hours - vhr;			
+					var volunteer_with_redeemed_hours_at_zero = obj.current_year_volunteer_hours - vhr;				
 				
 					if (obj.contact_id) {
 											

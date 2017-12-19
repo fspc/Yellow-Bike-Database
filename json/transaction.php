@@ -125,7 +125,7 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 					AND shop_user_roles.volunteer = 1 AND " .
 					$_POST['contact_id'] . 
 					" GROUP BY contact_id) AS firstset
-					INNER JOIN
+					LEFT JOIN
 					(SELECT contacts.contact_id,   
 					 COUNT(shop_hours.contact_id) AS current_year_visits, 
 					 ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS current_year_volunteer_hours 
@@ -137,7 +137,10 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 					 AND shop_user_roles.volunteer = 1 
 					 AND " . 
 					 $_POST['contact_id'] .
-					 ") AS secondset;";				
+					 " GROUP BY contact_id) AS secondset ON firstset.contact_id = secondset.contact_id;";		
+
+					 		
+		//$handler->debug($query);					
 								
 		$sql = mysql_query($query, $YBDB) or die(mysql_error());				
 		
