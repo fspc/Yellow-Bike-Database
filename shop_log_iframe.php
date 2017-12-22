@@ -193,7 +193,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
           
    <br /><br />
           
-   <table  id="shop_log" width="relative" style="margin-left:80px" border="1" cellpadding="10" cellspacing="0" bordercolor="#CCCCCC">
+   <table  id="shop_log" width="relative" style="margin:auto" border="1" cellpadding="10" cellspacing="0" bordercolor="#CCCCCC">
      <tbody>     
 	  <tr valign="bottom" bordercolor="#CCCCCC">
 	    <td height="25" colspan="1" bgcolor="#99CC33">Existing Shop Users</td>

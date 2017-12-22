@@ -113,7 +113,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 ?>
 <?php include("include_header_shop.html"); ?>
 
-	    <table style="margin-left:170px">
+	    <table style="margin:auto">
 
         <tr valign="top">
           <td align="left"><span class="yb_heading3red"><?php echo $error_message; ?></span> </td>
