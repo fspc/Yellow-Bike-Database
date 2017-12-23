@@ -136,7 +136,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
 <?php include("include_header_shop.html"); ?>
 
 	<div id="shop_height">
-	<table width="2200px">
+	<table style="width: 100%; align-content: center;">
   
       <form method="post" name="form_new" action="<?php echo $editFormAction; ?>">
 		  <tr>

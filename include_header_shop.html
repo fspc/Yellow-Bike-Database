@@ -37,14 +37,35 @@ function resetTimer()
 <script src="js/chosen.jquery.js"></script>
 <script src="js/jquery.liblink.js"></script> 
 <script src="js/wNumb.js"></script>
+<script>
+/*
+	$( window ).on( "load", function() {
+
+		    var page_y = $( document ).scrollTop();
+		    window.location.href = window.location.href + '?page_y=' + page_y;
+	
+	    if ( window.location.href.indexOf('page_y') != -1 ) {
+	        var match = window.location.href.split('?')[1].split("&")[0].split("=");
+	        $('html, body').scrollTop( match[1] );
+	    }
+
+	 });
+	 */
+</script>
 
 </head>
 
 <body class="yb_standard">
-	<table id="header_height" align="center" width="1000" border="0" cellpadding="1" cellspacing="0">
-	<tr valign="top">
-	  <td height="40" align="left"><a href="/shop_welcome.php">About/Help</a></td>	
-	  <td height="40" align="right"><a id="shop_log_link" href="/shop_log.php">Sign In/Sign Out</a> | <a href="/start_shop.php" target="_parent"> All Shops</a> | <a href="/contact_add_edit_select.php" target="_parent">Add/Edit Contact</a> | <a href="/stats.php" target="_parent">Reports</a>  | <a href="/transaction_log.php" target="_parent">Transaction Log</a> |   <a href="http://www.positivespin.org" target="_blank">PS Home</a></td>
-	</tr>
-	</table>
-	  
+	
+	<div style="float: left; width: 12.5%; height: 40px;"></div>
+	<div style="align-content: center; height: 40px; float: left; width: 75%">
+	  <div style="float: left; width: auto;"><a href="/shop_welcome.php">About/Help</a></div>	
+	  <div style="float: right; width: auto;"><a id="shop_log_link" href="/shop_log.php">Sign In/Sign Out</a> | 
+	  														<a href="/start_shop.php" target="_parent"> All Shops</a> | 
+	  														<a href="/contact_add_edit_select.php" target="_parent">Add/Edit Contact</a> | 
+	  														<a href="/stats.php" target="_parent">Reports</a>  | 
+	  														<a href="/transaction_log.php" target="_parent">Transaction Log</a> |   
+	  														<a href="http://www.positivespin.org" target="_blank">PS Home</a></div>
+	  </div>
+	<div style="float: left; width: 12.5%; height: 40px;"></div>
+	
