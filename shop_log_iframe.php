@@ -102,6 +102,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form_new") && ($_PO
 
 //Update Record     isset($_POST["MM_update"])
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormUpdate")) {
+
   $updateSQL = sprintf("UPDATE shop_hours SET time_out=%s WHERE shop_visit_id=%s",
                        GetSQLValueString($_POST['time_out'], "date"),
                        GetSQLValueString($_POST['shop_visit_id'], "int"));
@@ -115,6 +116,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormUpdate")) {
 }
 
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
+
   $updateSQL = sprintf("UPDATE shop_hours SET contact_id=%s, shop_user_role=%s, project_id=%s, time_in=%s, time_out=%s, comment=%s WHERE shop_visit_id=%s",
                        GetSQLValueString($_POST['contact_id'], "int"),
                        GetSQLValueString($_POST['user_role'], "text"),
@@ -235,18 +237,12 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "FormEdit")) {
             </tr>
             <tr>
             	<td></td>
-					<td><input type="submit" name="Submit" value="Update Changes" /> 
-						<input type="button" value="Close" 
-							onclick="location.href='<?php echo "/shop_log_iframe.php?shop_id={$shop_id}";?>';" /></td> 
-					<td>
-						<input type="button" value="Up"
-						onclick="location.href='<?php 
-					 									$prev = $visit_id + 1;
-					 									echo "/shop_log_iframe.php?shop_id={$shop_id}&visit_id={$prev}";?>';"/>					
-						<input type="button" value="Down"
-					 	onclick="location.href='<?php 
-					 									$prev = $visit_id - 1;
-	  				 									echo "/shop_log_iframe.php?shop_id={$shop_id}&visit_id={$prev}";?>';" />
+					<td><input class="update_changes" type="submit" name="Submit" value="Update Changes" /> 
+						<input class="close" type="button" value="Close" />
+					</td> 
+					<td>						
+						<input class="up" type="button" value="Up" />
+	  				 	<input class="down" type="button" value="Down" />
 					</td>         
             </tr>
               <?php //if(current_shop_by_ip()>=$shop_id & (current_shop_by_ip()-5)<=$shop_id ) { 

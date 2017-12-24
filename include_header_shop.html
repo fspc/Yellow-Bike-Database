@@ -19,7 +19,7 @@ function resetTimer()
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>YBDB</title>
 <link href="css/transactions.css" rel="stylesheet" type="text/css" />
 <link href="css/contacts.css" rel="stylesheet" type="text/css" />
@@ -38,19 +38,74 @@ function resetTimer()
 <script src="js/jquery.liblink.js"></script> 
 <script src="js/wNumb.js"></script>
 <script>
-/*
-	$( window ).on( "load", function() {
 
-		    var page_y = $( document ).scrollTop();
-		    window.location.href = window.location.href + '?page_y=' + page_y;
+	// scroll back to same location when up or down are selected
+	$(function() {
+
+		$(".down").on("click keypress", function(e) {
+
+			var hash = document.body.scrollTop + 25;
+			var query = window.location.search;
+			query = query.split("&");
+			var visit_id = query[1].split("=")[1] - 1;
+			var new_query = query[0] + "&visit_id=" + visit_id;
+
+			var new_url = window.location.origin + window.location.pathname + new_query + "&#" + hash;
+			window.location = new_url;     
+
+			
+		});
+
+		$(".up").on("click keypress", function(e) {
+
+			var hash = document.body.scrollTop - 25;
+			var query = window.location.search;
+			query = query.split("&");
+			var visit_id = parseInt(query[1].split("=")[1]) + 1;
+			var new_query = query[0] + "&visit_id=" + visit_id;
+
+			var new_url = window.location.origin + window.location.pathname + new_query + "&#" + hash;
+			window.location = new_url;    
 	
-	    if ( window.location.href.indexOf('page_y') != -1 ) {
-	        var match = window.location.href.split('?')[1].split("&")[0].split("=");
-	        $('html, body').scrollTop( match[1] );
-	    }
+		});
+
+		$(".close").on("click keypress", function(e) {
+
+			var hash = document.body.scrollTop;
+			var query = window.location.search;
+			query = query.split("&");
+			var new_query = query[0];
+			
+			var new_url = window.location.origin + window.location.pathname + new_query + "&#" + hash;   
+			window.location = new_url; 
+	
+		});
+
+		// have to do this a little differently because it is a submit, not a button
+		$(".update_changes").on("click keypress", function(e) {
+
+			var hash = parseInt(document.body.scrollTop);
+			var query = window.location.search;
+			query = query.split("&");
+			var visit_id = parseInt(query[1].split("=")[1]);			
+			var add_hash = "&#" + hash;
+			var action = $("[name=FormUpdate_" + visit_id).attr("action");			
+			$("[name=FormUpdate_" + visit_id).attr("action", action + add_hash);
+				
+		});
+
+	});
+
+	$( window ).on( "load", function() {
+	
+		if(window.location.hash != "") {
+			
+			document.body.scrollTop = window.location.hash.replace("#", "") * 1;	
+	
+		}
 
 	 });
-	 */
+	
 </script>
 
 </head>
