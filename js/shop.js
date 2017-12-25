@@ -165,7 +165,7 @@ $(function(){
 							
 							if (volunteer_with_redeemed_hours_at_zero !== 0) {								
 								$(".volunteer_hours_" + obj.contact_id).
-									html("Summary | <span class='update_interests'><a href='./contact_add_edit_select.php?contact_id=" + 
+									html("Summary | <span class='update_interests'><a target='_parent' href='./contact_add_edit_select.php?contact_id=" + 
 									obj.contact_id + 
 									"'>Update Interests</a></span>").
 									parent().css({backgroundColor: "#19a0cc", textAlign: "center", cursor: "cell"}).
@@ -192,7 +192,7 @@ $(function(){
 											"Volunteer Hours for last 365 days: None" + "\r\n";
 								
 							$(".volunteer_hours_" + obj.contact_id).
-								html("<span class='update_interests'><a href='./contact_add_edit_select.php?contact_id=" + 
+								html("<span class='update_interests'><a target='_parent' href='./contact_add_edit_select.php?contact_id=" + 
 								obj.contact_id + 
 								"'>Update Interests</a></span>").
 								parent().css({backgroundColor: "rgb(190, 199, 204)", textAlign: "center", cursor: "cell"}).
@@ -213,7 +213,7 @@ $(function(){
 										"Volunteer Hours for last 365 days: None" + "\r\n";
 							
 						$(".volunteer_hours_" + id).
-							html("<span class='update_interests'><a href='./contact_add_edit_select.php?contact_id=" + 
+							html("<span class='update_interests'><a target='_parent' href='./contact_add_edit_select.php?contact_id=" + 
 							id + 
 							"'>Update Interests</a></span>").
 							parent().css({backgroundColor: "rgb(190, 199, 204)", textAlign: "center", cursor: "cell"}).
@@ -242,7 +242,7 @@ $(function(){
 							"Volunteer Hours for last 365 days: None" + "\r\n";
 						
 			$(".volunteer_hours_" + id).
-				html("<span class='update_interests'><a href='./contact_add_edit_select.php?contact_id=" + 
+				html("<span class='update_interests'><a target='_parent' href='./contact_add_edit_select.php?contact_id=" + 
 				id + 
 				"'>Update Interests</a></span>").
 				parent().css({backgroundColor: "rgb(190, 199, 204)", textAlign: "center", cursor: "cell"}).
