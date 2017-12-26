@@ -38,10 +38,22 @@ function resetTimer()
 <script src="js/jquery.liblink.js"></script> 
 <script src="js/wNumb.js"></script>
 <script>
-
-	// scroll back to same location when up or down are selected
+	
 	$(function() {
 
+		// prevent a double etherpad if shop_log_iframe is clicked on after a shop closes
+		$("#shop_log_link").on("click keypress", function(e) { 
+			if (window.location.pathname === '/shop_log_iframe.php') {
+				e.preventDefault(); // hack to prevent open shop from reopening in same page
+			}			
+			$.post("json/transaction.php", {shop_exist: 1}, function(data) {
+				if (data === "no_shop") {
+					 window.top.location.href = "./start_shop.php";
+				}
+			});
+		});
+
+		// scroll back to same location when up, down, or updated are selected
 		$(".down").on("click keypress", function(e) {
 
 			var hash = document.body.scrollTop + 25;
@@ -93,6 +105,7 @@ function resetTimer()
 			$("[name=FormUpdate_" + visit_id).attr("action", action + add_hash);
 				
 		});
+		// end scroll back to same location when up, down, updated are selected
 
 	});
 
