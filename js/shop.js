@@ -143,9 +143,11 @@ $(function(){
 					var volunteer = "", remaining = 0, vhr = "", max_bikes_earned = 0;
 					if (obj.volunteer) {
 						volunteer = $.parseJSON(obj.volunteer);
-						remaining = obj.current_year_volunteer_hours - volunteer[year].volunteer_hours_redeemed;
-						vhr = volunteer[year].volunteer_hours_redeemed;
-						max_bikes_earned = volunteer[year].max_bike_earned;
+						if (volunteer.hasOwnProperty(year)) {
+							remaining = obj.current_year_volunteer_hours - volunteer[year].volunteer_hours_redeemed;
+							vhr = volunteer[year].volunteer_hours_redeemed;
+							max_bikes_earned = volunteer[year].max_bike_earned;
+						}
 					} else {
 						vhr = 0;
 					}			
