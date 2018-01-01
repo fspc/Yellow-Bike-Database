@@ -88,6 +88,39 @@ $(function() {
 		}
 	} );
 
+	// Provide membership and volunteer information for patrons
+	/*
+	$("[href^='individual_history_log.php']").each( function() { console.log(this.href.split("=")[1]); }); // check for duplicates
+	var membership_ids, volunteer_ids;
+	var last_index = $("[href^='individual_history_log.php']").length;
+	if (last_index) {
+		last_index = last_index - 1;
+		$.each($("[href^='individual_history_log.php']"), function(index) {  			
+			
+			if (this.id) {
+
+				var id = this.id;
+
+				if (last_index <= 1) {
+					membership_ids = "contact_id=" + id;
+				}
+				else if (!membership_ids) {
+					membership_ids = "(contact_id=" + id + " OR ";
+				} else if ( index === last_index) {
+					membership_ids += "contact_id=" + id + ")";
+				} else {
+					membership_ids += "contact_id=" + id + " OR ";
+				}		
+			}
+					   
+		});
+		
+		if (membership_ids) {
+			volunteer_ids = membership_ids.replace(/contact_id/g,"contacts.contact_id");
+		}
+	} 	
+	*/
+
 	// paid or not?
 	$(":checked").parent("td").prev().children().not("#payment_type_label").hide();  // need to watch that not introduction bugs
 	$(".paid").click(function() {
@@ -1051,9 +1084,11 @@ $(function() {
 					var volunteer = "", remaining = 0, vhr = "", max_bikes_earned = 0;
 					if (obj.volunteer) {
 						volunteer = $.parseJSON(obj.volunteer);
-						remaining = obj.current_year_volunteer_hours - volunteer[year].volunteer_hours_redeemed;
-						vhr = volunteer[year].volunteer_hours_redeemed;
-						max_bikes_earned = volunteer[year].max_bike_earned;
+						if (volunteer.hasOwnProperty(year)) {
+							remaining = obj.current_year_volunteer_hours - volunteer[year].volunteer_hours_redeemed;
+							vhr = volunteer[year].volunteer_hours_redeemed;
+							max_bikes_earned = volunteer[year].max_bike_earned;
+						}
 					} else {
 						vhr = 0;
 					}			
