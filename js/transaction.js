@@ -688,25 +688,28 @@ $(function() {
 		// figure out remaining hours that can be redeemed if some, but not all, volunteer hours have been redeemed.
 		var remaining, year = d.getFullYear(), exceeded_sweat_equity_limit = false, price_after_redeeming, spinner_difference;
 		if (volunteer) {
-			var vhr = obj.volunteer_hour_value * volunteer[year].volunteer_hours_redeemed + (spinner_value * obj.volunteer_hour_value);
-			//console.log(obj.volunteer_hour_value + " * " +  volunteer[year].volunteer_hours_redeemed + " = " + vhr );
-			remaining = obj.current_year_volunteer_hours - volunteer[year].volunteer_hours_redeemed;	
-			//console.log(obj.current_year_volunteer_hours + " - " +  volunteer[year].volunteer_hours_redeemed + " = " + remaining );	
-			if (vhr > obj.sweat_equity_limit) {
-				exceeded_sweat_equity_limit = true;
-				spinner_difference = (obj.sweat_equity_limit / obj.volunteer_hour_value) - volunteer[year].volunteer_hours_redeemed;
-				price_after_redeeming =  price - (obj.volunteer_hour_value * spinner_difference);
-				//console.log(spinner_difference + " " + price_after_redeeming);
+			
+			// will need to figure out these values when there isn't a property for the new year
+			if (volunteer.hasOwnProperty(year)) {
+				var vhr = obj.volunteer_hour_value * volunteer[year].volunteer_hours_redeemed + (spinner_value * obj.volunteer_hour_value);
+				//console.log(obj.volunteer_hour_value + " * " +  volunteer[year].volunteer_hours_redeemed + " = " + vhr );
+				remaining = obj.current_year_volunteer_hours - volunteer[year].volunteer_hours_redeemed;	
+				//console.log(obj.current_year_volunteer_hours + " - " +  volunteer[year].volunteer_hours_redeemed + " = " + remaining );	
+				if (vhr > obj.sweat_equity_limit) {
+					exceeded_sweat_equity_limit = true;
+					spinner_difference = (obj.sweat_equity_limit / obj.volunteer_hour_value) - volunteer[year].volunteer_hours_redeemed;
+					price_after_redeeming =  price - (obj.volunteer_hour_value * spinner_difference);
+					//console.log(spinner_difference + " " + price_after_redeeming);
+				}
 			}
 		}	
-
 
 		// no volunteer_hours_redeemed or still less than the allowable sweat_equity_hours
 		
 		// if running volunteer_hours >= special_volunteer_hours_qualification the special_discount kicks in
 		// other wise it is 25%	
 		
-		// only 1 bike per year earned with sweat_equity_hours
+		// only 1 bike per year earned with sweat_equity_hours		
 			
 		if (price >= redeemable_value) {
 			
@@ -755,6 +758,7 @@ $(function() {
 					}
 					//console.log(price_after_redeeming + " - " + redeemable_value + " * ." + discount);
 				} else {
+					// Never redeemed before
 					amount.val(price - redeemable_value);
 				}	
 			}
@@ -1179,11 +1183,11 @@ $(function() {
 						if ((volunteer_hours && volunteer_hours.length)) {						
 							
 							var max; 
-							if ((remaining || remaining === 0) && obj.volunteer) {
+							if ((remaining || remaining === 0) && (obj.volunteer &&  volunteer.hasOwnProperty(year))) {
 								max = remaining;
 							} else {
 								max = obj.current_year_volunteer_hours;
-							}														
+							}																				
 							
 							$("#volunteer_hours").prop("title",title).html("Volunteer Hours");
 
