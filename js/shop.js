@@ -99,7 +99,7 @@ $(function(){
 
 				var id = this.id;
 
-				if (last_index <= 1) {
+				if (last_index < 1) {
 					membership_ids = "contact_id=" + id;
 				}
 				else if (!membership_ids) {
@@ -112,6 +112,7 @@ $(function(){
 			}
 					   
 		});
+	
 		
 		if (membership_ids) {
 			volunteer_ids = membership_ids.replace(/contact_id/g,"contacts.contact_id");
