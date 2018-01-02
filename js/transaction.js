@@ -1303,9 +1303,11 @@ $(function() {
 					
 					// more than max_bike_limit turn off spinner	
 					if ($("#transaction_type").val() === "Bicycles") { 
-						if (volunteer && obj.max_bike_earned) {						
-							if (volunteer[year].max_bike_earned >= obj.max_bike_earned) {
-								$("#redeemable_hours").spinner("disable");
+						if (volunteer && obj.max_bike_earned) {
+							if (volunteer.hasOwnProperty(year)) {						
+								if (volunteer[year].max_bike_earned >= obj.max_bike_earned) {
+									$("#redeemable_hours").spinner("disable");
+							}
 							}
 						}								
 					}										
