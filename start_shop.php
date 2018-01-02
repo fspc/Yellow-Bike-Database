@@ -136,7 +136,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
                 <form action="<?php echo $editFormAction; ?>" method="post" name="form_new" id="form_new">
                   <tr>
                     <td height="30"><span class="yb_heading3red">Start New Shop:</span></td>
-                    <td><input id="ctrl_date" name="ctrl_date" type="text" class="yb_standard" value="<?php echo current_datetime();  ?>" /></td>
+                    <td><input id="ctrl_date" name="ctrl_date" type="hidden" class="yb_standard" value="<?php echo current_datetime();  ?>" />
+                    		<div class="yb_standard" value="<?php echo current_datetime();  ?>" ><?php echo current_datetime();  ?></div></td>
                     <td><?php list_shop_locations($ctrl_shoplocation,"Treasure City") ?></td>
                     <td><?php list_shop_types($ctrl_shoptype) ?></td>
                     <td>&nbsp;</td>

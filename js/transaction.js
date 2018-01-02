@@ -1307,7 +1307,7 @@ $(function() {
 							if (volunteer.hasOwnProperty(year)) {						
 								if (volunteer[year].max_bike_earned >= obj.max_bike_earned) {
 									$("#redeemable_hours").spinner("disable");
-							}
+								}
 							}
 						}								
 					}										
