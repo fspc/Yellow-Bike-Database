@@ -85,7 +85,7 @@ Chrome:
 
 5. Install chrome extension chromeIPass
    You may have to uncheck: 
-	     Activate password generator.
+        Activate password generator.
         Automatically fill-in single credentials entry.
         Activate autocomplete for username fields
 
