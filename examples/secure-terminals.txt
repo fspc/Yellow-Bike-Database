@@ -140,7 +140,6 @@ Chrome:
    Select "Change password"
    Enter your old password and leave the new password blank
    Press ok	
-   In preferences -> Main Menu (remove Password and Keys)
 
 4. run keepass2;
    create new password database in ~/keepass 
