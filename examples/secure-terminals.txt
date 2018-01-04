@@ -97,7 +97,7 @@ Chrome:
 
 9. In Chrome Settings "On Startup Continue where you left off" or 
    "Open a specific page or set of pages" and add the YBDB POS url as one of those specific pages
-
+   
 DESKTOP STARTUP
 
 1.	LXDE - put a file with this format in ~/.config/autostart with name of *desktop, e.g. keepass.desktop:
@@ -108,6 +108,14 @@ Exec=bash -c "secret-tool lookup keepass pos | sudo keepass2 /home/pos/keepass/P
 
 2.  Gnome based Window manager, e.g. Mate - open gnome-session-properties from commandline, 
 	 and add startup application.
+
+SPECIAL NOTES
+ 
+ With the combination of keepass2 and httpasswd, it is possible to fine tune access.  For instance, there could be a 
+ sign-in computer allowing access only to shop_log.php, shop_welcome.php, contact_add_edit_select.php, and
+ contact_add_edit.php, and another computer for volunteer staff allowing access to almost everything, 
+ including transaction_log.php, perhaps with the exclusion of certain reports that should only be available 
+ to the volunteer coordinator.
 
 SUSPENDING COMPUTER
 
