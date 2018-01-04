@@ -84,7 +84,7 @@ Chrome:
    sudo chmod -R 0400 ~/keepass (change to 0600 if you want to change password, then back to 0400 when done)
 
 5. Install chrome extension chromeIPass
-	You may have to uncheck: 
+   You may have to uncheck: 
 	     Activate password generator.
         Automatically fill-in single credentials entry.
         Activate autocomplete for username fields
