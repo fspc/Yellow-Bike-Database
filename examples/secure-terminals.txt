@@ -61,7 +61,7 @@ Chrome:
    
   edit file and add between <Configuration></Configuration>
    
-   	<Security>
+      <Security>
         <Policy><UnhidePasswords>false</UnhidePasswords></Policy>
       </Security>   
 
