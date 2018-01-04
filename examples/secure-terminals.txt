@@ -59,44 +59,44 @@ Chrome:
 2. cd /usr/lib/keepass2; \ 
    sudo mv KeePass.config.xml KeePass.config.enforced.xml
    
-	edit file and add between <Configuration></Configuration>
+  edit file and add between <Configuration></Configuration>
    
    	<Security>
-			<Policy><UnhidePasswords>false</UnhidePasswords></Policy>
-		</Security>   
+        <Policy><UnhidePasswords>false</UnhidePasswords></Policy>
+      </Security>   
 
-	sudo chmod 0400 KeePass.config.enforced.xml
+   sudo chmod 0400 KeePass.config.enforced.xml
 	
-	[doc: https://keepass.info/help/base/configuration.htm]
+   [doc: https://keepass.info/help/base/configuration.htm]
 
 3. Install libsecret-tools:  sudo apt-get install libsecret-tools
-	secret-tool store --label="PositiveSpin" keepass pos (remember password) 	
+   secret-tool store --label="PositiveSpin" keepass pos (remember password) 	
 
 4. run keepass2;
-	create new password database in ~/keepass 
-	assign password created with secret-tool to Master password
-	create key file in ~/keepass
-	In the password datatase, add the url for YBDB, username and password (created with htpasswd) 
-	close keepass2
-	sudo chown -R root:root ~/keepass
-	sudo chmod -R 0400 ~/keepass (change to 0600 if you want to change password, then back to 0400 when done)
+   create new password database in ~/keepass 
+   assign password created with secret-tool to Master password
+   create key file in ~/keepass
+   In the password datatase, add the url for YBDB, username and password (created with htpasswd) 
+   close keepass2
+   sudo chown -R root:root ~/keepass
+   sudo chmod -R 0400 ~/keepass (change to 0600 if you want to change password, then back to 0400 when done)
 
 5. Install chrome extension chromeIPass
 
 6. Install keepasshttp from https://github.com/pfn/keepasshttp/ by putting KeePassHttp.plgx in /usr/lib/keepass2;
-	sudo chmod 0644 /usr/lib/keepass2/KeePassHttp.plgx
+   sudo chmod 0644 /usr/lib/keepass2/KeePassHttp.plgx
    sudo apt-get install libmono-system-xml-linq4.0-cil libmono-system-data-datasetextensions4.0-cil \
-   							libmono-system-runtime-serialization4.0-cil mono-mcs
+                        libmono-system-runtime-serialization4.0-cil mono-mcs
 
 7. Follow the directions chromeIPass gives you, creating an identifier
-	 https://github.com/pfn/passifox/blob/master/documentation/chromeIPass.md goes into more detail 	
+   https://github.com/pfn/passifox/blob/master/documentation/chromeIPass.md goes into more detail 	
  	
 8. sudo su; visudo
-	after:	%sudo   ALL=(ALL:ALL) ALL
-   add: 		pos	ALL=(ALL) NOPASSWD: /usr/bin/keepass2 (note pos is an example user account being used for X11)
+   after:   %sudo   ALL=(ALL:ALL) ALL
+   add:     pos     ALL=(ALL) NOPASSWD: /usr/bin/keepass2 (note pos is an example user account being used for X11)
 
 9. In Chrome Settings "On Startup Continue where you left off" or 
-	"Open a specific page or set of pages" and add the YBDB POS url as one of those specific pages
+   "Open a specific page or set of pages" and add the YBDB POS url as one of those specific pages
 
 DESKTOP STARTUP
 
