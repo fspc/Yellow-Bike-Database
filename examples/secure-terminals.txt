@@ -52,7 +52,9 @@ Firefox (IceWeasel):
    the whole process can be completely automated in KeeFox options.
 16. In Firefox (IceWeasel) Preferences -> General use "When IceWeasel starts: Show my windows and tabs from the last time"
 17. Afterwards, you can sudo chown -R root:root ~/KeePass/*
+                        sudo chmod 0400 ~/KeePass/*
 	 You may need to make adjustments for plugins.
+	 Then run with sudo, see "Chrome (visudo)" to learn how to do this.
 
 Chrome:
 1. Install keepass2: sudo apt-get install keepass2
@@ -97,6 +99,8 @@ Chrome:
 
 9. In Chrome Settings "On Startup Continue where you left off" or 
    "Open a specific page or set of pages" and add the YBDB POS url as one of those specific pages
+   
+10. Add to desktop startup (see below). Test changes by logging out, and logging back into the WM.
    
 DESKTOP STARTUP
 
