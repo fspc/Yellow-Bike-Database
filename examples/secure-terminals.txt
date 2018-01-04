@@ -134,7 +134,13 @@ Chrome:
    [doc: https://keepass.info/help/base/configuration.htm]
 
 3. Install libsecret-tools:  sudo apt-get install libsecret-tools
-   secret-tool store --label="PositiveSpin" keepass pos (remember password) 	
+   secret-tool store --label="PositiveSpin" keepass pos (remember password) 
+   (Depending on your distribution) Open Menu -> Control Menu -> Security -> Password and Keys
+   Right-click on the "login" keyring
+   Select "Change password"
+   Enter your old password and leave the new password blank
+   Press ok	
+   In preferences -> Main Menu (remove Password and Keys)
 
 4. run keepass2;
    create new password database in ~/keepass 
