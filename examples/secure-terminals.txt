@@ -126,7 +126,10 @@ Chrome:
    Right-click on the "login" keyring
    Select "Change password"
    Enter your old password and leave the new password blank
-   Press ok	
+   Press ok
+	You may want to remove Password and Keys from the menu,   
+   E.g. see https://wiki.lxde.org/en/Main_Menu if using lxde: 
+     - sudo mv seahorse.desktop /root; lxpanelctl restart
 
 3. run keepass2;
    create new password database in ~/keepass 
@@ -137,15 +140,20 @@ Chrome:
    sudo chown -R root:root ~/keepass
    sudo chmod -R 0400 ~/keepass (change to 0600 if you want to change password, then back to 0400 when done)
 
-4. SECURITY - The easiest ways to learn about which policies can be modified are simply to unclick them in
-   Tools -> Options -> Policy, and then look at the additions to <Security></Security> in /usr/lib/keepass2/KeePass.config.xml 
-   after exiting the program; security changes don't apply until restarting the program.  These policies can be added between 
-   <Policy> in KeePass.config.enforced.xml.  Independently of using KeePass.config.enforced.xml, the key database could be looked at,
-   however, the owner (root), 0400 permissions, and KeePass.config.enforced.xml prevent the database from being copied anywhere, 
-   and the key file would be required as well to gain access. Secret tools only provides a low-level layer of security
-   with a master password passed by stdin, and is optional (and maybe a liability on a public computer). Keepass has auditing capability 
+4. SECURITY - The easiest ways to learn about the name of policies which can be disabled are simply 
+   to unclick them in Tools -> Options -> Policy, and then look at the additions to <Security></Security> in 
+   /usr/lib/keepass2/KeePass.config.xml after exiting the program; security changes don't apply
+   until restarting the program. Caveat, make sure that the xml is properly formed.
+   These policies can be added between <Policy> in KeePass.config.enforced.xml.  Independently of 
+   using KeePass.config.enforced.xml, the key database could be looked at, however, 
+   the owner (root), 0400 permissions, and KeePass.config.enforced.xml prevent the database 
+   from being copied anywhere, and the key file would be required as well to gain access. 
+   
+   Secret tools only provides a low-level layer of security with a master password passed by stdin, 
+   and is optional (and may be a liability on a public computer). Keepass has auditing capability 
    via triggers, see https://keepass.info/help/kb/trigger_examples.html#audit, if your want to monitor events. 
-   It should be noted that keepassxc does not provide the rich set of policies that keepass does, which rules out this newer program.
+   It should be noted that keepassxc does not provide the rich set of policies that keepass does, 
+   which rules out this newer program.
 
    cd /usr/lib/keepass2; \ 
    sudo touch KeePass.config.enforced.xml
