@@ -93,7 +93,7 @@ In the Chromium broswer: chrome://settings/certificates
    
 TERMINAL AUTOMATION AND SECURITY
 
-Firefox (IceWeasel):
+Firefox (IceWeasel); note that Chrome below, provides the most recent instructions:
 1. Download KeePass v2 zip - http://keepass.info/download.html
 2. Unzip in ~/KeePass
 3. sudo chown root:root ~/KeePass; sudo chmod 0755 ~/KeePass;
@@ -101,9 +101,8 @@ Firefox (IceWeasel):
 5. run .. mono KeePass.exe, create database and a key file in ~/KeePass
 6. mv KeePass.config.xml KeePass.config.enforced.xml
 7. sudo chown root:root KeePass.config.enforced.xml (and database/key file)
-8. sudo chmod 0444 KeePass.config.enforced.xml
-9.	Most importantly in KeePass.config.enforced.xml between <Security> change true to 
-	<Policy><UnhidePasswords>false</UnhidePasswords></Policy> so that passwords cannot be seen.
+8. sudo chmod 0400 KeePass.config.enforced.xml
+9.	See Chrome for KeePass.config.enforced.xml policy changes.
 10. In Debian/Ubuntu:  apt-get install mono-runtime mono-devel
 11. Install KeeFox extension from https://addons.mozilla.org/en-us/firefox/addon/keefox/
 12. KeeFox will tell you where to copy KeePassRPC.plgx from into the plugins directory
@@ -120,20 +119,8 @@ Firefox (IceWeasel):
 
 Chrome:
 1. Install keepass2: sudo apt-get install keepass2
-2. cd /usr/lib/keepass2; \ 
-   sudo mv KeePass.config.xml KeePass.config.enforced.xml
-   
-  edit file and add between <Configuration></Configuration>
-   
-      <Security>
-        <Policy><UnhidePasswords>false</UnhidePasswords></Policy>
-      </Security>   
 
-   sudo chmod 0400 KeePass.config.enforced.xml
-	
-   [doc: https://keepass.info/help/base/configuration.htm]
-
-3. Install libsecret-tools:  sudo apt-get install libsecret-tools
+2. Optional: Install libsecret-tools:  sudo apt-get install libsecret-tools
    secret-tool store --label="PositiveSpin" keepass pos (remember password) 
    (Depending on your distribution) Open Menu -> Control Menu -> Security -> Password and Keys
    Right-click on the "login" keyring
@@ -141,25 +128,68 @@ Chrome:
    Enter your old password and leave the new password blank
    Press ok	
 
-4. run keepass2;
+3. run keepass2;
    create new password database in ~/keepass 
    assign password created with secret-tool to Master password
-   create key file in ~/keepass
+   create key file in ~/keepass, or even better, in a secret place
    In the password datatase, add the url for YBDB, username and password (created with htpasswd) 
    close keepass2
    sudo chown -R root:root ~/keepass
    sudo chmod -R 0400 ~/keepass (change to 0600 if you want to change password, then back to 0400 when done)
 
-5. Install chrome extension chromeIPass
+4. SECURITY - The easiest ways to learn about which policies can be modified are simply to unclick them in
+   Tools -> Options -> Policy, and then look at the additions to <Security></Security> in /usr/lib/keepass2/KeePass.config.xml 
+   after exiting the program; security changes don't apply until restarting the program.  These policies can be added between 
+   <Policy> in KeePass.config.enforced.xml.  Independently of using KeePass.config.enforced.xml, the key database could be looked at,
+   however, the owner (root), 0400 permissions, and KeePass.config.enforced.xml prevent the database from being copied anywhere, 
+   and the key file would be required as well to gain access. Secret tools only provides a low-level layer of security
+   with a master password passed by stdin, and is optional (and maybe a liability on a public computer). Keepass has auditing capability 
+   via triggers, see https://keepass.info/help/kb/trigger_examples.html#audit, if your want to monitor events. 
+   It should be noted that keepassxc does not provide the rich set of policies that keepass does, which rules out this newer program.
+
+   cd /usr/lib/keepass2; \ 
+   sudo touch KeePass.config.enforced.xml
+   
+   edit file and add between <Configuration></Configuration>
+   
+		<?xml version="1.0" encoding="utf-8"?>
+		<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		        <Meta>
+		                <PreferUserConfiguration>false</PreferUserConfiguration>
+		        </Meta>
+		        <Security>
+		                <Policy>
+		                        <UnhidePasswords>false</UnhidePasswords>
+		                        <NewFile>false</NewFile>
+		                        <SaveFile>false</SaveFile>
+		                        <Export>false</Export>
+		                        <Import>false</Import>
+		                        <Copy>false</Copy>
+		                        <Print>false</Print>
+		                        <ChangeMasterKey>false</ChangeMasterKey>
+		                        <Delete>false</Delete>
+		                </Policy>
+		               <WorkspaceLocking>
+		                        <AlwaysExitInsteadOfLocking>true</AlwaysExitInsteadOfLocking>
+		               </WorkspaceLocking>
+		        </Security>
+		
+		</Configuration>
+
+   sudo chmod 0400 KeePass.config.enforced.xml
+	
+   [doc: https://keepass.info/help/base/configuration.htm]
+
+5. Install keepasshttp from https://github.com/pfn/keepasshttp/ by putting KeePassHttp.plgx in /usr/lib/keepass2;
+   sudo chmod 0644 /usr/lib/keepass2/KeePassHttp.plgx
+   sudo apt-get install libmono-system-xml-linq4.0-cil libmono-system-data-datasetextensions4.0-cil \
+                        libmono-system-runtime-serialization4.0-cil mono-mcs
+
+6. Install chrome extension chromeIPass
    You may have to uncheck: 
         Activate password generator.
         Automatically fill-in single credentials entry.
         Activate autocomplete for username fields
-
-6. Install keepasshttp from https://github.com/pfn/keepasshttp/ by putting KeePassHttp.plgx in /usr/lib/keepass2;
-   sudo chmod 0644 /usr/lib/keepass2/KeePassHttp.plgx
-   sudo apt-get install libmono-system-xml-linq4.0-cil libmono-system-data-datasetextensions4.0-cil \
-                        libmono-system-runtime-serialization4.0-cil mono-mcs
 
 7. Follow the directions chromeIPass gives you, creating an identifier
    https://github.com/pfn/passifox/blob/master/documentation/chromeIPass.md goes into more detail 	
@@ -200,7 +230,7 @@ Example commands that bring up the gui setting tool:
 
 SUMMARY
 
-There are other things that can be done within the terminal to prevent tampering, e.g., read-only environment, 
+There are other things that can be done within the terminal to prevent tampering, e.g., kiosk or read-only environment, 
 an expect or curl script, etc. rather than KeePass, but what is above protects the password from hacking, eavesdropping, 
 and from regular users in the shop, basically, only the sysadmin and bookkeeper should have remote access via the password. 
 So while YBDB is on the internet, it will only be available to the terminal(s) you allow it to be on, and
