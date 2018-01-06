@@ -236,6 +236,52 @@ Example commands that bring up the gui setting tool:
 1. xfce4-power-manager-settings (eg., used by wattos for LXDE)
 2. mate-power-manager-settings or mate-power-preferences
 
+BIOS / UEFI (recommended)
+
+Turn off booting of external devices; disable unnecessary external ports; password protect BIOS setup.
+Remember the password. There are some ways to reset passwords, if forgotten, but depending on the hardware,
+it is not always straight-forward, e.g., resetting the CMOS. 
+
+GRUB2 PASSWORD PROTECT (mandatory)
+
+You don't want individuals casually booting into single mode or a shell, therefore,
+password protecting GRUB with an encrypted password is mandatory.
+
+https://help.ubuntu.com/community/Grub2/Passwords gives good instructions
+
+1. In /etc/grub.d/10_linux change 
+
+     CLASS="--class gnu-linux --class gnu --class os"
+     
+     to
+     
+     CLASS="--class gnu-linux --class gnu --class os --unrestricted"
+
+2. Create an encrypted password with grub-mkpasswd-pbkdf2, producing something like
+
+     grub.pbkdf2.sha512.10000.80E702585F80C8D70D4BC75
+     
+3. In /etc/grub.d/40_custom add:
+ 
+     set superusers="MyUserName"
+     password_pbkdf2 MyUserName grub.pbkdf2.sha512.10000.80E702585F80C8D70D4BC75
+
+4. sudo chmod 0700 40_custom
+
+5. update-grub2     
+
+SSD or HD Encryption (optional)
+
+If a sign-in computers unencrypted drive goes missing (or is stolen), it should (in most cases) 
+be pretty obvious, and you would want to change YBDB's htpasswd and root password. However, if you 
+want to "help" prevent a detached drive from being accessed, utilitizing an encrypted partition or file container,
+for the keepass2 system discussed above, would be one way to go, although, even that can be accessed with a few steps,
+and some forensics (https://dfir.science/2014/08/how-to-brute-forcing-password-cracking.html). While most modern 
+distributions provide an option to encrypt the whole installation, some good reasons for not wanting to do this 
+include a performance hit, and a more complex recovery. When deciding to go the encryption route, you need to weigh 
+in the advantages and disadvantages for encrypting while factoring into the equation the nature of environment 
+the computer will be located within.
+
 SUMMARY
 
 There are other things that can be done within the terminal to prevent tampering, e.g., kiosk or read-only environment, 
