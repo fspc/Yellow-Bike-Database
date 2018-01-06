@@ -78,8 +78,12 @@ II.  cp device.key /etc/ssl/private/ssl-cert-snakeoil.key
      cp mysite.com.csr /etc/ssl/certs/ssl-cert-snakeoil.pem
 
 III. a2enmod ssl;
-     a2ensite default-ssl.conf; (standard on debian-based distributions .. add <Directory> stanza above)
+     a2ensite default-ssl.conf; (standard on debian-based distributions) 
+     add certs to the SSLCertificateFile and SSLCertificateKeyFile directives in default-ssl.conf
+                SSLCertificateFile      /etc/ssl/certs/ssl-cert-snakeoil.pem
+                SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key        
      a2dissite 000-default.conf;
+     service apache2 restart
 
 In the Chromium broswer: chrome://settings/certificates
   Choose IMPORT in AUTHORITIES
@@ -102,7 +106,7 @@ Firefox (IceWeasel); note that Chrome below, provides the most recent instructio
 6. mv KeePass.config.xml KeePass.config.enforced.xml
 7. sudo chown root:root KeePass.config.enforced.xml (and database/key file)
 8. sudo chmod 0400 KeePass.config.enforced.xml
-9.	See Chrome for KeePass.config.enforced.xml policy changes.
+9. See Chrome for KeePass.config.enforced.xml policy changes.
 10. In Debian/Ubuntu:  apt-get install mono-runtime mono-devel
 11. Install KeeFox extension from https://addons.mozilla.org/en-us/firefox/addon/keefox/
 12. KeeFox will tell you where to copy KeePassRPC.plgx from into the plugins directory
@@ -229,6 +233,38 @@ SPECIAL NOTES
  contact_add_edit.php, and another computer for volunteer staff allowing access to almost everything, 
  including transaction_log.php, perhaps with the exclusion of certain reports that should only be available 
  to the volunteer coordinator.
+ 
+ https://wiki.apache.org/httpd/BypassAuthenticationOrAuthorizationRequirements provides good details how this is done:
+ 
+ E.g., we want paid_members.php to be accessible via a completely different password under Apache for our paid members team:
+ 
+                <FilesMatch "\.(php|paid_members\.php)$">
+                                SSLOptions +StdEnvVars
+                </FilesMatch>
+                <Directory /var/www/html/js>
+                        Order allow,deny
+                        Allow from all
+                        Satisfy any
+                </Directory>
+                <Directory /var/www/html/css>
+                        Order allow,deny
+                        Allow from all
+                        Satisfy any
+                </Directory>
+                <Directory /var/www/html>
+                        Authtype        Basic
+                        Authname        "Amazing Community Bike Shop Login"
+                        Require         user someuser
+                        AuthUserFile    /var/htpasswd
+                </Directory>
+                <Files "paid_members.php">
+                        Authtype        Basic
+                        Authname        "Paid Members Login"
+                        Require         user paid_members_team
+                        AuthUserFile    /var/htpasswd
+                </Files>
+                
+How to get that working with keepass2 should be obvious.
 
 SUSPENDING COMPUTER
 
@@ -244,7 +280,7 @@ it is not always straight-forward, e.g., resetting the CMOS.
 
 GRUB2 PASSWORD PROTECT (mandatory)
 
-You don't want individuals casually booting into single mode or a shell, therefore,
+In order to prevent individuals from casually booting into single mode or a shell,
 password protecting GRUB with an encrypted password is mandatory.
 
 https://help.ubuntu.com/community/Grub2/Passwords gives good instructions
@@ -256,7 +292,7 @@ https://help.ubuntu.com/community/Grub2/Passwords gives good instructions
      to
      
      CLASS="--class gnu-linux --class gnu --class os --unrestricted"
-
+ 
 2. Create an encrypted password with grub-mkpasswd-pbkdf2, producing something like
 
      grub.pbkdf2.sha512.10000.80E702585F80C8D70D4BC75
@@ -270,7 +306,7 @@ https://help.ubuntu.com/community/Grub2/Passwords gives good instructions
 
 5. update-grub2     
 
-SSD or HD Encryption (optional)
+SSD or HD ENCRYPTION (optional)
 
 If a sign-in computers unencrypted drive goes missing (or is stolen), it should (in most cases) 
 be pretty obvious, and you would want to change YBDB's htpasswd and root password. However, if you 
