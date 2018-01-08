@@ -221,7 +221,13 @@ DESKTOP STARTUP
 
 [Desktop Entry]
 Type=Application
-Exec=bash -c "secret-tool lookup keepass pos | sudo keepass2 /home/pos/keepass/PositiveSpin.kdbx -pw-stdin -keyfile:/home/pos/keepass/PositiveSpin.key
+Exec=bash -c "secret-tool lookup keepass pos | sudo keepass2 /home/pos/keepass/PositiveSpin.kdbx -pw-stdin -keyfile:/home/pos/keepass/PositiveSpin.key"
+
+Where keepass2 is a file in /usr/bin (0755 perms)
+
+		#!/bin/sh
+		# e.g. in this case KeePass.exe was intalled in users home, rather than /usr/lib/keepass2
+		exec /usr/bin/cli /home/pos/KeePass/KeePass.exe "$@"
 
 2.  Gnome based Window manager, e.g. Mate - open gnome-session-properties from commandline, 
 	 and add startup application.
@@ -301,6 +307,8 @@ https://help.ubuntu.com/community/Grub2/Passwords gives good instructions
  
      set superusers="MyUserName"
      password_pbkdf2 MyUserName grub.pbkdf2.sha512.10000.80E702585F80C8D70D4BC75
+     # if you are using GRUB 2 1.99 the next line needs to be uncommented
+     # export superusers
 
 4. sudo chmod 0700 40_custom
 
@@ -309,13 +317,13 @@ https://help.ubuntu.com/community/Grub2/Passwords gives good instructions
 SSD or HD ENCRYPTION (optional)
 
 If a sign-in computers unencrypted drive goes missing (or is stolen), it should (in most cases) 
-be pretty obvious, and you would want to change YBDB's htpasswd and root password. However, if you 
+be pretty obvious, and you would want to change YBDB's htpasswd and root password for the computer. However, if you 
 want to "help" prevent a detached drive from being accessed, utilitizing an encrypted partition or file container,
 for the keepass2 system discussed above, would be one way to go, although, even that can be accessed with a few steps,
 and some forensics (https://dfir.science/2014/08/how-to-brute-forcing-password-cracking.html). While most modern 
 distributions provide an option to encrypt the whole installation, some good reasons for not wanting to do this 
 include a performance hit, and a more complex recovery. When deciding to go the encryption route, you need to weigh 
-in the advantages and disadvantages for encrypting while factoring into the equation the nature of environment 
+in the advantages and disadvantages for encrypting while factoring into the equation the nature of the environment 
 the computer will be located within.
 
 SUMMARY
