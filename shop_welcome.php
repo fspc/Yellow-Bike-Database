@@ -130,7 +130,7 @@ require_once('Connections/database_functions.php');
     <p>
      <span class="yb_heading3red">PS Info:   </span>
      <a href="http://positivespin.org" target="_blank">Positive Spin Home Page</a> |  
-     <a href="http://positivespin.org/content/view/94/80/" target="_blank">Shop Schedule </a> 
+     <a href="http://positivespin.org/#hours-and-membership" target="_blank">Shop Schedule </a> 
      <span class="yb_heading3red"><br />
     </p>
     
