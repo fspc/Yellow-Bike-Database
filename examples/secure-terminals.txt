@@ -8,7 +8,8 @@ B. htpasswd  -Bc -C 10 htpasswd test  (note that bcrypt is used)
 
 C.  chown www-data:www-data /var/htpasswd; chmod 0400 /var/htpasswd; \
 
-D.   <Directory /var/www/html>
+D.   In associated virtual host file, e.g. default-ssl.conf:
+		<Directory /var/www/html>
             Authtype        Basic
             Authname        "Amazing Community Bike Shop Login"
             Require         user someuser
