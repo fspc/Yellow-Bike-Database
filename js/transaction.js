@@ -114,7 +114,6 @@ $(function() {
 			}
 					   
 		});
-		
 		if (membership_ids) {
 			volunteer_ids = membership_ids.replace(/contact_id/g,"contacts.contact_id");
 		}
@@ -798,6 +797,8 @@ $(function() {
 		//var payment_type = $("input[name='payment_type']");
 		var amount = $("#amount");
 		var description = $("#description");
+		description.autogrow({flickering: false});
+		description.autogrow({flickering: false});
 		var quantity = $("#quantity");
 		var date = $("#date");
 		var shop_id = $("#shop_id").val();
