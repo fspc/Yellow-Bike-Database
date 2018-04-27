@@ -1090,13 +1090,17 @@ $(function() {
 					if (obj.volunteer) {
 						volunteer = $.parseJSON(obj.volunteer);
 						if (volunteer.hasOwnProperty(year)) {
-							remaining = obj.current_year_volunteer_hours - volunteer[year].volunteer_hours_redeemed;
+							remaining = obj.current_year_volunteer_hours - volunteer[year].volunteer_hours_redeemed;							
 							vhr = volunteer[year].volunteer_hours_redeemed;
 							max_bikes_earned = volunteer[year].max_bike_earned;
 						}
 					} else {
 						vhr = 0;
-					}			
+					}					
+					
+					if (obj.current_year_volunteer_hours === null) {
+						remaining = 0;
+					}					
 					
 					var title = obj.normal_full_name + "\r\n" +
 											obj.email + "\r\n" +
