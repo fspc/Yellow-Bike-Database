@@ -152,6 +152,11 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 			$result["max_bike_earned"] = $max_bike_earned;
 			$result["volunteer_hour_value"] = $volunteer_hour_value;
 			$result["sweat_equity_limit"] = $sweat_equity_limit;
+			foreach ( $custom_sweat_equity_limit as $key => $value ) {
+				if( $result["contact_id"] == $key ) {
+					$result["sweat_equity_limit"] = $value;
+				}						
+			}
 			$result["volunteer_discount"] = $volunteer_discount;
 			$result["special_volunteer_hours_qualification"] = $special_volunteer_hours_qualification;
 			$result["special_volunteer_discount"] = $special_volunteer_discount;

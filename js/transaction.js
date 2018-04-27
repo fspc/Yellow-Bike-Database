@@ -659,7 +659,7 @@ $(function() {
 	// volunteer hours magic
 	function redeemable(obj, spinner_value, event, volunteer) {
 		
-		//var sweat_equity_hours = obj.sweat_equity_limit / (obj.volunteer_hours_redeemed * obj.volunteer_hour_value);					
+		//var sweat_equity_hours = obj.sweat_equity_limit / (obj.volunteer_hours_redeemed * obj.volunteer_hour_value);							
 		
 		var redeemable_value;									
 		if ($("#transaction_type").val() !== "Stand Time") {									
