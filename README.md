@@ -7,7 +7,7 @@ In 2014, Positive Spin of Morgantown, WV in the USA was looking for a way to rep
 
 It was a successful choice, and continues to improve!  You can read more about the FLOSS process at [bikecollectives.org in this presentation](https://www.bikecollectives.org/wiki/images/1/1e/2017-SE-BikeBike-Libre-slides.pdf).
 
-There is a demo at [http://ybdb.wvcompletestreets.org](http://ybdb.wvcompletestreets.org).  Try it out!
+There is a demo at [https://ybdb.bikelover.org](https://ybdb.bikelover.org).  Try it out!
 
 Docker Development is at [https://github.com/fspc/ybdb](https://github.com/fspc/ybdb).
 
