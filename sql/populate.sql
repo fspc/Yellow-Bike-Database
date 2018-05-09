@@ -198,7 +198,7 @@ INSERT INTO transaction_types
   ("Used Parts", 3, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
   ("Trade-ups/Ins", 4, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
   ("Helmets", 5, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
-  ("Donations", 6, 1, 0, 1, 1, 0, 0, 1, 1, 1, "Donation Date", "Received by"," ", "Donated by", 1, "Description", "Donations", 0, 1, 0),
+  ("Donations", 6, 1, 0, 1, 1, 0, 0, 1, 1, 1, "Donation Date", "Received by"," ", "Donated by", 0, "Description", "Donations", 0, 1, 1),
   ("Monetary Donations", 7, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Donation Date", "Received by"," ", "Donated by", 1, "Description", "Sales", 1, 1, 0),     
   ("Memberships", 8, 1, 0, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
   ("New Parts", 9, 1, 1, 1, 1, 0, 1, 1, 1, 1, "Sale Date", "Sold By"," ", "Sold To", 1, "Description", "Sales", 1, 0, 0), 
