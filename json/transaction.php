@@ -14,7 +14,6 @@ $change_fund = CHANGE_FUND;
 $csv_directory = CSV_DIRECTORY;
 $stand_time_hourly_rate = STAND_TIME_HOURLY_RATE;
 $stand_time_grace_period = STAND_TIME_GRACE_PERIOD;
-$stand_time_value = STAND_TIME_VALUE;
 $free_stand_time_period = FREE_STAND_TIME_PERIOD;
 $timezone = TIMEZONE;
 $sweat_equity_limit = SWEAT_EQUITY_LIMIT;
@@ -160,7 +159,7 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 			$result["volunteer_discount"] = $volunteer_discount;
 			$result["special_volunteer_hours_qualification"] = $special_volunteer_hours_qualification;
 			$result["special_volunteer_discount"] = $special_volunteer_discount;
-			$result["stand_time_value"] = $stand_time_value;
+			$result["stand_time_value"] = $stand_time_hourly_rate;
 			$result["redeem_one_to_one"] = $redeem_one_to_one;
 			$volunteers[] = $result;					
 		}	

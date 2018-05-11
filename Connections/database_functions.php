@@ -49,14 +49,11 @@ define("MEMBERSHIP_DISCOUNT",10);      // PERCENTAGE
 /*********
 STAND TIME
 **********/
-// Determines the behaviour of Stand Time (transaction_type_id)
+// Determines the hourly cost for Stand Time (transaction_type_id)
 define("STAND_TIME_HOURLY_RATE",10);  // IN DOLLARS
 
 // Define how much time over 1hr is allowed before charging for the next hour.
 define("STAND_TIME_GRACE_PERIOD",15); // IN MINUTES 1 - 59
-
-// Define hourly cost for stand time
-define("STAND_TIME_VALUE",10);        // IN DOLLARS
 
 // Define how many free days of stand time are allotted after purchase of a bike
 define("FREE_STAND_TIME_PERIOD",30);  // IN DAYS
