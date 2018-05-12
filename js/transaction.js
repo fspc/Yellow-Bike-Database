@@ -1515,11 +1515,14 @@ $(function() {
 					}
 				}	
 				
+				// Assuming local time is correct and synchronized with mysql time d.toLocaleDateString().replace(/\//g,'-')
+				var current_date_time = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.toLocaleTimeString().split(' ')[0];
+				
 				var current_transaction =
 								{   			
 										transaction_id: transaction_id,
 										date_startstorage: $("#date_startstorage").val(),
-										date: date,
+										date: current_date_time,
 										transaction_type: $("#transaction_type").val(),
 										original_price: original_price,
 										amount: price,

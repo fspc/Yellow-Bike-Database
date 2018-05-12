@@ -699,13 +699,15 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  					$sql = mysql_query($query, $YBDB) or die(mysql_error());
 							$result = mysql_fetch_assoc($sql);
 		  					if ( $history[$key]->original_price ) {
-				  				$title = "Sold By: " . $result['full_name']. "\r\n" .
+				  				$title = "Date: " . $history[$key]->date. "\r\n" .
+				  							"Sold By: " . $result['full_name']. "\r\n" .
 				  							"Original Price: " . $history[$key]->original_price . "\r\n" .
 				  							"Paid: " . $history[$key]->amount . "\r\n" .
 				  							"Redeemed Hours: " . floatval($history[$key]->redeemed_hours);
 				  				echo "title='" . $title . "'";
 			  				} else {
-				  				$title = "Transaction Performed By: " . $result['full_name'];
+				  				$title = "Date: " . $history[$key]->date. "\r\n" .
+				  							"Transaction Performed By: " . $result['full_name'];
 				  				echo "title='" . $title . "'";			  				
 			  				}
 		  				}
@@ -874,11 +876,12 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 			echo "<td td style='vertical-align:inherit;'><input id='gnucash_csv_submit' type='submit' name='Submit' /></td></tr></table></form>";
 		
 		?>
-		</td>	    
+               </td>       
     </tr>
 </table>
-<p>&nbsp;</p>
+
 <?php include("include_footer.html"); ?>
+
 <?php
 mysql_free_result($Recordset1);
 ?>
