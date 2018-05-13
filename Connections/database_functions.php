@@ -725,6 +725,13 @@ function dateandtimein($date, $time){
 
 
 // Drop-Down lists
+function list_contacts_select_contact($form_name = "contact_id", $default_value = "")
+{
+	echo "<select name={$form_name} class='yb_standard'>\n";
+	echo "<option value='everyone'>Everyone</option>\n";
+	list_contacts("none",$default_value);	
+	echo "</select>\n";
+}
 
 function list_contacts_edit_add($form_name = "contact_id", $default_value = "")
 {

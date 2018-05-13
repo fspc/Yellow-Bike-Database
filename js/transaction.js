@@ -10,9 +10,10 @@ $(function() {
 										 // but all ajax needs to be synchronous in this program because of the use of an "ancient" mysql
 
 	$("[name='transaction_type']").attr("tabindex",1);
-	$("[name='transaction_type']").focus();
+	$("[name='transaction_type']").focus().scrollTop();
 	$("input[value='Create Transaction']").attr("tabindex",2);
 	$("#trans_date").mask("0000-00-00", {placeholder: "yyyy-mm-dd" });
+	$("[name='contact_id']").attr("tabindex",3);
 
 	// Add focus for easier tab browsing
 	// use .paid parent and hover & classes
@@ -183,7 +184,10 @@ $(function() {
 			}		
      }
 	});
+ 
 
+	// contact search on main page
+	$("select[name='contact_id_search']").chosen();
 
 	// transaction slider - on reload
 	transaction_slider();	
