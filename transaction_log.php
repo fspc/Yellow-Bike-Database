@@ -725,7 +725,9 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  				}
 				?>
 		  
-		  ><?php echo $row_Recordset1['format_amount']; ?>&nbsp;</td>
+		  ><?php echo $row_Recordset1['format_amount']; 
+		  			$total = $total + $row_Recordset1['amount'];
+		  												?>&nbsp;</td>
 		  <td><?php $record_trans_id = $row_Recordset1['transaction_id']; 
 						foreach ($_GET as $i => $value) {
 							if ($i != "trans_id") {
@@ -786,6 +788,11 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
           <input type="hidden" name="shop_visit_id" value="<?php echo $row_Recordset1['transaction_id']; ?>">
           </form>
 	  <?php } //while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)); // while Recordset1 ?>
+	  		<tr>
+	  			<td>TOTAL</td><td></td><td></td><td></td><td></td><td></td>
+	  			<td>$<?php echo number_format((float)$total, 2, '.', ''); ?></td>
+		  		<td></td><td></td>
+	  		</tr>
         </table>  </tr>
         
   <tr>
