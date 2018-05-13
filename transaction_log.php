@@ -795,7 +795,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
           </form>
 	  <?php } //while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)); // while Recordset1 ?>
 	  		<tr>
-	  			<td>TOTAL</td><td></td><td></td>
+	  			<td>TOTAL</td><td></td>
+	  			<td style="text-align: center;">Transactions: <?php echo $totalRows_Recordset1; ?></td>
 	  			<td><?php 	  			
 	  					if ($contact_id_state !== 'everyone') {
 							if ($whoami) {
