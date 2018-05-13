@@ -691,9 +691,13 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 					$result = mysql_fetch_assoc($sql);	
 		  
 		  			if($result['anonymous']) {
-					  echo  "Anonymous"; 
+					  echo  "Anonymous";
+					  $whoami = "Anonymous"; 
 		  			} else {
 		  				echo '<a style="color: rgb(27, 105, 30); text-decoration: none; cursor: crosshair;" href="individual_history_log.php?contact_id=' . 
+		  						$row_Recordset1['contact_id'] . '">' . 
+		  						$row_Recordset1['full_name'] . "</a>";
+		  				$whoami = '<a style="color: rgb(27, 105, 30); text-decoration: none; cursor: crosshair;" href="individual_history_log.php?contact_id=' . 
 		  						$row_Recordset1['contact_id'] . '">' . 
 		  						$row_Recordset1['full_name'] . "</a>";
 		  			}
@@ -791,7 +795,23 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
           </form>
 	  <?php } //while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)); // while Recordset1 ?>
 	  		<tr>
-	  			<td>TOTAL</td><td></td><td></td><td></td><td></td><td></td>
+	  			<td>TOTAL</td><td></td><td></td>
+	  			<td><?php 	  			
+	  					if ($contact_id_state !== 'everyone') {
+							if ($whoami) {
+								echo $whoami;							
+							} else {
+								$query = "SELECT CONCAT(last_name, ', ', first_name, ' ', middle_initial) AS full_name
+										 	FROM contacts WHERE contact_id=" . $contact_id_state . ";";
+		  					$sql = mysql_query($query, $YBDB) or die(mysql_error());
+							$result = mysql_fetch_assoc($sql);
+							echo '<a style="color: rgb(27, 105, 30); text-decoration: none; cursor: crosshair;" href="individual_history_log.php?contact_id=' . 
+		  						$contact_id_state . '">' . 
+		  						$result['full_name'] . "</a>";
+							}					
+	  					} 
+	  				?></td>
+	  			<td></td><td></td>
 	  			<td title="Updates on Transaction Search Submit">$<?php echo number_format((float)$total, 2, '.', ''); ?></td>
 		  		<td></td><td></td>
 	  		</tr>

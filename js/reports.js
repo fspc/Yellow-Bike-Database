@@ -36,18 +36,31 @@ $(function(){
 		$(".stats-left").attr("href","/individual_history_log.php?contact_id=" + prev);
 		$(".stats-right").attr("href","/individual_history_log.php?contact_id=" + next);
 		
+		var record_count;
+		$.post("json/reports.php", { record_count: 1 }, function (data) {		
+			record_count = data;
+			record_count = $.parseJSON(data);
+		});		
+		
 		// name
 		$.post("json/reports.php", { name: 1, contact_id: contact_id }, function (data) {		
 			if (data) {
+				var d = new Date();
+				var date = d.toISOString().split('T')[0];
 				var obj = $.parseJSON(data);
-				$("#name").text(obj.full_name);
+				var full_name_with_link = 	'<a style="color: rgb(27, 105, 30); text-decoration: none; cursor: crosshair;"' +
+													' href="transaction_log.php?trans_date=' + date + 
+													'&trans_type=all_types&shop_dayname=alldays&record_count=' + record_count.record_count + 
+													'&contact_id_search=' +
+					  								contact_id + '">' + obj.full_name + "</a>";
+				$("#name").html(full_name_with_link);
 				var pad_name;					
 				if (obj.configurations.prefix) {
 					pad_name = obj.configurations.prefix + "_pad_contact_id_" + contact_id;
 				} else {
 					pad_name = "pad_contact_id_" + contact_id;
 				}				
-				console.log(pad_name);
+				//console.log(pad_name);
 				if ( obj.configurations.host && obj.full_name ) {
 					$("#individual_history_pad").pad({
 						"padId": pad_name, 

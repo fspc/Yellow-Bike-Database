@@ -129,5 +129,15 @@ $handler->start();
 		echo json_encode($result);
 
 	} // return everyone	
+	
+	// Latest transaction_id
+	if (isset($_POST['record_count'])) {
+
+		$query = 'SELECT MAX(transaction_id) AS record_count FROM transaction_log;';
+		$sql = mysql_query($query, $YBDB) or die(mysql_error());
+		$result = mysql_fetch_assoc($sql);
+		echo json_encode($result);
+
+	}
 
 ?>
