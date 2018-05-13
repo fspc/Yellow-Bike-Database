@@ -789,7 +789,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
         </table>  </tr>
         
   <tr>
-    <td height="40" valign="bottom"><form id="form1" name="form1" method="post" action="">
+    <td height="40" valign="bottom" style="white-space: nowrap;"><form id="form1" name="form1" method="post" action="">
     	<br \>
 		<label for="transaction_search" style="font-weight:bold;">Transaction Search:</label>     
       <br \> 
