@@ -60,6 +60,7 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 		
 	}
 
+
 	// If payment_type check is selected - return check number if exists 
 	if (isset($_POST['check_number'])) {
 		
@@ -463,7 +464,7 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 			}				
 			
 			// second statement to find normal transactions
-			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, check_number, description, amount, " .
+			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, check_number, description, amount, history, " .
 						"CONCAT(contacts.first_name, ' ', contacts.last_name) AS 'patron' " .
 						"FROM transaction_log, contacts WHERE paid=1 AND date!='NULL' " .
 						"AND (payment_type='cash' OR payment_type='check') " . 
@@ -472,7 +473,7 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 			$sql2 = mysql_query($query, $YBDB) or die(mysql_error());
 							
 			// third statement to find anonymous transactions			
-			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, check_number, description, amount " .
+			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, check_number, description, amount, history " .
 						"FROM transaction_log WHERE paid=1 AND date!='NULL' " .
 						"AND  (payment_type='cash' OR payment_type='check') " . 
 						"AND  anonymous=1 " .
@@ -483,6 +484,11 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 			
 			// normal transaction
 			while ( $result = mysql_fetch_assoc($sql2) ) {
+				
+				$history = json_decode($result['history']);
+				end($history);
+		  		$key = key($history);		
+				
 				$description = preg_replace('/\n/', ' \r ', $result['description']);
 				$description = preg_replace('/\r/', '\r', $description);
 				$description = preg_replace('/,/', ';', $description);
@@ -491,13 +497,20 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 				}
 				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . ' ' . $check_number . 
 											',' . ' [' . $coordinator[$result['transaction_id']] . ' => ' . $result['patron'] . '] ' .  
-											$description . ' (Income:' . $result['transaction_type'] . ') '  . 
+											$description . ' (Income:' . $result['transaction_type'] . ') ' .
+											' [O:' . $history[$key]->original_price . '; P:' . $history[$key]->amount .
+											 '; R:' . $history[$key]->redeemed_hours . ']' . 
 											', ' . $result['amount'] . ', ' . 
 											$accounts_gnucash['checking'] . "\n";
 			}	
 
 			// anonymous transaction
 			while ( $result = mysql_fetch_assoc($sql3) ) {
+				
+				$history = json_decode($result['history']);
+				end($history);
+		  		$key = key($history);				
+				
 				$description = preg_replace('/\n/', ' \r ', $result['description']);
 				$description = preg_replace('/\r/', '\r', $description);
 				$description = preg_replace('/,/', ';', $description);
@@ -507,6 +520,8 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . ' ' . $check_number .
 											',' . ' [' . $coordinator[$result['transaction_id']] . ' => Anonymous] ' .  
 											$description . ' (Income:' . $result['transaction_type'] . ') '  . 
+											' [O:' . $history[$key]->original_price . '; P:' . $history[$key]->amount .
+											 '; R:' . $history[$key]->redeemed_hours . ']' . 											
 											', ' . $result['amount'] . ', ' . 
 											$accounts_gnucash['checking'] . "\n";						
 			}
@@ -538,7 +553,7 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 			}
 
 			// second statement to find normal transactions
-			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount, " .
+			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount, history, " .
 						"CONCAT(contacts.first_name, ' ', contacts.last_name) AS 'patron' " .
 						"FROM transaction_log, contacts WHERE paid=1 AND date!='NULL' " .
 						"AND  payment_type='credit'  " . 
@@ -547,7 +562,7 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 			$sql2 = mysql_query($query, $YBDB) or die(mysql_error());
 			
 			// third statement to find anonymous transactions			
-			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount " .
+			$query = "SELECT SUBSTRING_INDEX(date, ' ', 1) AS 'date', transaction_id, transaction_type, description, amount, history " .
 						"FROM transaction_log WHERE paid=1 AND date!='NULL' " .
 						"AND  payment_type='credit'  " . 
 						"AND  anonymous=1 " .
@@ -558,24 +573,38 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 			
 			// normal transaction	
 			while ( $result = mysql_fetch_assoc($sql2) ) {
+				
+				$history = json_decode($result['history']);
+				end($history);
+		  		$key = key($history);				
+				
 				$description = preg_replace('/\n/', ' \r ', $result['description']);
 				$description = preg_replace('/\r/', '\r', $description);
 				$description = preg_replace('/,/', ';', $description);
 				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . 
 											',' . ' [' . $coordinator[$result['transaction_id']] . ' => ' . $result['patron'] . '] ' .  
-											$description . ' (Income:' . $result['transaction_type'] . ') '  . 
+											$description . ' (Income:' . $result['transaction_type'] . ') '  .
+											' [O:' . $history[$key]->original_price . '; P:' . $history[$key]->amount .
+											 '; R:' . $history[$key]->redeemed_hours . ']' .  
 											', ' . $result['amount'] . ', ' . 
 											$accounts_gnucash['credit'] . "\n";						
 			}
 			
 			// anonymous transaction
 			while ( $result = mysql_fetch_assoc($sql3) ) {
+				
+				$history = json_decode($result['history']);
+				end($history);
+		  		$key = key($history);				
+				
 				$description = preg_replace('/\n/', ' \r ', $result['description']);
 				$description = preg_replace('/\r/', '\r', $description);
 				$description = preg_replace('/,/', ';', $description);
 				$gnucash_csv_file .= $result['date'] . ', ' . $result['transaction_id'] . 
 											',' . ' [' . $coordinator[$result['transaction_id']] . ' => Anonymous] ' .  
-											$description . ' (Income:' . $result['transaction_type'] . ') '  . 
+											$description . ' (Income:' . $result['transaction_type'] . ') '  .
+											' [O:' . $history[$key]->original_price . '; P:' . $history[$key]->amount .
+											 '; R:' . $history[$key]->redeemed_hours . ']' . 
 											', ' . $result['amount'] . ', ' . 
 											$accounts_gnucash['credit'] . "\n";						
 			}
