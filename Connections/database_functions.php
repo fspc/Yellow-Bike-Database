@@ -330,9 +330,9 @@ function highlightKeywords($text, $keyword) {
 	$wordsAry = explode(" ", $keyword);
 	$wordsCount = count($wordsAry);
 	
-	// Using REGEXP so remove regex from search
-	$find = array('/\*/', '/\./', '/\$/', '/\^/', '/\?/', '/\+/', '/\[/', '/\]/', '/\|/', '/\(/', '/\)/', '/\,/', '/\{/', '/\}/', '/\:/', '/\\\/');
-	$replace = array('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');		
+	// Using REGEXP, this removes regex from search
+	$find = array('/[\*\.\$\^\?\+\[\]\|\(\)\,\{\}\:\\\]/');
+	$replace = array('');
 	
 	for($i=0;$i<$wordsCount;$i++) {
 		
