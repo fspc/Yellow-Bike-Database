@@ -324,6 +324,28 @@ define("PAGE_SALE_LOG", "/transaction_log.php");
 define("PAGE_EDIT_LOCATION", "/location_add_edit.php");
 define("PAGE_SELECT_LOCATION", "/location_add_edit_select.php");
 
+// Highlight search results in transaction_log
+function highlightKeywords($text, $keyword) {
+
+	$wordsAry = explode(" ", $keyword);
+	$wordsCount = count($wordsAry);
+	
+	// Using REGEXP so remove regex from search
+	$find = array('/\*/', '/\./', '/\$/', '/\^/', '/\?/', '/\+/', '/\[/', '/\]/', '/\|/', '/\(/', '/\)/', '/\,/', '/\{/', '/\}/', '/\:/', '/\\\/');
+	$replace = array('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');		
+	
+	for($i=0;$i<$wordsCount;$i++) {
+		
+		$wordsAry[$i] = preg_replace($find, $replace, $wordsAry[$i]);
+		$highlighted_text = "<span style='color:black; background:#ffeb3bc7; box-shadow:2px 0 #ffeb3bc7, -2px 0 0 #ffeb3bc7; padding: 0px 0;'>$wordsAry[$i]</span>";
+		$text = str_ireplace($wordsAry[$i], $highlighted_text, $text);
+		//$text = str_replace($wordsAry[$i], $highlighted_text, $text);
+
+	}
+
+	return $text;
+}
+
 //This is a general function to generate the contents of a list box based on a MySQL query.  All necessary parameters for the query are passed 
 function generate_list($querySQL,$list_value,$list_text, $form_name, $default_value, $color)
 {

@@ -89,6 +89,19 @@ if($_GET['contact_id_search']=='everyone'){
 	$contact_id_state = 'everyone';
 }
 
+if($_GET['search']==''){
+	$search = '';
+	$search_state = '';
+} elseif(isset($_GET['search'])) {
+	$search = "AND description REGEXP" . "'" . $_GET['search'] . "'";
+	//$search = "AND description LIKE" . "'%" . $_GET['search'] . "%'";
+	$search_state = $_GET['search'];
+} else {
+	$search = '';
+	$search_state = '';
+}
+
+
 //record_count (SQL or state)
 if($_GET['record_count']>0){
 	$record_count = $_GET['record_count'];
@@ -99,6 +112,7 @@ if($_GET['record_count']>0){
 
 // create a string to remember state
 $search_state_array = array(
+								"search" => $search_state,
 								"contact_id_search" => $contact_id_state,
 								"trans_date" => $trans_date_state, 
 								"trans_type" => $trans_type_state, 
@@ -132,7 +146,7 @@ LEFT(IF(show_startdate, CONCAT(' [',
 FROM transaction_log
 LEFT JOIN contacts ON transaction_log.sold_to=contacts.contact_id
 LEFT JOIN transaction_types ON transaction_log.transaction_type=transaction_types.transaction_type_id
-WHERE 1=1 {$trans_date} {$shop_dayname} {$trans_type} {$contact_id} ORDER BY transaction_id DESC LIMIT  0, $record_count;";
+WHERE 1=1 {$trans_date} {$shop_dayname} {$trans_type} {$contact_id} {$search} ORDER BY transaction_id DESC LIMIT  0, $record_count;";
 $Recordset1 = mysql_query($query_Recordset1, $YBDB) or die(mysql_error());
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
@@ -330,9 +344,9 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ConfirmDelete") && 
 	header(sprintf("Location: %s", PAGE_SALE_LOG . "?trans_id={$delete_trans_id}&" . $search_state ));   //$editFormAction
 }
 
-//Change Date  & Search   isset($_POST["MM_update"]) =========================================================
+//Change Date  & Transaction Search   isset($_POST["MM_update"]) =========================================================
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
-  $editFormAction = "?trans_date={$_POST['trans_date']}&trans_type={$_POST['trans_type']}&shop_dayname={$_POST['dayname']}&record_count={$_POST['record_count']}&contact_id_search={$_POST['contact_id_search']}";
+  $editFormAction = "?trans_date={$_POST['trans_date']}&trans_type={$_POST['trans_type']}&shop_dayname={$_POST['dayname']}&record_count={$_POST['record_count']}&contact_id_search={$_POST['contact_id_search']}&search={$_POST['search']}";
   header(sprintf("Location: %s",$editFormAction ));   //$editFormAction
 }
 
@@ -702,8 +716,17 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
 		  						$row_Recordset1['full_name'] . "</a>";
 		  			}
 		  ?>&nbsp;</td>
+		
+		  <?php
+		  	// Highlight search results in Description
+			$description = $row_Recordset1['description_with_locations'];
+			if(!empty($_GET["search"])) {
+				$description = highlightKeywords($row_Recordset1['description_with_locations'],$_GET["search"]);
+			}	  
+		  
+		  ?>
 
-		  <td <?php echo "title='Description: " . htmlspecialchars($row_Recordset1['description_with_locations'], ENT_QUOTES) . "'"; ?> ><?php echo $row_Recordset1['description_with_locations']; ?>&nbsp;</td>
+		  <td <?php echo "title='Description: " . htmlspecialchars($row_Recordset1['description_with_locations'], ENT_QUOTES) . "'"; ?> ><?php echo $description; ?>&nbsp;</td>
 		  <td><?php echo $row_Recordset1['payment_type']; ?>&nbsp;</td>
 		  <td <?php 
 		  				$history = json_decode($row_Recordset1['history']);		  				
@@ -860,9 +883,11 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "ChangeDate")) {
           <option value="Sunday">Sunday</option>
           </select>
         
-         transaction type <?php list_transaction_types_withheader('trans_type', 'all_types'); ?> by
+         transaction type <?php list_transaction_types_withheader('trans_type', 'all_types'); ?> by	         
          
-         <?php list_contacts_select_contact(contact_id_search, $_GET['contact_id_search']);?>
+         <?php list_contacts_select_contact(contact_id_search, $_GET['contact_id_search']);?> <br \> with these words 
+         
+         <input type="text" name="search" value="<?php echo $_GET[search]; ?>" />
      
 		          
           <input type="submit" name="Submit" value="Submit" />
