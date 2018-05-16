@@ -43,10 +43,11 @@ $(function(){
 		});		
 		
 		// name
+		var date;
 		$.post("json/reports.php", { name: 1, contact_id: contact_id }, function (data) {		
 			if (data) {
 				var d = new Date();
-				var date = d.toISOString().split('T')[0];
+				date = d.toISOString().split('T')[0];
 				var obj = $.parseJSON(data);
 				var full_name_with_link = 	'<a style="color: rgb(27, 105, 30); text-decoration: none; cursor: crosshair;"' +
 													' href="transaction_log.php?trans_date=' + date + 
@@ -126,6 +127,59 @@ $(function(){
 			}
 			
 		}); // tabulator
+		
+		// Is contact a member
+		var contacts = "contact_id=" + contact_id;
+		$.post("json/transaction.php", { membership_benefits: 1, contact_id: contacts }, function (data) {	
+		
+			var membership, membership_obj, membership_objs = $.parseJSON(data);
+
+			/*
+		 	Weird hack, before improving performance #46, there was always a property for membership_obj,
+			membership_discount:10, which just allowed the code to work, now it is empty when a patron 
+			actually is not a paid member, so this creates that obj & property if that is the case.
+			*/
+			membership_obj = membership_objs[0] || { membership_discount: 10 };				
+
+			var title = membership_obj.normal_full_name + "\r\n" +
+							membership_obj.email + "\r\n" +
+							membership_obj.phone + "\r\n" +
+							"expiration: " + membership_obj.expiration_date;						
+									
+			var expiration_date;
+			var d = new Date();
+			if (membership_obj.expiration_date) {
+				var exp = membership_obj.expiration_date;
+				expiration_date = new Date(exp.split("-").toString());
+				if (d < expiration_date) {	
+					membership = true;
+				}
+			}
+			
+			
+			if (typeof membership_obj.expiration_date && membership_obj.expiration_date !== undefined) {
+				
+				if (d >= expiration_date) {
+					var membership = '<a href="transaction_log.php?trans_date=' + date + 
+													'&trans_type=all_types&shop_dayname=alldays&record_count=' + record_count.record_count + 
+													'&contact_id_search=' +
+					  								contact_id + '">' + "Expired Membership</a>";
+					$("#membership_status").prop("title",title).html(membership).children().
+													css({color: "rgb(27, 105, 30)", textAlign: "center", cursor: "help", textDecoration: "none"});
+				} else if (d < expiration_date) {
+					var membership = '<a href="transaction_log.php?trans_date=' + date + 
+													'&trans_type=all_types&shop_dayname=alldays&record_count=' + record_count.record_count + 
+													'&contact_id_search=' +
+					  								contact_id + '">' + "Paid Membership</a>";
+					$("#membership_status").prop("title",title).html(membership).children().
+													css({color: "rgb(27, 105, 30)", textAlign: "center", cursor: "help", textDecoration: "none"});
+					
+				}
+						
+			}
+
+		
+		}); // Is contact a member
 		
 	} // if contact_id
 	
