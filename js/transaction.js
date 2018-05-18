@@ -185,7 +185,10 @@ $(function() {
 		
 	}
 	
-	volunteer_status(volunteer_ids);
+	// For performance
+	if (last_index <= 200) {
+		volunteer_status(volunteer_ids);
+	}
 		
 	// volunteer status
 	function volunteer_status(contacts) {
