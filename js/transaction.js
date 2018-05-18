@@ -89,37 +89,6 @@ $(function() {
 		}
 	} );
 
-	// Provide membership and volunteer information for patrons
-	/*
-	$("[href^='individual_history_log.php']").each( function() { console.log(this.href.split("=")[1]); }); // check for duplicates
-	var membership_ids, volunteer_ids;
-	var last_index = $("[href^='individual_history_log.php']").length;
-	if (last_index) {
-		last_index = last_index - 1;
-		$.each($("[href^='individual_history_log.php']"), function(index) {  			
-			
-			if (this.id) {
-
-				var id = this.id;
-
-				if (last_index <= 1) {
-					membership_ids = "contact_id=" + id;
-				}
-				else if (!membership_ids) {
-					membership_ids = "(contact_id=" + id + " OR ";
-				} else if ( index === last_index) {
-					membership_ids += "contact_id=" + id + ")";
-				} else {
-					membership_ids += "contact_id=" + id + " OR ";
-				}		
-			}
-					   
-		});
-		if (membership_ids) {
-			volunteer_ids = membership_ids.replace(/contact_id/g,"contacts.contact_id");
-		}
-	} 	
-	*/
 
 	// paid or not?
 	$(":checked").parent("td").prev().children().not("#payment_type_label").hide();  // need to watch that not introduction bugs
@@ -188,6 +157,158 @@ $(function() {
 
 	// contact search on main page
 	$("select[name='contact_id_search']").chosen();
+	
+	// Volunteer Information on mouseover of contact
+	var volunteer_ids;
+	var last_index = $("td a[href*='individual_history']").length;
+	if (last_index) {
+		last_index = last_index - 1;
+		$.each($("td a[href*='individual_history']"), function(index) {  			
+			
+			if (this.href.match(/\d+$/)) {
+
+				var id = this.href.match(/\d+$/);
+
+				if (last_index < 1) {
+					volunteer_ids = "contacts.contact_id=" + id;
+				}
+				else if (!volunteer_ids) {
+					volunteer_ids = "(contacts.contact_id=" + id + " OR ";
+				} else if ( index === last_index) {
+					volunteer_ids += "contacts.contact_id=" + id + ")";
+				} else {
+					volunteer_ids += "contacts.contact_id=" + id + " OR ";
+				}		
+			}
+					   
+		});
+		
+	}
+	
+	volunteer_status(volunteer_ids);
+		
+	// volunteer status
+	function volunteer_status(contacts) {
+
+		var d = new Date();
+		var all_members_obj; //reuse this object
+		var year = d.getFullYear();
+			
+		if (contacts) {  
+
+			$.post("json/transaction.php", { volunteer_benefits: 1, contact_id: contacts }, function (data) { 								
+
+				all_members_obj = $.parseJSON(data);
+				
+			  	$.each(all_members_obj, function() {
+			  																				
+					var bikes_earned = 0;
+					var volunteer_hours_redeemed = 0;								
+					var obj = this;
+				
+					var volunteer = "", remaining = 0, vhr = "", max_bikes_earned = 0;
+					if (obj.volunteer) {
+						volunteer = $.parseJSON(obj.volunteer);
+						if (volunteer.hasOwnProperty(year)) {
+							remaining = obj.current_year_volunteer_hours - volunteer[year].volunteer_hours_redeemed;
+							vhr = volunteer[year].volunteer_hours_redeemed;
+							max_bikes_earned = volunteer[year].max_bike_earned;
+						}
+					} else {
+						vhr = 0;
+					}			
+					
+					var title = obj.normal_full_name + "\r\n" +
+											"Volunteer Hours for last 365 days: " + obj.volunteer_hours + "\r\n" +
+											"Volunteer Hours \(" + year + "\): " + obj.current_year_volunteer_hours + "\r\n" +
+											"Volunteer Hours Redeemed: " +  vhr + "\r\n" +
+											"Volunteer Hours Remaining: " + remaining + "\r\n" +
+											"Max Bikes Earned: " + max_bikes_earned;		
+					
+					var volunteer_with_redeemed_hours_at_zero = obj.current_year_volunteer_hours - vhr;				
+
+					if (obj.contact_id) {
+											//#d8c62757
+						if (obj.volunteer_hours && obj.volunteer_hours !== '0') {
+							
+							if (volunteer_with_redeemed_hours_at_zero !== 0) {								
+								$("td a[href='individual_history_log.php?contact_id=" + obj.contact_id + "']").
+									parent().css({backgroundColor: "#19a0cc2b", cursor: "cell"}).
+									prop("title",title);
+								
+								$("td a[href='individual_history_log.php?contact_id=" + obj.contact_id + "']").css({color: "#1b691e", textDecoration: "none", cursor: "crosshair"});
+								$("td a[href='individual_history_log.php?contact_id=" + obj.contact_id + "']").hover( function(e){ $(this).css("color",e.type === "mouseenter"?"blue":"#1b691e");});									
+									
+							} else {
+								$("td a[href='individual_history_log.php?contact_id=" + obj.contact_id + "']").
+									parent().css({backgroundColor: "#d8c62757", cursor: "cell"}).
+									prop("title",title);		
+									
+								$("td a[href='individual_history_log.php?contact_id=" + obj.contact_id + "']").css({color: "#1b691e", textDecoration: "none", cursor: "crosshair"});
+								$("td a[href='individual_history_log.php?contact_id=" + obj.contact_id + "']").hover( function(e){ $(this).css("color",e.type === "mouseenter"?"blue":"#1b691e");});													
+							}
+	
+						} else {
+							
+							title = obj.normal_full_name + "\r\n" +
+											"Volunteer Hours for last 365 days: None" + "\r\n";
+								
+							$("td a[href='individual_history_log.php?contact_id=" + obj.contact_id + "']").
+								parent().css({backgroundColor: "#bec7cc91", textAlign: "center", cursor: "cell"}).
+								prop("title",title);
+								
+								$("td a[href='individual_history_log.php?contact_id=" + obj.contact_id + "']").css({color: "#1b691e", textDecoration: "none", cursor: "crosshair"});
+								$("td a[href='individual_history_log.php?contact_id=" + obj.contact_id + "']").hover( function(e){ $(this).css("color",e.type === "mouseenter"?"blue":"#1b691e");});	
+								
+						}
+										
+					} else {										
+							
+						var name =  $("#" + id + " td a[href*='individual']").text();
+						var name_obj = name.trim().split(", ");
+						name = name_obj[1] + " " + name_obj[0];
+	
+						title = name + "\r\n" +
+										"Volunteer Hours for last 365 days: None" + "\r\n";
+							
+						$("td a[href='individual_history_log.php?contact_id=" + obj.contact_id + "']").
+							parent().css({backgroundColor: "rgb(190, 199, 204)", textAlign: "center", cursor: "cell"}).
+							prop("title",title);	
+							
+								$("td a[href='individual_history_log.php?contact_id=" + obj.contact_id + "']").css({color: "#1b691e", textDecoration: "none", cursor: "crosshair"});
+								$("td a[href='individual_history_log.php?contact_id=" + obj.contact_id + "']").hover( function(e){ $(this).css("color",e.type === "mouseenter"?"blue":"#1b691e");});													
+		
+					}	
+					
+				}); // each all_members_obj
+			}); // post volunteer benefits					
+		} // if this is a volunteer
+
+		// not a current volunteer within the last 365 days, or never has been a volunteer					
+		$("td a[href*='individual_history']").parent(":not([title])").children().each( function() { 
+
+			var name =  $(this).text();
+			var name_obj = name.trim().split(", ");
+			name = name_obj[1] + " " + name_obj[0];
+			
+			var id = this.href.split("=")[1];
+	
+			var title = name + "\r\n" +
+							"Volunteer Hours for last 365 days: None" + "\r\n";
+							
+			if (id) {						
+			$("td a[href='individual_history_log.php?contact_id=" + id + "']").
+				parent().css({cursor: "cell"}).
+				prop("title",title);	
+				
+				$("td a[href='individual_history_log.php?contact_id=" + id + "']").css({color: "#1b691e", textDecoration: "none", cursor: "crosshair"});
+				$("td a[href='individual_history_log.php?contact_id=" + id + "']").hover( function(e){ $(this).css("color",e.type === "mouseenter"?"blue":"#1b691e");});	
+			}
+
+		}); // .each not a current volunteer		
+		
+	} // end function volunteer_status	
+	
 
 	// transaction slider - on reload
 	transaction_slider();	
@@ -772,8 +893,6 @@ $(function() {
 		
 		
 	} // end function redeemable 
-
-	
 
 	// editing a transaction
 	if ( $("input[name='shop_id']").length ) {
