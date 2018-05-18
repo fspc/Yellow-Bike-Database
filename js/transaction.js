@@ -165,7 +165,7 @@ $(function() {
 		last_index = last_index - 1;
 		$.each($("td a[href*='individual_history']"), function(index) {  			
 			
-			if (this.href.match(/\d+$/)) {
+			if (this.href.match(/\d*$/)) {
 
 				var id = this.href.match(/\d+$/);
 
@@ -180,7 +180,7 @@ $(function() {
 					volunteer_ids += "contacts.contact_id=" + id + " OR ";
 				}		
 			}
-					   
+		   
 		});
 		
 	}
