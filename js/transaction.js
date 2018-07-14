@@ -1518,9 +1518,9 @@ $(function() {
 				var vhr;				
 				if ($("#redeemable_hours").val() === "") {
 					vhr = "0.00";
-				} else {
+				}	else {
 					vhr = parseFloat($("#redeemable_hours").val());
-				}				
+				}								
 					
 				// Don't require paid to be selected, only amount >= 0	
 				var max_bike_earned = 0, maximum_allowable_earned_bikes;
@@ -1567,8 +1567,15 @@ $(function() {
 						} else {
 										
 							if ($("#redeemable_hours").val().length) {
-								volunteer_benefits_history[year].volunteer_hours_redeemed = parseFloat(volunteer_benefits_history[year].volunteer_hours_redeemed) + 
-																												parseFloat($("#redeemable_hours").val());
+								
+								// NaN bug #75
+								if (volunteer_benefits_history[year].volunteer_hours_redeemed === "NaN")  {
+									vhr = 0; 
+								} else {
+									vhr = parseFloat(volunteer_benefits_history[year].volunteer_hours_redeemed);
+								}
+								
+								volunteer_benefits_history[year].volunteer_hours_redeemed = vhr + parseFloat($("#redeemable_hours").val());
 
 								if (parseFloat(volunteer_benefits_history[year].max_bike_earned) <  maximum_allowable_earned_bikes) {																				
 									volunteer_benefits_history[year].max_bike_earned = parseFloat(volunteer_benefits_history[year].max_bike_earned) + 
