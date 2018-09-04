@@ -101,6 +101,15 @@ if($_GET['search']==''){
 	$search_state = '';
 }
 
+// currently used for links in reports, and not for transaction_log page search mechanism
+
+if($_GET['shop_id_search']==''){
+	$shop_id_search = '';
+} elseif(isset($_GET['shop_id_search'])) {
+	$shop_id_search = "AND shop_id = '" . $_GET['shop_id_search'] . "'";
+} else {
+	$shop_id_search = '';
+}
 
 //record_count (SQL or state)
 if($_GET['record_count']>0){
@@ -146,7 +155,7 @@ LEFT(IF(show_startdate, CONCAT(' [',
 FROM transaction_log
 LEFT JOIN contacts ON transaction_log.sold_to=contacts.contact_id
 LEFT JOIN transaction_types ON transaction_log.transaction_type=transaction_types.transaction_type_id
-WHERE 1=1 {$trans_date} {$shop_dayname} {$trans_type} {$contact_id} {$search} ORDER BY transaction_id DESC LIMIT  0, $record_count;";
+WHERE 1=1 {$trans_date} {$shop_dayname} {$trans_type} {$contact_id} {$search} {$shop_id_search} ORDER BY transaction_id DESC LIMIT  0, $record_count;";
 $Recordset1 = mysql_query($query_Recordset1, $YBDB) or die(mysql_error());
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
