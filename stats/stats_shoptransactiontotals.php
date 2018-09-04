@@ -21,7 +21,7 @@ shops.shop_type as ShopType, ROUND(sum(t.amount),2) as Total, count(t.transactio
 FROM transaction_log t
 LEFT JOIN shops ON t.shop_id=shops.shop_id
 LEFT JOIN transaction_types AS ttype ON t.transaction_type = ttype.transaction_type_id
-WHERE ttype.accounting_group = 'Sales' OR ttype.transaction_type_id = 'Incoming Donation - Cash'
+WHERE (ttype.accounting_group = 'Sales' AND t.paid=1) OR ttype.transaction_type_id = 'Incoming Donation - Cash'
 GROUP BY t.shop_id, date_format(t.date,'%m/%d/%Y')
 ORDER BY t.date DESC, t.shop_id DESC;";
 $Recordset1 = mysql_query($query_Recordset1, $YBDB) or die(mysql_error());
@@ -65,7 +65,7 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 		    <?php } else { // end if EDIT RECORD ?>
               <tr>
                 <td><?php echo $row_Recordset1['ShopDate']; ?></td>
-                <td><?php echo '<a href="/transaction_log.php?shop_id_search=' . $row_Recordset1['ShopID'] . '&record_count=' . $row_Recordset1['CountOfTrans']  . '">' . $row_Recordset1['ShopID'] . '</a>'; ?></td>
+                <td><?php echo '<a href="/transaction_log.php?shop_id_search=' . $row_Recordset1['ShopID'] . '&record_count=500">' . $row_Recordset1['ShopID'] . '</a>'; ?></td>
 			    <td valign="middle"><?php echo $row_Recordset1['Day']; ?></td>
 			    <td valign="middle"><?php echo $row_Recordset1['ShopType']; ?></td>
 			    <td class="yb_standardRIGHT"><?php currency_format($row_Recordset1['Total'],2);?></td>
