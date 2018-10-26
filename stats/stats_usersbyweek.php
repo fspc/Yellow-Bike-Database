@@ -27,7 +27,7 @@ $total_users = $row_Recordset2['total_users'];
 
 $query_Recordset3 = "SELECT year(date), week(date),
 COUNT(shop_visit_id) AS total_visitors,
-ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS total_hours
+ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS total_hours 
 FROM shops LEFT JOIN shop_hours ON shops.shop_id = shop_hours.shop_id
 GROUP BY year(date), week(date)
 ORDER BY year(date) DESC, week(date) DESC";
@@ -37,7 +37,7 @@ $totalRows_Recordset3 = mysql_num_rows($Recordset3);
 
 $query_Recordset4 = "SELECT year(date), week(date),
 COUNT(shop_visit_id) AS volunteer_visitors,
-ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS volunteer_hours
+ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS volunteer_hours 
 FROM shops
 LEFT JOIN shop_hours ON shops.shop_id = shop_hours.shop_id
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id

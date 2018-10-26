@@ -37,13 +37,13 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 	  </tr>
         <tr>
           <td>
-            <table   border="1" cellpadding="1" cellspacing="0">
+            <table id="monthlysalestax"  border="1" cellpadding="1" cellspacing="0">
               
               <tr valign="top" bgcolor="#99CC33" class="yb_standardCENTER">
-                <td width="60" height="35">Year</td>
-			    <td width="60">Month</td>
-			    <td width="100">Total Sales</td>
-			    <td width="110">Accounting Group</td>
+             	<th width="120" height="35">Year</th>
+			    	<th width="60">Month</th>
+			    	<th width="100">Total Sales</th>
+			    	<th width="110">Accounting Group</th>
 		      </tr>
               <form method="post" name="FormUpdate_<?php echo $row_Recordset1['shop_id']; ?>" action="<?php echo $editFormAction; ?>">
                 <?php while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)) { //do { 
@@ -62,9 +62,9 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 		    <?php } else { // end if EDIT RECORD ?>
               <tr>
                 <td><?php echo $row_Recordset1['Year']; ?></td>
-			    <td>&nbsp;<?php echo $row_Recordset1['Month']; ?></td>
+			    <td><?php echo $row_Recordset1['Month']; ?></td>
 			    <td class="yb_standardRIGHT"><?php currency_format($row_Recordset1['TotalSales'],2);?></td>
-			    <td>&nbsp;<?php echo $row_Recordset1['AccountingGroup']; ?></td>
+			    <td><?php echo $row_Recordset1['AccountingGroup']; ?></td>
 		      </tr>
               <?php
 		  } // end if EDIT RECORD 

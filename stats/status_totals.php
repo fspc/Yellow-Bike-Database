@@ -42,8 +42,8 @@ if (isset($_POST['range1'])) {
 
 $query = "SELECT shop_user_role,
 			COUNT(DISTINCT shop_hours.contact_id) as unique_volunteers,  
-			COUNT(shop_hours.contact_id) as volunteer_visits,   
-			ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS volunteer_hours   
+			COUNT(shop_hours.contact_id) as volunteer_visits,
+			ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS volunteer_hours   
 			FROM shop_hours 
 			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id   
 			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id   
@@ -54,7 +54,7 @@ $query = "SELECT shop_user_role,
 
 $query = "SELECT COUNT(DISTINCT shop_hours.contact_id) as unique_volunteers,
 			COUNT(shop_hours.contact_id) as volunteer_visits,
-			ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS volunteer_hours
+			ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS volunteer_hours 
 			FROM shop_hours 
 			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id   
@@ -64,8 +64,7 @@ $total_volunteers_sql = mysql_query($query, $YBDB) or die(mysql_error());
 
 $query = "SELECT shop_user_role, COUNT(DISTINCT shop_hours.contact_id) as unique_visitors, 
 			COUNT(shop_hours.contact_id) as visits, 
-			ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), 
-			TIME(time_in)))/60)) AS hours 
+			ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS hours 
 			FROM shop_hours 
 			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id 
 			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id 
@@ -77,7 +76,7 @@ $visitors_sql = mysql_query($query, $YBDB) or die(mysql_error());
 
 $query = "SELECT COUNT(DISTINCT shop_hours.contact_id) as unique_visitors,
 			COUNT(shop_hours.contact_id) as visits,
-			ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS hours
+			ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS hours 
 			FROM shop_hours 
 			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id   
@@ -87,7 +86,7 @@ $total_visitors_sql = mysql_query($query, $YBDB) or die(mysql_error());
 
 $query = "SELECT COUNT(DISTINCT shop_hours.contact_id) as unique_vv,
 			COUNT(shop_hours.contact_id) as visits,
-			ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS hours
+			ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS hours 
 			FROM shop_hours 
 			LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 			LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id   

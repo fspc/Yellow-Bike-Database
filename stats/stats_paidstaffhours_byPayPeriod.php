@@ -20,7 +20,7 @@ $query_Recordset1 = "SELECT *
 FROM (SELECT IF(Week(time_in) DIV 2 <>0,Year(time_in),Year(time_in)-1) as Year,
 IF(Week(time_in) DIV 2 <>0,Week(time_in) DIV 2,26 ) as PayPeriod, contacts.contact_id as ContactID, CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS Name,
 COUNT(shop_hours.contact_id) as Shifts,
-ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60),1) AS Hours
+ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS Hours
 FROM shop_hours
 LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id

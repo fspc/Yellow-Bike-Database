@@ -33,7 +33,6 @@ if (isset($_POST['range1'])) {
 	$today = $range2;
 }	
 
-
 $query = "SELECT COUNT(shop_id) as total_shops from shops 
 WHERE (date >= DATE_SUB(CURDATE(),INTERVAL $days_range1 DAY)  AND date <= DATE_SUB(CURDATE(), INTERVAL $days_range2 DAY));";
 $shop_totals_sql = mysql_query($query, $YBDB) or die(mysql_error());

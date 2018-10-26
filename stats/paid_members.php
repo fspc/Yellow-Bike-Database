@@ -41,7 +41,7 @@ $query = "SELECT contact_id, full_name, normal_full_name, email, phone, sort_vis
 CONCAT(first_name, ' ', last_name) AS normal_full_name,
 contacts.email AS email, contacts.phone AS phone, 
 COUNT(shop_hours.contact_id) as sort_visits, 
-ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS sort_hours 
+ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS sort_hours  
 FROM shop_hours 
 LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id 
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id 
