@@ -30,7 +30,7 @@ ORDER BY sort_hours DESC) AS sort_hours
 
 LEFT JOIN (SELECT contacts.contact_id AS vh_contact_id,
 COUNT(shop_hours.contact_id) as th_visits,
-ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS th_hours
+ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS th_hours
 FROM shop_hours
 LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id
@@ -39,7 +39,7 @@ ORDER BY last_name, first_name) AS total_hours ON sort_hours.contact_id = total_
 
 LEFT JOIN (SELECT contacts.contact_id AS vh_contact_id,
 COUNT(shop_hours.contact_id) as vh_visits,
-ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS vh_hours
+ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS vh_hours
 FROM shop_hours
 LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id
@@ -49,7 +49,7 @@ ORDER BY last_name, first_name) AS volunteer_hours ON sort_hours.contact_id = vo
 
 LEFT JOIN (SELECT contacts.contact_id AS th3_contact_id,
 COUNT(shop_hours.contact_id) as th3_visits,
-ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS th3_hours
+ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS th3_hours
 FROM shop_hours
 LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id
@@ -59,7 +59,7 @@ ORDER BY last_name, first_name) AS total_hours3 ON sort_hours.contact_id = total
 
 LEFT JOIN (SELECT contacts.contact_id AS vh3_contact_id,
 COUNT(shop_hours.contact_id) as vh3_visits,
-ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS vh3_hours
+ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS vh3_hours
 FROM shop_hours
 LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id
