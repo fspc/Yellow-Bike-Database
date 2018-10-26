@@ -18,7 +18,7 @@ default:
 mysql_select_db($database_YBDB, $YBDB);
 $query_Recordset1 = "SELECT * FROM (SELECT contacts.contact_id, CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name,
 COUNT(shop_hours.contact_id) as th_visits,
-ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS th_hours
+ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS th_hours
 FROM shop_hours
 LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id
@@ -26,7 +26,7 @@ GROUP BY contact_id
 ORDER BY last_name, first_name) AS total_hours
 LEFT JOIN (SELECT contacts.contact_id AS vh_contact_id,
 COUNT(shop_hours.contact_id) as vh_visits,
-ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS vh_hours
+ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS vh_hours
 FROM shop_hours
 LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id
@@ -35,7 +35,7 @@ GROUP BY contacts.contact_id
 ORDER BY last_name, first_name) AS volunteer_hours ON total_hours.contact_id = volunteer_hours.vh_contact_id
 LEFT JOIN (SELECT contacts.contact_id AS th3_contact_id,
 COUNT(shop_hours.contact_id) as th3_visits,
-ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS th3_hours
+ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS th3_hours
 FROM shop_hours
 LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id
@@ -44,7 +44,7 @@ GROUP BY contacts.contact_id
 ORDER BY last_name, first_name) AS total_hours3 ON total_hours.contact_id = total_hours3.th3_contact_id
 LEFT JOIN (SELECT contacts.contact_id AS vh3_contact_id,
 COUNT(shop_hours.contact_id) as vh3_visits,
-ROUND(SUM(HOUR(SUBTIME( TIME(time_out), TIME(time_in))) + MINUTE(SUBTIME( TIME(time_out), TIME(time_in)))/60)) AS vh3_hours
+ROUND(SUM(HOUR(TIMEDIFF( time_out, time_in)) + MINUTE(TIMEDIFF( time_out, time_in))/60)) AS vh3_hours
 FROM shop_hours
 LEFT JOIN contacts ON shop_hours.contact_id = contacts.contact_id
 LEFT JOIN shop_user_roles ON shop_hours.shop_user_role = shop_user_roles.shop_user_role_id
