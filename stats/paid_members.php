@@ -93,7 +93,14 @@ $num_member_rows = mysql_num_rows($purchased_membership);
 			  		 ?> 
             <tr>           
              <td class="yb_standardRIGHTred"><a href="<?php echo "{$page_individual_history_log}?contact_id=" . $result['contact_id']; ?>"><?php echo $result['full_name']; ?></a></td>
-			    <td class="yb_standardRIGHTred"><?php echo $result['expiration_date']; ?></td>
+			    <td class="yb_standardRIGHTred"><?php 
+			    													if( strtotime($result['expiration_date']) <= local_datetime() ) {
+			    														echo $result['expiration_date'];
+			    													} else {
+			    														echo "<span style='color:blue;'>" . $result['expiration_date'] . "</span>";
+			    													}
+			    
+			    											?></td>
 			    <td class="yb_standardRIGHT"><?php echo number_format($purchased_membership_dictionary[$result['contact_id']]['sort_visits'],0); ?></td>
 			    <td class="yb_standardRIGHT"><?php echo number_format($purchased_membership_dictionary[$result['contact_id']]['sort_hours'],0); ?></td>						    
 		      </tr>
