@@ -7,34 +7,6 @@ $page_individual_history_log = INDIVIDUAL_HISTORY_LOG;
 
 mysql_select_db($database_YBDB, $YBDB);
 
-$today = date("Y/m/d");
-$year_ago = date("Y/m/d", strtotime("$today -1 year"));
-
-$today_date = new DateTime('now');
-$past = new DateTime($year_ago);
-$interval = $today_date->diff($past);
-
-$chosen_date = $today;
-$days_range1 = $interval->days;
-$days_range2 = 0;
-
-// Do some ajax stuff
-if (isset($_POST['range1'])) {
-	$range1 = $_POST['range1'];
-	$range2 = $_POST['range2'];
-	
-	$choice1 = new DateTime($range1);
-	$interval = $today_date->diff($choice1);
-	$days_range1 = $interval->days;
-
-	$choice2 = new DateTime($range2);
-	$interval = $today_date->diff($choice2);
-	$days_range2 = $interval->days;
-
-	$year_ago = $range1;
-	$today = $range2;
-}	
-
 // Membership via volunteering
 $query = "SELECT contact_id, full_name, normal_full_name, email, phone, sort_visits, sort_hours FROM 
 (SELECT contacts.contact_id, CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name,
@@ -94,7 +66,7 @@ $num_member_rows = mysql_num_rows($purchased_membership);
             <tr>           
              <td class="yb_standardRIGHTred"><a href="<?php echo "{$page_individual_history_log}?contact_id=" . $result['contact_id']; ?>"><?php echo $result['full_name']; ?></a></td>
 			    <td class="yb_standardRIGHTred"><?php 
-			    													if( strtotime($result['expiration_date']) <= local_datetime() ) {
+			    													if( strtotime($result['expiration_date']) <= time() ) {
 			    														echo $result['expiration_date'];
 			    													} else {
 			    														echo "<span style='color:blue;'>" . $result['expiration_date'] . "</span>";
