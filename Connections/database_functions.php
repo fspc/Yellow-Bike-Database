@@ -119,6 +119,16 @@ BANNED IDS
 
 // Ban those pesky individuals who continually refuse to follow policies and safer space agreements by contact_id
 $banned_individuals = array();
+
+/************
+PROBATION IDS
+************/				
+
+// Put individuals under probation by contact_id. Probation could be used for a variety of scenarios, 
+// an individual who may potentially become banned, or who has been deemed as worthy of coming out of a ban,
+// or someone who IOU's volunteer time for a bike they earned (generally, people should not be allowed to do
+// this in the first place), etc.
+$probation_individuals = array();
 					
 /*******
 CONTACTS
@@ -369,7 +379,7 @@ function generate_list($querySQL,$list_value,$list_text, $form_name, $default_va
 			$default_delimiter = 'selected="selected"';
 		} else { $default_delimiter = '';}
 		echo '<option style="color:' . $color . ';" value="' . $row_recordset[$list_value] . '" ' . $default_delimiter . '>' .
-				$row_recordset[$list_text] . '</option>\n';		
+				$row_recordset[$list_text] . '</option>';		
 		} while ($row_recordset = mysql_fetch_assoc($recordset));
  	$rows = mysql_num_rows($recordset);
  	if($rows > 0) {

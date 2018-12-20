@@ -57,6 +57,15 @@ $ssl_certificate = SSL_CERTIFICATE;
 
 	}	
 	
+	// pass probation contact_id values if they exist
+	if (isset($_POST['probation'])) {
+
+		if ($probation_individuals) {
+			echo json_encode($probation_individuals);		
+		}		
+
+	}		
+	
 	// update email_list
 	if( isset($_POST['email_list']) ) {		
 					
@@ -94,7 +103,7 @@ $ssl_certificate = SSL_CERTIFICATE;
 			 CURLOPT_SSL_VERIFYPEER => true,
 		    CURLOPT_RETURNTRANSFER => true,
 		    CURLOPT_POSTFIELDS     => json_encode($json),
-		);
+		); 
   
   		if ($ssl_certificate) {    
       	$curlConfig[CURLOPT_CAINFO] = $ssl_certificate;		

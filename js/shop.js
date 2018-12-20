@@ -32,6 +32,23 @@ $(function(){
 	});
 
 	$(banned_list).css({backgroundColor: "red"}).prop("title", "BANNED");
+	
+	// return probation list
+	var probation_list, pl;
+	$.post("json/contact.php", {probation: 1}, function (data) { 
+		if (data) {
+			pl = $.parseJSON(data);
+			$(pl).each(function(i,v) { 
+				if (i === 0) {		
+					probation_list = "#" + v;
+				} else { 
+					probation_list = probation_list + ",#" + v; 
+				}
+			});
+		}
+	});
+
+	$(probation_list).css({backgroundColor: "#eed202"}).prop("title", "PROBATION");
 
 	// error handler for shops	with a popup dialog (TODO)	
 	function error_handler(input,error_span,error,error_text,event) {		
@@ -86,7 +103,6 @@ $(function(){
 		}		
 
 	} );
-
 
 	// could have done this in php, but this separates out the view logic   
 	var membership_ids, volunteer_ids;
