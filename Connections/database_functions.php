@@ -88,11 +88,6 @@ define("SPECIAL_VOLUNTEER_DISCOUNT",50);              // PERCENTAGE
 // e.g. for sweat equity limit of $200 for contact_id 500: array(500 => 200)
 $custom_sweat_equity_limit = array();
 
-// Determines the behaviour of Bicycles (transaction_type_id) for volunteer to earn-a-bike purchases.
-// Keeping things equitable, if a patron decides to purchase a bike, rather than earning it, 
-// that counts to the EAB limit for the year.
-define("EARN_A_BIKE_LIMIT",1);
-
 // Determine if stand time behaviour will be based on the SWEAT_EQUITY_LIMIT with discounts applied,
 // or 1 to 1 (1hr of volunteering === 1hr of free stand time) regardless of the SWEAT_EQUITY_LIMIT
 define("REDEEM_ONE_TO_ONE", true);

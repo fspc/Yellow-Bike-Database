@@ -89,7 +89,6 @@ $(function() {
 		}
 	} );
 
-
 	// paid or not?
 	$(":checked").parent("td").prev().children().not("#payment_type_label").hide();  // need to watch that not introduction bugs
 	$(".paid").click(function() {
@@ -1036,6 +1035,7 @@ $(function() {
 
 		sold_to.change(function() { 					
 			
+			//sold_to.hide();
 			amount.prop("disabled","");
 			var membership_obj; //reuse this object
 			
@@ -1521,12 +1521,18 @@ $(function() {
 				}	else {
 					vhr = parseFloat($("#redeemable_hours").val());
 				}								
+									
 					
-				// Don't require paid to be selected, only amount >= 0	
+				// Don't require paid to be selected, only amount >= 0
+				//
+				// Here is where equitable behaviour for earned bikes could be turned off/on
+				// However, it actually was a feature induced bug or undesired depending how you look at it, 
+				// see #78 and #80, 
+				// because vhr always became 0 when amount was added if spinner was not used
 				var max_bike_earned = 0, maximum_allowable_earned_bikes;
 				if ($("#transaction_type").val() === "Bicycles") {
 					// hours were redeemed and this is a Bicycle transaction
-					if (vhr !== "0.00") {
+					if (vhr !== "0.00" && vhr !== 0) {
 						max_bike_earned = 1;
 					}
 				}
