@@ -1523,12 +1523,17 @@ $(function() {
 				}								
 									
 					
-				// Don't require paid to be selected, only amount >= 0
+				// Don't require paid to be selected, only amount >= 0 
 				//
 				// Here is where equitable behaviour for earned bikes could be turned off/on
 				// However, it actually was a feature induced bug or undesired depending how you look at it, 
 				// see #78 and #80, 
-				// because vhr always became 0 when amount was added if spinner was not used
+				// because vhr always became 0 when amount was added if spinner was not used if the 
+				// patron had become volunteer, which at the time made sense, but there
+				// are exceptions to the rule, and it actually was not fair, but penalized those
+				// who chose to volunteer and purchase a bike (usually for someone else) without redeeming hours
+				// and then later redeemed their hours for a bike for themselves, only to find out they had already hit their
+				// max eab.
 				var max_bike_earned = 0, maximum_allowable_earned_bikes;
 				if ($("#transaction_type").val() === "Bicycles") {
 					// hours were redeemed and this is a Bicycle transaction
