@@ -20,7 +20,7 @@ mysql_select_db($database_YBDB, $YBDB);
 $query_Recordset1 = "SELECT year(t.date) as Year,quarter(t.date) as Quarter, month(t.date) as Month, round(sum(amount),2) as TotalSales, tt.accounting_group as AccountingGroup
 FROM transaction_log t
 LEFT JOIN transaction_types tt ON t.transaction_type = tt.transaction_type_id
-WHERE tt.accounting_group = '$accounting_group'
+WHERE tt.accounting_group = '$accounting_group' AND t.paid=1
 GROUP BY year(t.date), month(t.date)
 ORDER BY year(t.date) DESC, month(t.date) DESC;";
 $Recordset1 = mysql_query($query_Recordset1, $YBDB) or die(mysql_error());
