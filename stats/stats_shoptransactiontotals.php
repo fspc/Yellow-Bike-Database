@@ -65,7 +65,7 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 		    <?php } else { // end if EDIT RECORD ?>
               <tr>
                 <td><?php echo $row_Recordset1['ShopDate']; ?></td>
-                <td><?php echo '<a href="/transaction_log.php?shop_id_search=' . $row_Recordset1['ShopID'] . '&record_count=500">' . $row_Recordset1['ShopID'] . '</a>'; ?></td>
+                <td><?php echo '<a href="/transaction_log.php?shop_id_search=' . $row_Recordset1['ShopID'] . '">' . $row_Recordset1['ShopID'] . '</a>'; ?></td>
 			    <td valign="middle"><?php echo $row_Recordset1['Day']; ?></td>
 			    <td valign="middle"><?php echo $row_Recordset1['ShopType']; ?></td>
 			    <td class="yb_standardRIGHT"><?php currency_format($row_Recordset1['Total'],2);?></td>

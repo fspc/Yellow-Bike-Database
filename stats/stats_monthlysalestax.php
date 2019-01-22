@@ -62,7 +62,9 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 		    <?php } else { // end if EDIT RECORD ?>
               <tr>
                 <td><?php echo $row_Recordset1['Year']; ?></td>
-			    <td><?php echo $row_Recordset1['Month']; ?></td>
+			    <td>
+			    	<?php echo '<a href="/transaction_log.php?month_search=' . $row_Recordset1['Year'] . '-' . $row_Recordset1['Month'] . '-01">' . $row_Recordset1['Month'] . '</a>'; ?>			    
+			    </td>
 			    <td class="yb_standardRIGHT"><?php currency_format($row_Recordset1['TotalSales'],2);?></td>
 			    <td><?php echo $row_Recordset1['AccountingGroup']; ?></td>
 		      </tr>
