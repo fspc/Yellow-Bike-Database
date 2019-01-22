@@ -404,8 +404,14 @@ $(function() {
 		// watch that percentage doesn't acquire too many decimal points.
 		//console.dir(range_obj);
 
+		// If no min is found this makes it the same as max
+		// only a problem for non transaction_log pages using transaction.js if there is only one deposit for the last year
+		// not sure what will happen with 0 deposits for the last year
+		if ( !range_obj["min"] ) {
+			range_obj["min"] = range_obj["max"];		
+		}
 
-		//initialize slider 
+		//initialize slider 		
 		if (!slider) {		
 			slider = $('#gnucash_csv_range').noUiSlider({
 				start: [ prev_trans, max_range ],
