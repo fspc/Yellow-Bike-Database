@@ -2,11 +2,6 @@
 require_once('YBDB.php');
 
 
-require_once(realpath($_SERVER["DOCUMENT_ROOT"]) . '/php-console/src/PhpConsole/__autoload.php');
-$handler = PhpConsole\Handler::getInstance();
-$handler->setErrorsHandlerLevel(E_ALL &~ E_DEPRECATED);
-$handler->start();
-
 // DO NOT EDIT - USE Connections/local_configurations.php instead with definitions between 
 // <?php (no space between ? and >) ? > 
 
