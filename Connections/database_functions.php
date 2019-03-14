@@ -1,6 +1,13 @@
 <?php
 require_once('YBDB.php');
 
+/*
+require_once(realpath($_SERVER["DOCUMENT_ROOT"]) . '/php-console/src/PhpConsole/__autoload.php');
+$handler = PhpConsole\Handler::getInstance();
+$handler->setErrorsHandlerLevel(E_ALL &~ E_DEPRECATED);
+$handler->start();
+*/
+
 // DO NOT EDIT - USE Connections/local_configurations.php instead with definitions between 
 // <?php (no space between ? and >) ? > 
 
@@ -17,8 +24,7 @@ require_once('YBDB.php');
 	Hawaii no DST ..... Pacific/Honolulu
 
 */
-define("TIMEZONE", "America/New_York");
-
+if( !defined( 'TIMEZONE' ) ) define("TIMEZONE", "America/New_York");
 
 /*********
 MEMBERSHIP
@@ -34,29 +40,29 @@ Memberships include unlimited access to an available work stand during open shop
 
 // Needs to volunteer at least this amount of defined hours before being considered a member 
 // Note: used only as a metric for reports
-define("MEMBERSHIP_HOURS",8);
+if( !defined( 'MEMBERSHIP_HOURS' ) ) define("MEMBERSHIP_HOURS",8);
 
 // Needs to volunteer at least this number of days before being considered a member
 // Note: used only as a metric for reports
-define("MEMBERSHIP_DAYS",2);
+if( !defined( 'MEMBERSHIP_DAYS' ) ) define("MEMBERSHIP_DAYS",2);
 
 // Define how long a patron remains a member if they purchase a membership.
-define("PURCHASED_MEMBERSHIP_DAYS",365);
+if( !defined( 'PURCHASED_MEMBERSHIP_DAYS' ) ) define("PURCHASED_MEMBERSHIP_DAYS",365);
 
 // Define discount for paid members (applies when volunteer benefits do not)
-define("MEMBERSHIP_DISCOUNT",10);      // PERCENTAGE
+if( !defined( 'MEMBERSHIP_DISCOUNT' ) ) define("MEMBERSHIP_DISCOUNT",10);      // PERCENTAGE
 
 /*********
 STAND TIME
 **********/
 // Determines the hourly cost for Stand Time (transaction_type_id)
-define("STAND_TIME_HOURLY_RATE",10);  // IN DOLLARS
+if( !defined( 'STAND_TIME_HOURLY_RATE' ) ) define("STAND_TIME_HOURLY_RATE",10);  // IN DOLLARS
 
 // Define how much time over 1hr is allowed before charging for the next hour.
-define("STAND_TIME_GRACE_PERIOD",15); // IN MINUTES 1 - 59
+if( !defined( 'STAND_TIME_GRACE_PERIOD' ) ) define("STAND_TIME_GRACE_PERIOD",15); // IN MINUTES 1 - 59
 
 // Define how many free days of stand time are allotted after purchase of a bike
-define("FREE_STAND_TIME_PERIOD",30);  // IN DAYS
+if( !defined( 'FREE_STAND_TIME_PERIOD' ) ) define("FREE_STAND_TIME_PERIOD",30);  // IN DAYS
 
 /********************************
 SWEAT EQUITY / VOLUNTEER BENEFITS
@@ -77,12 +83,12 @@ donated more than 100 hours of their time in the past 365 days, this match can b
 (Sweat Equity / Volunteer Benefits can't be combined with Membership Benefits.)
 
 */
-define("SWEAT_EQUITY_LIMIT",100);     // IN DOLLARS
-define("MAX_BIKE_EARNED",1);          // AMOUNT OF BIKES
-define("VOLUNTEER_HOUR_VALUE",8);	  // IN DOLLARS
-define("VOLUNTEER_DISCOUNT",25);      // PERCENTAGE
-define("SPECIAL_VOLUNTEER_HOURS_QUALIFICATION",100);  // IN HOURS
-define("SPECIAL_VOLUNTEER_DISCOUNT",50);              // PERCENTAGE
+if( !defined( 'SWEAT_EQUITY_LIMIT' ) ) define("SWEAT_EQUITY_LIMIT",100);     // IN DOLLARS
+if( !defined( 'MAX_BIKE_EARNED' ) ) define("MAX_BIKE_EARNED",1);          // AMOUNT OF BIKES
+if( !defined( 'VOLUNTEER_HOUR_VALUE' ) ) define("VOLUNTEER_HOUR_VALUE",8);	  // IN DOLLARS
+if( !defined( 'VOLUNTEER_DISCOUNT' ) ) define("VOLUNTEER_DISCOUNT",25);      // PERCENTAGE
+if( !defined( 'SPECIAL_VOLUNTEER_HOURS_QUALIFICATION' ) ) define("SPECIAL_VOLUNTEER_HOURS_QUALIFICATION",100);  // IN HOURS
+if( !defined( 'SPECIAL_VOLUNTEER_DISCOUNT' ) ) define("SPECIAL_VOLUNTEER_DISCOUNT",50);              // PERCENTAGE
 
 // Customized sweat equity limit per contact_id
 // e.g. for sweat equity limit of $200 for contact_id 500: array(500 => 200)
@@ -131,12 +137,12 @@ CONTACTS
 
 // Allow waiver (recommended) in Add/Edit Contacts; 1 = yes, 0 = no
 // Waiver text may be modified in Connections/waiver.txt
-define("WAIVER", 1);
+if( !defined( 'WAIVER' ) ) define("WAIVER", 1);
 
-define("WAIVER_LABEL","Waiver of Liability and Safer Spaces Agreement:");
+if( !defined( 'WAIVER_LABEL' ) ) define("WAIVER_LABEL","Waiver of Liability and Safer Spaces Agreement:");
 
 // Allow email_list option in Add/Edit Contacts; 1 = yes, 0 = no 
-define("EMAIL_LIST", 1);
+if( !defined( 'EMAIL_LIST' ) ) define("EMAIL_LIST", 1);
 
 // Define a url for an email connector that will connect to an email list.
 // The url can be a server:port, program, etc.  
@@ -145,20 +151,20 @@ define("EMAIL_LIST", 1);
 // The purpose of email connectors is to provide autonomy in the choice
 // of email services and programs.  E.g. mailman, googlegroups
 // See ./examples for an example mailman connector
-define("EMAIL_LIST_CONNECTOR","https://wvcompletestreets.org:9987");
+if( !defined( 'EMAIL_LIST_CONNECTOR' ) ) define("EMAIL_LIST_CONNECTOR","https://wvcompletestreets.org:9987");
 
 // Define the password that is unique to the connector.
-define("EMAIL_LIST_CONNECTOR_PASSWORD","bikebike");
+if( !defined( 'EMAIL_LIST_CONNECTOR_PASSWORD' ) ) define("EMAIL_LIST_CONNECTOR_PASSWORD","bikebike");
 
 // If a self-signed ssl certificate that is associated with the email connector is being provided, 
 // designate an absolute path, if not, change to false.
-define("SSL_CERTIFICATE", "/var/www/html/examples/cert.pem");
+if( !defined( 'SSL_CERTIFICATE' ) ) define("SSL_CERTIFICATE", "/var/www/html/examples/cert.pem");
 
 //// "Volunteer Interest" form ////
-define("VOLUNTEER_INTEREST_FORM", true);
+if( !defined( 'VOLUNTEER_INTEREST_FORM' ) ) define("VOLUNTEER_INTEREST_FORM", true);
 
 // Form name
-define("VOLUNTEER_INTEREST_FORM_NAME","Volunteer Interests");
+if( !defined( 'VOLUNTEER_INTEREST_FORM_NAME' ) ) define("VOLUNTEER_INTEREST_FORM_NAME","Volunteer Interests");
 
 // NOTE: Introductory text can be modified in Connections/volunteer_interest_form_introduction.txt
 
@@ -180,7 +186,7 @@ $volunteer_interests = array(
 								);
 								
 // Provide a comment box - true of false
-define("VOLUNTEER_INTEREST_COMMENTS", true);
+if( !defined( 'VOLUNTEER_INTEREST_COMMENTS' ) ) define("VOLUNTEER_INTEREST_COMMENTS", true);
 
 // NOTE: The 2 variables ($volunteer_interest_changename & $volunteer_interests_deletename) 
 // below allow you to change or delete an interest.
@@ -213,40 +219,40 @@ TRANSACTIONS
 ************/
 
 // User defined constants - read sql/populate.sql for an explanation
-define("STORAGE_PERIOD", 14);
-define("ACCOUNTING_GROUP", "Sales");
-define("DEFAULT_TRANSACTION_TYPE", "Sale - Used Parts");
+if( !defined( 'STORAGE_PERIOD' ) ) define("STORAGE_PERIOD", 14);
+if( !defined( 'ACCOUNTING_GROUP' ) ) define("ACCOUNTING_GROUP", "Sales");
+if( !defined( 'DEFAULT_TRANSACTION_TYPE' ) ) define("DEFAULT_TRANSACTION_TYPE", "Sale - Used Parts");
 
 // shop_user_role
-define("DEFAULT_SHOP_USER", "Stand Time");
+if( !defined( 'DEFAULT_SHOP_USER' ) ) define("DEFAULT_SHOP_USER", "Stand Time");
 
 /* Change Fund - A specific amount of money for the purpose of making change. 
    The amount on hand should remain the same at all times; 
    therefore a change funds does not require replenishment.
 */
-define("CHANGE_FUND", 20);
+if( !defined( 'CHANGE_FUND' ) ) define("CHANGE_FUND", 20);
 
 // How many hours should the shop be open from the time a person logins?  Hours display in pulldown in shop_log.php
 // No overtime for volunteers.  :)
 // shop will be current shop for the 24hr day yyyy-mm-dd (currently no check for hrs, only date)
-define("SHOP_HOURS_LENGTH", 10);  
+if( !defined( 'SHOP_HOURS_LENGTH' ) ) define("SHOP_HOURS_LENGTH", 10);  
 
 // What minute interval should be displayed for list_time()? In other words, the time_in and time_out pulldown lists.
 // choose an interval that is divisible by 60 minutes, 1, 5, 15, 30 etc.
-define("LIST_MINUTE_INTERVAL", 1);
+if( !defined( 'LIST_MINUTE_INTERVAL' ) ) define("LIST_MINUTE_INTERVAL", 1);
 
 /* If you elect to keep records for non-shop hours, decide which shop should be used for that purpose.
    The first shop created, 1, makes sense.  A link will show in start_shop.php.
 	If you do not want this functionality at all, choose 0.   
 */
-define("NONSHOP", 0);
+if( !defined( 'NONSHOP' ) ) define("NONSHOP", 0);
 
 // How many transactions do you want shown by default
-define("NUMBER_OF_TRANSACTIONS", 11);
+if( !defined( 'NUMBER_OF_TRANSACTIONS' ) ) define("NUMBER_OF_TRANSACTIONS", 11);
 
 
 // Define csv directory (see directions below for creating it)
-define("CSV_DIRECTORY","csv"); 
+if( !defined( 'CSV_DIRECTORY' ) ) define("CSV_DIRECTORY","csv"); 
 
 // Make a directory to store csv accounting files.  Currently used for GnuCash format.
 // Assuming the root of the website, and directory is called csv, and a Debian-based distribution:
@@ -280,7 +286,7 @@ $gnucash_accounts = array(	"Assets:Current Assets:Checking Account" => "checking
 // Note: Remote shops function independently via their IP identification.
 //
 // Normally, you will want this set at 0.
-define('SHOW_SHOP_ID',0);
+if( !defined( 'SHOW_SHOP_ID' ) ) define('SHOW_SHOP_ID',0);
 
 /*************
  ETHERPAD LITE
@@ -318,16 +324,16 @@ if(file_exists( realpath($_SERVER["DOCUMENT_ROOT"]) . "/Connections/local_config
 }
 
 // other constants
-define("PAGE_START_SHOP", "/start_shop.php");
-define("PAGE_SHOP_LOG", "/shop_log.php");
-define("PAGE_EDIT_CONTACT", "/contact_add_edit.php");
-define("PAGE_SELECT_CONTACT", "/contact_add_edit_select.php");
-define("PAGE_SHOP_LOG_DELETE_VISIT", "/shop_log_delete_shopvisitid.php");
-define("INDIVIDUAL_HOURS_LOG", "/individual_hours_log.php");
-define("INDIVIDUAL_HISTORY_LOG", "/individual_history_log.php");
-define("PAGE_SALE_LOG", "/transaction_log.php");
-define("PAGE_EDIT_LOCATION", "/location_add_edit.php");
-define("PAGE_SELECT_LOCATION", "/location_add_edit_select.php");
+if( !defined( 'PAGE_START_SHOP' ) ) define("PAGE_START_SHOP", "/start_shop.php");
+if( !defined( 'PAGE_SHOP_LOG' ) ) define("PAGE_SHOP_LOG", "/shop_log.php");
+if( !defined( 'PAGE_EDIT_CONTACT' ) ) define("PAGE_EDIT_CONTACT", "/contact_add_edit.php");
+if( !defined( 'PAGE_SELECT_CONTACT' ) ) define("PAGE_SELECT_CONTACT", "/contact_add_edit_select.php");
+if( !defined( 'PAGE_SHOP_LOG_DELETE_VISIT' ) ) define("PAGE_SHOP_LOG_DELETE_VISIT", "/shop_log_delete_shopvisitid.php");
+if( !defined( 'INDIVIDUAL_HOURS_LOG' ) ) define("INDIVIDUAL_HOURS_LOG", "/individual_hours_log.php");
+if( !defined( 'INDIVIDUAL_HISTORY_LOG' ) ) define("INDIVIDUAL_HISTORY_LOG", "/individual_history_log.php");
+if( !defined( 'PAGE_SALE_LOG' ) ) define("PAGE_SALE_LOG", "/transaction_log.php");
+if( !defined( 'PAGE_EDIT_LOCATION' ) ) define("PAGE_EDIT_LOCATION", "/location_add_edit.php");
+if( !defined( 'PAGE_SELECT_LOCATION' ) ) define("PAGE_SELECT_LOCATION", "/location_add_edit_select.php");
 
 // Highlight search results in transaction_log
 function highlightKeywords($text, $keyword) {
@@ -871,6 +877,7 @@ function max_shop_id(){
 }
 
 // Is there currently a shop?
+// curl https://ipinfo.io/ip
 function current_shop_by_ip(){
 	global $database_YBDB, $YBDB;
 	$IP = $_SERVER['REMOTE_ADDR'];

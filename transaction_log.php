@@ -7,6 +7,7 @@ require_once('Connections/database_functions.php');
 /*
 require_once(realpath($_SERVER["DOCUMENT_ROOT"]) . '/php-console/src/PhpConsole/__autoload.php');
 $handler = PhpConsole\Handler::getInstance();
+$handler->setErrorsHandlerLevel(E_ALL &~ E_DEPRECATED);
 $handler->start();
 */
 
