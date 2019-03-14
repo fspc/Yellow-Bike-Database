@@ -1,12 +1,11 @@
 <?php
 require_once('YBDB.php');
 
-/*
+
 require_once(realpath($_SERVER["DOCUMENT_ROOT"]) . '/php-console/src/PhpConsole/__autoload.php');
 $handler = PhpConsole\Handler::getInstance();
 $handler->setErrorsHandlerLevel(E_ALL &~ E_DEPRECATED);
 $handler->start();
-*/
 
 // DO NOT EDIT - USE Connections/local_configurations.php instead with definitions between 
 // <?php (no space between ? and >) ? > 
@@ -25,6 +24,20 @@ $handler->start();
 
 */
 if( !defined( 'TIMEZONE' ) ) define("TIMEZONE", "America/New_York");
+
+/***
+DHCP
+****/
+// The public IP address of the device which has opened a shop determines the ownership of that shop.
+// In that way, more than one shop can run without conflicting with each other from different locations.
+// However, in some cases the IP changes frequently due to DHCP during a 24hr shop.
+// Definitions:
+//				default (use full IP address assigned) 
+//										or
+//				Enter the numbers that defines a  Class (A|B|C) Network, eg. 73.79; 
+//				73.79 would match a Class B network with an IP range of 73.79.*.*
+//				For additional info, read https://www.webopedia.com/DidYouKnow/Internet/IPaddressing.asp 
+if( !defined( 'IP' ) ) define("IP", "default");	
 
 /*********
 MEMBERSHIP
@@ -884,10 +897,19 @@ function current_shop_by_ip(){
 	$current_date = current_date();
 	
 	mysql_select_db($database_YBDB, $YBDB);
-	$query_Recordset1 = "SELECT shop_id FROM shops WHERE ip_address = '{$IP}' AND date REGEXP '^{$current_date} ' ORDER BY shop_id DESC;";
-	$Recordset1 = mysql_query($query_Recordset1, $YBDB) or die(mysql_error());
-	$row_Recordset1 = mysql_fetch_assoc($Recordset1);   
-	$totalRows_Recordset1 = mysql_num_rows($Recordset1);
+	
+	if( IP == "default") {
+		$query_Recordset1 = "SELECT shop_id FROM shops WHERE ip_address = '{$IP}' AND date REGEXP '^{$current_date} ' ORDER BY shop_id DESC;";
+		$Recordset1 = mysql_query($query_Recordset1, $YBDB) or die(mysql_error());
+		$row_Recordset1 = mysql_fetch_assoc($Recordset1);   
+		$totalRows_Recordset1 = mysql_num_rows($Recordset1);
+	} else {
+		$ip = IP;
+		$query_Recordset1 = "SELECT shop_id FROM shops WHERE ip_address REGEXP '^{$ip}' AND date REGEXP '^{$current_date} ' ORDER BY shop_id DESC;";
+		$Recordset1 = mysql_query($query_Recordset1, $YBDB) or die(mysql_error());
+		$row_Recordset1 = mysql_fetch_assoc($Recordset1);   
+		$totalRows_Recordset1 = mysql_num_rows($Recordset1);		
+	}
 	return $row_Recordset1['shop_id'];
 }
 
