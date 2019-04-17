@@ -708,12 +708,12 @@ $membership_discount = MEMBERSHIP_DISCOUNT;
 		
 		$query = "SELECT contacts.contact_id,  CONCAT(last_name, ', ', first_name, ' ',middle_initial) AS full_name,
 					CONCAT(first_name, ' ', last_name) AS normal_full_name, contacts.email AS email, contacts.phone AS phone,  
-					transaction_log.date AS membership_start, SUBSTRING_INDEX(DATE_ADD(date, INTERVAL 365 DAY), ' ', 1) AS expiration_date 
+					MAX(transaction_log.date) AS membership_start, MAX(SUBSTRING_INDEX(DATE_ADD(date, INTERVAL 365 DAY), ' ', 1)) AS expiration_date 
 					FROM transaction_log  LEFT JOIN contacts ON transaction_log.sold_to = contacts.contact_id  
 					WHERE SUBSTRING_INDEX(date, ' ', 1) <= DATE_ADD(date, INTERVAL 365 DAY)  
 					AND (transaction_type='Memberships' AND paid=1) AND " .
 					$contact_id . 
-					" ORDER by membership_start DESC;";		
+					" GROUP BY contact_id ORDER by membership_start DESC;";		
 			
 		 $sql = mysql_query($query, $YBDB) or die(mysql_error());
 
